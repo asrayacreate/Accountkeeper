@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PRERAK CRM - Advanced</title>
+<title>PRERAK CRM</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=Tiro+Devanagari+Sanskrit:ital@0;1&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#0f0f13;--surface:#18181f;--surface2:#22222c;--border:#2e2e3a;--accent:#f97316;--accent2:#fb923c;--text:#f0f0f5;--muted:#8888a0;--green:#22c55e;--blue:#60a5fa;--red:#f87171;--yellow:#fbbf24;--radius:12px;--saffron:#ff9933;}
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;overflow-x:hidden;}
 
-/* WELCOME & UI */
+/* WELCOME */
 #welcome-overlay{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at center,#1a0500 0%,#08000f 60%,#000 100%);}
 #welcome-overlay.hide{animation:wOut 0.7s ease forwards;}
 @keyframes wOut{to{opacity:0;pointer-events:none;visibility:hidden;}}
@@ -31,12 +31,14 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .star{position:absolute;border-radius:50%;background:#ffcc44;animation:twinkle 3s ease-in-out infinite;}
 @keyframes twinkle{0%,100%{opacity:0.15}50%{opacity:0.9}}
 
-/* NOTIFICATION & PANELS */
+/* NOTIFICATION BELL */
 .notif-wrap{position:relative;}
 .notif-btn{background:var(--surface2);border:1px solid var(--border);width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.1rem;transition:all 0.15s;}
 .notif-btn:hover{border-color:var(--accent);}
 .notif-badge{position:absolute;top:-5px;right:-5px;background:var(--red);color:#fff;border-radius:50%;width:17px;height:17px;font-size:0.6rem;font-weight:700;display:flex;align-items:center;justify-content:center;border:2px solid var(--bg);display:none;}
 .notif-badge.show{display:flex;}
+
+/* NOTIFICATION PANEL */
 #notif-panel{position:fixed;top:58px;right:16px;width:330px;max-height:460px;background:var(--surface);border:1px solid var(--border);border-radius:14px;z-index:500;box-shadow:0 20px 60px rgba(0,0,0,0.6);display:none;flex-direction:column;overflow:hidden;}
 #notif-panel.open{display:flex;animation:slideDown 0.2s ease;}
 @keyframes slideDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
@@ -46,6 +48,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .np-list{overflow-y:auto;flex:1;}
 .np-item{display:flex;align-items:flex-start;gap:10px;padding:12px 16px;border-bottom:1px solid var(--border);cursor:pointer;transition:background 0.1s;}
 .np-item:hover{background:var(--surface2);}
+.np-item:last-child{border-bottom:none;}
 .np-item.unread{background:rgba(249,115,22,0.07);}
 .np-dot{width:7px;height:7px;border-radius:50%;background:var(--accent);margin-top:5px;flex-shrink:0;}
 .np-dot.read{background:var(--border);}
@@ -73,8 +76,7 @@ nav{flex:1;padding:14px 10px;display:flex;flex-direction:column;gap:3px;}
 .topbar-right{display:flex;align-items:center;gap:10px;}
 .bs-chip{background:rgba(255,153,51,0.1);border:1px solid rgba(255,153,51,0.3);padding:5px 12px;border-radius:20px;font-size:0.75rem;color:var(--saffron);font-weight:600;}
 
-/* BUTTONS */
-.btn{padding:8px 18px;border-radius:8px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:0.85rem;font-weight:500;transition:all 0.15s;display:inline-flex;align-items:center;justify-content:center;gap:6px;}
+.btn{padding:8px 18px;border-radius:8px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:0.85rem;font-weight:500;transition:all 0.15s;}
 .btn-primary{background:var(--accent);color:#fff;}
 .btn-primary:hover{background:var(--accent2);}
 .btn-secondary{background:var(--surface2);color:var(--text);border:1px solid var(--border);}
@@ -82,13 +84,11 @@ nav{flex:1;padding:14px 10px;display:flex;flex-direction:column;gap:3px;}
 .btn-sm{padding:5px 11px;font-size:0.77rem;border-radius:6px;}
 .btn-danger{background:#3f1818;color:var(--red);border:1px solid #5a2020;}
 .btn-danger:hover{background:#5a1f1f;}
-.btn-wa{background:#075e54;color:#fff;}
-.btn-wa:hover{background:#128c7e;}
 
-/* PAGES & CARDS */
 .page{display:none;padding:28px;animation:fadeIn 0.2s ease;}
 .page.active{display:block;}
 @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
 .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-bottom:24px;}
 .stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:22px;position:relative;overflow:hidden;}
 .stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
@@ -99,11 +99,11 @@ nav{flex:1;padding:14px 10px;display:flex;flex-direction:column;gap:3px;}
 .stat-label{font-size:0.73rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:9px;}
 .stat-value{font-family:'Syne',sans-serif;font-size:2.1rem;font-weight:800;}
 .stat-sub{font-size:0.76rem;color:var(--muted);margin-top:5px;}
-.section-title{font-family:'Syne',sans-serif;font-size:0.95rem;font-weight:700;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;}
+
+.section-title{font-family:'Syne',sans-serif;font-size:0.95rem;font-weight:700;margin-bottom:14px;}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);}
 .card-body{padding:18px;}
 
-/* TABLES & FORMS */
 table{width:100%;border-collapse:collapse;}
 th{text-align:left;font-size:0.7rem;text-transform:uppercase;letter-spacing:1px;color:var(--muted);padding:11px 15px;border-bottom:1px solid var(--border);}
 td{padding:11px 15px;font-size:0.84rem;border-bottom:1px solid var(--border);vertical-align:middle;}
@@ -113,8 +113,6 @@ tr:hover td{background:var(--surface2);}
 .tag-upvc{background:#1e3a5f;color:var(--blue);}
 .tag-gypsum{background:#2a1f4e;color:#a78bfa;}
 .tag-interior{background:#1a3a2a;color:var(--green);}
-.tag-aac{background:#3f3f46;color:#e4e4e7;}
-.tag-prefab{background:#451a03;color:#fdba74;}
 .tag-pending{background:#3a2a14;color:var(--yellow);}
 .tag-done{background:#1a3a2a;color:var(--green);}
 .tag-overdue{background:#3a1a1a;color:var(--red);}
@@ -126,6 +124,22 @@ label{font-size:0.76rem;color:var(--muted);font-weight:500;letter-spacing:0.5px;
 input,select,textarea{background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:9px 13px;font-family:'DM Sans',sans-serif;font-size:0.87rem;outline:none;transition:border-color 0.15s;}
 input:focus,select:focus,textarea:focus{border-color:var(--accent);}
 textarea{resize:vertical;min-height:76px;}
+select option{background:var(--surface2);}
+.form-actions{display:flex;gap:9px;margin-top:8px;justify-content:flex-end;}
+.bs-hint{background:rgba(255,153,51,0.08);border:1px solid rgba(255,153,51,0.2);border-radius:7px;padding:7px 12px;font-size:0.78rem;color:var(--saffron);margin-bottom:12px;}
+
+.activity-list{display:flex;flex-direction:column;}
+.activity-item{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);}
+.activity-item:last-child{border-bottom:none;}
+.act-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);margin-top:5px;flex-shrink:0;}
+.act-dot.green{background:var(--green);}
+.act-dot.blue{background:var(--blue);}
+.act-text{font-size:0.83rem;}
+.act-time{font-size:0.72rem;color:var(--muted);margin-top:2px;}
+
+.search-bar{position:relative;margin-bottom:18px;}
+.search-bar input{width:100%;padding-left:38px;}
+.search-bar::before{content:'🔍';position:absolute;left:11px;top:50%;transform:translateY(-50%);font-size:0.83rem;}
 
 .fu-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:10px;display:flex;align-items:center;gap:14px;}
 .fu-card.today{border-left:3px solid var(--accent);}
@@ -134,45 +148,64 @@ textarea{resize:vertical;min-height:76px;}
 .fu-day{font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;color:var(--accent);min-width:48px;text-align:center;line-height:1;}
 .fu-day small{display:block;font-size:0.62rem;font-weight:400;color:var(--muted);font-family:'DM Sans',sans-serif;text-transform:uppercase;letter-spacing:1px;}
 .fu-info{flex:1;}
+.fu-name{font-weight:600;font-size:0.88rem;}
+.fu-note{font-size:0.78rem;color:var(--muted);margin-top:2px;}
+.fu-bs{font-size:0.7rem;color:var(--saffron);margin-top:3px;}
 
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.72);z-index:200;align-items:center;justify-content:center;}
 .modal-overlay.open{display:flex;}
 .modal{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:26px;width:90%;max-width:500px;max-height:90vh;overflow-y:auto;}
+.modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;}
+.modal-title{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:700;}
+.modal-close{background:var(--surface2);border:none;color:var(--muted);cursor:pointer;width:29px;height:29px;border-radius:6px;font-size:0.95rem;}
+
 #toast{position:fixed;bottom:22px;right:22px;background:var(--green);color:#fff;padding:11px 18px;border-radius:10px;font-size:0.84rem;font-weight:500;z-index:999;opacity:0;transform:translateY(10px);transition:all 0.25s;pointer-events:none;}
 #toast.show{opacity:1;transform:translateY(0);}
+
 #hamburger{display:none;position:fixed;top:14px;left:14px;z-index:200;background:var(--accent);border:none;color:#fff;width:38px;height:38px;border-radius:8px;font-size:1.1rem;cursor:pointer;}
+
+.empty{text-align:center;padding:44px 20px;color:var(--muted);}
+.empty .icon{font-size:2.3rem;margin-bottom:10px;}
+.empty p{font-size:0.88rem;}
 
 @media(max-width:768px){
   #sidebar{transform:translateX(-100%);}
   #sidebar.open{transform:translateX(0);}
   #main{margin-left:0;}
-  .topbar{padding-left:56px;}
+  .page{padding:14px;}
+  .topbar{padding:10px 14px;padding-left:56px;}
   .form-grid{grid-template-columns:1fr;}
   .stat-grid{grid-template-columns:1fr 1fr;}
   #hamburger{display:flex;align-items:center;justify-content:center;}
+  #notif-panel{width:calc(100vw - 28px);right:14px;}
+  .dash-2col{grid-template-columns:1fr!important;}
 }
 </style>
 </head>
 <body>
 
+<!-- WELCOME OVERLAY -->
 <div id="welcome-overlay">
   <div class="star-field" id="star-field"></div>
-  <div class="ring"></div><div class="ring"></div><div class="ring"></div>
+  <div class="ring"></div>
+  <div class="ring"></div>
+  <div class="ring"></div>
   <div class="w-box">
     <div class="om-glyph">ॐ</div>
     <div class="om-mantra">ॐ नमः शिवाय</div>
-    <div class="om-sub">Om Namah Shivaya &nbsp;•&nbsp; PRERAK CRM</div>
+    <div class="om-sub">Om Namah Shivaya &nbsp;•&nbsp; शिवको जय</div>
     <button class="enter-btn" onclick="closeWelcome()">🙏 प्रवेश गर्नुहोस्</button>
   </div>
 </div>
 
 <button id="hamburger" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
 
+<!-- SIDEBAR -->
 <aside id="sidebar">
   <div class="logo">
     <div class="logo-name">PRERAK</div>
-    <span class="logo-sub">AccountKeer System</span>
-    <span class="logo-bs" id="sb-bs">लोड...</span>
+    <span class="logo-sub">CRM System</span>
+    <span class="logo-bs" id="sb-bs">बि.सं. लोड...</span>
   </div>
   <nav>
     <div class="nav-section">Main</div>
@@ -184,13 +217,12 @@ textarea{resize:vertical;min-height:76px;}
     <div class="nav-item" onclick="navigate('quotations',this)"><span class="icon">📋</span> Quotation List</div>
     <div class="nav-item" onclick="navigate('add-quotation',this)"><span class="icon">📝</span> New Quotation</div>
     <div class="nav-section">Follow-ups</div>
-    <div class="nav-item" onclick="navigate('followups',this)"><span class="icon">📅</span> Tracker</div>
+    <div class="nav-item" onclick="navigate('followups',this)"><span class="icon">📅</span> Follow-up Tracker</div>
     <div class="nav-item" onclick="navigate('add-followup',this)"><span class="icon">🔔</span> Add Follow-up</div>
-    <div class="nav-section">System</div>
-    <div class="nav-item" onclick="exportData()"><span class="icon">💾</span> Backup Data</div>
   </nav>
 </aside>
 
+<!-- MAIN -->
 <main id="main">
   <div class="topbar">
     <span class="page-title" id="page-title">Dashboard</span>
@@ -202,115 +234,149 @@ textarea{resize:vertical;min-height:76px;}
     </div>
   </div>
 
+  <!-- NOTIF PANEL -->
   <div id="notif-panel">
-    <div class="np-head"><span class="np-title">🔔 Notifications</span><button class="np-clear" onclick="clearNotifs()">Clear</button></div>
-    <div class="np-list" id="np-list"></div>
+    <div class="np-head">
+      <span class="np-title">🔔 Notifications</span>
+      <button class="np-clear" onclick="clearNotifs()">सबै हटाउनुहोस्</button>
+    </div>
+    <div class="np-list" id="np-list"><div class="np-empty">कुनै notification छैन</div></div>
   </div>
 
+  <!-- DASHBOARD -->
   <div class="page active" id="page-dashboard">
     <div class="stat-grid">
-      <div class="stat-card c1"><div class="stat-label">Total Customers</div><div class="stat-value" id="s-cust">0</div></div>
-      <div class="stat-card c2"><div class="stat-label">Active Work</div><div class="stat-value" id="s-ongoing">0</div></div>
-      <div class="stat-card c3"><div class="stat-label">Follow-ups Today</div><div class="stat-value" id="s-today">0</div></div>
-      <div class="stat-card c4"><div class="stat-label">Total Quotes</div><div class="stat-value" id="s-quotes">0</div></div>
+      <div class="stat-card c1"><div class="stat-label">Total Customers</div><div class="stat-value" id="s-cust">0</div><div class="stat-sub">Registered clients</div></div>
+      <div class="stat-card c2"><div class="stat-label">Ongoing Work</div><div class="stat-value" id="s-ongoing">0</div><div class="stat-sub">Active quotations</div></div>
+      <div class="stat-card c3"><div class="stat-label">Follow-ups Today</div><div class="stat-value" id="s-today">0</div><div class="stat-sub">आजको follow-up</div></div>
+      <div class="stat-card c4"><div class="stat-label">Total Quotations</div><div class="stat-value" id="s-quotes">0</div><div class="stat-sub">All time</div></div>
     </div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px">
+    <div class="dash-2col" style="display:grid;grid-template-columns:1fr 1fr;gap:18px">
+      <div>
+        <div class="section-title">Recent Customers</div>
+        <div class="card"><table><thead><tr><th>नाम</th><th>काम</th><th>फोन</th></tr></thead><tbody id="dash-custs"></tbody></table></div>
+      </div>
       <div>
         <div class="section-title">Recent Activity</div>
-        <div class="card card-body"><div id="act-feed" style="font-size:0.85rem"></div></div>
+        <div class="card card-body"><div class="activity-list" id="act-feed"></div></div>
       </div>
-      <div>
-        <div class="section-title">Upcoming Follow-ups (BS)</div>
-        <div id="dash-fu"></div>
-      </div>
+    </div>
+    <div style="margin-top:18px">
+      <div class="section-title">Upcoming Follow-ups (बि.सं.)</div>
+      <div id="dash-fu"></div>
     </div>
   </div>
 
+  <!-- CUSTOMERS -->
   <div class="page" id="page-customers">
-    <div style="display:flex;gap:10px;margin-bottom:15px">
-        <input type="text" id="cust-search" placeholder="नाम, फोन वा ठेगानाबाट खोज्नुहोस्..." oninput="renderCustomers()" style="flex:1">
-    </div>
-    <div class="card" style="overflow-x:auto">
-      <table><thead><tr><th>नाम</th><th>फोन</th><th>काम</th><th>Actions</th></tr></thead><tbody id="cust-table"></tbody></table>
+    <div class="search-bar"><input type="text" id="cust-search" placeholder="Search by name or phone..." oninput="renderCustomers()"></div>
+    <div class="card" style="overflow:hidden">
+      <table><thead><tr><th>नाम</th><th>फोन</th><th>ठेगाना</th><th>काम</th><th>Actions</th></tr></thead><tbody id="cust-table"></tbody></table>
+      <div id="no-custs" class="empty" style="display:none"><div class="icon">👥</div><p>No customers found</p></div>
     </div>
   </div>
 
+  <!-- ADD CUSTOMER -->
   <div class="page" id="page-add-customer">
-    <div class="card card-body" style="max-width:600px;margin:auto">
-      <h2 class="section-title">➕ नयाँ ग्राहक थप्नुहोस्</h2>
+    <div class="card card-body" style="max-width:580px">
+      <h2 style="font-family:Syne,sans-serif;font-size:1.05rem;margin-bottom:18px">➕ Add New Customer</h2>
       <div class="form-grid">
-        <div class="form-group"><label>नाम *</label><input type="text" id="c-name"></div>
-        <div class="form-group"><label>फोन *</label><input type="tel" id="c-phone"></div>
-        <div class="form-group full"><label>ठेगाना</label><input type="text" id="c-address"></div>
-        <div class="form-group"><label>कामको प्रकार</label>
-          <select id="c-work">
-            <option value="">Select</option>
-            <option>UPVC</option><option>Gypsum</option>
-            <option>Interior</option><option>AAC Blocks</option>
-            <option>Prefab Home</option><option>Aluminium</option>
-          </select>
+        <div class="form-group"><label>Full Name *</label><input type="text" id="c-name" placeholder="Customer name"></div>
+        <div class="form-group"><label>Phone *</label><input type="tel" id="c-phone" placeholder="98XXXXXXXX"></div>
+        <div class="form-group full"><label>Address</label><input type="text" id="c-address" placeholder="City / Area"></div>
+        <div class="form-group"><label>Work Type</label>
+          <select id="c-work"><option value="">Select</option><option>UPVC</option><option>Gypsum</option><option>Interior</option><option>Other</option></select>
         </div>
-        <div class="form-group"><label>कैफियत (Notes)</label><input type="text" id="c-notes"></div>
+        <div class="form-group"><label>Notes</label><input type="text" id="c-notes" placeholder="Optional"></div>
       </div>
-      <div class="form-actions" style="margin-top:20px;display:flex;justify-content:flex-end;gap:10px">
-        <button class="btn btn-secondary" onclick="navigate('customers')">Cancel</button>
+      <div class="form-actions">
+        <button class="btn btn-secondary" onclick="navigate('customers',null)">Cancel</button>
         <button class="btn btn-primary" onclick="addCustomer()">Save Customer</button>
       </div>
     </div>
   </div>
 
+  <!-- QUOTATIONS -->
   <div class="page" id="page-quotations">
-    <div class="card" style="overflow-x:auto">
-      <table><thead><tr><th>ग्राहक</th><th>विवरण</th><th>रकम</th><th>स्थिति</th><th>डिलिट</th></tr></thead><tbody id="quot-table"></tbody></table>
+    <div class="card" style="overflow:hidden">
+      <table><thead><tr><th>Customer</th><th>Details</th><th>Amount</th><th>Date (बि.सं.)</th><th>Status</th><th>Del</th></tr></thead><tbody id="quot-table"></tbody></table>
+      <div id="no-quot" class="empty" style="display:none"><div class="icon">📋</div><p>No quotations yet</p></div>
     </div>
   </div>
 
+  <!-- ADD QUOTATION -->
   <div class="page" id="page-add-quotation">
-    <div class="card card-body" style="max-width:600px;margin:auto">
-      <h2 class="section-title">📝 नयाँ कोटेसन</h2>
+    <div class="card card-body" style="max-width:580px">
+      <h2 style="font-family:Syne,sans-serif;font-size:1.05rem;margin-bottom:18px">📝 New Quotation</h2>
       <div class="form-grid">
-        <div class="form-group full"><label>ग्राहक छान्नुहोस् *</label><select id="q-cust"></select></div>
-        <div class="form-group full"><label>कामको विवरण *</label><textarea id="q-details"></textarea></div>
-        <div class="form-group"><label>अनुमानित रकम (Rs.)</label><input type="number" id="q-amount"></div>
-        <div class="form-group"><label>स्थिति</label>
+        <div class="form-group full"><label>Select Customer *</label><select id="q-cust"></select></div>
+        <div class="form-group full"><label>Work Details *</label><textarea id="q-details" placeholder="Describe the work..."></textarea></div>
+        <div class="form-group"><label>Amount (Rs.)</label><input type="number" id="q-amount" placeholder="0"></div>
+        <div class="form-group"><label>Status</label>
           <select id="q-status"><option>Pending</option><option>Approved</option><option>Completed</option></select>
         </div>
       </div>
-      <div class="form-actions" style="margin-top:20px;display:flex;justify-content:flex-end;gap:10px">
+      <div class="form-actions">
+        <button class="btn btn-secondary" onclick="navigate('quotations',null)">Cancel</button>
         <button class="btn btn-primary" onclick="addQuotation()">Save Quotation</button>
       </div>
     </div>
   </div>
 
+  <!-- FOLLOWUPS -->
   <div class="page" id="page-followups">
+    <div style="display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap">
+      <button class="btn btn-secondary btn-sm" onclick="filterFU('all')" id="fa-all">All</button>
+      <button class="btn btn-secondary btn-sm" onclick="filterFU('today')" id="fa-today">Today</button>
+      <button class="btn btn-secondary btn-sm" onclick="filterFU('overdue')" id="fa-overdue">Overdue</button>
+      <button class="btn btn-secondary btn-sm" onclick="filterFU('upcoming')" id="fa-upcoming">Upcoming</button>
+    </div>
     <div id="fu-list"></div>
+    <div id="no-fu" class="empty" style="display:none"><div class="icon">📅</div><p>No follow-ups found</p></div>
   </div>
 
+  <!-- ADD FOLLOWUP -->
   <div class="page" id="page-add-followup">
-    <div class="card card-body" style="max-width:600px;margin:auto">
-      <h2 class="section-title">🔔 फलो-अप थप्नुहोस्</h2>
+    <div class="card card-body" style="max-width:580px">
+      <h2 style="font-family:Syne,sans-serif;font-size:1.05rem;margin-bottom:18px">🔔 Add Follow-up</h2>
+      <div class="bs-hint" id="fu-bs-today">📅 आजको मिति: लोड हुँदैछ...</div>
       <div class="form-grid">
-        <div class="form-group full"><label>ग्राहक *</label><select id="f-cust"></select></div>
-        <div class="form-group"><label>मिति (AD) *</label><input type="date" id="f-date" onchange="updateBSPreview()"></div>
-        <div class="form-group"><label>नेपाली मिति (BS)</label><input type="text" id="f-bs" readonly style="color:var(--saffron)"></div>
-        <div class="form-group full"><label>नोट</label><textarea id="f-notes"></textarea></div>
+        <div class="form-group full"><label>Select Customer *</label><select id="f-cust"></select></div>
+        <div class="form-group"><label>Follow-up Date (AD) *</label><input type="date" id="f-date" onchange="updateBSPreview()"></div>
+        <div class="form-group"><label>BS Date (Auto)</label><input type="text" id="f-bs" readonly placeholder="AD मिति छान्नुस्" style="opacity:0.7;color:var(--saffron)"></div>
+        <div class="form-group"><label>Priority</label>
+          <select id="f-priority"><option>Normal</option><option>High</option><option>Urgent</option></select>
+        </div>
+        <div class="form-group full"><label>Notes</label><textarea id="f-notes" placeholder="What to follow up about..."></textarea></div>
       </div>
-      <button class="btn btn-primary" style="margin-top:20px;width:100%" onclick="addFollowup()">सुरक्षित गर्नुहोस्</button>
+      <div class="form-actions">
+        <button class="btn btn-secondary" onclick="navigate('followups',null)">Cancel</button>
+        <button class="btn btn-primary" onclick="addFollowup()">Save Follow-up</button>
+      </div>
     </div>
   </div>
 </main>
 
+<!-- EDIT MODAL -->
 <div class="modal-overlay" id="edit-modal">
   <div class="modal">
-    <div class="modal-head" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
-      <span style="font-weight:bold">✏️ ग्राहक विवरण सम्पादन</span>
-      <button onclick="closeModal()" style="background:none;border:none;color:white;cursor:pointer">✕</button>
+    <div class="modal-head">
+      <span class="modal-title">✏️ Edit Customer</span>
+      <button class="modal-close" onclick="closeModal()">✕</button>
     </div>
-    <div class="form-grid" id="edit-form-content">
-        </div>
-    <div class="form-actions" style="margin-top:20px;display:flex;justify-content:flex-end;gap:10px">
-      <button class="btn btn-secondary" onclick="closeModal()">बन्द गर्नुहोस्</button>
-      <button class="btn btn-primary" onclick="saveEdit()">अपडेट गर्नुहोस्</button>
+    <div class="form-grid">
+      <div class="form-group"><label>Full Name</label><input type="text" id="e-name"></div>
+      <div class="form-group"><label>Phone</label><input type="tel" id="e-phone"></div>
+      <div class="form-group full"><label>Address</label><input type="text" id="e-address"></div>
+      <div class="form-group"><label>Work Type</label>
+        <select id="e-work"><option value="">Select</option><option>UPVC</option><option>Gypsum</option><option>Interior</option><option>Other</option></select>
+      </div>
+      <div class="form-group"><label>Notes</label><input type="text" id="e-notes"></div>
+    </div>
+    <input type="hidden" id="e-id">
+    <div class="form-actions" style="margin-top:14px">
+      <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveEdit()">Update</button>
     </div>
   </div>
 </div>
@@ -319,275 +385,452 @@ textarea{resize:vertical;min-height:76px;}
 
 <script>
 // ============================================================
-// BS ENGINE (Extended)
+// BS CALENDAR ENGINE
 // ============================================================
 const BS_NP = ['बैशाख','जेठ','असार','श्रावण','भाद्र','आश्विन','कार्तिक','मंसिर','पौष','माघ','फाल्गुण','चैत्र'];
 const NP_D  = ['०','१','२','३','४','५','६','७','८','९'];
-const BS_TABLE = { 2080:[31,31,31,32,31,31,30,29,30,29,30,30], 2081:[31,31,32,31,31,31,30,29,30,29,30,30], 2082:[31,31,32,32,31,30,30,29,30,29,30,30], 2083:[31,32,31,32,31,30,30,30,29,29,30,31] };
+const BS_TABLE = {
+  2000:[30,32,31,32,31,30,30,30,29,30,29,31],2001:[31,31,32,31,31,31,30,29,30,29,30,30],
+  2002:[31,31,32,32,31,30,30,29,30,29,30,30],2003:[31,32,31,32,31,30,30,30,29,29,30,31],
+  2004:[30,32,31,32,31,30,30,30,29,30,29,31],2005:[31,31,32,31,31,31,30,29,30,29,30,30],
+  2006:[31,31,32,32,31,30,30,29,30,29,30,30],2007:[31,32,31,32,31,30,30,30,29,29,30,31],
+  2008:[31,31,31,32,31,31,29,30,30,29,29,31],2009:[31,31,32,31,31,31,30,29,30,29,30,30],
+  2010:[31,31,32,32,31,30,30,29,30,29,30,30],2011:[31,32,31,32,31,30,30,30,29,29,30,31],
+  2012:[31,31,31,32,31,31,29,30,30,29,30,30],2013:[31,31,32,31,31,31,30,29,30,29,30,30],
+  2014:[31,31,32,32,31,30,30,29,30,29,30,30],2015:[31,32,31,32,31,30,30,30,29,29,30,31],
+  2016:[31,31,31,32,31,31,29,30,30,29,30,30],2017:[31,31,32,31,31,31,30,29,30,29,30,30],
+  2018:[31,31,32,32,31,30,30,29,30,29,30,30],2019:[31,32,31,32,31,30,30,30,29,29,30,31],
+  2020:[31,31,31,32,31,31,30,29,30,29,30,30],2021:[31,31,32,31,31,31,30,29,30,29,30,30],
+  2022:[31,31,32,32,31,30,30,29,30,29,30,30],2023:[31,32,31,32,31,30,30,30,29,29,30,31],
+  2024:[31,31,31,32,31,31,30,29,30,29,30,30],2025:[31,31,32,31,31,31,30,29,30,29,30,30],
+  2026:[31,31,32,32,31,30,30,29,30,29,30,30],2027:[31,32,31,32,31,30,30,30,29,29,30,32],
+  2028:[30,32,31,32,31,30,30,30,29,30,29,31],2029:[31,31,32,31,31,31,30,29,30,29,30,30],
+  2030:[31,31,32,32,31,30,30,29,30,29,30,30],2031:[31,32,31,32,31,30,30,30,29,29,30,31],
+  2032:[30,32,31,32,31,30,30,30,29,30,29,31],2033:[31,31,32,31,31,31,30,29,30,29,30,30],
+  2034:[31,31,32,32,31,30,30,29,30,29,30,30],2035:[31,32,31,32,31,30,30,30,29,29,30,31],
+  2036:[31,31,31,32,31,31,29,30,30,29,30,30],2037:[31,31,32,31,31,31,30,29,30,29,30,30],
+  2038:[31,31,32,32,31,30,30,29,30,29,30,30],2039:[31,32,31,32,31,30,30,30,29,29,30,31],
+  2040:[31,31,31,32,31,31,30,29,30,29,30,30],2041:[31,31,32,31,31,31,30,29,30,29,30,30],
+  2042:[31,31,32,32,31,30,30,29,30,29,30,30],2043:[31,32,31,32,31,30,30,30,29,29,30,31],
+  2044:[31,31,31,32,31,31,30,29,30,29,30,30],2045:[31,31,32,31,31,31,30,29,30,29,30,30],
+  2046:[31,32,31,32,31,30,30,30,29,29,30,30],2047:[31,32,31,32,31,30,30,30,29,30,29,31],
+  2048:[31,31,31,32,31,31,30,29,30,29,30,30],2049:[31,31,32,31,31,31,30,29,30,29,30,30],
+  2050:[31,31,32,32,31,30,30,29,30,29,30,30],2051:[31,32,31,32,31,30,30,30,29,29,30,31],
+  2052:[31,31,31,32,31,31,30,29,30,29,30,30],2053:[31,31,32,31,31,31,30,29,30,29,30,30],
+  2054:[31,31,32,32,31,30,30,29,30,29,30,30],2055:[31,32,31,32,31,30,30,30,29,29,30,31],
+  2056:[31,31,31,32,31,31,30,29,30,29,30,30],2057:[31,31,32,31,31,31,30,29,30,29,30,30],
+  2058:[31,31,32,32,31,30,30,29,30,29,30,30],2059:[31,32,31,32,31,30,30,30,29,29,30,31],
+  2060:[31,31,31,32,31,31,30,29,30,29,30,30],2061:[31,31,32,31,31,31,30,29,30,29,30,30],
+  2062:[31,31,32,32,31,30,30,29,30,29,30,30],2063:[31,32,31,32,31,30,30,30,29,29,30,31],
+  2064:[31,31,31,32,31,31,30,29,30,29,30,30],2065:[31,31,32,31,31,31,30,29,30,29,30,30],
+  2066:[31,31,32,32,31,30,30,29,30,29,30,30],2067:[31,32,31,32,31,30,30,30,29,29,30,31],
+  2068:[31,31,31,32,31,31,30,29,30,29,30,30],2069:[31,31,32,31,31,31,30,29,30,29,30,30],
+  2070:[31,31,32,32,31,30,30,29,30,29,30,30],2071:[31,32,31,32,31,30,30,30,29,29,30,31],
+  2072:[31,31,31,32,31,31,30,29,30,29,30,30],2073:[31,31,32,31,31,31,30,29,30,29,30,30],
+  2074:[31,31,32,32,31,30,30,29,30,29,30,30],2075:[31,32,31,32,31,30,30,30,29,29,30,31],
+  2076:[31,31,31,32,31,31,30,29,30,29,30,30],2077:[31,31,32,31,31,31,30,29,30,29,30,30],
+  2078:[31,31,32,32,31,30,30,29,30,29,30,30],2079:[31,32,31,32,31,30,30,30,29,29,30,31],
+  2080:[31,31,31,32,31,31,30,29,30,29,30,30],2081:[31,31,32,31,31,31,30,29,30,29,30,30],
+  2082:[31,31,32,32,31,30,30,29,30,29,30,30],2083:[31,32,31,32,31,30,30,30,29,29,30,31],
+  2084:[31,31,31,32,31,31,30,29,30,29,30,30],2085:[31,31,32,31,31,31,30,29,30,29,30,30],
+  2086:[31,31,32,32,31,30,30,29,30,29,30,30],2087:[31,32,31,32,31,30,30,30,29,29,30,31],
+  2088:[31,31,31,32,31,31,30,29,30,29,30,30],2089:[31,31,32,31,31,31,30,29,30,29,30,30],
+  2090:[31,31,32,32,31,30,30,29,30,29,30,30]
+};
+// Reference: 1943-04-14 AD = 2000-01-01 BS
 const AD_REF = new Date(1943,3,14);
 
 function adToBS(d){
-    let days = Math.floor((d - AD_REF)/86400000);
-    let y=2000,m=0,day=1;
-    // Simple table for common years
-    for(let yr=2000; yr<=2090; yr++){
-        let yrData = BS_TABLE[yr] || [31,31,32,31,31,31,30,29,30,29,30,30];
-        for(let mo=0; mo<12; mo++){
-            if(days < yrData[mo]){ return {y:yr, m:mo, d:days+1}; }
-            days -= yrData[mo];
-        }
+  let days = Math.floor((d - AD_REF)/86400000);
+  let y=2000,m=0,day=1;
+  outer:for(let yr=2000;yr<=2090;yr++){
+    if(!BS_TABLE[yr])break;
+    for(let mo=0;mo<12;mo++){
+      const dim=BS_TABLE[yr][mo];
+      if(days<dim){y=yr;m=mo;day=days+1;break outer;}
+      days-=dim;
     }
-    return {y:2081, m:0, d:1};
+  }
+  return {y,m,d:day};
 }
 
 function npNum(n){return String(n).split('').map(c=>NP_D[+c]||c).join('');}
 function bsStr(bs){return `${npNum(bs.y)} ${BS_NP[bs.m]} ${npNum(bs.d)}`;}
+function bsFull(bs){return `बि.सं. ${bsStr(bs)}`;}
 function todayBS(){return adToBS(new Date());}
 
 // ============================================================
-// DATA MANAGEMENT
+// DATA
 // ============================================================
-let customers = JSON.parse(localStorage.getItem('pk_customers') || '[]');
-let quotations = JSON.parse(localStorage.getItem('pk_quotations') || '[]');
-let followups = JSON.parse(localStorage.getItem('pk_followups') || '[]');
-let activities = JSON.parse(localStorage.getItem('pk_activities') || '[]');
-let notifs = JSON.parse(localStorage.getItem('pk_notifs') || '[]');
+let customers    = JSON.parse(localStorage.getItem('pk_customers')  ||'[]');
+let quotations   = JSON.parse(localStorage.getItem('pk_quotations') ||'[]');
+let followups    = JSON.parse(localStorage.getItem('pk_followups')  ||'[]');
+let activities   = JSON.parse(localStorage.getItem('pk_activities') ||'[]');
+let notifs       = JSON.parse(localStorage.getItem('pk_notifs')     ||'[]');
 
 function save(){
-    localStorage.setItem('pk_customers', JSON.stringify(customers));
-    localStorage.setItem('pk_quotations', JSON.stringify(quotations));
-    localStorage.setItem('pk_followups', JSON.stringify(followups));
-    localStorage.setItem('pk_activities', JSON.stringify(activities));
-    localStorage.setItem('pk_notifs', JSON.stringify(notifs));
+  localStorage.setItem('pk_customers',  JSON.stringify(customers));
+  localStorage.setItem('pk_quotations', JSON.stringify(quotations));
+  localStorage.setItem('pk_followups',  JSON.stringify(followups));
+  localStorage.setItem('pk_activities', JSON.stringify(activities));
+  localStorage.setItem('pk_notifs',     JSON.stringify(notifs));
 }
 
-function logActivity(text, type='accent'){
-    activities.unshift({text, time: new Date().toLocaleTimeString(), type});
-    if(activities.length > 15) activities.pop();
-    save();
-}
-
-function toast(m){
-    const t=document.getElementById('toast');
-    t.textContent=m; t.classList.add('show');
-    setTimeout(()=>t.classList.remove('show'), 2500);
+function logActivity(text,type='accent'){
+  activities.unshift({text,time:new Date().toLocaleTimeString()+' | '+bsFull(todayBS()),type});
+  if(activities.length>20)activities.pop();
 }
 
 // ============================================================
-// CORE FUNCTIONS
+// NOTIFICATIONS
 // ============================================================
-function navigate(page, el){
-    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-    document.getElementById('page-'+page).classList.add('active');
-    document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-    if(el) el.classList.add('active');
-    document.getElementById('page-title').textContent = page.charAt(0).toUpperCase() + page.slice(1);
-    
-    if(page==='dashboard') renderDashboard();
-    if(page==='customers') renderCustomers();
-    if(page==='quotations') renderQuotations();
-    if(page==='followups') renderFU();
-    if(page==='add-quotation' || page==='add-followup') fillSelects();
+function pushNotif(text,icon='🔔'){
+  notifs.unshift({id:Date.now()+'',text,icon,time:bsFull(todayBS()),read:false});
+  if(notifs.length>30)notifs.pop();
+  save(); renderBadge();
 }
-
-function fillSelects(){
-    const options = '<option value="">-- ग्राहक छान्नुहोस् --</option>' + customers.map(c=>`<option value="${c.id}">${c.name} (${c.phone})</option>`).join('');
-    document.getElementById('q-cust').innerHTML = options;
-    document.getElementById('f-cust').innerHTML = options;
+function renderBadge(){
+  const u=notifs.filter(n=>!n.read).length;
+  const b=document.getElementById('notif-badge');
+  if(u>0){b.textContent=u>9?'9+':u;b.classList.add('show');}
+  else b.classList.remove('show');
 }
-
-function wTag(w){
-    const tags = { UPVC:'tag-upvc', Gypsum:'tag-gypsum', Interior:'tag-interior', 'AAC Blocks':'tag-aac', 'Prefab Home':'tag-prefab' };
-    return `<span class="tag ${tags[w]||'tag-upvc'}">${w||'—'}</span>`;
+function renderNotifList(){
+  const el=document.getElementById('np-list');
+  if(!notifs.length){el.innerHTML='<div class="np-empty">🙏 कुनै notification छैन</div>';return;}
+  el.innerHTML=notifs.map(n=>`<div class="np-item ${n.read?'':'unread'}" onclick="readNotif('${n.id}')">
+    <div class="np-dot ${n.read?'read':''}"></div>
+    <div><div class="np-text">${n.icon} ${n.text}</div><div class="np-time">${n.time}</div></div>
+  </div>`).join('');
 }
+function readNotif(id){const n=notifs.find(x=>x.id===id);if(n){n.read=true;save();renderBadge();renderNotifList();}}
+function clearNotifs(){notifs=[];save();renderBadge();renderNotifList();}
+function toggleNotif(){
+  const p=document.getElementById('notif-panel');
+  p.classList.toggle('open');
+  if(p.classList.contains('open')){notifs.forEach(n=>n.read=true);save();renderBadge();renderNotifList();}
+}
+document.addEventListener('click',e=>{
+  const p=document.getElementById('notif-panel'),b=document.getElementById('notif-btn');
+  if(p.classList.contains('open')&&!p.contains(e.target)&&!b.contains(e.target))p.classList.remove('open');
+  const sb=document.getElementById('sidebar'),hb=document.getElementById('hamburger');
+  if(window.innerWidth<=768&&sb.classList.contains('open')&&!sb.contains(e.target)&&!hb.contains(e.target))sb.classList.remove('open');
+});
 
-// WhatsApp Integration
-function sendWA(phone, name, msgType="followup") {
-    let message = msgType === "followup" 
-        ? `नमस्ते ${name} सर, म Prerak Construction बाट। हजुरको कामको बारेमा थप केही कुरा बुझ्न खोज्दै थियौं।`
-        : `नमस्ते ${name} सर, हजुरको कोटेसन तयार भएको छ।`;
-    window.open(`https://wa.me/977${phone}?text=${encodeURIComponent(message)}`, '_blank');
+// ============================================================
+// WELCOME
+// ============================================================
+(function(){
+  const sf=document.getElementById('star-field');
+  for(let i=0;i<50;i++){
+    const s=document.createElement('div');s.className='star';
+    const sz=Math.random()*2.5+1;
+    s.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${Math.random()*100}%;animation-delay:${Math.random()*3}s;animation-duration:${2+Math.random()*3}s`;
+    sf.appendChild(s);
+  }
+})();
+function closeWelcome(){
+  const o=document.getElementById('welcome-overlay');
+  o.classList.add('hide');
+  setTimeout(()=>o.style.display='none',700);
 }
 
 // ============================================================
-// CUSTOMER & DASHBOARD RENDERING
+// NAVIGATION
+// ============================================================
+function navigate(page,el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  if(el)el.classList.add('active');
+  const t={dashboard:'Dashboard',customers:'Customers','add-customer':'Add Customer',quotations:'Quotations','add-quotation':'New Quotation',followups:'Follow-up Tracker','add-followup':'Add Follow-up'};
+  document.getElementById('page-title').textContent=t[page]||page;
+  if(page==='dashboard')renderDashboard();
+  if(page==='customers')renderCustomers();
+  if(page==='quotations')renderQuotations();
+  if(page==='followups')renderFU('all');
+  if(page==='add-quotation'||page==='add-followup')fillCustSelects();
+  if(page==='add-followup')document.getElementById('fu-bs-today').textContent='📅 आजको मिति: '+bsFull(todayBS());
+  if(window.innerWidth<=768)document.getElementById('sidebar').classList.remove('open');
+}
+
+// ============================================================
+// TOAST
+// ============================================================
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
+
+// ============================================================
+// HELPERS
+// ============================================================
+function wTag(w){const m={UPVC:'tag-upvc',Gypsum:'tag-gypsum',Interior:'tag-interior'};return `<span class="tag ${m[w]||'tag-upvc'}">${w||'—'}</span>`;}
+
+// ============================================================
+// DASHBOARD
+// ============================================================
+function renderDashboard(){
+  const today=new Date().toISOString().split('T')[0];
+  document.getElementById('s-cust').textContent=customers.length;
+  document.getElementById('s-quotes').textContent=quotations.length;
+  document.getElementById('s-ongoing').textContent=quotations.filter(q=>q.status==='Pending').length;
+  document.getElementById('s-today').textContent=followups.filter(f=>f.date===today&&f.status!=='Done').length;
+
+  const dt=document.getElementById('dash-custs');
+  const rc=customers.slice(-5).reverse();
+  dt.innerHTML=rc.length?rc.map(c=>`<tr><td>${c.name}</td><td>${wTag(c.work)}</td><td>${c.phone}</td></tr>`).join('')
+    :'<tr><td colspan="3" style="text-align:center;color:var(--muted);padding:18px">No customers yet</td></tr>';
+
+  const af=document.getElementById('act-feed');
+  af.innerHTML=activities.length?activities.slice(0,6).map(a=>`<div class="activity-item">
+    <div class="act-dot ${a.type==='green'?'green':a.type==='blue'?'blue':''}"></div>
+    <div><div class="act-text">${a.text}</div><div class="act-time">${a.time}</div></div>
+  </div>`).join(''):'<div style="color:var(--muted);font-size:0.83rem;text-align:center;padding:18px">No activity yet</div>';
+
+  const dfu=document.getElementById('dash-fu');
+  const upc=followups.filter(f=>f.status!=='Done').sort((a,b)=>a.date.localeCompare(b.date)).slice(0,3);
+  dfu.innerHTML=upc.length?upc.map(f=>{
+    const c=customers.find(x=>x.id===f.customerId);
+    const bs=adToBS(new Date(f.date+'T00:00:00'));
+    const cls=f.date<today?'overdue':f.date===today?'today':'upcoming';
+    return `<div class="fu-card ${cls}">
+      <div class="fu-day">${npNum(bs.d)}<small>${BS_NP[bs.m]}</small></div>
+      <div class="fu-info">
+        <div class="fu-name">${c?c.name:'Unknown'}</div>
+        <div class="fu-note">${f.notes||'No notes'}</div>
+        <div class="fu-bs">बि.सं. ${bsStr(bs)} (${toNepaliNum(bs.y)})</div>
+      </div>
+      <span class="tag ${cls==='overdue'?'tag-overdue':cls==='today'?'tag-pending':'tag-upvc'}">${cls}</span>
+    </div>`;
+  }).join(''):'<div style="color:var(--muted);font-size:0.83rem;padding:14px">No upcoming follow-ups</div>';
+}
+
+function toNepaliNum(n){return npNum(n);}
+
+// ============================================================
+// CUSTOMERS
 // ============================================================
 function renderCustomers(){
-    const q = document.getElementById('cust-search').value.toLowerCase();
-    const filtered = customers.filter(c => 
-        c.name.toLowerCase().includes(q) || 
-        c.phone.includes(q) || 
-        (c.address && c.address.toLowerCase().includes(q))
-    );
-    
-    document.getElementById('cust-table').innerHTML = filtered.map(c => `
-        <tr>
-            <td><strong>${c.name}</strong><br><small style="color:var(--muted)">${c.address||''}</small></td>
-            <td>${c.phone}</td>
-            <td>${wTag(c.work)}</td>
-            <td>
-                <button class="btn btn-wa btn-sm" onclick="sendWA('${c.phone}', '${c.name}')">💬</button>
-                <button class="btn btn-secondary btn-sm" onclick="openEdit('${c.id}')">✏️</button>
-            </td>
-        </tr>
-    `).join('');
-}
-
-function renderDashboard(){
-    document.getElementById('s-cust').textContent = customers.length;
-    document.getElementById('s-quotes').textContent = quotations.length;
-    document.getElementById('s-ongoing').textContent = quotations.filter(q=>q.status==='Pending').length;
-    
-    document.getElementById('act-feed').innerHTML = activities.map(a => `
-        <div style="margin-bottom:8px; border-bottom:1px solid var(--border); padding-bottom:4px">
-            <span style="color:var(--accent)">●</span> ${a.text} <br>
-            <small style="color:var(--muted)">${a.time}</small>
-        </div>
-    `).join('') || 'No recent activity';
-
-    const upcoming = followups.filter(f=>f.status!=='Done').slice(0,3);
-    document.getElementById('dash-fu').innerHTML = upcoming.map(f => {
-        const c = customers.find(x=>x.id===f.customerId);
-        return `<div class="fu-card today">
-            <div class="fu-info">
-                <strong>${c?c.name:'Unknown'}</strong> - ${f.bsDate} <br>
-                <small>${f.notes||'No notes'}</small>
-            </div>
-            <button class="btn btn-wa btn-sm" onclick="sendWA('${c?c.phone:''}', '${c?c.name:''}')">WA</button>
-        </div>`;
-    }).join('') || 'No upcoming follow-ups';
+  const q=(document.getElementById('cust-search').value||'').toLowerCase();
+  const filtered=customers.filter(c=>c.name.toLowerCase().includes(q)||c.phone.includes(q));
+  const tb=document.getElementById('cust-table'),em=document.getElementById('no-custs');
+  if(!filtered.length){tb.innerHTML='';em.style.display='block';return;}
+  em.style.display='none';
+  tb.innerHTML=filtered.map(c=>`<tr>
+    <td><strong>${c.name}</strong></td><td>${c.phone}</td><td>${c.address||'—'}</td><td>${wTag(c.work)}</td>
+    <td style="white-space:nowrap">
+      <button class="btn btn-secondary btn-sm" onclick="openEdit('${c.id}')">✏️</button>
+      <button class="btn btn-danger btn-sm" style="margin-left:5px" onclick="delCust('${c.id}')">🗑</button>
+    </td>
+  </tr>`).join('');
 }
 
 function addCustomer(){
-    const name = document.getElementById('c-name').value;
-    const phone = document.getElementById('c-phone').value;
-    if(!name || !phone) return toast('नाम र फोन अनिवार्य छ!');
-    
-    const newCust = { 
-        id: Date.now().toString(), 
-        name, phone, 
-        address: document.getElementById('c-address').value,
-        work: document.getElementById('c-work').value,
-        notes: document.getElementById('c-notes').value
-    };
-    customers.push(newCust);
-    logActivity(`नयाँ ग्राहक थपियो: ${name}`, 'green');
-    save(); navigate('customers'); toast('✅ सुरक्षित भयो!');
+  const name=document.getElementById('c-name').value.trim(),phone=document.getElementById('c-phone').value.trim();
+  if(!name||!phone){toast('❌ Name and phone required');return;}
+  const c={id:Date.now()+'',name,phone,address:document.getElementById('c-address').value.trim(),work:document.getElementById('c-work').value,notes:document.getElementById('c-notes').value.trim()};
+  customers.push(c);
+  logActivity(`नयाँ ग्राहक: ${name}`,'green');
+  pushNotif(`नयाँ ग्राहक थपियो: ${name}`,'👤');
+  save();
+  ['c-name','c-phone','c-address','c-notes'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('c-work').value='';
+  toast('✅ Customer saved!');
+  navigate('customers',null);
 }
 
-// Clean Edit Function (Reduced Duplication)
-let currentEditId = null;
+function delCust(id){
+  if(!confirm('Delete this customer?'))return;
+  const c=customers.find(x=>x.id===id);
+  customers=customers.filter(x=>x.id!==id);
+  logActivity(`ग्राहक हटाइयो: ${c?.name}`,'red');
+  save();renderCustomers();toast('🗑 Deleted');
+}
+
 function openEdit(id){
-    const c = customers.find(x=>x.id===id);
-    if(!c) return;
-    currentEditId = id;
-    document.getElementById('edit-form-content').innerHTML = `
-        <div class="form-group"><label>नाम</label><input type="text" id="e-name" value="${c.name}"></div>
-        <div class="form-group"><label>फोन</label><input type="tel" id="e-phone" value="${c.phone}"></div>
-        <div class="form-group full"><label>ठेगाना</label><input type="text" id="e-address" value="${c.address||''}"></div>
-        <div class="form-group full"><label>काम</label><input type="text" id="e-work" value="${c.work||''}"></div>
-    `;
-    document.getElementById('edit-modal').classList.add('open');
+  const c=customers.find(x=>x.id===id);if(!c)return;
+  ['e-id','e-name','e-phone','e-address','e-work','e-notes'].forEach(eid=>{
+    const key=eid.replace('e-','');
+    document.getElementById(eid).value=c[key==='id'?'id':key]||'';
+  });
+  document.getElementById('e-id').value=c.id;
+  document.getElementById('e-name').value=c.name;
+  document.getElementById('e-phone').value=c.phone;
+  document.getElementById('e-address').value=c.address||'';
+  document.getElementById('e-work').value=c.work||'';
+  document.getElementById('e-notes').value=c.notes||'';
+  document.getElementById('edit-modal').classList.add('open');
 }
 
 function saveEdit(){
-    const c = customers.find(x=>x.id===currentEditId);
-    if(c){
-        c.name = document.getElementById('e-name').value;
-        c.phone = document.getElementById('e-phone').value;
-        c.address = document.getElementById('e-address').value;
-        c.work = document.getElementById('e-work').value;
-        save(); renderCustomers(); closeModal(); toast('✅ अपडेट भयो!');
-    }
+  const id=document.getElementById('e-id').value;
+  const c=customers.find(x=>x.id===id);if(!c)return;
+  c.name=document.getElementById('e-name').value.trim();
+  c.phone=document.getElementById('e-phone').value.trim();
+  c.address=document.getElementById('e-address').value.trim();
+  c.work=document.getElementById('e-work').value;
+  c.notes=document.getElementById('e-notes').value.trim();
+  logActivity(`ग्राहक अपडेट: ${c.name}`,'blue');
+  pushNotif(`ग्राहक अपडेट भयो: ${c.name}`,'✏️');
+  save();closeModal();renderCustomers();toast('✅ Updated!');
 }
 
-function closeModal(){ document.getElementById('edit-modal').classList.remove('open'); }
+function closeModal(){document.getElementById('edit-modal').classList.remove('open');}
+document.getElementById('edit-modal').addEventListener('click',function(e){if(e.target===this)closeModal();});
 
 // ============================================================
-// QUOTATIONS & FOLLOWUPS
+// QUOTATIONS
 // ============================================================
+function fillCustSelects(){
+  ['q-cust','f-cust'].forEach(id=>{
+    const s=document.getElementById(id);if(!s)return;
+    s.innerHTML='<option value="">-- Select Customer --</option>'+customers.map(c=>`<option value="${c.id}">${c.name} (${c.phone})</option>`).join('');
+  });
+}
+
 function renderQuotations(){
-    document.getElementById('quot-table').innerHTML = [...quotations].reverse().map(q => {
-        const c = customers.find(x=>x.id===q.customerId);
-        return `<tr>
-            <td>${c?c.name:'Unknown'}</td>
-            <td>${q.details}</td>
-            <td>Rs. ${q.amount}</td>
-            <td><span class="tag tag-pending">${q.status}</span></td>
-            <td><button class="btn btn-danger btn-sm" onclick="delQuot('${q.id}')">🗑</button></td>
-        </tr>`;
-    }).join('');
+  const tb=document.getElementById('quot-table'),em=document.getElementById('no-quot');
+  if(!quotations.length){tb.innerHTML='';em.style.display='block';return;}
+  em.style.display='none';
+  tb.innerHTML=[...quotations].reverse().map(q=>{
+    const c=customers.find(x=>x.id===q.customerId);
+    const st=q.status==='Pending'?'tag-pending':q.status==='Approved'?'tag-upvc':'tag-done';
+    return `<tr>
+      <td><strong>${c?c.name:'Unknown'}</strong></td>
+      <td>${q.details}</td>
+      <td>Rs. ${Number(q.amount||0).toLocaleString()}</td>
+      <td style="color:var(--saffron);font-size:0.8rem">${q.bsDate||q.date}</td>
+      <td><span class="tag ${st}">${q.status}</span></td>
+      <td><button class="btn btn-danger btn-sm" onclick="delQuot('${q.id}')">🗑</button></td>
+    </tr>`;
+  }).join('');
 }
 
 function addQuotation(){
-    const cid = document.getElementById('q-cust').value;
-    const det = document.getElementById('q-details').value;
-    if(!cid || !det) return toast('विवरण भर्नुहोस्!');
-    
-    quotations.push({
-        id: Date.now().toString(), customerId: cid, details: det,
-        amount: document.getElementById('q-amount').value,
-        status: document.getElementById('q-status').value,
-        date: new Date().toLocaleDateString()
-    });
-    save(); navigate('quotations'); toast('✅ कोटेसन सेभ भयो!');
+  const cid=document.getElementById('q-cust').value,det=document.getElementById('q-details').value.trim();
+  if(!cid||!det){toast('❌ Customer & details required');return;}
+  const c=customers.find(x=>x.id===cid);
+  const bs=todayBS();
+  const q={id:Date.now()+'',customerId:cid,details:det,amount:document.getElementById('q-amount').value,status:document.getElementById('q-status').value,date:new Date().toLocaleDateString(),bsDate:bsStr(bs)};
+  quotations.push(q);
+  logActivity(`Quotation: ${c?.name}`,'blue');
+  pushNotif(`नयाँ Quotation: ${c?.name} - Rs.${q.amount||0}`,'📋');
+  save();
+  document.getElementById('q-details').value='';
+  document.getElementById('q-amount').value='';
+  toast('✅ Saved!');navigate('quotations',null);
 }
 
-function renderFU(){
-    document.getElementById('fu-list').innerHTML = followups.filter(f=>f.status!=='Done').map(f => {
-        const c = customers.find(x=>x.id===f.customerId);
-        return `<div class="fu-card today">
-            <div class="fu-info">
-                <strong>${c?c.name:'Unknown'}</strong> (${c?c.phone:''})<br>
-                नेपाली मिति: ${f.bsDate} | नोट: ${f.notes}
-            </div>
-            <button class="btn btn-wa" onclick="sendWA('${c.phone}', '${c.name}')">WhatsApp</button>
-            <button class="btn btn-primary btn-sm" onclick="markDone('${f.id}')">Done</button>
-        </div>`;
-    }).join('') || '<p style="text-align:center; padding:20px;">कुनै फलो-अप छैन।</p>';
+function delQuot(id){if(!confirm('Delete?'))return;quotations=quotations.filter(x=>x.id!==id);save();renderQuotations();toast('🗑 Deleted');}
+
+// ============================================================
+// FOLLOWUPS
+// ============================================================
+function renderFU(filter){
+  const today=new Date().toISOString().split('T')[0];
+  ['all','today','overdue','upcoming'].forEach(f=>{
+    const b=document.getElementById('fa-'+f);
+    b.style.borderColor=f===filter?'var(--accent)':'var(--border)';
+    b.style.color=f===filter?'var(--accent)':'var(--muted)';
+  });
+  let list=followups.filter(f=>f.status!=='Done');
+  if(filter==='today')list=list.filter(f=>f.date===today);
+  else if(filter==='overdue')list=list.filter(f=>f.date<today);
+  else if(filter==='upcoming')list=list.filter(f=>f.date>today);
+  list.sort((a,b)=>a.date.localeCompare(b.date));
+  const el=document.getElementById('fu-list'),em=document.getElementById('no-fu');
+  if(!list.length){el.innerHTML='';em.style.display='block';return;}
+  em.style.display='none';
+  el.innerHTML=list.map(f=>{
+    const c=customers.find(x=>x.id===f.customerId);
+    const bs=adToBS(new Date(f.date+'T00:00:00'));
+    const cls=f.date<today?'overdue':f.date===today?'today':'upcoming';
+    return `<div class="fu-card ${cls}">
+      <div class="fu-day">${npNum(bs.d)}<small>${BS_NP[bs.m]}</small></div>
+      <div class="fu-info">
+        <div class="fu-name">${c?c.name:'Unknown'} <span style="color:var(--muted);font-size:0.73rem">${f.priority}</span></div>
+        <div class="fu-note">${f.notes||'No notes'}</div>
+        <div class="fu-bs">बि.सं. ${bsStr(bs)}</div>
+      </div>
+      <button class="btn btn-secondary btn-sm" onclick="markDone('${f.id}')">✅ Done</button>
+    </div>`;
+  }).join('');
 }
+
+function filterFU(f){renderFU(f);}
 
 function updateBSPreview(){
-    const d = document.getElementById('f-date').value;
-    if(d) document.getElementById('f-bs').value = bsStr(adToBS(new Date(d)));
+  const v=document.getElementById('f-date').value;
+  if(v){const bs=adToBS(new Date(v+'T00:00:00'));document.getElementById('f-bs').value=bsStr(bs);}
 }
 
 function addFollowup(){
-    const cid = document.getElementById('f-cust').value;
-    if(!cid) return toast('ग्राहक छान्नुहोस्');
-    followups.push({
-        id: Date.now().toString(), customerId: cid,
-        date: document.getElementById('f-date').value,
-        bsDate: document.getElementById('f-bs').value,
-        notes: document.getElementById('f-notes').value,
-        status: 'Pending'
-    });
-    save(); navigate('followups'); toast('✅ फलो-अप थपियो!');
+  const cid=document.getElementById('f-cust').value,date=document.getElementById('f-date').value;
+  if(!cid||!date){toast('❌ Customer & date required');return;}
+  const c=customers.find(x=>x.id===cid);
+  const bs=adToBS(new Date(date+'T00:00:00'));
+  const f={id:Date.now()+'',customerId:cid,date,bsDate:bsStr(bs),priority:document.getElementById('f-priority').value,notes:document.getElementById('f-notes').value.trim(),status:'Pending'};
+  followups.push(f);
+  logActivity(`Follow-up: ${c?.name} - ${bsStr(bs)}`,'accent');
+  pushNotif(`Follow-up थपियो: ${c?.name} (${bsStr(bs)})`,'📅');
+  save();
+  document.getElementById('f-date').value='';
+  document.getElementById('f-bs').value='';
+  document.getElementById('f-notes').value='';
+  toast('✅ Saved!');navigate('followups',null);
 }
 
 function markDone(id){
-    const f = followups.find(x=>x.id===id);
-    if(f) { f.status = 'Done'; save(); renderFU(); toast('✅ सम्पन्न!'); }
+  const f=followups.find(x=>x.id===id);
+  if(f){f.status='Done';const c=customers.find(x=>x.id===f.customerId);logActivity(`Follow-up सम्पन्न: ${c?.name}`,'green');pushNotif(`Follow-up सम्पन्न: ${c?.name}`,'✅');save();}
+  renderFU('all');toast('✅ Completed!');
 }
 
-// BACKUP DATA
-function exportData() {
-    const data = { customers, quotations, followups, activities };
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = `AccountKeer_Backup_${new Date().toISOString().split('T')[0]}.json`;
-    a.click();
-    toast('💾 ब्याकअप डाउनलोड भयो!');
+// ============================================================
+// AUTO NOTIFY TODAY'S FOLLOWUPS
+// ============================================================
+function autoCheckFollowups(){
+  const today=new Date().toISOString().split('T')[0];
+  const due=followups.filter(f=>f.date===today&&f.status!=='Done');
+  if(due.length){
+    due.forEach(f=>{const c=customers.find(x=>x.id===f.customerId);pushNotif(`⏰ आज follow-up छ: ${c?.name||'Unknown'}  (${bsFull(todayBS())})`, '⏰');});
+  }
+  const ov=followups.filter(f=>f.date<today&&f.status!=='Done');
+  if(ov.length)pushNotif(`🚨 ${ov.length} वटा follow-up overdue छ!`,'🚨');
 }
 
+// ============================================================
 // INIT
-function closeWelcome(){ document.getElementById('welcome-overlay').classList.add('hide'); }
+// ============================================================
 (function init(){
-    const bs = todayBS();
-    document.getElementById('tb-bs').textContent = `बि.सं. ${bsStr(bs)}`;
-    document.getElementById('sb-bs').textContent = `बि.सं. ${npNum(bs.y)} ${BS_NP[bs.m]} ${npNum(bs.d)}`;
-    renderDashboard();
+  const bs=todayBS();
+  const bsText=bsFull(bs);
+  document.getElementById('tb-bs').textContent=bsText;
+  document.getElementById('sb-bs').textContent=`बि.सं. ${npNum(bs.y)} ${BS_NP[bs.m]} ${npNum(bs.d)}`;
+
+  // Seed
+  if(!customers.length){
+    customers=[
+      {id:'1',name:'राम बहादुर',phone:'9841234567',address:'काठमाडौं',work:'UPVC',notes:''},
+      {id:'2',name:'सीता शर्मा',phone:'9851234567',address:'ललितपुर',work:'Interior',notes:''},
+      {id:'3',name:'कृष्ण थापा',phone:'9861234567',address:'भक्तपुर',work:'Gypsum',notes:''},
+    ];
+    const bs2=todayBS();
+    quotations=[
+      {id:'1',customerId:'1',details:'UPVC window 5 pcs',amount:'45000',status:'Pending',date:'2026-04-08',bsDate:'२०८२ चैत्र २५'},
+      {id:'2',customerId:'2',details:'False ceiling 200sqft',amount:'32000',status:'Approved',date:'2026-04-09',bsDate:'२०८२ चैत्र २६'},
+    ];
+    const todayStr=new Date().toISOString().split('T')[0];
+    followups=[
+      {id:'1',customerId:'1',date:todayStr,bsDate:bsStr(bs2),priority:'High',notes:'UPVC estimate बारे फोन',status:'Pending'},
+      {id:'2',customerId:'3',date:'2026-05-03',bsDate:'२०८३ बैशाख २०',priority:'Normal',notes:'Site visit तय',status:'Pending'},
+    ];
+    activities=[{text:'System started | '+bsFull(bs2),time:new Date().toLocaleTimeString(),type:'green'}];
+    save();
+  }
+
+  autoCheckFollowups();
+  renderDashboard();
+  renderBadge();
+  renderNotifList();
 })();
 </script>
 </body>
