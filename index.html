@@ -3,132 +3,314 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PRERAK CRM - Final Edition</title>
+<title>PRERAK CRM - Advanced</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=Tiro+Devanagari+Sanskrit:ital@0;1&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg: #0f0f13; --surface: #18181f; --surface2: #22222c; --border: #2e2e3a;
-  --text: #f0f0f5; --muted: #8888a0; --green: #22c55e; --blue: #60a5fa;
-  --red: #f87171; --yellow: #fbbf24; --radius: 12px;
-  --accent: #f97316; --accent2: #fb923c; --saffron: #ff9933;
-}
-body.theme-blue { --accent: #2563eb; --accent2: #3b82f6; --saffron: #60a5fa; }
-body.theme-green { --accent: #16a34a; --accent2: #22c55e; --saffron: #4ade80; }
+:root{--bg:#0f0f13;--surface:#18181f;--surface2:#22222c;--border:#2e2e3a;--accent:#f97316;--accent2:#fb923c;--text:#f0f0f5;--muted:#8888a0;--green:#22c55e;--blue:#60a5fa;--red:#f87171;--yellow:#fbbf24;--radius:12px;--saffron:#ff9933;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;overflow-x:hidden;}
 
-* { margin:0; padding:0; box-sizing:border-box; }
-body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; display:flex; overflow-x:hidden; }
+/* WELCOME & UI */
+#welcome-overlay{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at center,#1a0500 0%,#08000f 60%,#000 100%);}
+#welcome-overlay.hide{animation:wOut 0.7s ease forwards;}
+@keyframes wOut{to{opacity:0;pointer-events:none;visibility:hidden;}}
+.w-box{text-align:center;padding:0 24px;position:relative;z-index:2;animation:wIn 1.2s cubic-bezier(.16,1,.3,1) both;}
+@keyframes wIn{from{opacity:0;transform:scale(0.8) translateY(40px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.om-glyph{font-family:'Tiro Devanagari Sanskrit',serif;font-size:clamp(5rem,20vw,10rem);line-height:1;margin-bottom:10px;background:linear-gradient(135deg,#ff9933 0%,#ffd700 40%,#ff6600 80%,#ffcc44 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 40px rgba(255,153,51,0.7));animation:omGlow 2.5s ease-in-out infinite;}
+@keyframes omGlow{0%,100%{filter:drop-shadow(0 0 20px rgba(255,153,51,0.5))drop-shadow(0 0 60px rgba(255,153,51,0.2))}50%{filter:drop-shadow(0 0 50px rgba(255,204,68,0.9))drop-shadow(0 0 100px rgba(255,153,51,0.4));}}
+.om-mantra{font-family:'Tiro Devanagari Sanskrit',serif;font-size:clamp(1.5rem,5vw,2.8rem);color:#ffd700;letter-spacing:4px;text-shadow:0 0 30px rgba(255,215,0,0.6),0 0 60px rgba(255,153,51,0.3);margin-bottom:6px;}
+.om-sub{font-size:0.8rem;color:rgba(255,153,51,0.6);letter-spacing:3px;text-transform:uppercase;margin-bottom:36px;}
+.enter-btn{background:linear-gradient(135deg,#ff9933,#e05000);border:none;color:#fff;padding:13px 40px;border-radius:30px;font-size:1rem;font-family:'DM Sans',sans-serif;cursor:pointer;letter-spacing:1px;font-weight:600;box-shadow:0 4px 28px rgba(255,153,51,0.45);transition:all 0.2s;}
+.enter-btn:hover{transform:scale(1.06);box-shadow:0 8px 36px rgba(255,153,51,0.65);}
+.ring{position:absolute;border-radius:50%;border:1px solid rgba(255,153,51,0.12);top:50%;left:50%;transform:translate(-50%,-50%);animation:spin 25s linear infinite;}
+.ring:nth-child(1){width:340px;height:340px;}
+.ring:nth-child(2){width:280px;height:280px;animation-duration:18s;animation-direction:reverse;border-color:rgba(255,204,68,0.09);}
+.ring:nth-child(3){width:420px;height:420px;animation-duration:35s;border-color:rgba(255,153,51,0.06);}
+@keyframes spin{to{transform:translate(-50%,-50%) rotate(360deg);}}
+.star-field{position:absolute;inset:0;overflow:hidden;pointer-events:none;}
+.star{position:absolute;border-radius:50%;background:#ffcc44;animation:twinkle 3s ease-in-out infinite;}
+@keyframes twinkle{0%,100%{opacity:0.15}50%{opacity:0.9}}
 
-/* WELCOME */
-#welcome-overlay { position:fixed; inset:0; z-index:9999; display:flex; align-items:center; justify-content:center; background:radial-gradient(ellipse at center,#1a0500 0%,#08000f 60%,#000 100%); }
-#welcome-overlay.hide { animation:wOut 0.7s ease forwards; }
-@keyframes wOut { to { opacity:0; pointer-events:none; visibility:hidden; } }
-.om-glyph { font-family:'Tiro Devanagari Sanskrit',serif; font-size:clamp(5rem,20vw,10rem); line-height:1; margin-bottom:10px; background:linear-gradient(135deg,#ff9933 0%,#ffd700 40%,#ff6600 80%,#ffcc44 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; filter:drop-shadow(0 0 40px rgba(255,153,51,0.7)); }
+/* NOTIFICATION & PANELS */
+.notif-wrap{position:relative;}
+.notif-btn{background:var(--surface2);border:1px solid var(--border);width:38px;height:38px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.1rem;transition:all 0.15s;}
+.notif-btn:hover{border-color:var(--accent);}
+.notif-badge{position:absolute;top:-5px;right:-5px;background:var(--red);color:#fff;border-radius:50%;width:17px;height:17px;font-size:0.6rem;font-weight:700;display:flex;align-items:center;justify-content:center;border:2px solid var(--bg);display:none;}
+.notif-badge.show{display:flex;}
+#notif-panel{position:fixed;top:58px;right:16px;width:330px;max-height:460px;background:var(--surface);border:1px solid var(--border);border-radius:14px;z-index:500;box-shadow:0 20px 60px rgba(0,0,0,0.6);display:none;flex-direction:column;overflow:hidden;}
+#notif-panel.open{display:flex;animation:slideDown 0.2s ease;}
+@keyframes slideDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+.np-head{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.np-title{font-family:'Syne',sans-serif;font-size:0.9rem;font-weight:700;}
+.np-clear{background:none;border:none;color:var(--accent);font-size:0.75rem;cursor:pointer;}
+.np-list{overflow-y:auto;flex:1;}
+.np-item{display:flex;align-items:flex-start;gap:10px;padding:12px 16px;border-bottom:1px solid var(--border);cursor:pointer;transition:background 0.1s;}
+.np-item:hover{background:var(--surface2);}
+.np-item.unread{background:rgba(249,115,22,0.07);}
+.np-dot{width:7px;height:7px;border-radius:50%;background:var(--accent);margin-top:5px;flex-shrink:0;}
+.np-dot.read{background:var(--border);}
+.np-text{font-size:0.82rem;line-height:1.45;}
+.np-time{font-size:0.7rem;color:var(--muted);margin-top:2px;}
+.np-empty{text-align:center;padding:28px;color:var(--muted);font-size:0.85rem;}
 
 /* SIDEBAR */
-#sidebar { width:240px; background:var(--surface); border-right:1px solid var(--border); display:flex; flex-direction:column; position:fixed; height:100vh; z-index:100; transition: 0.3s; }
-.logo { padding:22px; border-bottom:1px solid var(--border); }
-.logo-name { font-family:'Syne',sans-serif; font-weight:800; font-size:1.4rem; color:var(--accent); }
-.logo-bs { display:block; margin-top:8px; background:rgba(255,153,51,0.1); border:1px solid rgba(255,153,51,0.25); border-radius:6px; padding:4px 10px; font-size:0.72rem; color:var(--saffron); font-weight:600; }
-nav { flex:1; padding:15px; }
-.nav-item { display:flex; align-items:center; gap:12px; padding:10px; border-radius:8px; cursor:pointer; font-size:0.87rem; color:var(--muted); transition:0.2s; }
-.nav-item:hover, .nav-item.active { background:var(--surface2); color:var(--text); }
-.nav-item.active { background:var(--accent); color:white; }
+#sidebar{width:240px;min-height:100vh;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;position:fixed;top:0;left:0;height:100vh;z-index:100;transition:transform 0.3s;}
+.logo{padding:22px 22px 14px;border-bottom:1px solid var(--border);}
+.logo-name{font-family:'Syne',sans-serif;font-weight:800;font-size:1.4rem;color:var(--accent);letter-spacing:-0.5px;}
+.logo-sub{display:block;font-size:0.68rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-top:2px;}
+.logo-bs{display:block;margin-top:8px;background:rgba(255,153,51,0.1);border:1px solid rgba(255,153,51,0.25);border-radius:6px;padding:4px 10px;font-size:0.72rem;color:var(--saffron);font-weight:600;letter-spacing:0.3px;}
+nav{flex:1;padding:14px 10px;display:flex;flex-direction:column;gap:3px;}
+.nav-item{display:flex;align-items:center;gap:11px;padding:9px 13px;border-radius:8px;cursor:pointer;font-size:0.87rem;font-weight:500;color:var(--muted);transition:all 0.15s;}
+.nav-item:hover{background:var(--surface2);color:var(--text);}
+.nav-item.active{background:var(--accent);color:#fff;}
+.nav-item .icon{font-size:0.95rem;width:20px;text-align:center;}
+.nav-section{font-size:0.63rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);padding:11px 13px 3px;margin-top:4px;}
 
-/* UI ELEMENTS */
-#theme-btn { margin: 15px; padding: 8px; font-size: 0.75rem; background: var(--surface2); border: 1px solid var(--border); color: var(--text); border-radius: 8px; cursor: pointer; }
-#main { margin-left:240px; flex:1; padding: 0; display:flex; flex-direction:column; }
-.topbar { background:var(--bg); border-bottom:1px solid var(--border); padding:15px 30px; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; z-index:50; }
-.page { display:none; padding:30px; animation:fadeIn 0.3s ease; }
-.page.active { display:block; }
-@keyframes fadeIn { from { opacity:0; transform:translateY(10px) } to { opacity:1; transform:translateY(0) } }
+/* MAIN */
+#main{margin-left:240px;flex:1;display:flex;flex-direction:column;min-height:100vh;}
+.topbar{position:sticky;top:0;z-index:50;background:var(--bg);border-bottom:1px solid var(--border);padding:11px 28px;display:flex;align-items:center;justify-content:space-between;}
+.page-title{font-family:'Syne',sans-serif;font-size:1.25rem;font-weight:700;}
+.topbar-right{display:flex;align-items:center;gap:10px;}
+.bs-chip{background:rgba(255,153,51,0.1);border:1px solid rgba(255,153,51,0.3);padding:5px 12px;border-radius:20px;font-size:0.75rem;color:var(--saffron);font-weight:600;}
 
-.btn { padding:8px 16px; border-radius:8px; border:none; cursor:pointer; font-weight:500; font-size:0.85rem; transition:0.2s; }
-.btn-primary { background:var(--accent); color:white; }
-.btn-wa { background:#25D366; color:white; }
-.btn-wa:hover { background:#128C7E; transform: translateY(-1px); }
+/* BUTTONS */
+.btn{padding:8px 18px;border-radius:8px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:0.85rem;font-weight:500;transition:all 0.15s;display:inline-flex;align-items:center;justify-content:center;gap:6px;}
+.btn-primary{background:var(--accent);color:#fff;}
+.btn-primary:hover{background:var(--accent2);}
+.btn-secondary{background:var(--surface2);color:var(--text);border:1px solid var(--border);}
+.btn-secondary:hover{border-color:var(--accent);color:var(--accent);}
+.btn-sm{padding:5px 11px;font-size:0.77rem;border-radius:6px;}
+.btn-danger{background:#3f1818;color:var(--red);border:1px solid #5a2020;}
+.btn-danger:hover{background:#5a1f1f;}
+.btn-wa{background:#075e54;color:#fff;}
+.btn-wa:hover{background:#128c7e;}
 
-table { width:100%; border-collapse:collapse; }
-td, th { padding:12px 15px; text-align:left; border-bottom:1px solid var(--border); font-size:0.85rem; }
-.card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:20px; }
+/* PAGES & CARDS */
+.page{display:none;padding:28px;animation:fadeIn 0.2s ease;}
+.page.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-bottom:24px;}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:22px;position:relative;overflow:hidden;}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.stat-card.c1::before{background:var(--accent);}
+.stat-card.c2::before{background:var(--green);}
+.stat-card.c3::before{background:var(--blue);}
+.stat-card.c4::before{background:var(--yellow);}
+.stat-label{font-size:0.73rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:9px;}
+.stat-value{font-family:'Syne',sans-serif;font-size:2.1rem;font-weight:800;}
+.stat-sub{font-size:0.76rem;color:var(--muted);margin-top:5px;}
+.section-title{font-family:'Syne',sans-serif;font-size:0.95rem;font-weight:700;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);}
+.card-body{padding:18px;}
 
-.modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:200; align-items:center; justify-content:center; }
-.modal { background:var(--surface); padding:25px; border-radius:15px; width:450px; }
-#toast { position:fixed; bottom:25px; right:25px; background:var(--green); color:white; padding:12px 20px; border-radius:10px; opacity:0; transition:0.3s; z-index:999; }
+/* TABLES & FORMS */
+table{width:100%;border-collapse:collapse;}
+th{text-align:left;font-size:0.7rem;text-transform:uppercase;letter-spacing:1px;color:var(--muted);padding:11px 15px;border-bottom:1px solid var(--border);}
+td{padding:11px 15px;font-size:0.84rem;border-bottom:1px solid var(--border);vertical-align:middle;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:var(--surface2);}
+.tag{display:inline-block;padding:3px 9px;border-radius:20px;font-size:0.71rem;font-weight:600;}
+.tag-upvc{background:#1e3a5f;color:var(--blue);}
+.tag-gypsum{background:#2a1f4e;color:#a78bfa;}
+.tag-interior{background:#1a3a2a;color:var(--green);}
+.tag-aac{background:#3f3f46;color:#e4e4e7;}
+.tag-prefab{background:#451a03;color:#fdba74;}
+.tag-pending{background:#3a2a14;color:var(--yellow);}
+.tag-done{background:#1a3a2a;color:var(--green);}
+.tag-overdue{background:#3a1a1a;color:var(--red);}
 
-@media(max-width:768px) { #sidebar { transform:translateX(-100%); } #main { margin-left:0; } }
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.form-group{display:flex;flex-direction:column;gap:5px;}
+.form-group.full{grid-column:1/-1;}
+label{font-size:0.76rem;color:var(--muted);font-weight:500;letter-spacing:0.5px;text-transform:uppercase;}
+input,select,textarea{background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:9px 13px;font-family:'DM Sans',sans-serif;font-size:0.87rem;outline:none;transition:border-color 0.15s;}
+input:focus,select:focus,textarea:focus{border-color:var(--accent);}
+textarea{resize:vertical;min-height:76px;}
+
+.fu-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:10px;display:flex;align-items:center;gap:14px;}
+.fu-card.today{border-left:3px solid var(--accent);}
+.fu-card.overdue{border-left:3px solid var(--red);}
+.fu-card.upcoming{border-left:3px solid var(--blue);}
+.fu-day{font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;color:var(--accent);min-width:48px;text-align:center;line-height:1;}
+.fu-day small{display:block;font-size:0.62rem;font-weight:400;color:var(--muted);font-family:'DM Sans',sans-serif;text-transform:uppercase;letter-spacing:1px;}
+.fu-info{flex:1;}
+
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.72);z-index:200;align-items:center;justify-content:center;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:26px;width:90%;max-width:500px;max-height:90vh;overflow-y:auto;}
+#toast{position:fixed;bottom:22px;right:22px;background:var(--green);color:#fff;padding:11px 18px;border-radius:10px;font-size:0.84rem;font-weight:500;z-index:999;opacity:0;transform:translateY(10px);transition:all 0.25s;pointer-events:none;}
+#toast.show{opacity:1;transform:translateY(0);}
+#hamburger{display:none;position:fixed;top:14px;left:14px;z-index:200;background:var(--accent);border:none;color:#fff;width:38px;height:38px;border-radius:8px;font-size:1.1rem;cursor:pointer;}
+
+@media(max-width:768px){
+  #sidebar{transform:translateX(-100%);}
+  #sidebar.open{transform:translateX(0);}
+  #main{margin-left:0;}
+  .topbar{padding-left:56px;}
+  .form-grid{grid-template-columns:1fr;}
+  .stat-grid{grid-template-columns:1fr 1fr;}
+  #hamburger{display:flex;align-items:center;justify-content:center;}
+}
 </style>
 </head>
 <body>
 
 <div id="welcome-overlay">
+  <div class="star-field" id="star-field"></div>
+  <div class="ring"></div><div class="ring"></div><div class="ring"></div>
   <div class="w-box">
     <div class="om-glyph">ॐ</div>
-    <h2 style="color:#ffd700">ॐ नमः शिवाय</h2>
-    <p style="color:var(--muted); margin: 15px 0;">PRERAK Construction & Prefab Homes</p>
+    <div class="om-mantra">ॐ नमः शिवाय</div>
+    <div class="om-sub">Om Namah Shivaya &nbsp;•&nbsp; PRERAK CRM</div>
     <button class="enter-btn" onclick="closeWelcome()">🙏 प्रवेश गर्नुहोस्</button>
   </div>
 </div>
 
+<button id="hamburger" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+
 <aside id="sidebar">
   <div class="logo">
     <div class="logo-name">PRERAK</div>
-    <span class="logo-bs" id="sb-bs">बि.सं. २०८३</span>
+    <span class="logo-sub">AccountKeer System</span>
+    <span class="logo-bs" id="sb-bs">लोड...</span>
   </div>
   <nav>
-    <div class="nav-item active" onclick="navigate('dashboard',this)">🏠 Dashboard</div>
-    <div class="nav-item" onclick="navigate('customers',this)">👥 Customer List</div>
-    <div class="nav-item" onclick="navigate('add-customer',this)">➕ Add Customer</div>
+    <div class="nav-section">Main</div>
+    <div class="nav-item active" onclick="navigate('dashboard',this)"><span class="icon">🏠</span> Dashboard</div>
+    <div class="nav-section">Customers</div>
+    <div class="nav-item" onclick="navigate('customers',this)"><span class="icon">👥</span> Customer List</div>
+    <div class="nav-item" onclick="navigate('add-customer',this)"><span class="icon">➕</span> Add Customer</div>
+    <div class="nav-section">Quotations</div>
+    <div class="nav-item" onclick="navigate('quotations',this)"><span class="icon">📋</span> Quotation List</div>
+    <div class="nav-item" onclick="navigate('add-quotation',this)"><span class="icon">📝</span> New Quotation</div>
+    <div class="nav-section">Follow-ups</div>
+    <div class="nav-item" onclick="navigate('followups',this)"><span class="icon">📅</span> Tracker</div>
+    <div class="nav-item" onclick="navigate('add-followup',this)"><span class="icon">🔔</span> Add Follow-up</div>
+    <div class="nav-section">System</div>
+    <div class="nav-item" onclick="exportData()"><span class="icon">💾</span> Backup Data</div>
   </nav>
-  <button id="theme-btn" onclick="cycleTheme()">🎨 Change Theme</button>
 </aside>
 
 <main id="main">
   <div class="topbar">
-    <h3 id="page-title">Dashboard</h3>
-    <span class="bs-chip" id="tb-bs">बि.सं. लोड...</span>
+    <span class="page-title" id="page-title">Dashboard</span>
+    <div class="topbar-right">
+      <span class="bs-chip" id="tb-bs">बि.सं.</span>
+      <div class="notif-wrap">
+        <button class="notif-btn" onclick="toggleNotif()" id="notif-btn">🔔<span class="notif-badge" id="notif-badge">0</span></button>
+      </div>
+    </div>
+  </div>
+
+  <div id="notif-panel">
+    <div class="np-head"><span class="np-title">🔔 Notifications</span><button class="np-clear" onclick="clearNotifs()">Clear</button></div>
+    <div class="np-list" id="np-list"></div>
   </div>
 
   <div class="page active" id="page-dashboard">
-    <div class="card">
-      <h4>Recent Activity</h4>
-      <div id="act-feed" style="margin-top:15px"></div>
+    <div class="stat-grid">
+      <div class="stat-card c1"><div class="stat-label">Total Customers</div><div class="stat-value" id="s-cust">0</div></div>
+      <div class="stat-card c2"><div class="stat-label">Active Work</div><div class="stat-value" id="s-ongoing">0</div></div>
+      <div class="stat-card c3"><div class="stat-label">Follow-ups Today</div><div class="stat-value" id="s-today">0</div></div>
+      <div class="stat-card c4"><div class="stat-label">Total Quotes</div><div class="stat-value" id="s-quotes">0</div></div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px">
+      <div>
+        <div class="section-title">Recent Activity</div>
+        <div class="card card-body"><div id="act-feed" style="font-size:0.85rem"></div></div>
+      </div>
+      <div>
+        <div class="section-title">Upcoming Follow-ups (BS)</div>
+        <div id="dash-fu"></div>
+      </div>
     </div>
   </div>
 
   <div class="page" id="page-customers">
-    <input type="text" id="cust-search" oninput="renderCustomers()" placeholder="खोज्नुहोस्..." style="width:100%; padding:10px; margin-bottom:15px; background:var(--surface2); border:1px solid var(--border); color:white; border-radius:8px;">
+    <div style="display:flex;gap:10px;margin-bottom:15px">
+        <input type="text" id="cust-search" placeholder="नाम, फोन वा ठेगानाबाट खोज्नुहोस्..." oninput="renderCustomers()" style="flex:1">
+    </div>
     <div class="card" style="overflow-x:auto">
-      <table>
-        <thead><tr><th>नाम</th><th>फोन</th><th>ठेगाना</th><th>कार्य</th></tr></thead>
-        <tbody id="cust-table"></tbody>
-      </table>
+      <table><thead><tr><th>नाम</th><th>फोन</th><th>काम</th><th>Actions</th></tr></thead><tbody id="cust-table"></tbody></table>
     </div>
   </div>
 
   <div class="page" id="page-add-customer">
-    <div class="card" style="max-width:500px; margin:auto;">
-      <h3>नयाँ ग्राहक</h3>
-      <div style="display:flex; flex-direction:column; gap:15px; margin-top:15px;">
-        <input type="text" id="c-name" placeholder="पुरा नाम" style="padding:10px; background:var(--surface2); border:1px solid var(--border); color:white; border-radius:5px;">
-        <input type="tel" id="c-phone" placeholder="फोन नम्बर" style="padding:10px; background:var(--surface2); border:1px solid var(--border); color:white; border-radius:5px;">
-        <input type="text" id="c-address" placeholder="ठेगाना" style="padding:10px; background:var(--surface2); border:1px solid var(--border); color:white; border-radius:5px;">
-        <button class="btn btn-primary" onclick="addCustomer()">सुरक्षित गर्नुहोस्</button>
+    <div class="card card-body" style="max-width:600px;margin:auto">
+      <h2 class="section-title">➕ नयाँ ग्राहक थप्नुहोस्</h2>
+      <div class="form-grid">
+        <div class="form-group"><label>नाम *</label><input type="text" id="c-name"></div>
+        <div class="form-group"><label>फोन *</label><input type="tel" id="c-phone"></div>
+        <div class="form-group full"><label>ठेगाना</label><input type="text" id="c-address"></div>
+        <div class="form-group"><label>कामको प्रकार</label>
+          <select id="c-work">
+            <option value="">Select</option>
+            <option>UPVC</option><option>Gypsum</option>
+            <option>Interior</option><option>AAC Blocks</option>
+            <option>Prefab Home</option><option>Aluminium</option>
+          </select>
+        </div>
+        <div class="form-group"><label>कैफियत (Notes)</label><input type="text" id="c-notes"></div>
       </div>
+      <div class="form-actions" style="margin-top:20px;display:flex;justify-content:flex-end;gap:10px">
+        <button class="btn btn-secondary" onclick="navigate('customers')">Cancel</button>
+        <button class="btn btn-primary" onclick="addCustomer()">Save Customer</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="page" id="page-quotations">
+    <div class="card" style="overflow-x:auto">
+      <table><thead><tr><th>ग्राहक</th><th>विवरण</th><th>रकम</th><th>स्थिति</th><th>डिलिट</th></tr></thead><tbody id="quot-table"></tbody></table>
+    </div>
+  </div>
+
+  <div class="page" id="page-add-quotation">
+    <div class="card card-body" style="max-width:600px;margin:auto">
+      <h2 class="section-title">📝 नयाँ कोटेसन</h2>
+      <div class="form-grid">
+        <div class="form-group full"><label>ग्राहक छान्नुहोस् *</label><select id="q-cust"></select></div>
+        <div class="form-group full"><label>कामको विवरण *</label><textarea id="q-details"></textarea></div>
+        <div class="form-group"><label>अनुमानित रकम (Rs.)</label><input type="number" id="q-amount"></div>
+        <div class="form-group"><label>स्थिति</label>
+          <select id="q-status"><option>Pending</option><option>Approved</option><option>Completed</option></select>
+        </div>
+      </div>
+      <div class="form-actions" style="margin-top:20px;display:flex;justify-content:flex-end;gap:10px">
+        <button class="btn btn-primary" onclick="addQuotation()">Save Quotation</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="page" id="page-followups">
+    <div id="fu-list"></div>
+  </div>
+
+  <div class="page" id="page-add-followup">
+    <div class="card card-body" style="max-width:600px;margin:auto">
+      <h2 class="section-title">🔔 फलो-अप थप्नुहोस्</h2>
+      <div class="form-grid">
+        <div class="form-group full"><label>ग्राहक *</label><select id="f-cust"></select></div>
+        <div class="form-group"><label>मिति (AD) *</label><input type="date" id="f-date" onchange="updateBSPreview()"></div>
+        <div class="form-group"><label>नेपाली मिति (BS)</label><input type="text" id="f-bs" readonly style="color:var(--saffron)"></div>
+        <div class="form-group full"><label>नोट</label><textarea id="f-notes"></textarea></div>
+      </div>
+      <button class="btn btn-primary" style="margin-top:20px;width:100%" onclick="addFollowup()">सुरक्षित गर्नुहोस्</button>
     </div>
   </div>
 </main>
 
 <div class="modal-overlay" id="edit-modal">
   <div class="modal">
-    <h3>✏️ सम्पादन गर्नुहोस्</h3>
-    <div style="display:flex; flex-direction:column; gap:15px; margin-top:20px;">
-      <input type="text" id="e-name" style="padding:10px; background:var(--surface2); border:1px solid var(--border); color:white; border-radius:5px;">
-      <input type="tel" id="e-phone" style="padding:10px; background:var(--surface2); border:1px solid var(--border); color:white; border-radius:5px;">
-      <input type="text" id="e-address" style="padding:10px; background:var(--surface2); border:1px solid var(--border); color:white; border-radius:5px;">
-      <div style="display:flex; gap:10px;">
-        <button class="btn btn-primary" style="flex:1" onclick="saveEdit()">Update</button>
-        <button class="btn" style="background:var(--border); color:white;" onclick="closeModal()">रद्द</button>
-      </div>
+    <div class="modal-head" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+      <span style="font-weight:bold">✏️ ग्राहक विवरण सम्पादन</span>
+      <button onclick="closeModal()" style="background:none;border:none;color:white;cursor:pointer">✕</button>
+    </div>
+    <div class="form-grid" id="edit-form-content">
+        </div>
+    <div class="form-actions" style="margin-top:20px;display:flex;justify-content:flex-end;gap:10px">
+      <button class="btn btn-secondary" onclick="closeModal()">बन्द गर्नुहोस्</button>
+      <button class="btn btn-primary" onclick="saveEdit()">अपडेट गर्नुहोस्</button>
     </div>
   </div>
 </div>
@@ -136,111 +318,275 @@ td, th { padding:12px 15px; text-align:left; border-bottom:1px solid var(--borde
 <div id="toast"></div>
 
 <script>
-// DATA
+// ============================================================
+// BS ENGINE (Extended)
+// ============================================================
+const BS_NP = ['बैशाख','जेठ','असार','श्रावण','भाद्र','आश्विन','कार्तिक','मंसिर','पौष','माघ','फाल्गुण','चैत्र'];
+const NP_D  = ['०','१','२','३','४','५','६','७','८','९'];
+const BS_TABLE = { 2080:[31,31,31,32,31,31,30,29,30,29,30,30], 2081:[31,31,32,31,31,31,30,29,30,29,30,30], 2082:[31,31,32,32,31,30,30,29,30,29,30,30], 2083:[31,32,31,32,31,30,30,30,29,29,30,31] };
+const AD_REF = new Date(1943,3,14);
+
+function adToBS(d){
+    let days = Math.floor((d - AD_REF)/86400000);
+    let y=2000,m=0,day=1;
+    // Simple table for common years
+    for(let yr=2000; yr<=2090; yr++){
+        let yrData = BS_TABLE[yr] || [31,31,32,31,31,31,30,29,30,29,30,30];
+        for(let mo=0; mo<12; mo++){
+            if(days < yrData[mo]){ return {y:yr, m:mo, d:days+1}; }
+            days -= yrData[mo];
+        }
+    }
+    return {y:2081, m:0, d:1};
+}
+
+function npNum(n){return String(n).split('').map(c=>NP_D[+c]||c).join('');}
+function bsStr(bs){return `${npNum(bs.y)} ${BS_NP[bs.m]} ${npNum(bs.d)}`;}
+function todayBS(){return adToBS(new Date());}
+
+// ============================================================
+// DATA MANAGEMENT
+// ============================================================
 let customers = JSON.parse(localStorage.getItem('pk_customers') || '[]');
+let quotations = JSON.parse(localStorage.getItem('pk_quotations') || '[]');
+let followups = JSON.parse(localStorage.getItem('pk_followups') || '[]');
 let activities = JSON.parse(localStorage.getItem('pk_activities') || '[]');
+let notifs = JSON.parse(localStorage.getItem('pk_notifs') || '[]');
 
-function save() {
+function save(){
     localStorage.setItem('pk_customers', JSON.stringify(customers));
+    localStorage.setItem('pk_quotations', JSON.stringify(quotations));
+    localStorage.setItem('pk_followups', JSON.stringify(followups));
     localStorage.setItem('pk_activities', JSON.stringify(activities));
+    localStorage.setItem('pk_notifs', JSON.stringify(notifs));
 }
 
-function toast(m) {
-    const t = document.getElementById('toast'); t.textContent = m; t.style.opacity = '1';
-    setTimeout(() => t.style.opacity = '0', 2000);
+function logActivity(text, type='accent'){
+    activities.unshift({text, time: new Date().toLocaleTimeString(), type});
+    if(activities.length > 15) activities.pop();
+    save();
 }
 
-// NAVIGATION
-function navigate(page, el) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.getElementById('page-' + page).classList.add('active');
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+function toast(m){
+    const t=document.getElementById('toast');
+    t.textContent=m; t.classList.add('show');
+    setTimeout(()=>t.classList.remove('show'), 2500);
+}
+
+// ============================================================
+// CORE FUNCTIONS
+// ============================================================
+function navigate(page, el){
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    document.getElementById('page-'+page).classList.add('active');
+    document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
     if(el) el.classList.add('active');
     document.getElementById('page-title').textContent = page.charAt(0).toUpperCase() + page.slice(1);
-    if(page === 'dashboard') renderDashboard();
-    if(page === 'customers') renderCustomers();
+    
+    if(page==='dashboard') renderDashboard();
+    if(page==='customers') renderCustomers();
+    if(page==='quotations') renderQuotations();
+    if(page==='followups') renderFU();
+    if(page==='add-quotation' || page==='add-followup') fillSelects();
 }
 
-// SMART WHATSAPP MESSAGE (WITH DIGITAL CARD LINK)
-function sendWA(phone, name) {
-    const bizName = "*PRERAK Construction & Prefab Homes*";
-    const services = "UPVC Doors, Aluminium, AAC Blocks, Prefab Homes";
-    const siteLink = "https://prerakconstruction.com.np"; // तपाईंको वेबसाइट वा डिजिटल कार्ड लिंक यहाँ राख्नुहोस्
-
-    let msg = `*नमस्ते ${name} सर,* 🙏\n\n`;
-    msg += `म *${bizName}* बाट बोलिरहेको छु।\n\n`;
-    msg += `हजुरले सोध्नुभएको कार्यको बारेमा थप विवरण यहाँ हेर्न सक्नुहुन्छ:\n🔗 ${siteLink}\n\n`;
-    msg += `*हाम्रा सेवाहरू:*\n🏗️ ${services}\n📍 Hetauda-2, Kantirajpath\n\n`;
-    msg += `हामीलाई सम्झनुभएकोमा धन्यवाद!`;
-
-    window.open(`https://wa.me/977${phone}?text=${encodeURIComponent(msg)}`, '_blank');
+function fillSelects(){
+    const options = '<option value="">-- ग्राहक छान्नुहोस् --</option>' + customers.map(c=>`<option value="${c.id}">${c.name} (${c.phone})</option>`).join('');
+    document.getElementById('q-cust').innerHTML = options;
+    document.getElementById('f-cust').innerHTML = options;
 }
 
-// RENDER FUNCTIONS
-function renderCustomers() {
+function wTag(w){
+    const tags = { UPVC:'tag-upvc', Gypsum:'tag-gypsum', Interior:'tag-interior', 'AAC Blocks':'tag-aac', 'Prefab Home':'tag-prefab' };
+    return `<span class="tag ${tags[w]||'tag-upvc'}">${w||'—'}</span>`;
+}
+
+// WhatsApp Integration
+function sendWA(phone, name, msgType="followup") {
+    let message = msgType === "followup" 
+        ? `नमस्ते ${name} सर, म Prerak Construction बाट। हजुरको कामको बारेमा थप केही कुरा बुझ्न खोज्दै थियौं।`
+        : `नमस्ते ${name} सर, हजुरको कोटेसन तयार भएको छ।`;
+    window.open(`https://wa.me/977${phone}?text=${encodeURIComponent(message)}`, '_blank');
+}
+
+// ============================================================
+// CUSTOMER & DASHBOARD RENDERING
+// ============================================================
+function renderCustomers(){
     const q = document.getElementById('cust-search').value.toLowerCase();
-    const filtered = customers.filter(c => c.name.toLowerCase().includes(q) || c.phone.includes(q));
+    const filtered = customers.filter(c => 
+        c.name.toLowerCase().includes(q) || 
+        c.phone.includes(q) || 
+        (c.address && c.address.toLowerCase().includes(q))
+    );
+    
     document.getElementById('cust-table').innerHTML = filtered.map(c => `
         <tr>
-            <td>${c.name}</td><td>${c.phone}</td><td>${c.address || '—'}</td>
+            <td><strong>${c.name}</strong><br><small style="color:var(--muted)">${c.address||''}</small></td>
+            <td>${c.phone}</td>
+            <td>${wTag(c.work)}</td>
             <td>
-                <button class="btn btn-wa" onclick="sendWA('${c.phone}', '${c.name}')">WA</button>
-                <button class="btn btn-primary" style="padding:5px 10px;" onclick="openEdit('${c.id}')">✏️</button>
+                <button class="btn btn-wa btn-sm" onclick="sendWA('${c.phone}', '${c.name}')">💬</button>
+                <button class="btn btn-secondary btn-sm" onclick="openEdit('${c.id}')">✏️</button>
             </td>
         </tr>
     `).join('');
 }
 
-function renderDashboard() {
-    document.getElementById('act-feed').innerHTML = activities.map(a => `<div>● ${a.text} <small style="color:var(--muted)">(${a.time})</small></div>`).join('') || 'No activity';
+function renderDashboard(){
+    document.getElementById('s-cust').textContent = customers.length;
+    document.getElementById('s-quotes').textContent = quotations.length;
+    document.getElementById('s-ongoing').textContent = quotations.filter(q=>q.status==='Pending').length;
+    
+    document.getElementById('act-feed').innerHTML = activities.map(a => `
+        <div style="margin-bottom:8px; border-bottom:1px solid var(--border); padding-bottom:4px">
+            <span style="color:var(--accent)">●</span> ${a.text} <br>
+            <small style="color:var(--muted)">${a.time}</small>
+        </div>
+    `).join('') || 'No recent activity';
+
+    const upcoming = followups.filter(f=>f.status!=='Done').slice(0,3);
+    document.getElementById('dash-fu').innerHTML = upcoming.map(f => {
+        const c = customers.find(x=>x.id===f.customerId);
+        return `<div class="fu-card today">
+            <div class="fu-info">
+                <strong>${c?c.name:'Unknown'}</strong> - ${f.bsDate} <br>
+                <small>${f.notes||'No notes'}</small>
+            </div>
+            <button class="btn btn-wa btn-sm" onclick="sendWA('${c?c.phone:''}', '${c?c.name:''}')">WA</button>
+        </div>`;
+    }).join('') || 'No upcoming follow-ups';
 }
 
-function addCustomer() {
+function addCustomer(){
     const name = document.getElementById('c-name').value;
     const phone = document.getElementById('c-phone').value;
-    if(!name || !phone) return toast('विवरण भर्नुहोस्!');
-    customers.push({ id: Date.now().toString(), name, phone, address: document.getElementById('c-address').value });
-    activities.unshift({ text: `नयाँ ग्राहक: ${name}`, time: new Date().toLocaleTimeString() });
+    if(!name || !phone) return toast('नाम र फोन अनिवार्य छ!');
+    
+    const newCust = { 
+        id: Date.now().toString(), 
+        name, phone, 
+        address: document.getElementById('c-address').value,
+        work: document.getElementById('c-work').value,
+        notes: document.getElementById('c-notes').value
+    };
+    customers.push(newCust);
+    logActivity(`नयाँ ग्राहक थपियो: ${name}`, 'green');
     save(); navigate('customers'); toast('✅ सुरक्षित भयो!');
 }
 
-let editId = null;
-function openEdit(id) {
-    const c = customers.find(x => x.id === id);
+// Clean Edit Function (Reduced Duplication)
+let currentEditId = null;
+function openEdit(id){
+    const c = customers.find(x=>x.id===id);
     if(!c) return;
-    editId = id;
-    document.getElementById('e-name').value = c.name;
-    document.getElementById('e-phone').value = c.phone;
-    document.getElementById('e-address').value = c.address || '';
-    document.getElementById('edit-modal').style.display = 'flex';
+    currentEditId = id;
+    document.getElementById('edit-form-content').innerHTML = `
+        <div class="form-group"><label>नाम</label><input type="text" id="e-name" value="${c.name}"></div>
+        <div class="form-group"><label>फोन</label><input type="tel" id="e-phone" value="${c.phone}"></div>
+        <div class="form-group full"><label>ठेगाना</label><input type="text" id="e-address" value="${c.address||''}"></div>
+        <div class="form-group full"><label>काम</label><input type="text" id="e-work" value="${c.work||''}"></div>
+    `;
+    document.getElementById('edit-modal').classList.add('open');
 }
 
-function saveEdit() {
-    const c = customers.find(x => x.id === editId);
-    if(c) {
+function saveEdit(){
+    const c = customers.find(x=>x.id===currentEditId);
+    if(c){
         c.name = document.getElementById('e-name').value;
         c.phone = document.getElementById('e-phone').value;
         c.address = document.getElementById('e-address').value;
+        c.work = document.getElementById('e-work').value;
         save(); renderCustomers(); closeModal(); toast('✅ अपडेट भयो!');
     }
 }
 
-function closeModal() { document.getElementById('edit-modal').style.display = 'none'; }
+function closeModal(){ document.getElementById('edit-modal').classList.remove('open'); }
 
-// THEME CHANGER
-let themes = ['', 'theme-blue', 'theme-green'];
-let currentTheme = 0;
-function cycleTheme() {
-    currentTheme = (currentTheme + 1) % themes.length;
-    document.body.className = themes[currentTheme];
-    toast('🎨 Theme Updated');
+// ============================================================
+// QUOTATIONS & FOLLOWUPS
+// ============================================================
+function renderQuotations(){
+    document.getElementById('quot-table').innerHTML = [...quotations].reverse().map(q => {
+        const c = customers.find(x=>x.id===q.customerId);
+        return `<tr>
+            <td>${c?c.name:'Unknown'}</td>
+            <td>${q.details}</td>
+            <td>Rs. ${q.amount}</td>
+            <td><span class="tag tag-pending">${q.status}</span></td>
+            <td><button class="btn btn-danger btn-sm" onclick="delQuot('${q.id}')">🗑</button></td>
+        </tr>`;
+    }).join('');
 }
 
-function closeWelcome() { document.getElementById('welcome-overlay').classList.add('hide'); }
+function addQuotation(){
+    const cid = document.getElementById('q-cust').value;
+    const det = document.getElementById('q-details').value;
+    if(!cid || !det) return toast('विवरण भर्नुहोस्!');
+    
+    quotations.push({
+        id: Date.now().toString(), customerId: cid, details: det,
+        amount: document.getElementById('q-amount').value,
+        status: document.getElementById('q-status').value,
+        date: new Date().toLocaleDateString()
+    });
+    save(); navigate('quotations'); toast('✅ कोटेसन सेभ भयो!');
+}
+
+function renderFU(){
+    document.getElementById('fu-list').innerHTML = followups.filter(f=>f.status!=='Done').map(f => {
+        const c = customers.find(x=>x.id===f.customerId);
+        return `<div class="fu-card today">
+            <div class="fu-info">
+                <strong>${c?c.name:'Unknown'}</strong> (${c?c.phone:''})<br>
+                नेपाली मिति: ${f.bsDate} | नोट: ${f.notes}
+            </div>
+            <button class="btn btn-wa" onclick="sendWA('${c.phone}', '${c.name}')">WhatsApp</button>
+            <button class="btn btn-primary btn-sm" onclick="markDone('${f.id}')">Done</button>
+        </div>`;
+    }).join('') || '<p style="text-align:center; padding:20px;">कुनै फलो-अप छैन।</p>';
+}
+
+function updateBSPreview(){
+    const d = document.getElementById('f-date').value;
+    if(d) document.getElementById('f-bs').value = bsStr(adToBS(new Date(d)));
+}
+
+function addFollowup(){
+    const cid = document.getElementById('f-cust').value;
+    if(!cid) return toast('ग्राहक छान्नुहोस्');
+    followups.push({
+        id: Date.now().toString(), customerId: cid,
+        date: document.getElementById('f-date').value,
+        bsDate: document.getElementById('f-bs').value,
+        notes: document.getElementById('f-notes').value,
+        status: 'Pending'
+    });
+    save(); navigate('followups'); toast('✅ फलो-अप थपियो!');
+}
+
+function markDone(id){
+    const f = followups.find(x=>x.id===id);
+    if(f) { f.status = 'Done'; save(); renderFU(); toast('✅ सम्पन्न!'); }
+}
+
+// BACKUP DATA
+function exportData() {
+    const data = { customers, quotations, followups, activities };
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `AccountKeer_Backup_${new Date().toISOString().split('T')[0]}.json`;
+    a.click();
+    toast('💾 ब्याकअप डाउनलोड भयो!');
+}
 
 // INIT
-(function init() {
-    document.getElementById('tb-bs').textContent = "बि.सं. २०८३ बैशाख";
+function closeWelcome(){ document.getElementById('welcome-overlay').classList.add('hide'); }
+(function init(){
+    const bs = todayBS();
+    document.getElementById('tb-bs').textContent = `बि.सं. ${bsStr(bs)}`;
+    document.getElementById('sb-bs').textContent = `बि.सं. ${npNum(bs.y)} ${BS_NP[bs.m]} ${npNum(bs.d)}`;
     renderDashboard();
 })();
 </script>
