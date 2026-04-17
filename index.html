@@ -1,1789 +1,740 @@
 <!DOCTYPE html>
-<html lang="ne">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#0b1220">
-<title>Prerak Multipurpose | Business OS</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>PRERAK MULTIPURPOSE PVT LTD | Building Your Dreams</title>
+<meta name="description" content="PRERAK MULTIPURPOSE PVT LTD - Construction, Interior, UPVC, Gypsum, Solar. Hetauda, Makwanpur, Nepal.">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <style>
-/* ================= THEME VARIABLES ================= */
-:root {
-    --bg: #eef2f6; --card: #ffffff; --card-2: #f9fafb;
-    --text: #1f2937; --text-2: #6b7280; --text-3: #9ca3af;
-    --border: #e5e7eb;
-    --primary: #1e3a8a; --primary-2: #3b82f6;
-    --accent: #f97316;
-    --success: #059669; --danger: #dc2626; --warning: #d97706; --purple: #7c3aed;
-    --success-bg: #ecfdf5; --danger-bg: #fef2f2;
-    --primary-bg: #eff6ff; --warning-bg: #fff7ed; --purple-bg: #faf5ff;
-    --shadow: 0 1px 3px rgba(0,0,0,0.04);
-    --shadow-lg: 0 10px 25px rgba(0,0,0,0.08);
-    --overlay: rgba(0,0,0,0.5);
+:root{
+  --orange:#f97316;--orange-d:#c2410c;--dark:#0c0c0e;--dark2:#161618;
+  --dark3:#1e1e22;--border:rgba(255,255,255,0.08);--text:#f5f5f0;--muted:#9ca3af;
+  --gold:#f59e0b;
 }
-[data-theme="dark"] {
-    --bg: #0b1220; --card: #141f35; --card-2: #1a2844;
-    --text: #e5e7eb; --text-2: #94a3b8; --text-3: #64748b;
-    --border: #1f2e4a;
-    --primary: #3b82f6; --primary-2: #60a5fa;
-    --success-bg: rgba(5,150,105,0.15); --danger-bg: rgba(220,38,38,0.15);
-    --primary-bg: rgba(59,130,246,0.15); --warning-bg: rgba(217,119,6,0.15);
-    --purple-bg: rgba(124,58,237,0.15);
-    --shadow: 0 1px 3px rgba(0,0,0,0.3);
-    --shadow-lg: 0 10px 25px rgba(0,0,0,0.4);
+body.theme-light{
+  --dark:#f8f8f8;--dark2:#ffffff;--dark3:#f0f0f0;--border:rgba(0,0,0,0.1);
+  --text:#111111;--muted:#666666;
 }
+body.theme-saffron{
+  --dark:#1a0f00;--dark2:#2a1800;--dark3:#3a2200;--border:rgba(249,115,22,0.2);
+  --text:#fff8f0;--muted:#c8a070;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--dark);color:var(--text);font-family:'DM Sans',sans-serif;overflow-x:hidden;transition:background .3s,color .3s;}
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-thumb{background:var(--orange);border-radius:2px;}
 
-/* ================= RESET ================= */
-* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-html, body { height: 100%; }
-body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans Devanagari', sans-serif;
-    background: var(--bg); color: var(--text);
-    font-size: 14px; line-height: 1.5;
-    transition: background 0.2s, color 0.2s;
-}
-input, select, textarea, button { font-family: inherit; font-size: 14px; color: inherit; }
-button { cursor: pointer; border: none; background: none; }
-a { text-decoration: none; color: inherit; }
+/* THEME TOGGLE */
+#theme-bar{position:fixed;bottom:24px;right:24px;z-index:999;display:flex;flex-direction:column;gap:8px;}
+.theme-btn{width:42px;height:42px;border-radius:50%;border:2px solid var(--border);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;font-size:1.1rem;
+  background:var(--dark2);backdrop-filter:blur(10px);transition:all .2s;box-shadow:0 4px 12px rgba(0,0,0,0.3);}
+.theme-btn:hover{transform:scale(1.1);border-color:var(--orange);}
+.theme-btn.active{border-color:var(--orange);background:var(--orange);}
 
-/* ================= TOPBAR ================= */
-.topbar {
-    position: sticky; top: 0; z-index: 40;
-    background: var(--card); border-bottom: 1px solid var(--border);
-    padding: 10px 14px;
-    display: flex; align-items: center; gap: 10px;
-    box-shadow: var(--shadow);
-}
-.hamburger {
-    width: 40px; height: 40px; border-radius: 10px;
-    background: var(--accent); color: white;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 18px; flex-shrink: 0;
-}
-.brand-inline { flex: 1; min-width: 0; }
-.brand-inline h1 {
-    font-size: 14px; font-weight: 900; color: var(--accent);
-    letter-spacing: 0.5px; line-height: 1.1;
-}
-.brand-inline .tagline {
-    font-size: 10px; color: var(--text-2); font-weight: 700;
-    text-transform: uppercase; letter-spacing: 0.5px;
-}
-.topbar-right { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
-.icon-btn {
-    width: 36px; height: 36px; border-radius: 10px;
-    background: var(--card-2); color: var(--text);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 15px; border: 1px solid var(--border);
-}
-.bs-date {
-    font-size: 10px; background: var(--warning-bg); color: var(--warning);
-    padding: 4px 8px; border-radius: 999px; font-weight: 700;
-    white-space: nowrap;
-}
-[data-theme="dark"] .bs-date { color: #fbbf24; }
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:14px 5%;
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(12,12,14,0.9);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);transition:all .3s;}
+body.theme-light nav{background:rgba(248,248,248,0.95);}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.nav-logo-icon{width:36px;height:36px;border-radius:9px;
+  background:linear-gradient(135deg,#f97316,#c2410c);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 12px rgba(249,115,22,0.4);}
+.nav-logo-text .name{font-family:'Syne',sans-serif;font-weight:900;font-size:1rem;color:var(--orange);letter-spacing:1px;}
+.nav-logo-text .sub{font-size:0.52rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;}
+.nav-links{display:flex;gap:28px;list-style:none;}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:0.85rem;font-weight:500;transition:color .2s;}
+.nav-links a:hover{color:var(--text);}
+.nav-cta{background:var(--orange);color:#fff;padding:8px 18px;border-radius:8px;
+  text-decoration:none;font-weight:700;font-size:0.82rem;transition:all .2s;white-space:nowrap;}
+.nav-cta:hover{background:var(--orange-d);transform:translateY(-1px);}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;}
+.hamburger span{width:22px;height:2px;background:var(--text);border-radius:2px;transition:all .3s;}
+.mobile-menu{display:none;position:fixed;top:65px;left:0;right:0;
+  background:rgba(12,12,14,0.98);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);padding:16px 5%;flex-direction:column;gap:12px;z-index:99;}
+.mobile-menu.open{display:flex;}
+.mobile-menu a{color:var(--muted);text-decoration:none;font-size:0.95rem;padding:8px 0;border-bottom:1px solid var(--border);}
 
-/* ================= SIDEBAR ================= */
-.sidebar-overlay {
-    position: fixed; inset: 0; background: var(--overlay); z-index: 90;
-    opacity: 0; pointer-events: none; transition: opacity 0.25s;
-}
-.sidebar-overlay.show { opacity: 1; pointer-events: auto; }
-.sidebar {
-    position: fixed; top: 0; left: 0; bottom: 0;
-    width: 280px; max-width: 85vw;
-    background: var(--card); z-index: 100;
-    transform: translateX(-100%); transition: transform 0.25s;
-    overflow-y: auto; display: flex; flex-direction: column;
-    border-right: 1px solid var(--border);
-}
-.sidebar.show { transform: translateX(0); }
-.sidebar-head {
-    padding: 16px; border-bottom: 1px solid var(--border);
-    display: flex; align-items: center; gap: 10px;
-}
-.sidebar-head .logo {
-    width: 44px; height: 44px; background: var(--accent); border-radius: 12px;
-    display: flex; align-items: center; justify-content: center; font-size: 22px; color: white;
-}
-.sidebar-head h2 { font-size: 15px; font-weight: 900; color: var(--accent); }
-.sidebar-head p { font-size: 10px; color: var(--text-2); }
-.user-chip {
-    margin: 12px 16px; padding: 10px 12px;
-    background: var(--primary-bg); border-radius: 12px;
-    display: flex; align-items: center; gap: 10px;
-}
-.user-chip .av {
-    width: 32px; height: 32px; border-radius: 50%; background: var(--primary);
-    color: white; display: flex; align-items: center; justify-content: center; font-size: 14px;
-}
-.user-chip .name { font-weight: 700; color: var(--primary); font-size: 13px; }
-.user-chip .role { font-size: 9px; color: var(--text-2); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; }
+/* HERO */
+.hero{min-height:100vh;display:flex;align-items:center;position:relative;overflow:hidden;padding:100px 5% 60px;}
+.hero-bg{position:absolute;inset:0;
+  background:radial-gradient(ellipse 60% 50% at 65% 50%,rgba(249,115,22,0.12),transparent),
+  linear-gradient(135deg,var(--dark) 0%,var(--dark2) 100%);}
+.hero-grid{position:absolute;inset:0;opacity:0.03;
+  background-image:linear-gradient(rgba(249,115,22,1) 1px,transparent 1px),linear-gradient(90deg,rgba(249,115,22,1) 1px,transparent 1px);
+  background-size:60px 60px;}
+.hero-img{position:absolute;right:0;top:0;bottom:0;width:48%;overflow:hidden;}
+.hero-img img{width:100%;height:100%;object-fit:cover;opacity:0.2;}
+.hero-img::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,var(--dark) 0%,transparent 50%);z-index:1;}
+.hero-content{position:relative;z-index:2;max-width:640px;}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(249,115,22,0.1);
+  border:1px solid rgba(249,115,22,0.25);padding:5px 14px;border-radius:20px;
+  font-size:0.72rem;color:var(--orange);font-weight:600;letter-spacing:1px;text-transform:uppercase;
+  margin-bottom:20px;animation:fadeUp .8s both;}
+.hero-badge::before{content:'';width:6px;height:6px;background:var(--orange);border-radius:50%;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.5)}}
+.hero h1{font-family:'Syne',sans-serif;font-size:clamp(2.2rem,5.5vw,3.8rem);font-weight:900;
+  line-height:1.06;margin-bottom:18px;animation:fadeUp .8s .1s both;}
+.hero h1 .accent{color:var(--orange);display:block;}
+.hero p{font-size:1rem;color:var(--muted);line-height:1.7;max-width:520px;margin-bottom:32px;animation:fadeUp .8s .2s both;}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap;animation:fadeUp .8s .3s both;}
+.btn-primary{background:var(--orange);color:#fff;padding:13px 26px;border-radius:10px;
+  text-decoration:none;font-weight:700;font-size:0.9rem;display:flex;align-items:center;gap:7px;
+  transition:all .2s;box-shadow:0 8px 24px rgba(249,115,22,0.35);}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(249,115,22,0.45);}
+.btn-secondary{border:1px solid var(--border);color:var(--text);padding:13px 26px;border-radius:10px;
+  text-decoration:none;font-weight:600;font-size:0.9rem;display:flex;align-items:center;gap:7px;
+  transition:all .2s;background:rgba(255,255,255,0.04);}
+.btn-secondary:hover{border-color:rgba(249,115,22,0.4);background:rgba(249,115,22,0.06);}
+.hero-stats{display:flex;gap:36px;margin-top:48px;padding-top:36px;border-top:1px solid var(--border);flex-wrap:wrap;animation:fadeUp .8s .4s both;}
+.hero-stat .num{font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:900;color:var(--orange);line-height:1;}
+.hero-stat .label{font-size:0.7rem;color:var(--muted);margin-top:3px;text-transform:uppercase;letter-spacing:1px;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 
-.side-section-title {
-    padding: 12px 20px 6px; font-size: 10px; font-weight: 800;
-    color: var(--text-3); text-transform: uppercase; letter-spacing: 1px;
-}
-.side-btn {
-    display: flex; align-items: center; gap: 12px;
-    width: calc(100% - 16px); margin: 2px 8px; padding: 10px 14px;
-    border-radius: 10px; font-weight: 600; color: var(--text);
-    text-align: left; font-size: 14px;
-}
-.side-btn:hover { background: var(--card-2); }
-.side-btn.active { background: var(--primary-bg); color: var(--primary); font-weight: 800; }
-.side-btn .ic { font-size: 18px; width: 24px; text-align: center; }
-.side-btn .lock { margin-left: auto; font-size: 11px; }
+/* SECTION */
+section{padding:80px 5%;}
+.section-label{font-size:0.68rem;color:var(--orange);letter-spacing:3px;text-transform:uppercase;
+  font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:10px;}
+.section-label::before{content:'';width:22px;height:2px;background:var(--orange);}
+.section-title{font-family:'Syne',sans-serif;font-size:clamp(1.7rem,3.5vw,2.6rem);font-weight:800;line-height:1.15;margin-bottom:14px;}
+.section-sub{color:var(--muted);font-size:0.95rem;max-width:500px;line-height:1.7;margin-bottom:44px;}
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .6s ease,transform .6s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
 
-.sidebar-summary {
-    margin: 16px; padding: 14px;
-    background: var(--card-2); border-radius: 14px; border: 1px solid var(--border);
-}
-.sidebar-summary h4 {
-    font-size: 11px; color: var(--text-2); font-weight: 800;
-    text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px;
-}
-.mini-grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin-bottom: 6px; }
-.mini-grid2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px; }
-.mini-box {
-    padding: 8px 6px; border-radius: 10px; text-align: center;
-    border: 1px solid var(--border); background: var(--card);
-}
-.mini-box .lbl { font-size: 9px; color: var(--text-2); font-weight: 700; }
-.mini-box .val { font-size: 12px; font-weight: 900; margin-top: 2px; }
-.mini-box.green { background: var(--success-bg); border-color: transparent; }
-.mini-box.green .val { color: var(--success); }
-.mini-box.red { background: var(--danger-bg); border-color: transparent; }
-.mini-box.red .val { color: var(--danger); }
-.mini-box.blue { background: var(--primary-bg); border-color: transparent; }
-.mini-box.blue .val { color: var(--primary); }
-.mini-box.orange { background: var(--warning-bg); border-color: transparent; }
-.mini-box.orange .val { color: var(--warning); }
+/* SERVICES */
+.services-section{background:var(--dark2);}
+.services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;}
+.service-card{background:var(--dark3);border:1px solid var(--border);border-radius:16px;
+  overflow:hidden;cursor:pointer;transition:all .3s;position:relative;}
+.service-card:hover{transform:translateY(-6px);border-color:rgba(249,115,22,0.4);
+  box-shadow:0 20px 40px rgba(0,0,0,0.3);}
+.service-card-img{width:100%;height:180px;object-fit:cover;display:block;transition:transform .5s;}
+.service-card:hover .service-card-img{transform:scale(1.05);}
+.service-card-img-wrap{overflow:hidden;position:relative;}
+.service-card-img-wrap::after{content:'';position:absolute;inset:0;
+  background:linear-gradient(to bottom,transparent 50%,rgba(0,0,0,0.6) 100%);}
+.service-card-body{padding:20px;}
+.service-icon{font-size:1.8rem;margin-bottom:10px;}
+.service-card h3{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:700;margin-bottom:8px;}
+.service-card p{color:var(--muted);font-size:0.82rem;line-height:1.6;margin-bottom:12px;}
+.service-tags{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px;}
+.service-tag{background:rgba(249,115,22,0.08);border:1px solid rgba(249,115,22,0.15);
+  color:var(--orange);font-size:0.65rem;padding:2px 8px;border-radius:20px;font-weight:600;}
+.service-more{color:var(--orange);font-size:0.78rem;font-weight:700;display:flex;align-items:center;gap:5px;}
 
-/* ================= MAIN ================= */
-main {
-    padding: 14px;
-    padding-bottom: 80px;
-    max-width: 1200px; margin: 0 auto;
-}
-.page-title {
-    font-size: 22px; font-weight: 900; margin-bottom: 14px;
-    letter-spacing: -0.5px;
-}
-section.hidden { display: none; }
+/* SERVICE MODAL */
+.svc-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:500;
+  align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(8px);}
+.svc-overlay.open{display:flex;}
+.svc-modal{background:var(--dark2);border:1px solid var(--border);border-radius:20px;
+  max-width:800px;width:100%;max-height:90vh;overflow-y:auto;}
+.svc-modal-header{position:relative;}
+.svc-modal-img{width:100%;height:240px;object-fit:cover;border-radius:20px 20px 0 0;}
+.svc-modal-close{position:absolute;top:12px;right:12px;background:rgba(0,0,0,0.6);
+  border:none;color:#fff;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1rem;
+  display:flex;align-items:center;justify-content:center;}
+.svc-modal-body{padding:24px;}
+.svc-modal-body h2{font-family:'Syne',sans-serif;font-weight:800;font-size:1.4rem;margin-bottom:12px;}
+.svc-modal-body p{color:var(--muted);line-height:1.7;margin-bottom:16px;}
+.svc-modal-gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:16px 0;}
+.svc-modal-gallery img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:8px;cursor:pointer;transition:transform .2s;}
+.svc-modal-gallery img:hover{transform:scale(1.03);}
+.svc-modal-features{display:flex;flex-direction:column;gap:8px;margin:16px 0;}
+.svc-feat{display:flex;align-items:center;gap:10px;font-size:0.85rem;}
+.svc-feat::before{content:'✅';font-size:0.75rem;}
+.svc-cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px;}
 
-/* ================= CARDS ================= */
-.card {
-    background: var(--card); border-radius: 16px;
-    padding: 16px; box-shadow: var(--shadow);
-    margin-bottom: 12px; border: 1px solid var(--border);
-}
-.card-title {
-    font-size: 11px; font-weight: 800; color: var(--text-2);
-    text-transform: uppercase; margin-bottom: 12px; letter-spacing: 0.5px;
-    display: flex; justify-content: space-between; align-items: center;
-}
-.card-title .more {
-    font-size: 11px; color: var(--primary); font-weight: 700; cursor: pointer;
-    text-transform: none; letter-spacing: 0;
-}
+/* VIDEO SECTION */
+.video-section{background:var(--dark3);}
+.video-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.video-card{border-radius:14px;overflow:hidden;border:1px solid var(--border);position:relative;cursor:pointer;}
+.video-card:first-child{grid-column:span 2;}
+.video-thumb{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;transition:transform .4s;}
+.video-card:hover .video-thumb{transform:scale(1.03);}
+.video-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.45);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  transition:background .3s;}
+.video-card:hover .video-overlay{background:rgba(0,0,0,0.3);}
+.play-btn{width:64px;height:64px;border-radius:50%;background:var(--orange);
+  display:flex;align-items:center;justify-content:center;margin-bottom:12px;
+  box-shadow:0 8px 24px rgba(249,115,22,0.5);transition:transform .2s;}
+.video-card:hover .play-btn{transform:scale(1.1);}
+.play-btn svg{margin-left:4px;}
+.video-label{background:var(--orange);color:#fff;font-size:0.65rem;font-weight:700;
+  padding:3px 10px;border-radius:20px;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;}
+.video-overlay h4{color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:0.95rem;text-align:center;}
 
-/* ================= GRIDS ================= */
-.grid { display: grid; gap: 10px; }
-.g2 { grid-template-columns: repeat(2, 1fr); }
-.g3 { grid-template-columns: repeat(3, 1fr); }
-.g4 { grid-template-columns: repeat(2, 1fr); }
-@media (min-width: 720px) {
-    .g4 { grid-template-columns: repeat(4, 1fr); }
-    .g-md-2 { grid-template-columns: repeat(2, 1fr); }
-    .g-md-3 { grid-template-columns: repeat(3, 1fr); }
-}
+/* VIDEO MODAL */
+.vid-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.95);z-index:600;
+  align-items:center;justify-content:center;padding:16px;}
+.vid-overlay.open{display:flex;}
+.vid-modal{max-width:900px;width:100%;position:relative;}
+.vid-close{position:absolute;top:-40px;right:0;background:none;border:none;color:#fff;
+  font-size:1.5rem;cursor:pointer;}
+.vid-modal iframe,.vid-modal video{width:100%;aspect-ratio:16/9;border-radius:12px;border:none;}
 
-/* ================= STATS ================= */
-.stat { padding: 14px; border-radius: 14px; background: var(--card); border: 1px solid var(--border); }
-.stat .lbl { font-size: 10px; color: var(--text-2); font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; }
-.stat .val { font-size: 22px; font-weight: 900; margin-top: 4px; color: var(--primary); }
-.stat .val.sm { font-size: 16px; }
-.stat.income .val { color: var(--success); }
-.stat.expense .val { color: var(--danger); }
+/* WHY US */
+.why-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;}
+.why-img-wrap{border-radius:20px;overflow:hidden;aspect-ratio:4/3;border:1px solid var(--border);position:relative;}
+.why-img-wrap img{width:100%;height:100%;object-fit:cover;opacity:.85;}
+.why-badge-box{position:absolute;bottom:-16px;right:-16px;background:var(--orange);
+  padding:14px 18px;border-radius:12px;box-shadow:0 14px 36px rgba(249,115,22,0.45);}
+.why-badge-box .num{font-family:'Syne',sans-serif;font-size:2rem;font-weight:900;color:#fff;line-height:1;}
+.why-badge-box .txt{font-size:0.68rem;color:rgba(255,255,255,.8);font-weight:600;}
+.why-points{display:flex;flex-direction:column;gap:16px;}
+.why-point{display:flex;gap:14px;padding:16px;border-radius:12px;border:1px solid var(--border);transition:all .2s;}
+.why-point:hover{border-color:rgba(249,115,22,.3);background:rgba(249,115,22,.04);}
+.why-icon{width:42px;height:42px;border-radius:10px;background:rgba(249,115,22,.12);
+  display:flex;align-items:center;justify-content:center;font-size:1.15rem;flex-shrink:0;}
+.why-point h4{font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;margin-bottom:3px;}
+.why-point p{color:var(--muted);font-size:0.8rem;line-height:1.6;}
 
-.hero {
-    background: linear-gradient(135deg, var(--primary), var(--primary-2));
-    color: white; padding: 20px; border-radius: 16px;
-}
-.hero .lbl { color: rgba(255,255,255,0.85); font-size: 11px; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; }
-.hero .val { font-size: 28px; font-weight: 900; color: white; margin-top: 6px; }
-.hero .sub { font-size: 11px; color: rgba(255,255,255,0.8); margin-top: 4px; }
+/* PROJECTS */
+.projects-section{background:var(--dark2);}
+.proj-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+.proj-card{border-radius:12px;overflow:hidden;position:relative;border:1px solid var(--border);cursor:pointer;}
+.proj-card:first-child{grid-column:span 2;aspect-ratio:16/9;}
+.proj-card:not(:first-child){aspect-ratio:4/3;}
+.proj-card img{width:100%;height:100%;object-fit:cover;transition:transform .5s;}
+.proj-card:hover img{transform:scale(1.06);}
+.proj-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.8) 0%,transparent 60%);
+  display:flex;flex-direction:column;justify-content:flex-end;padding:16px;}
+.proj-tag{background:var(--orange);color:#fff;font-size:0.62rem;font-weight:700;
+  padding:2px 9px;border-radius:20px;display:inline-block;margin-bottom:5px;
+  width:fit-content;letter-spacing:1px;text-transform:uppercase;}
+.proj-overlay h4{font-family:'Syne',sans-serif;font-weight:700;font-size:0.92rem;}
+.proj-overlay p{color:rgba(255,255,255,.65);font-size:0.72rem;margin-top:2px;}
 
-/* ================= FORMS ================= */
-.form-grid { display: grid; gap: 10px; grid-template-columns: 1fr; }
-@media (min-width: 720px) {
-    .form-grid.c2 { grid-template-columns: 1fr 1fr; }
-    .form-grid.c3 { grid-template-columns: 1fr 1fr 1fr; }
-}
-.input, .select, .textarea {
-    width: 100%; padding: 11px 13px;
-    background: var(--card-2); border: 1px solid var(--border);
-    border-radius: 10px; outline: none; color: var(--text);
-}
-.input:focus, .select:focus, .textarea:focus {
-    border-color: var(--primary); background: var(--card);
-}
-.textarea { min-height: 80px; resize: vertical; font-family: inherit; }
-label.field-lbl {
-    display: block; font-size: 11px; color: var(--text-2);
-    margin-bottom: 4px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px;
-}
+/* TESTIMONIALS */
+.test-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;}
+.test-card{background:var(--dark2);border:1px solid var(--border);border-radius:14px;padding:24px;transition:all .2s;}
+.test-card:hover{border-color:rgba(249,115,22,.25);transform:translateY(-2px);}
+.stars{color:var(--gold);font-size:0.85rem;margin-bottom:12px;}
+.test-card p{color:var(--muted);font-size:0.87rem;line-height:1.7;margin-bottom:16px;font-style:italic;}
+.test-author{display:flex;align-items:center;gap:10px;}
+.test-avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--orange),var(--orange-d));
+  display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:0.95rem;color:#fff;flex-shrink:0;}
+.test-author .name{font-weight:700;font-size:0.85rem;}
+.test-author .loc{font-size:0.7rem;color:var(--muted);margin-top:1px;}
 
-/* ================= BUTTONS ================= */
-.btn {
-    display: inline-flex; align-items: center; justify-content: center;
-    padding: 11px 18px; border-radius: 10px;
-    font-weight: 700; transition: all 0.15s; gap: 6px;
-}
-.btn-block { width: 100%; }
-.btn-primary { background: var(--primary); color: white; }
-.btn-primary:hover { filter: brightness(1.1); }
-.btn-success { background: var(--success); color: white; }
-.btn-danger { background: var(--danger); color: white; }
-.btn-orange { background: var(--accent); color: white; }
-.btn-purple { background: var(--purple); color: white; }
-.btn-gray { background: var(--text-3); color: white; }
-.btn-ghost { background: var(--card-2); border: 1px solid var(--border); color: var(--text); }
-.btn-ic { width: 36px; height: 36px; padding: 0; border-radius: 10px; }
-.btn-sm { padding: 7px 12px; font-size: 12px; border-radius: 8px; }
-.btn-row { display: flex; gap: 6px; flex-wrap: wrap; }
-.btn-row .btn { flex: 1; min-width: 0; padding: 10px; font-size: 12px; }
+/* CTA */
+.cta-section{text-align:center;padding:80px 5%;
+  background:linear-gradient(135deg,rgba(249,115,22,.12),rgba(249,115,22,.04));
+  border-top:1px solid rgba(249,115,22,.15);border-bottom:1px solid rgba(249,115,22,.15);}
+.cta-section h2{font-family:'Syne',sans-serif;font-size:clamp(1.7rem,3.5vw,2.8rem);font-weight:900;margin-bottom:14px;}
+.cta-section p{color:var(--muted);max-width:460px;margin:0 auto 28px;line-height:1.7;}
 
-/* ================= LIST ================= */
-.list-item {
-    background: var(--card); padding: 12px; border-radius: 14px;
-    display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;
-    margin-bottom: 8px; box-shadow: var(--shadow); border: 1px solid var(--border);
-}
-.list-item .body { flex: 1; min-width: 0; }
-.list-item .actions { display: flex; flex-direction: column; gap: 4px; }
-.i-name { font-weight: 700; font-size: 15px; }
-.i-sub { font-size: 12px; color: var(--text-2); margin-top: 2px; }
-.i-note { font-size: 11px; color: var(--text-3); font-style: italic; margin-top: 3px; }
-.i-date { font-size: 10px; color: var(--text-3); margin-top: 4px; }
+/* CONTACT */
+.contact-section{background:var(--dark2);}
+.contact-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:50px;align-items:start;}
+.contact-info{display:flex;flex-direction:column;gap:16px;}
+.contact-item{display:flex;gap:12px;padding:16px;border-radius:12px;border:1px solid var(--border);}
+.contact-item-icon{width:42px;height:42px;border-radius:10px;background:rgba(249,115,22,.12);
+  display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
+.contact-item h4{font-weight:700;font-size:0.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px;}
+.contact-item p,.contact-item a{font-size:0.88rem;color:var(--text);text-decoration:none;line-height:1.5;}
+.contact-item a:hover{color:var(--orange);}
+.wa-btn{display:flex;align-items:center;gap:10px;background:#25D366;color:#fff;
+  padding:13px 22px;border-radius:12px;text-decoration:none;font-weight:700;font-size:0.9rem;
+  transition:all .2s;box-shadow:0 8px 24px rgba(37,211,102,.3);margin-top:8px;}
+.wa-btn:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(37,211,102,.4);}
+.contact-form{background:var(--dark3);border:1px solid var(--border);border-radius:18px;padding:28px;}
+.contact-form h3{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:800;margin-bottom:20px;}
+.fg{margin-bottom:14px;}
+.fg label{display:block;font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;font-weight:600;}
+.fg input,.fg select,.fg textarea{width:100%;padding:11px 13px;background:rgba(255,255,255,.04);
+  border:1px solid var(--border);border-radius:9px;color:var(--text);font-size:0.88rem;
+  font-family:'DM Sans',sans-serif;outline:none;transition:border-color .2s;}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:rgba(249,115,22,.5);}
+.fg textarea{resize:vertical;min-height:90px;}
+.fg select option{background:var(--dark3);}
+.form-submit{width:100%;padding:13px;background:var(--orange);color:#fff;border:none;
+  border-radius:9px;font-size:0.9rem;font-weight:700;cursor:pointer;transition:all .2s;
+  font-family:'DM Sans',sans-serif;margin-top:6px;}
+.form-submit:hover{background:var(--orange-d);transform:translateY(-1px);}
+#form-success{display:none;text-align:center;padding:16px;color:#22c55e;font-weight:600;}
 
-/* ================= PILLS ================= */
-.pill { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 10px; font-weight: 700; cursor: pointer; }
-.pill-lead { background: var(--card-2); color: var(--text-2); }
-.pill-quoted { background: var(--warning-bg); color: var(--warning); }
-.pill-progress { background: var(--primary-bg); color: var(--primary); }
-.pill-completed { background: var(--success-bg); color: var(--success); }
-.pill-lost { background: var(--danger-bg); color: var(--danger); }
+/* FOOTER */
+footer{background:var(--dark);border-top:1px solid var(--border);padding:44px 5% 20px;}
+.footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:36px;margin-bottom:36px;}
+.footer-brand .tagline{color:var(--muted);font-size:0.82rem;line-height:1.7;margin:10px 0 18px;max-width:250px;}
+.footer-socials{display:flex;gap:8px;}
+.soc-btn{width:34px;height:34px;border-radius:8px;background:var(--dark3);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;text-decoration:none;font-size:0.85rem;transition:all .2s;}
+.soc-btn:hover{border-color:rgba(249,115,22,.4);background:rgba(249,115,22,.08);}
+.footer-col h4{font-family:'Syne',sans-serif;font-weight:700;font-size:0.8rem;letter-spacing:1px;
+  text-transform:uppercase;color:var(--text);margin-bottom:14px;}
+.footer-col ul{list-style:none;display:flex;flex-direction:column;gap:7px;}
+.footer-col ul a{color:var(--muted);text-decoration:none;font-size:0.82rem;transition:color .2s;}
+.footer-col ul a:hover{color:var(--orange);}
+.footer-bottom{border-top:1px solid var(--border);padding-top:18px;
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;}
+.footer-bottom p{color:var(--muted);font-size:0.75rem;}
 
-/* ================= RATE CARD ================= */
-.rate-card {
-    background: var(--card); border-left: 4px solid var(--primary);
-    padding: 14px 16px; border-radius: 12px; position: relative;
-    border: 1px solid var(--border); border-left: 4px solid var(--primary);
-    box-shadow: var(--shadow);
+/* RESPONSIVE */
+@media(max-width:900px){
+  .nav-links,.nav-cta{display:none;}
+  .hamburger{display:flex;}
+  .why-grid,.contact-grid{grid-template-columns:1fr;}
+  .why-img-wrap{display:none;}
+  .video-grid{grid-template-columns:1fr;}
+  .video-card:first-child{grid-column:span 1;}
+  .proj-grid{grid-template-columns:1fr 1fr;}
+  .proj-card:first-child{grid-column:span 2;aspect-ratio:16/9;}
+  .footer-grid{grid-template-columns:1fr 1fr;}
+  .hero-img{display:none;}
+  .svc-modal-gallery{grid-template-columns:1fr 1fr;}
 }
-.rate-card h4 { font-size: 11px; color: var(--text-2); text-transform: uppercase; padding-right: 20px; font-weight: 800; }
-.rate-card .price { font-size: 22px; font-weight: 900; color: var(--primary); margin-top: 4px; cursor: pointer; }
-.rate-card .unit { font-size: 11px; color: var(--text-3); }
-.close-x {
-    position: absolute; top: 6px; right: 6px; color: var(--text-3);
-    font-size: 16px; padding: 4px 8px; border-radius: 6px;
-}
-.close-x:hover { color: var(--danger); background: var(--danger-bg); }
-
-/* ================= VISITING CARD ================= */
-.v-card {
-    background: linear-gradient(135deg, #0f172a, #1e3a8a);
-    color: white; padding: 24px; border-radius: 20px;
-    box-shadow: var(--shadow-lg); position: relative; overflow: hidden;
-    min-height: 220px;
-}
-.v-card::before {
-    content: ''; position: absolute; top: -50%; right: -30%;
-    width: 60%; height: 150%; background: rgba(249,115,22,0.1);
-    transform: rotate(25deg);
-}
-.v-card h2 { font-size: 20px; font-weight: 900; color: #f97316; letter-spacing: 0.5px; }
-.v-card .sub { font-size: 11px; opacity: 0.8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; }
-.v-card .line { display: flex; align-items: center; gap: 8px; margin: 6px 0; font-size: 13px; }
-.v-card .line .ic { font-size: 14px; }
-
-/* ================= BOTTOM NAV ================= */
-.bottom-nav {
-    position: fixed; bottom: 0; left: 0; right: 0;
-    background: var(--card); border-top: 1px solid var(--border);
-    display: flex; justify-content: space-around;
-    padding: 6px 4px; z-index: 50;
-    box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
-}
-.bottom-nav button {
-    flex: 1; display: flex; flex-direction: column; align-items: center;
-    gap: 2px; padding: 4px; color: var(--text-2);
-}
-.bottom-nav button.active { color: var(--primary); }
-.bottom-nav .emoji { font-size: 18px; }
-.bottom-nav .label { font-size: 9px; font-weight: 700; }
-
-/* ================= TOAST ================= */
-.toast {
-    position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
-    background: var(--success); color: white; padding: 10px 22px;
-    border-radius: 999px; font-weight: 700; font-size: 13px;
-    z-index: 999; box-shadow: var(--shadow-lg);
-    animation: toastIn 0.25s ease;
-}
-@keyframes toastIn { from { opacity: 0; transform: translate(-50%, -20px); } to { opacity: 1; transform: translate(-50%, 0); } }
-
-/* ================= MODAL ================= */
-.modal-back {
-    position: fixed; inset: 0; background: var(--overlay); z-index: 200;
-    display: flex; align-items: center; justify-content: center; padding: 16px;
-    opacity: 0; pointer-events: none; transition: opacity 0.2s;
-}
-.modal-back.show { opacity: 1; pointer-events: auto; }
-.modal {
-    background: var(--card); border-radius: 20px; padding: 20px;
-    max-width: 500px; width: 100%; max-height: 90vh; overflow-y: auto;
-    box-shadow: var(--shadow-lg);
-}
-.modal h3 { font-size: 17px; font-weight: 900; margin-bottom: 14px; }
-
-/* ================= EMPTY ================= */
-.empty { background: var(--card); padding: 36px 16px; border-radius: 16px; text-align: center; color: var(--text-3); border: 1px solid var(--border); }
-.empty .big { font-size: 40px; margin-bottom: 8px; opacity: 0.5; }
-
-/* ================= QUICK ACTIONS ================= */
-.qa-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-.qa { padding: 12px 8px; border-radius: 12px; font-weight: 800; font-size: 12px; text-align: center; cursor: pointer; }
-.qa .e { font-size: 22px; display: block; margin-bottom: 4px; }
-.qa-blue { background: var(--primary-bg); color: var(--primary); }
-.qa-green { background: var(--success-bg); color: var(--success); }
-.qa-purple { background: var(--purple-bg); color: var(--purple); }
-.qa-orange { background: var(--warning-bg); color: var(--warning); }
-
-/* ================= INVOICE / ESTIMATE ================= */
-.invoice-items { margin-bottom: 12px; }
-.inv-row {
-    display: grid; grid-template-columns: 2fr 1fr 1fr auto;
-    gap: 6px; margin-bottom: 6px; align-items: center;
-}
-.inv-row input { padding: 8px; font-size: 13px; }
-.inv-row button { color: var(--danger); font-size: 18px; padding: 4px 8px; }
-.inv-totals { border-top: 2px dashed var(--border); padding-top: 10px; margin-top: 10px; }
-.inv-totals .row { display: flex; justify-content: space-between; padding: 4px 0; font-size: 14px; }
-.inv-totals .row.total { font-weight: 900; font-size: 18px; color: var(--primary); border-top: 1px solid var(--border); padding-top: 8px; margin-top: 4px; }
-
-/* ================= PRINT ================= */
-@media print {
-    .topbar, .bottom-nav, .sidebar, .sidebar-overlay, .no-print { display: none !important; }
-    body { background: white; color: black; }
-    main { padding: 0; padding-bottom: 0; max-width: none; }
-    .card { box-shadow: none; border: 1px solid #ccc; break-inside: avoid; }
-}
-
-/* Utility */
-.utility-row { display: flex; gap: 8px; align-items: center; margin-bottom: 10px; flex-wrap: wrap; }
-.utility-row .input, .utility-row .select { flex: 1; min-width: 120px; }
-.text-center { text-align: center; }
-.text-muted { color: var(--text-2); }
-.tx-icon {
-    width: 36px; height: 36px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 14px; flex-shrink: 0;
-}
-.tx-income { background: var(--success-bg); }
-.tx-expense { background: var(--danger-bg); }
-.mb-2 { margin-bottom: 8px; }
-.mt-2 { margin-top: 8px; }
-.mt-3 { margin-top: 14px; }
-
-.activity-row {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 13px;
-}
-.activity-row:last-child { border: none; }
-.activity-row .date { font-size: 10px; color: var(--text-3); }
-
-@media (min-width: 960px) {
-    .sidebar { transform: translateX(0); position: sticky; height: 100vh; }
-    .sidebar-overlay { display: none; }
-    .hamburger { display: none; }
-    .app { display: flex; }
-    main { flex: 1; }
+@media(max-width:600px){
+  .proj-grid{grid-template-columns:1fr;}
+  .proj-card:first-child{grid-column:span 1;}
+  .footer-grid{grid-template-columns:1fr;}
+  nav{padding:12px 4%;}
+  section{padding:60px 4%;}
+  #theme-bar{bottom:16px;right:16px;}
+  .svc-modal-gallery{grid-template-columns:1fr 1fr;}
 }
 </style>
 </head>
 <body>
 
-<!-- ================= TOPBAR ================= -->
-<header class="topbar no-print">
-    <button class="hamburger" onclick="toggleSidebar()">☰</button>
-    <div class="brand-inline">
-        <h1>🔨 PRERAK MULTIPURPOSE</h1>
-        <div class="tagline">PVT LTD • Business OS</div>
-    </div>
-    <div class="topbar-right">
-        <span class="bs-date" id="bsDateDisplay">बि.सं. —</span>
-        <button class="icon-btn" onclick="toggleTheme()" title="Theme" id="themeIcon">🌙</button>
-    </div>
-</header>
-
-<!-- ================= SIDEBAR ================= -->
-<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
-<aside class="sidebar" id="sidebar">
-    <div class="sidebar-head">
-        <div class="logo">🔨</div>
-        <div>
-            <h2>PRERAK</h2>
-            <p>MULTIPURPOSE PVT LTD</p>
-        </div>
-    </div>
-
-    <div class="user-chip">
-        <div class="av">👤</div>
-        <div>
-            <div class="name" id="userName">Admin</div>
-            <div class="role" id="userRole">Admin</div>
-        </div>
-    </div>
-
-    <div class="side-section-title">Main</div>
-    <button class="side-btn" onclick="go('dash')" id="sb-dash"><span class="ic">📊</span> Dashboard</button>
-    <button class="side-btn" onclick="go('crm')" id="sb-crm"><span class="ic">👥</span> CRM (ग्राहक)</button>
-    <button class="side-btn" onclick="go('acc')" id="sb-acc"><span class="ic">💰</span> Accounting</button>
-    <button class="side-btn" onclick="go('staff')" id="sb-staff"><span class="ic">👷</span> Staff Log</button>
-    <button class="side-btn" onclick="go('rate')" id="sb-rate"><span class="ic">🏷️</span> Rate List</button>
-
-    <div class="side-section-title">Business</div>
-    <button class="side-btn" onclick="go('bakauta')" id="sb-bakauta"><span class="ic">📋</span> Bakauta / Estimate</button>
-    <button class="side-btn" onclick="go('vcard')" id="sb-vcard"><span class="ic">💼</span> Visiting Card</button>
-    <button class="side-btn" onclick="go('stock')" id="sb-stock"><span class="ic">📦</span> Stock / Items</button>
-    <button class="side-btn" onclick="go('sales')" id="sb-sales"><span class="ic">🎯</span> Sales Team</button>
-
-    <div class="side-section-title">Reports</div>
-    <button class="side-btn" onclick="go('daily')" id="sb-daily"><span class="ic">📈</span> Daily Report</button>
-    <button class="side-btn" onclick="go('daybook')" id="sb-daybook"><span class="ic">📒</span> Day Book</button>
-    <button class="side-btn" onclick="go('bulk')" id="sb-bulk"><span class="ic">📢</span> Bulk Message</button>
-
-    <div class="side-section-title">Account</div>
-    <div class="sidebar-summary">
-        <h4>📊 आजको Summary</h4>
-        <div class="mini-grid3">
-            <div class="mini-box green"><div class="lbl">आम्दानी</div><div class="val" id="sb-today-income">Rs.0</div></div>
-            <div class="mini-box red"><div class="lbl">खर्च</div><div class="val" id="sb-today-expense">Rs.0</div></div>
-            <div class="mini-box blue"><div class="lbl">NET</div><div class="val" id="sb-today-net">Rs.0</div></div>
-        </div>
-        <div class="mini-grid2">
-            <div class="mini-box orange"><div class="lbl">📗 Advance</div><div class="val" id="sb-advance">Rs.0</div></div>
-            <div class="mini-box blue"><div class="lbl">📅 Follow-ups</div><div class="val" id="sb-followup">0 आज</div></div>
-        </div>
-    </div>
-    <button class="side-btn" onclick="go('admin')" id="sb-admin"><span class="ic">🛡️</span> Admin Panel <span class="lock">🔒</span></button>
-    <div style="padding: 10px 16px 20px; font-size: 10px; color: var(--text-3); text-align: center;">
-        v3.0 • Offline Ready • © Prerak Multipurpose
-    </div>
-</aside>
-
-<!-- ================= MAIN ================= -->
-<div class="app">
-    <main>
-        <!-- DASHBOARD -->
-        <section id="sec-dash">
-            <h1 class="page-title">Dashboard</h1>
-            <div class="grid g4 mb-2">
-                <div class="stat"><div class="lbl">कुल ग्राहक</div><div class="val" id="dc-cust">0</div></div>
-                <div class="stat income"><div class="lbl">यस महिना आय</div><div class="val sm" id="dc-income">Rs.0</div></div>
-                <div class="stat expense"><div class="lbl">यस महिना खर्च</div><div class="val sm" id="dc-expense">Rs.0</div></div>
-                <div class="stat"><div class="lbl">कुल स्टाफ</div><div class="val" id="dc-staff">0</div></div>
-            </div>
-
-            <div class="grid g-md-2 mb-2">
-                <div class="hero">
-                    <div class="lbl">नेट ब्यालेन्स</div>
-                    <div class="val" id="dc-balance">Rs.0</div>
-                    <div class="sub">कुल आय − कुल खर्च</div>
-                </div>
-                <div class="card">
-                    <div class="card-title">हालसालैको गतिविधि</div>
-                    <div id="dc-recent"></div>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-title">द्रुत कार्य</div>
-                <div class="qa-grid">
-                    <button class="qa qa-blue" onclick="go('crm')"><span class="e">➕</span>ग्राहक</button>
-                    <button class="qa qa-green" onclick="go('acc')"><span class="e">💰</span>कारोबार</button>
-                    <button class="qa qa-purple" onclick="go('staff')"><span class="e">✓</span>हाजिर</button>
-                    <button class="qa qa-orange" onclick="go('bakauta')"><span class="e">📋</span>Estimate</button>
-                </div>
-            </div>
-        </section>
-
-        <!-- CRM -->
-        <section id="sec-crm" class="hidden">
-            <h1 class="page-title">CRM - ग्राहक</h1>
-            <div class="card">
-                <div class="card-title">➕ नयाँ ग्राहक थप्नुहोस्</div>
-                <div class="form-grid c2">
-                    <input type="text" id="cName" class="input" placeholder="ग्राहकको नाम *">
-                    <input type="tel" id="cPhone" class="input" placeholder="फोन *">
-                    <input type="text" id="cAddr" class="input" placeholder="ठेगाना">
-                    <select id="cType" class="select">
-                        <option value="">प्रोजेक्ट प्रकार</option>
-                        <option>UPVC Window</option><option>Interior Design</option>
-                        <option>AAC Block</option><option>Aluminum Work</option>
-                        <option>Renovation</option><option>अन्य</option>
-                    </select>
-                    <select id="cStatus" class="select">
-                        <option value="Lead">Lead</option><option value="Quoted">Quoted</option>
-                        <option value="In Progress">In Progress</option>
-                        <option value="Completed">Completed</option><option value="Lost">Lost</option>
-                    </select>
-                    <input type="date" id="cFollowup" class="input" title="फलो-अप मिति">
-                    <input type="text" id="cNote" class="input" placeholder="नोट" style="grid-column: 1/-1;">
-                </div>
-                <button onclick="saveCRM()" class="btn btn-primary btn-block mt-3">+ ग्राहक सेभ</button>
-            </div>
-            <div class="utility-row">
-                <input type="text" id="crmSearch" class="input" oninput="renderCRM()" placeholder="🔍 खोज्नुहोस्...">
-                <select id="crmFilter" class="select" onchange="renderCRM()" style="max-width: 160px;">
-                    <option value="all">सबै</option>
-                    <option value="followup">आज Follow-up</option>
-                    <option value="Lead">Lead</option>
-                    <option value="In Progress">चलिरहेको</option>
-                    <option value="Completed">सकिएको</option>
-                </select>
-            </div>
-            <div id="crm_list"></div>
-        </section>
-
-        <!-- ACCOUNTING -->
-        <section id="sec-acc" class="hidden">
-            <h1 class="page-title">Accounting - हिसाब</h1>
-            <div class="card">
-                <div class="card-title">💰 नयाँ कारोबार</div>
-                <div class="form-grid c2">
-                    <select id="tType" class="select">
-                        <option value="income">💰 आय (Income)</option>
-                        <option value="expense">💸 खर्च (Expense)</option>
-                    </select>
-                    <input type="number" id="tAmount" class="input" placeholder="रकम (रू) *">
-                    <input type="date" id="tDate" class="input">
-                    <input type="text" id="tCat" class="input" placeholder="Category">
-                    <input type="text" id="tParty" class="input" placeholder="ग्राहक / पार्टी (वैकल्पिक)">
-                    <input type="text" id="tDesc" class="input" placeholder="विवरण">
-                </div>
-                <button onclick="saveTx()" class="btn btn-primary btn-block mt-3">+ कारोबार सेभ</button>
-            </div>
-            <div class="grid g3 mb-2">
-                <div class="stat income"><div class="lbl">कुल आय</div><div class="val sm" id="ac-income">Rs.0</div></div>
-                <div class="stat expense"><div class="lbl">कुल खर्च</div><div class="val sm" id="ac-expense">Rs.0</div></div>
-                <div class="stat"><div class="lbl">ब्यालेन्स</div><div class="val sm" id="ac-balance">Rs.0</div></div>
-            </div>
-            <select id="accFilter" class="select mb-2" onchange="renderAcc()">
-                <option value="all">सबै देखाउनुहोस्</option>
-                <option value="income">आय मात्र</option>
-                <option value="expense">खर्च मात्र</option>
-                <option value="month">यस महिना</option>
-                <option value="today">आज मात्र</option>
-            </select>
-            <div id="acc_list"></div>
-        </section>
-
-        <!-- STAFF -->
-        <section id="sec-staff" class="hidden">
-            <h1 class="page-title">Staff Log</h1>
-            <div class="card">
-                <div class="card-title">👷 नयाँ स्टाफ</div>
-                <div class="form-grid c2">
-                    <input type="text" id="sName" class="input" placeholder="नाम *">
-                    <input type="tel" id="sPhone" class="input" placeholder="फोन">
-                    <input type="text" id="sRole" class="input" placeholder="पद (Mistri, Helper)">
-                    <input type="number" id="sWage" class="input" placeholder="दैनिक ज्याला (रू) *">
-                </div>
-                <button onclick="saveStaff()" class="btn btn-primary btn-block mt-3">+ स्टाफ सेभ</button>
-            </div>
-            <p class="text-muted mb-2" style="font-size: 11px; padding: 0 8px;">📊 यस महिनाको रिपोर्ट</p>
-            <div id="staff_list"></div>
-        </section>
-
-        <!-- RATE -->
-        <section id="sec-rate" class="hidden">
-            <h1 class="page-title">Rate List</h1>
-            <div class="card">
-                <div class="card-title">🏷️ नयाँ रेट</div>
-                <div class="form-grid c3">
-                    <input type="text" id="rItem" class="input" placeholder="वस्तु *">
-                    <input type="number" id="rPrice" class="input" placeholder="मूल्य *">
-                    <input type="text" id="rUnit" class="input" placeholder="Unit">
-                </div>
-                <button onclick="saveRate()" class="btn btn-primary btn-block mt-3">+ रेट सेभ</button>
-            </div>
-            <div id="rate_list" class="grid g-md-3"></div>
-        </section>
-
-        <!-- BAKAUTA / ESTIMATE -->
-        <section id="sec-bakauta" class="hidden">
-            <h1 class="page-title">Bakauta / Estimate</h1>
-            <div class="card">
-                <div class="card-title">📋 नयाँ Estimate बनाउनुहोस्</div>
-                <div class="form-grid c2">
-                    <input type="text" id="eCust" class="input" placeholder="ग्राहकको नाम *">
-                    <input type="tel" id="ePhone" class="input" placeholder="ग्राहकको फोन">
-                    <input type="text" id="eAddr" class="input" placeholder="ठेगाना" style="grid-column: 1/-1;">
-                </div>
-                <div style="margin: 14px 0 8px; font-size: 12px; font-weight: 700; color: var(--text-2);">वस्तुहरू:</div>
-                <div id="inv-items" class="invoice-items"></div>
-                <button onclick="addInvItem()" class="btn btn-ghost btn-sm">+ वस्तु थप्नुहोस्</button>
-                <div class="inv-totals">
-                    <div class="row"><span>Subtotal:</span><span id="inv-subtotal">रू 0</span></div>
-                    <div class="row">
-                        <span>VAT (13%):</span>
-                        <label style="display:flex; align-items:center; gap:6px;">
-                            <input type="checkbox" id="inv-vat" onchange="calcInv()">
-                            <span id="inv-vat-amt">रू 0</span>
-                        </label>
-                    </div>
-                    <div class="row"><span>Discount:</span>
-                        <input type="number" id="inv-discount" class="input" style="width:100px; padding:4px 8px;" value="0" oninput="calcInv()">
-                    </div>
-                    <div class="row total"><span>कुल:</span><span id="inv-total">रू 0</span></div>
-                </div>
-                <div class="btn-row mt-3">
-                    <button onclick="saveEstimate()" class="btn btn-primary">💾 सेभ</button>
-                    <button onclick="printEstimate()" class="btn btn-purple">🖨️ Print</button>
-                </div>
-            </div>
-            <div class="card-title" style="padding-left: 8px;">पहिलेका Estimates</div>
-            <div id="estimates_list"></div>
-        </section>
-
-        <!-- VISITING CARD -->
-        <section id="sec-vcard" class="hidden">
-            <h1 class="page-title">Visiting Card</h1>
-            <div class="v-card" id="vcard-preview">
-                <div style="position: relative; z-index: 1;">
-                    <h2 id="vc-name">PRERAK MULTIPURPOSE</h2>
-                    <div class="sub" id="vc-sub">PVT LTD</div>
-                    <div class="line"><span class="ic">👤</span><span id="vc-contact">Admin</span></div>
-                    <div class="line"><span class="ic">📞</span><span id="vc-phone">—</span></div>
-                    <div class="line"><span class="ic">📧</span><span id="vc-email">—</span></div>
-                    <div class="line"><span class="ic">📍</span><span id="vc-addr">—</span></div>
-                    <div class="line"><span class="ic">🏷️</span><span id="vc-pan">PAN: —</span></div>
-                </div>
-            </div>
-            <div class="btn-row mt-3">
-                <button onclick="window.print()" class="btn btn-primary">🖨️ Print Card</button>
-                <button onclick="shareVCard()" class="btn btn-success">📤 Share</button>
-                <button onclick="go('admin')" class="btn btn-ghost">✏️ Edit Info</button>
-            </div>
-        </section>
-
-        <!-- STOCK -->
-        <section id="sec-stock" class="hidden">
-            <h1 class="page-title">Stock / Items</h1>
-            <div class="card">
-                <div class="card-title">📦 नयाँ वस्तु थप्नुहोस्</div>
-                <div class="form-grid c2">
-                    <input type="text" id="stName" class="input" placeholder="वस्तुको नाम *">
-                    <input type="number" id="stQty" class="input" placeholder="मौज्दात *">
-                    <input type="number" id="stBuy" class="input" placeholder="खरिद मूल्य">
-                    <input type="number" id="stSell" class="input" placeholder="बिक्री मूल्य">
-                    <input type="text" id="stUnit" class="input" placeholder="Unit (pcs, kg, bag)">
-                    <input type="number" id="stMin" class="input" placeholder="Low Stock Alert मा">
-                </div>
-                <button onclick="saveStock()" class="btn btn-primary btn-block mt-3">+ वस्तु सेभ</button>
-            </div>
-            <div id="stock_list"></div>
-        </section>
-
-        <!-- SALES TEAM -->
-        <section id="sec-sales" class="hidden">
-            <h1 class="page-title">Sales Team</h1>
-            <div class="card">
-                <div class="card-title">🎯 नयाँ Salesperson थप्नुहोस्</div>
-                <div class="form-grid c2">
-                    <input type="text" id="spName" class="input" placeholder="नाम *">
-                    <input type="tel" id="spPhone" class="input" placeholder="फोन">
-                    <input type="text" id="spArea" class="input" placeholder="Area / क्षेत्र">
-                    <input type="number" id="spComm" class="input" placeholder="Commission % (वैकल्पिक)">
-                </div>
-                <button onclick="saveSales()" class="btn btn-primary btn-block mt-3">+ Team Member सेभ</button>
-            </div>
-            <div id="sales_list"></div>
-        </section>
-
-        <!-- DAILY REPORT -->
-        <section id="sec-daily" class="hidden">
-            <h1 class="page-title">Daily Report</h1>
-            <div class="card">
-                <label class="field-lbl">मिति छान्नुहोस्:</label>
-                <input type="date" id="drDate" class="input" onchange="renderDailyReport()">
-            </div>
-            <div id="daily-report-body"></div>
-            <button onclick="window.print()" class="btn btn-primary btn-block mt-3">🖨️ रिपोर्ट Print</button>
-        </section>
-
-        <!-- DAY BOOK -->
-        <section id="sec-daybook" class="hidden">
-            <h1 class="page-title">Day Book</h1>
-            <div class="card">
-                <div class="utility-row">
-                    <input type="date" id="dbFrom" class="input" onchange="renderDaybook()">
-                    <span class="text-muted">देखि</span>
-                    <input type="date" id="dbTo" class="input" onchange="renderDaybook()">
-                </div>
-            </div>
-            <div id="daybook-body"></div>
-            <button onclick="window.print()" class="btn btn-primary btn-block mt-3">🖨️ Print Day Book</button>
-        </section>
-
-        <!-- BULK MESSAGE -->
-        <section id="sec-bulk" class="hidden">
-            <h1 class="page-title">Bulk Message</h1>
-            <div class="card">
-                <div class="card-title">📢 सन्देश Template</div>
-                <textarea id="bulkMsg" class="textarea" placeholder="नमस्ते {name}, ...&#10;&#10;{name} = ग्राहकको नाम लेखिन्छ">नमस्ते {name},
-
-हाम्रो नयाँ offer चेक गर्नुहोस्।
-
-धन्यवाद,
-Prerak Multipurpose Pvt Ltd</textarea>
-            </div>
-            <div class="card">
-                <div class="card-title">👥 ग्राहक छान्नुहोस् <span class="more" onclick="toggleAllBulk()">सबै छान्नुहोस्</span></div>
-                <div id="bulk-customers"></div>
-            </div>
-            <div class="btn-row">
-                <button onclick="sendBulkSMS()" class="btn btn-primary">💬 SMS App मा खोल्नुहोस्</button>
-                <button onclick="exportBulkCSV()" class="btn btn-success">📥 CSV डाउनलोड</button>
-                <button onclick="copyBulk()" class="btn btn-purple">📋 Copy</button>
-            </div>
-        </section>
-
-        <!-- ADMIN PANEL -->
-        <section id="sec-admin" class="hidden">
-            <h1 class="page-title">🛡️ Admin Panel</h1>
-            <div class="card">
-                <div class="card-title">🏢 कम्पनी जानकारी</div>
-                <div class="form-grid c2">
-                    <input type="text" id="adName" class="input" placeholder="Company Name">
-                    <input type="text" id="adSub" class="input" placeholder="Subtitle (PVT LTD)">
-                    <input type="text" id="adContact" class="input" placeholder="Contact Person">
-                    <input type="tel" id="adPhone" class="input" placeholder="Phone">
-                    <input type="email" id="adEmail" class="input" placeholder="Email">
-                    <input type="text" id="adPan" class="input" placeholder="PAN Number">
-                    <input type="text" id="adAddr" class="input" placeholder="Address" style="grid-column: 1/-1;">
-                </div>
-                <button onclick="saveAdmin()" class="btn btn-primary btn-block mt-3">💾 सेभ</button>
-            </div>
-
-            <div class="card">
-                <div class="card-title">🔐 Admin Password</div>
-                <div class="form-grid">
-                    <input type="password" id="adPwd" class="input" placeholder="नयाँ password (खाली छोडे पुरानै रहन्छ)">
-                </div>
-                <button onclick="savePwd()" class="btn btn-primary btn-block mt-3">🔒 Password Update</button>
-            </div>
-
-            <div class="card">
-                <div class="card-title">📊 Data Statistics</div>
-                <div id="admin-stats"></div>
-            </div>
-
-            <div class="card">
-                <div class="card-title">💾 डाटा व्यवस्थापन</div>
-                <div class="btn-row">
-                    <button onclick="downloadBackup()" class="btn btn-primary">📥 Backup</button>
-                    <button onclick="restoreBackup()" class="btn btn-success">📤 Restore</button>
-                    <button onclick="clearAll()" class="btn btn-danger">🗑️ Clear All</button>
-                </div>
-            </div>
-        </section>
-    </main>
+<!-- THEME BAR -->
+<div id="theme-bar">
+  <button class="theme-btn active" onclick="setTheme('dark')" title="Dark">🌙</button>
+  <button class="theme-btn" onclick="setTheme('light')" title="Light">☀️</button>
+  <button class="theme-btn" onclick="setTheme('saffron')" title="Saffron">🔶</button>
 </div>
 
-<!-- ================= BOTTOM NAV ================= -->
-<nav class="bottom-nav no-print">
-    <button id="nav-dash" onclick="go('dash')"><span class="emoji">📊</span><span class="label">Home</span></button>
-    <button id="nav-crm" onclick="go('crm')"><span class="emoji">👥</span><span class="label">CRM</span></button>
-    <button id="nav-acc" onclick="go('acc')"><span class="emoji">💰</span><span class="label">Cash</span></button>
-    <button id="nav-bakauta" onclick="go('bakauta')"><span class="emoji">📋</span><span class="label">Estimate</span></button>
-    <button id="nav-staff" onclick="go('staff')"><span class="emoji">👷</span><span class="label">Staff</span></button>
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-icon">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+        <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" stroke="#fff" stroke-width="2.5" stroke-linejoin="round"/>
+        <polyline points="9,22 9,12 15,12 15,22" stroke="#fff" stroke-width="2.5" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="nav-logo-text">
+      <div class="name">PRERAK</div>
+      <div class="sub">Multipurpose Pvt Ltd</div>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#videos">Videos</a></li>
+    <li><a href="#why-us">Why Us</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="tel:9855069733" class="nav-cta">📞 Call Now</a>
+  <div class="hamburger" onclick="toggleMenu()" id="hamburger">
+    <span></span><span></span><span></span>
+  </div>
 </nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#services" onclick="toggleMenu()">Services</a>
+  <a href="#videos" onclick="toggleMenu()">Videos</a>
+  <a href="#why-us" onclick="toggleMenu()">Why Choose Us</a>
+  <a href="#projects" onclick="toggleMenu()">Projects</a>
+  <a href="#contact" onclick="toggleMenu()">Contact</a>
+  <a href="tel:9855069733" style="color:var(--orange);font-weight:700">📞 9855069733</a>
+</div>
 
-<input type="file" id="restoreInput" accept=".json" style="display:none" onchange="handleRestore(event)">
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-img">
+    <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1400&q=80" alt="Construction">
+  </div>
+  <div class="hero-content">
+    <div class="hero-badge">Hetauda, Makwanpur, Nepal</div>
+    <h1>Building Your <span class="accent">Dreams</span> Into Reality</h1>
+    <p>PRERAK MULTIPURPOSE PVT LTD — Nepal's trusted partner for construction, interior design, UPVC, gypsum, solar & complete renovation solutions.</p>
+    <div class="hero-btns">
+      <a href="#contact" class="btn-primary">🏗️ Get Free Quote</a>
+      <a href="#services" class="btn-secondary">View Services →</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="num">500+</div><div class="label">Projects Done</div></div>
+      <div class="hero-stat"><div class="num">10+</div><div class="label">Years Experience</div></div>
+      <div class="hero-stat"><div class="num">100%</div><div class="label">Satisfaction</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services-section" id="services">
+  <div class="section-label">What We Do</div>
+  <h2 class="section-title">Our Services</h2>
+  <p class="section-sub">Complete construction & interior solutions — click any service to learn more.</p>
+  <div class="services-grid reveal" id="services-grid"></div>
+</section>
+
+<!-- SERVICE MODAL -->
+<div class="svc-overlay" id="svc-overlay" onclick="if(event.target===this)closeSvc()">
+  <div class="svc-modal" id="svc-modal">
+    <div class="svc-modal-header">
+      <img id="svc-img" src="" alt="" class="svc-modal-img">
+      <button class="svc-modal-close" onclick="closeSvc()">✕</button>
+    </div>
+    <div class="svc-modal-body">
+      <div style="font-size:2rem;margin-bottom:8px" id="svc-icon"></div>
+      <h2 id="svc-title"></h2>
+      <p id="svc-desc"></p>
+      <div class="svc-modal-gallery" id="svc-gallery"></div>
+      <div id="svc-features" class="svc-modal-features"></div>
+      <div class="svc-cta">
+        <a href="#contact" class="btn-primary" onclick="closeSvc()">🏗️ Get Quote</a>
+        <a id="svc-wa" href="#" target="_blank" class="wa-btn">💬 WhatsApp</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- VIDEOS -->
+<section class="video-section" id="videos">
+  <div class="section-label">Our Work</div>
+  <h2 class="section-title">See Our Projects</h2>
+  <p class="section-sub">Watch our completed projects and work process videos.</p>
+  <div class="video-grid reveal">
+    <div class="video-card" onclick="openVideo('https://www.youtube.com/embed/dQw4w9WgXcQ','Construction Work - Hetauda')">
+      <div class="video-thumb" style="background:linear-gradient(135deg,#1a1a2e,#16213e);height:100%;display:flex;align-items:center;justify-content:center;aspect-ratio:16/9">
+        <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1200&q=80" alt="Construction" class="video-thumb" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.7">
+      </div>
+      <div class="video-overlay">
+        <div class="video-label">Featured</div>
+        <div class="play-btn"><svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><polygon points="5,3 19,12 5,21"/></svg></div>
+        <h4>PRERAK Construction Work — Hetauda</h4>
+      </div>
+    </div>
+    <div class="video-card" onclick="openVideo('https://www.youtube.com/embed/dQw4w9WgXcQ','Interior Design')">
+      <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=600&q=80" alt="Interior" class="video-thumb">
+      <div class="video-overlay">
+        <div class="video-label">Interior</div>
+        <div class="play-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><polygon points="5,3 19,12 5,21"/></svg></div>
+        <h4>Interior Design Project</h4>
+      </div>
+    </div>
+    <div class="video-card" onclick="openVideo('https://www.youtube.com/embed/dQw4w9WgXcQ','UPVC Work')">
+      <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=600&q=80" alt="UPVC" class="video-thumb">
+      <div class="video-overlay">
+        <div class="video-label">UPVC</div>
+        <div class="play-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><polygon points="5,3 19,12 5,21"/></svg></div>
+        <h4>UPVC Windows Installation</h4>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VIDEO MODAL -->
+<div class="vid-overlay" id="vid-overlay" onclick="if(event.target===this)closeVideo()">
+  <div class="vid-modal">
+    <button class="vid-close" onclick="closeVideo()">✕</button>
+    <iframe id="vid-frame" src="" allowfullscreen></iframe>
+  </div>
+</div>
+
+<!-- WHY US -->
+<section id="why-us">
+  <div class="why-grid reveal">
+    <div class="why-visual">
+      <div class="why-img-wrap">
+        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80" alt="Interior">
+        <div class="why-badge-box"><div class="num">10+</div><div class="txt">Years Nepal</div></div>
+      </div>
+    </div>
+    <div>
+      <div class="section-label">Why Choose Us</div>
+      <h2 class="section-title">Quality You Can Trust</h2>
+      <p class="section-sub">We combine expertise, quality materials and honest pricing.</p>
+      <div class="why-points">
+        <div class="why-point"><div class="why-icon">⭐</div><div><h4>Quality Materials</h4><p>Certified, premium materials — no shortcuts.</p></div></div>
+        <div class="why-point"><div class="why-icon">⏱️</div><div><h4>On-Time Delivery</h4><p>Projects delivered on schedule, always.</p></div></div>
+        <div class="why-point"><div class="why-icon">💰</div><div><h4>Transparent Pricing</h4><p>No hidden charges. Best value in Nepal.</p></div></div>
+        <div class="why-point"><div class="why-icon">🤝</div><div><h4>After-Sales Support</h4><p>Full warranty and after-sales service.</p></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section class="projects-section" id="projects">
+  <div class="section-label">Our Work</div>
+  <h2 class="section-title">Recent Projects</h2>
+  <p class="section-sub">Completed projects across Hetauda and Makwanpur.</p>
+  <div class="proj-grid reveal">
+    <div class="proj-card"><img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80" alt="Interior"><div class="proj-overlay"><span class="proj-tag">Interior</span><h4>Modern Living Room</h4><p>Hetauda Residential</p></div></div>
+    <div class="proj-card"><img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=600&q=80" alt="Kitchen"><div class="proj-overlay"><span class="proj-tag">Kitchen</span><h4>Modular Kitchen</h4><p>Makwanpur</p></div></div>
+    <div class="proj-card"><img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=600&q=80" alt="Ceiling"><div class="proj-overlay"><span class="proj-tag">Gypsum</span><h4>False Ceiling</h4><p>Commercial</p></div></div>
+    <div class="proj-card"><img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=600&q=80" alt="UPVC"><div class="proj-overlay"><span class="proj-tag">UPVC</span><h4>UPVC Windows</h4><p>Residential</p></div></div>
+    <div class="proj-card"><img src="https://images.unsplash.com/photo-1501183638710-841dd1904471?auto=format&fit=crop&w=600&q=80" alt="Bedroom"><div class="proj-overlay"><span class="proj-tag">Interior</span><h4>Master Bedroom</h4><p>Hetauda</p></div></div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+  <div class="section-label">Happy Clients</div>
+  <h2 class="section-title">What Clients Say</h2>
+  <p class="section-sub">Trusted by hundreds across Makwanpur.</p>
+  <div class="test-grid reveal">
+    <div class="test-card"><div class="stars">★★★★★</div><p>"PRERAK ले हाम्रो घरको interior design गर्यो — बिल्कुल सपना जस्तै। Quality र time दुवैमा best!"</p><div class="test-author"><div class="test-avatar">र</div><div><div class="name">Ramesh Sharma</div><div class="loc">Hetauda-6</div></div></div></div>
+    <div class="test-card"><div class="stars">★★★★★</div><p>"UPVC windows and doors ko quality ekdam ramro. Rate pani fair thiyo. Strongly recommend!"</p><div class="test-author"><div class="test-avatar">स</div><div><div class="name">Sita Thapa</div><div class="loc">Hetauda-4</div></div></div></div>
+    <div class="test-card"><div class="stars">★★★★★</div><p>"Gypsum ceiling ko kaam top level. Team professional, deadline pani meet garyo. Best!"</p><div class="test-author"><div class="test-avatar">ब</div><div><div class="name">Bikash Adhikari</div><div class="loc">Hetauda-3</div></div></div></div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section reveal">
+  <div class="section-label" style="justify-content:center">Start Today</div>
+  <h2>Ready to Build Your Dream?</h2>
+  <p>Free site visit & detailed quotation. No obligation.</p>
+  <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+    <a href="#contact" class="btn-primary">🏗️ Get Free Quote</a>
+    <a href="https://wa.me/9779855069733?text=नमस्ते%20PRERAK%20जी!" target="_blank" class="wa-btn">💬 WhatsApp Us</a>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact-section" id="contact">
+  <div class="section-label">Get In Touch</div>
+  <h2 class="section-title">Contact Us</h2>
+  <p class="section-sub">Call, WhatsApp or send a message. We respond within 2 hours.</p>
+  <div class="contact-grid reveal">
+    <div class="contact-info">
+      <div class="contact-item"><div class="contact-item-icon">📍</div><div><h4>Address</h4><p>Hetauda-4, Kantirajpath<br>Makwanpur, Nepal</p></div></div>
+      <div class="contact-item"><div class="contact-item-icon">📞</div><div><h4>Phone</h4><a href="tel:9855069733">9855069733</a><br><a href="tel:9801069733">9801069733</a><br><a href="tel:057590733">057-590733</a></div></div>
+      <div class="contact-item"><div class="contact-item-icon">📧</div><div><h4>Email</h4><a href="mailto:prerakconstrucion21@gmail.com">prerakconstrucion21@gmail.com</a></div></div>
+      <div class="contact-item"><div class="contact-item-icon">⏰</div><div><h4>Hours</h4><p>Sun–Fri: 8AM–6PM<br>Sat: 9AM–4PM</p></div></div>
+      <a href="https://wa.me/9779855069733?text=नमस्ते%20PRERAK%20जी!" target="_blank" class="wa-btn">💬 Chat on WhatsApp</a>
+    </div>
+    <div class="contact-form">
+      <h3>Get Free Quote 🏗️</h3>
+      <div id="formContent">
+        <div class="fg"><label>Name *</label><input type="text" id="cf-name" placeholder="Your name"></div>
+        <div class="fg"><label>Phone *</label><input type="tel" id="cf-phone" placeholder="98XXXXXXXX"></div>
+        <div class="fg"><label>Service</label>
+          <select id="cf-svc">
+            <option>-- Select --</option>
+            <option>Construction</option><option>Interior Design</option>
+            <option>Gypsum Ceiling</option><option>UPVC & Aluminum</option>
+            <option>Flooring</option><option>Solar</option><option>Renovation</option>
+          </select>
+        </div>
+        <div class="fg"><label>Message</label><textarea id="cf-msg" placeholder="Tell us about your project..."></textarea></div>
+        <button class="form-submit" onclick="submitForm()">Send Message 📤</button>
+      </div>
+      <div id="form-success">✅ Message sent! We'll contact you shortly.<br><strong>WhatsApp: 9855069733</strong></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="#" class="nav-logo"><div class="nav-logo-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" stroke="#fff" stroke-width="2.5" stroke-linejoin="round"/><polyline points="9,22 9,12 15,12 15,22" stroke="#fff" stroke-width="2.5" stroke-linejoin="round"/></svg></div><div class="nav-logo-text"><div class="name">PRERAK</div><div class="sub">Multipurpose Pvt Ltd</div></div></a>
+      <p class="tagline">Building dreams across Hetauda & Makwanpur since 2012.</p>
+      <div class="footer-socials">
+        <a href="https://wa.me/9779855069733" target="_blank" class="soc-btn">💬</a>
+        <a href="mailto:prerakconstrucion21@gmail.com" class="soc-btn">📧</a>
+        <a href="tel:9855069733" class="soc-btn">📞</a>
+      </div>
+    </div>
+    <div class="footer-col"><h4>Services</h4><ul><li><a href="#services">Construction</a></li><li><a href="#services">Interior Design</a></li><li><a href="#services">Gypsum Ceiling</a></li><li><a href="#services">UPVC & Aluminum</a></li><li><a href="#services">Solar</a></li></ul></div>
+    <div class="footer-col"><h4>Company</h4><ul><li><a href="#why-us">About</a></li><li><a href="#projects">Projects</a></li><li><a href="#videos">Videos</a></li><li><a href="#contact">Contact</a></li></ul></div>
+    <div class="footer-col"><h4>Contact</h4><ul><li><a href="tel:9855069733">📞 9855069733</a></li><li><a href="tel:9801069733">📞 9801069733</a></li><li><a href="tel:057590733">☎️ 057-590733</a></li><li><a href="#">📍 Hetauda-4, Makwanpur</a></li></ul></div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 PRERAK MULTIPURPOSE PVT LTD. All rights reserved.</p>
+    <p>Hetauda, Makwanpur, Nepal</p>
+  </div>
+</footer>
 
 <script>
-// ============================================================
-// DATA STORE
-// ============================================================
-const DB_KEY = 'prerak_os_v4';
+// ══ THEME ══
+function setTheme(t){
+  document.body.className = t==='dark'?'':('theme-'+t);
+  localStorage.setItem('pw_theme',t);
+  document.querySelectorAll('.theme-btn').forEach(b=>b.classList.remove('active'));
+  const map={dark:0,light:1,saffron:2};
+  document.querySelectorAll('.theme-btn')[map[t]]?.classList.add('active');
+}
+(function(){
+  const t=localStorage.getItem('pw_theme')||'dark';
+  setTheme(t);
+})();
 
-function loadDB() {
-    try {
-        const d = localStorage.getItem(DB_KEY);
-        if (d) return { ...defaultDB(), ...JSON.parse(d) };
-    } catch(e) {}
-    return defaultDB();
+// ══ SERVICES DATA ══
+const SERVICES = [
+  {
+    id:'construction',
+    icon:'🏗️',
+    name:'Construction Works',
+    img:'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=800&q=80',
+    desc:'We provide complete construction services from foundation to finishing. Residential homes, commercial buildings, RCC structures, prefab houses — all under one roof with quality materials and skilled workers.',
+    tags:['Residential','Commercial','RCC','Prefab'],
+    gallery:[
+      'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&w=400&q=80',
+      'https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&w=400&q=80',
+      'https://images.unsplash.com/photo-1486325212027-8081e485255e?auto=format&fit=crop&w=400&q=80'
+    ],
+    features:['Foundation to finishing','RCC structure','Prefab & modular homes','Commercial buildings','Renovation & repair']
+  },
+  {
+    id:'interior',
+    icon:'🛋️',
+    name:'Interior Design',
+    img:'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80',
+    desc:'Transform your space with our expert interior design services. We create beautiful, functional spaces that reflect your personality — from modular kitchens to complete home makeovers.',
+    tags:['Modular Kitchen','Wardrobe','TV Unit','Lighting'],
+    gallery:[
+      'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=400&q=80',
+      'https://images.unsplash.com/photo-1501183638710-841dd1904471?auto=format&fit=crop&w=400&q=80',
+      'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=400&q=80'
+    ],
+    features:['Modular kitchen design','Custom wardrobe','TV unit & partition','Lighting design','Wall decoration']
+  },
+  {
+    id:'gypsum',
+    icon:'🪨',
+    name:'Gypsum & Ceiling',
+    img:'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80',
+    desc:'Professional gypsum ceiling and partition work. We install false ceilings, 2x2 grid ceilings, PVC boards and smart boards with perfect finishing and modern designs.',
+    tags:['False Ceiling','Grid Ceiling','PVC Board','Partition'],
+    gallery:[
+      'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?auto=format&fit=crop&w=400&q=80',
+      'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=400&q=80',
+      'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=400&q=80'
+    ],
+    features:['Gypsum false ceiling','2×2 grid ceiling','PVC & smart board','Office partition','Modern designs']
+  },
+  {
+    id:'upvc',
+    icon:'🪟',
+    name:'UPVC & Aluminum',
+    img:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=800&q=80',
+    desc:'High-quality UPVC windows and doors, aluminum sliding systems and glass work. Our products are waterproof, soundproof and energy efficient — perfect for Nepal\'s climate.',
+    tags:['UPVC Windows','Aluminum','Glass Work','Sliding'],
+    gallery:[
+      'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=400&q=80',
+      'https://images.unsplash.com/photo-1560448075-cbc16bb4af8e?auto=format&fit=crop&w=400&q=80',
+      'https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=400&q=80'
+    ],
+    features:['UPVC windows & doors','Aluminum sliding','Office glass work','Waterproof & soundproof','Energy efficient']
+  },
+  {
+    id:'flooring',
+    icon:'🏠',
+    name:'Flooring & Finishing',
+    img:'https://images.unsplash.com/photo-1504309092620-4d0ec726efa4?auto=format&fit=crop&w=800&q=80',
+    desc:'Complete flooring solutions including parquet, tiles, marble and granite. We also do painting, floor polishing and complete renovation of old houses.',
+    tags:['Parquet','Tiles','Marble','Painting'],
+    gallery:[
+      'https://images.unsplash.com/photo-1504309092620-4d0ec726efa4?auto=format&fit=crop&w=400&q=80',
+      'https://images.unsplash.com/photo-1507089947368-19c1da9775ae?auto=format&fit=crop&w=400&q=80',
+      'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?auto=format&fit=crop&w=400&q=80'
+    ],
+    features:['Parquet flooring','Tile & marble work','Granite finishing','Interior painting','House renovation']
+  },
+  {
+    id:'solar',
+    icon:'☀️',
+    name:'Solar & Electrical',
+    img:'https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=800&q=80',
+    desc:'Complete solar panel installation, electrical wiring, lighting setup, plumbing and bathroom fitting. We provide end-to-end electrical and solar solutions for homes and offices.',
+    tags:['Solar Panel','Electrical','Plumbing','Lighting'],
+    gallery:[
+      'https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=400&q=80',
+      'https://images.unsplash.com/photo-1558449028-b53a39d100fc?auto=format&fit=crop&w=400&q=80',
+      'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=400&q=80'
+    ],
+    features:['Solar panel installation','Electrical wiring','Lighting design','Plumbing','Bathroom fitting']
+  }
+];
+
+// Render services
+document.getElementById('services-grid').innerHTML = SERVICES.map(s=>`
+  <div class="service-card" onclick="openSvc('${s.id}')">
+    <div class="service-card-img-wrap">
+      <img src="${s.img}" alt="${s.name}" class="service-card-img">
+    </div>
+    <div class="service-card-body">
+      <div class="service-icon">${s.icon}</div>
+      <h3>${s.name}</h3>
+      <p>${s.desc.substring(0,90)}...</p>
+      <div class="service-tags">${s.tags.map(t=>`<span class="service-tag">${t}</span>`).join('')}</div>
+      <div class="service-more">View Details <span>→</span></div>
+    </div>
+  </div>`).join('');
+
+function openSvc(id){
+  const s=SERVICES.find(x=>x.id===id);
+  if(!s) return;
+  document.getElementById('svc-img').src=s.img;
+  document.getElementById('svc-icon').textContent=s.icon;
+  document.getElementById('svc-title').textContent=s.name;
+  document.getElementById('svc-desc').textContent=s.desc;
+  document.getElementById('svc-gallery').innerHTML=s.gallery.map(g=>`<img src="${g}" alt="">`).join('');
+  document.getElementById('svc-features').innerHTML=s.features.map(f=>`<div class="svc-feat">${f}</div>`).join('');
+  document.getElementById('svc-wa').href=`https://wa.me/9779855069733?text=नमस्ते PRERAK जी! मलाई ${s.name} को बारे जानकारी चाहियो।`;
+  document.getElementById('svc-overlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeSvc(){
+  document.getElementById('svc-overlay').classList.remove('open');
+  document.body.style.overflow='';
 }
 
-function defaultDB() {
-    return {
-        customers: [],
-        transactions: [],
-        staff: [],
-        rates: [
-            { id: 1, item: 'UPVC झ्याल', price: 950, unit: 'Sq.Ft' },
-            { id: 2, item: 'इन्टेरियर डिजाइन', price: 1200, unit: 'Sq.Ft' },
-            { id: 3, item: 'AAC ब्लक', price: 1100, unit: 'Cubic' }
-        ],
-        estimates: [],
-        stock: [],
-        salesTeam: [],
-        company: {
-            name: 'PRERAK MULTIPURPOSE',
-            sub: 'PVT LTD',
-            contact: 'Admin',
-            phone: '',
-            email: '',
-            address: '',
-            pan: ''
-        },
-        adminPassword: '',
-        theme: 'light',
-        adminUnlocked: false
-    };
+// ══ VIDEO ══
+function openVideo(url,title){
+  document.getElementById('vid-frame').src=url+'?autoplay=1';
+  document.getElementById('vid-overlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeVideo(){
+  document.getElementById('vid-frame').src='';
+  document.getElementById('vid-overlay').classList.remove('open');
+  document.body.style.overflow='';
 }
 
-let db = loadDB();
-function saveDB() {
-    try { localStorage.setItem(DB_KEY, JSON.stringify(db)); }
-    catch(e) { alert('Storage full वा error: ' + e.message); }
+// ══ NAV ══
+function toggleMenu(){
+  document.getElementById('mobileMenu').classList.toggle('open');
 }
+window.addEventListener('scroll',function(){
+  document.getElementById('navbar').style.padding=window.scrollY>50?'10px 5%':'14px 5%';
+});
+document.addEventListener('click',function(e){
+  const m=document.getElementById('mobileMenu'),h=document.getElementById('hamburger');
+  if(m.classList.contains('open')&&!m.contains(e.target)&&!h.contains(e.target))m.classList.remove('open');
+});
 
-// ============================================================
-// UTILITIES
-// ============================================================
-function fmt(n) { return Number(n||0).toLocaleString('en-IN'); }
-function today() { return new Date().toISOString().split('T')[0]; }
-function thisMonth() { return new Date().toISOString().substring(0, 7); }
-function uid() { return Date.now() + Math.floor(Math.random()*1000); }
-function esc(s) { return String(s==null?'':s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-function toast(msg) {
-    const t = document.createElement('div'); t.className = 'toast'; t.innerText = msg;
-    document.body.appendChild(t); setTimeout(() => t.remove(), 2000);
+// ══ SCROLL REVEAL ══
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});
+},{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+// ══ CONTACT FORM ══
+function submitForm(){
+  const name=(document.getElementById('cf-name').value||'').trim();
+  const phone=(document.getElementById('cf-phone').value||'').trim();
+  const svc=document.getElementById('cf-svc').value;
+  const msg=(document.getElementById('cf-msg').value||'').trim();
+  if(!name||!phone){alert('कृपया नाम र फोन हाल्नुस्।');return;}
+  const waMsg=`🏗️ *New Quote Request*\n\n👤 ${name}\n📞 ${phone}\n🔧 ${svc||'General'}\n📝 ${msg||'—'}\n\n_From PRERAK Website_`;
+  window.open('https://wa.me/9779855069733?text='+encodeURIComponent(waMsg),'_blank');
+  document.getElementById('formContent').style.display='none';
+  document.getElementById('form-success').style.display='block';
 }
-
-// ============================================================
-// BS CALENDAR (approximate for 2080-2088)
-// ============================================================
-const bsMonths = ['बैशाख','जेठ','असार','साउन','भदौ','असोज','कार्तिक','मंसिर','पुष','माघ','फागुन','चैत'];
-const bsData = {
-    2080: { days: [31,31,31,32,31,31,30,29,30,29,30,30], start: new Date(2023,3,14) },
-    2081: { days: [31,31,32,31,31,31,30,29,30,29,30,30], start: new Date(2024,3,13) },
-    2082: { days: [31,32,31,32,31,30,30,29,30,29,30,30], start: new Date(2025,3,14) },
-    2083: { days: [31,31,32,31,31,30,30,30,29,30,30,30], start: new Date(2026,3,14) },
-    2084: { days: [31,31,32,32,30,31,30,29,30,29,30,30], start: new Date(2027,3,14) },
-    2085: { days: [31,32,31,32,31,30,30,30,29,30,30,30], start: new Date(2028,3,13) },
-    2086: { days: [31,32,31,32,31,30,30,30,29,30,30,30], start: new Date(2029,3,14) },
-    2087: { days: [31,31,32,31,31,31,30,29,30,29,30,30], start: new Date(2030,3,14) },
-    2088: { days: [30,31,32,32,31,30,30,30,29,30,30,30], start: new Date(2031,3,14) }
-};
-const niDigit = s => String(s).replace(/\d/g, d => '०१२३४५६७८९'[d]);
-
-function adToBS(d = new Date()) {
-    d.setHours(0,0,0,0);
-    for (let y = 2088; y >= 2080; y--) {
-        if (d >= bsData[y].start) {
-            let diff = Math.floor((d - bsData[y].start) / 86400000);
-            const md = bsData[y].days;
-            let m = 0;
-            while (m < 11 && diff >= md[m]) { diff -= md[m]; m++; }
-            return { y, m, d: diff + 1 };
-        }
-    }
-    return null;
-}
-
-function bsDateStr() {
-    const bs = adToBS();
-    if (!bs) return 'बि.सं. —';
-    return `बि.सं. ${niDigit(bs.y)} ${bsMonths[bs.m]} ${niDigit(bs.d)}`;
-}
-
-// ============================================================
-// NAVIGATION
-// ============================================================
-function go(tab) {
-    // Admin panel password check
-    if (tab === 'admin' && db.adminPassword && !db.adminUnlocked) {
-        const p = prompt('🔒 Admin password राख्नुहोस्:');
-        if (p !== db.adminPassword) { toast('❌ गलत password'); return; }
-        db.adminUnlocked = true;
-    }
-
-    document.querySelectorAll('main > section').forEach(s => s.classList.add('hidden'));
-    const el = document.getElementById('sec-' + tab);
-    if (el) el.classList.remove('hidden');
-
-    document.querySelectorAll('.side-btn').forEach(b => b.classList.remove('active'));
-    document.querySelectorAll('.bottom-nav button').forEach(b => b.classList.remove('active'));
-    document.getElementById('sb-' + tab)?.classList.add('active');
-    document.getElementById('nav-' + tab)?.classList.add('active');
-
-    // Per-tab rendering
-    const renders = {
-        dash: renderDashboard, crm: renderCRM, acc: renderAcc, staff: renderStaff,
-        rate: renderRate, bakauta: renderBakauta, vcard: renderVCard, stock: renderStock,
-        sales: renderSalesTeam, daily: () => { document.getElementById('drDate').value = today(); renderDailyReport(); },
-        daybook: () => { 
-            const t = today(); const m = t.substring(0,7);
-            document.getElementById('dbFrom').value = m + '-01';
-            document.getElementById('dbTo').value = t;
-            renderDaybook();
-        },
-        bulk: renderBulk, admin: renderAdmin
-    };
-    renders[tab]?.();
-
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    closeSidebar();
-}
-
-// ============================================================
-// SIDEBAR / THEME
-// ============================================================
-function toggleSidebar() {
-    document.getElementById('sidebar').classList.toggle('show');
-    document.getElementById('sidebarOverlay').classList.toggle('show');
-}
-function closeSidebar() {
-    document.getElementById('sidebar').classList.remove('show');
-    document.getElementById('sidebarOverlay').classList.remove('show');
-}
-function toggleTheme() {
-    db.theme = db.theme === 'dark' ? 'light' : 'dark';
-    applyTheme(); saveDB();
-}
-function applyTheme() {
-    document.documentElement.setAttribute('data-theme', db.theme);
-    document.getElementById('themeIcon').innerText = db.theme === 'dark' ? '☀️' : '🌙';
-}
-
-// ============================================================
-// CRM
-// ============================================================
-function saveCRM() {
-    const name = document.getElementById('cName').value.trim();
-    const phone = document.getElementById('cPhone').value.trim();
-    if (!name || !phone) return alert('नाम र फोन आवश्यक छ।');
-    db.customers.unshift({
-        id: uid(), name, phone,
-        address: document.getElementById('cAddr').value.trim(),
-        type: document.getElementById('cType').value,
-        status: document.getElementById('cStatus').value,
-        note: document.getElementById('cNote').value.trim(),
-        followup: document.getElementById('cFollowup').value,
-        date: today()
-    });
-    saveDB();
-    ['cName','cPhone','cAddr','cNote','cFollowup'].forEach(i => document.getElementById(i).value='');
-    renderCRM(); updateSidebar(); toast('✓ ग्राहक सेभ');
-}
-
-function delCRM(id) {
-    if (!confirm('मेटाउने?')) return;
-    db.customers = db.customers.filter(c => c.id !== id);
-    saveDB(); renderCRM(); updateSidebar();
-}
-
-function updateStatus(id) {
-    const c = db.customers.find(x => x.id === id);
-    const opts = ['Lead','Quoted','In Progress','Completed','Lost'];
-    const r = prompt(`स्थिति बदल्नुहोस्:\n${opts.map((o,i)=>(i+1)+'. '+o).join('\n')}\n\n1-5 टाइप गर्नुहोस्:`, opts.indexOf(c.status)+1);
-    if (opts[r-1]) { c.status = opts[r-1]; saveDB(); renderCRM(); }
-}
-
-function setFollowup(id) {
-    const c = db.customers.find(x => x.id === id);
-    const d = prompt('Follow-up मिति (YYYY-MM-DD):', c.followup || today());
-    if (d) { c.followup = d; saveDB(); renderCRM(); updateSidebar(); }
-}
-
-function pillCls(s) {
-    return 'pill ' + ({'Lead':'pill-lead','Quoted':'pill-quoted','In Progress':'pill-progress','Completed':'pill-completed','Lost':'pill-lost'}[s] || 'pill-lead');
-}
-
-function renderCRM() {
-    const q = (document.getElementById('crmSearch')?.value || '').toLowerCase();
-    const f = document.getElementById('crmFilter')?.value || 'all';
-    const t = today();
-    let list = db.customers.filter(c => !q || c.name.toLowerCase().includes(q) || c.phone.includes(q));
-    if (f === 'followup') list = list.filter(c => c.followup === t);
-    else if (f !== 'all') list = list.filter(c => c.status === f);
-
-    const el = document.getElementById('crm_list');
-    if (!list.length) { el.innerHTML = '<div class="empty"><div class="big">👥</div><p>कुनै ग्राहक छैन</p></div>'; return; }
-    el.innerHTML = list.map(c => `
-        <div class="list-item">
-            <div class="body">
-                <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
-                    <span class="i-name">${esc(c.name)}</span>
-                    <span class="${pillCls(c.status)}" onclick="updateStatus(${c.id})">${esc(c.status||'Lead')}</span>
-                    ${c.followup===t?'<span class="pill pill-quoted">📅 आज Follow-up</span>':''}
-                </div>
-                <p class="i-sub">📞 ${esc(c.phone)}${c.address?' • 📍 '+esc(c.address):''}</p>
-                ${c.type?`<p class="i-sub">🏷️ ${esc(c.type)}</p>`:''}
-                ${c.followup?`<p class="i-sub">📅 Follow-up: ${esc(c.followup)}</p>`:''}
-                ${c.note?`<p class="i-note">📝 ${esc(c.note)}</p>`:''}
-                <p class="i-date">${esc(c.date)}</p>
-            </div>
-            <div class="actions">
-                <a href="tel:${esc(c.phone)}" class="btn btn-success btn-ic">📞</a>
-                <button onclick="setFollowup(${c.id})" class="btn btn-orange btn-ic">📅</button>
-                <button onclick="delCRM(${c.id})" class="btn btn-danger btn-ic">🗑️</button>
-            </div>
-        </div>`).join('');
-}
-
-// ============================================================
-// ACCOUNTING
-// ============================================================
-function saveTx() {
-    const amt = parseFloat(document.getElementById('tAmount').value);
-    if (!amt || amt<=0) return alert('सही रकम राख्नुहोस्।');
-    db.transactions.unshift({
-        id: uid(), type: document.getElementById('tType').value, amount: amt,
-        date: document.getElementById('tDate').value || today(),
-        category: document.getElementById('tCat').value.trim() || 'General',
-        party: document.getElementById('tParty').value.trim(),
-        desc: document.getElementById('tDesc').value.trim()
-    });
-    saveDB();
-    ['tAmount','tCat','tParty','tDesc'].forEach(i => document.getElementById(i).value='');
-    document.getElementById('tDate').value = today();
-    renderAcc(); updateSidebar(); toast('✓ कारोबार सेभ');
-}
-
-function delTx(id) {
-    if (!confirm('मेटाउने?')) return;
-    db.transactions = db.transactions.filter(t => t.id !== id);
-    saveDB(); renderAcc(); updateSidebar();
-}
-
-function renderAcc() {
-    const inc = db.transactions.filter(t=>t.type==='income').reduce((a,t)=>a+t.amount,0);
-    const exp = db.transactions.filter(t=>t.type==='expense').reduce((a,t)=>a+t.amount,0);
-    document.getElementById('ac-income').innerText = 'Rs.'+fmt(inc);
-    document.getElementById('ac-expense').innerText = 'Rs.'+fmt(exp);
-    document.getElementById('ac-balance').innerText = 'Rs.'+fmt(inc-exp);
-
-    const f = document.getElementById('accFilter')?.value || 'all';
-    let list = [...db.transactions];
-    if (f==='income') list = list.filter(t=>t.type==='income');
-    else if (f==='expense') list = list.filter(t=>t.type==='expense');
-    else if (f==='month') list = list.filter(t=>t.date.startsWith(thisMonth()));
-    else if (f==='today') list = list.filter(t=>t.date===today());
-
-    const el = document.getElementById('acc_list');
-    if (!list.length) { el.innerHTML = '<div class="empty"><div class="big">💰</div><p>कुनै कारोबार छैन</p></div>'; return; }
-    el.innerHTML = list.map(t => `
-        <div class="list-item">
-            <div style="display:flex; gap:10px; flex:1; min-width:0; align-items:center;">
-                <div class="tx-icon ${t.type==='income'?'tx-income':'tx-expense'}">${t.type==='income'?'⬇️':'⬆️'}</div>
-                <div style="min-width:0; flex:1;">
-                    <p class="i-name" style="font-size:14px;">${esc(t.category)}${t.party?' • '+esc(t.party):''}</p>
-                    <p class="i-sub">${esc(t.desc||'-')} • ${esc(t.date)}</p>
-                </div>
-            </div>
-            <div style="display:flex; align-items:center; gap:6px;">
-                <span style="font-weight:900; font-size:14px; white-space:nowrap; color:${t.type==='income'?'var(--success)':'var(--danger)'};">
-                    ${t.type==='income'?'+':'-'}रू ${fmt(t.amount)}
-                </span>
-                <button onclick="delTx(${t.id})" class="close-x">✕</button>
-            </div>
-        </div>`).join('');
-}
-
-// ============================================================
-// STAFF
-// ============================================================
-function saveStaff() {
-    const name = document.getElementById('sName').value.trim();
-    const wage = parseFloat(document.getElementById('sWage').value);
-    if (!name||!wage) return alert('नाम र ज्याला आवश्यक।');
-    db.staff.unshift({
-        id: uid(), name,
-        phone: document.getElementById('sPhone').value.trim(),
-        role: document.getElementById('sRole').value.trim(),
-        wage, attendance: [], advances: []
-    });
-    saveDB();
-    ['sName','sPhone','sRole','sWage'].forEach(i=>document.getElementById(i).value='');
-    renderStaff(); toast('✓ स्टाफ सेभ');
-}
-
-function markAttendance(id) {
-    const s = db.staff.find(x=>x.id===id); const t = today();
-    if (s.attendance.includes(t)) {
-        if (confirm('आजको हाजिर हटाउने?')) {
-            s.attendance = s.attendance.filter(d=>d!==t); saveDB(); renderStaff();
-        }
-        return;
-    }
-    s.attendance.push(t); saveDB(); renderStaff(); toast('✓ हाजिर');
-}
-
-function addAdvance(id) {
-    const a = parseFloat(prompt('पेश्की रकम (रू):'));
-    if (!a||a<=0) return;
-    const s = db.staff.find(x=>x.id===id);
-    s.advances.push({ id: uid(), date: today(), amount: a });
-    saveDB(); renderStaff(); updateSidebar(); toast('✓ पेश्की');
-}
-
-function paySalary(id) {
-    const s = db.staff.find(x=>x.id===id); const m = thisMonth();
-    const days = s.attendance.filter(d=>d.startsWith(m)).length;
-    const adv = s.advances.filter(a=>a.date.startsWith(m)).reduce((x,a)=>x+a.amount,0);
-    const due = (days*s.wage)-adv;
-    if (due<=0) return alert('बाँकी रकम छैन।');
-    if (!confirm(`${s.name} लाई रू ${fmt(due)} तलब दिने?\nखर्चमा दर्ता हुनेछ, महिनाको रेकर्ड रिसेट हुनेछ।`)) return;
-    db.transactions.unshift({
-        id: uid(), type: 'expense', amount: due, date: today(),
-        category: 'Salary', desc: `${s.name} (${s.role||'Staff'}) - ${days} दिन`, party: s.name
-    });
-    s.attendance = s.attendance.filter(d=>!d.startsWith(m));
-    s.advances = s.advances.filter(a=>!a.date.startsWith(m));
-    saveDB(); renderStaff(); updateSidebar(); toast('✓ तलब भुक्तानी');
-}
-
-function delStaff(id) {
-    if (!confirm('मेटाउने?')) return;
-    db.staff = db.staff.filter(s=>s.id!==id);
-    saveDB(); renderStaff();
-}
-
-function renderStaff() {
-    const el = document.getElementById('staff_list');
-    if (!db.staff.length) { el.innerHTML='<div class="empty"><div class="big">👷</div><p>कुनै स्टाफ छैन</p></div>'; return; }
-    const m = thisMonth();
-    el.innerHTML = db.staff.map(s => {
-        const days = s.attendance.filter(d=>d.startsWith(m)).length;
-        const adv = s.advances.filter(a=>a.date.startsWith(m)).reduce((x,a)=>x+a.amount,0);
-        const earned = days*s.wage; const due = earned-adv;
-        const todayMarked = s.attendance.includes(today());
-        return `<div class="card">
-            <div style="display:flex; justify-content:space-between;">
-                <div>
-                    <p class="i-name">${esc(s.name)}</p>
-                    <p class="i-sub">${esc(s.role||'Staff')} • रू ${fmt(s.wage)}/दिन${s.phone?' • <a href="tel:'+esc(s.phone)+'" style="color:var(--primary);">'+esc(s.phone)+'</a>':''}</p>
-                </div>
-                <button onclick="delStaff(${s.id})" class="close-x">✕</button>
-            </div>
-            <div class="mini-grid2" style="grid-template-columns:repeat(4,1fr); margin:10px 0;">
-                <div class="mini-box blue"><div class="lbl">हाजिर</div><div class="val">${days}</div></div>
-                <div class="mini-box green"><div class="lbl">कमाई</div><div class="val">रू ${fmt(earned)}</div></div>
-                <div class="mini-box orange"><div class="lbl">पेश्की</div><div class="val">रू ${fmt(adv)}</div></div>
-                <div class="mini-box" style="background:var(--purple-bg);"><div class="lbl">बाँकी</div><div class="val" style="color:var(--purple);">रू ${fmt(due)}</div></div>
-            </div>
-            <div class="btn-row">
-                <button onclick="markAttendance(${s.id})" class="btn ${todayMarked?'btn-gray':'btn-success'}">${todayMarked?'✓ हाजिर ✓':'✓ हाजिर'}</button>
-                <button onclick="addAdvance(${s.id})" class="btn btn-orange">💵 पेश्की</button>
-                <button onclick="paySalary(${s.id})" class="btn btn-purple">👛 तलब</button>
-            </div>
-        </div>`;
-    }).join('');
-}
-
-// ============================================================
-// RATES
-// ============================================================
-function saveRate() {
-    const item = document.getElementById('rItem').value.trim();
-    const price = parseFloat(document.getElementById('rPrice').value);
-    const unit = document.getElementById('rUnit').value.trim();
-    if (!item||!price) return alert('वस्तु र मूल्य चाहिन्छ।');
-    db.rates.unshift({ id: uid(), item, price, unit: unit||'pc' });
-    saveDB();
-    ['rItem','rPrice','rUnit'].forEach(i=>document.getElementById(i).value='');
-    renderRate(); toast('✓ रेट सेभ');
-}
-function editRate(id) {
-    const r = db.rates.find(x=>x.id===id);
-    const p = parseFloat(prompt(`${r.item} नयाँ मूल्य:`, r.price));
-    if (!p||p<=0) return;
-    r.price = p; saveDB(); renderRate(); toast('✓ अपडेट');
-}
-function delRate(id) { if (!confirm('मेटाउने?')) return; db.rates = db.rates.filter(r=>r.id!==id); saveDB(); renderRate(); }
-function renderRate() {
-    const el = document.getElementById('rate_list');
-    if (!db.rates.length) { el.innerHTML='<div class="empty" style="grid-column:1/-1;"><div class="big">🏷️</div><p>कुनै रेट छैन</p></div>'; return; }
-    el.innerHTML = db.rates.map(r => `
-        <div class="rate-card">
-            <button class="close-x" onclick="delRate(${r.id})">✕</button>
-            <h4>${esc(r.item)}</h4>
-            <p class="price" onclick="editRate(${r.id})">रू ${fmt(r.price)}</p>
-            <p class="unit">प्रति ${esc(r.unit)}</p>
-        </div>`).join('');
-}
-
-// ============================================================
-// BAKAUTA / ESTIMATE
-// ============================================================
-let invItems = [{item:'',qty:1,rate:0}];
-
-function renderInvItems() {
-    const el = document.getElementById('inv-items');
-    el.innerHTML = invItems.map((it,i)=>`
-        <div class="inv-row">
-            <input type="text" class="input" placeholder="वस्तु" value="${esc(it.item)}" oninput="invItems[${i}].item=this.value">
-            <input type="number" class="input" placeholder="Qty" value="${it.qty}" oninput="invItems[${i}].qty=parseFloat(this.value)||0; calcInv()">
-            <input type="number" class="input" placeholder="Rate" value="${it.rate}" oninput="invItems[${i}].rate=parseFloat(this.value)||0; calcInv()">
-            <button onclick="removeInvItem(${i})">✕</button>
-        </div>`).join('');
-    calcInv();
-}
-function addInvItem() { invItems.push({item:'',qty:1,rate:0}); renderInvItems(); }
-function removeInvItem(i) { invItems.splice(i,1); if (!invItems.length) invItems=[{item:'',qty:1,rate:0}]; renderInvItems(); }
-
-function calcInv() {
-    const sub = invItems.reduce((a,it)=>a+(it.qty*it.rate),0);
-    const disc = parseFloat(document.getElementById('inv-discount').value)||0;
-    const vatOn = document.getElementById('inv-vat').checked;
-    const vat = vatOn ? (sub-disc)*0.13 : 0;
-    const total = sub-disc+vat;
-    document.getElementById('inv-subtotal').innerText = 'रू '+fmt(sub);
-    document.getElementById('inv-vat-amt').innerText = 'रू '+fmt(Math.round(vat));
-    document.getElementById('inv-total').innerText = 'रू '+fmt(Math.round(total));
-}
-
-function renderBakauta() { renderInvItems(); renderEstimatesList(); }
-
-function saveEstimate() {
-    const cust = document.getElementById('eCust').value.trim();
-    if (!cust) return alert('ग्राहकको नाम चाहिन्छ।');
-    const valid = invItems.filter(it=>it.item && it.qty>0 && it.rate>0);
-    if (!valid.length) return alert('कमसेकम एक वस्तु भर्नुहोस्।');
-    const sub = valid.reduce((a,it)=>a+(it.qty*it.rate),0);
-    const disc = parseFloat(document.getElementById('inv-discount').value)||0;
-    const vat = document.getElementById('inv-vat').checked ? Math.round((sub-disc)*0.13) : 0;
-    const total = sub-disc+vat;
-    db.estimates.unshift({
-        id: uid(), customer: cust,
-        phone: document.getElementById('ePhone').value.trim(),
-        address: document.getElementById('eAddr').value.trim(),
-        items: valid, subtotal: sub, discount: disc, vat, total,
-        date: today()
-    });
-    saveDB();
-    ['eCust','ePhone','eAddr'].forEach(i=>document.getElementById(i).value='');
-    invItems = [{item:'',qty:1,rate:0}];
-    document.getElementById('inv-discount').value = 0;
-    document.getElementById('inv-vat').checked = false;
-    renderBakauta(); toast('✓ Estimate सेभ');
-}
-
-function renderEstimatesList() {
-    const el = document.getElementById('estimates_list');
-    if (!db.estimates.length) { el.innerHTML='<div class="empty"><div class="big">📋</div><p>कुनै estimate छैन</p></div>'; return; }
-    el.innerHTML = db.estimates.map(e => `
-        <div class="list-item">
-            <div class="body">
-                <p class="i-name">${esc(e.customer)}</p>
-                <p class="i-sub">${e.items.length} वस्तु • रू ${fmt(e.total)} • ${esc(e.date)}</p>
-            </div>
-            <div class="actions">
-                <button onclick="printSavedEstimate(${e.id})" class="btn btn-primary btn-ic">🖨️</button>
-                <button onclick="delEstimate(${e.id})" class="btn btn-danger btn-ic">🗑️</button>
-            </div>
-        </div>`).join('');
-}
-
-function delEstimate(id) { if (!confirm('मेटाउने?')) return; db.estimates = db.estimates.filter(e=>e.id!==id); saveDB(); renderBakauta(); }
-
-function printEstimate() {
-    const cust = document.getElementById('eCust').value.trim();
-    if (!cust) return alert('Estimate सेभ गर्न customer नाम चाहिन्छ।');
-    const valid = invItems.filter(it=>it.item && it.qty>0 && it.rate>0);
-    if (!valid.length) return alert('वस्तु भर्नुहोस्।');
-    const sub = valid.reduce((a,it)=>a+(it.qty*it.rate),0);
-    const disc = parseFloat(document.getElementById('inv-discount').value)||0;
-    const vat = document.getElementById('inv-vat').checked ? Math.round((sub-disc)*0.13) : 0;
-    printEstimateDoc({
-        customer: cust,
-        phone: document.getElementById('ePhone').value.trim(),
-        address: document.getElementById('eAddr').value.trim(),
-        items: valid, subtotal: sub, discount: disc, vat, total: sub-disc+vat, date: today()
-    });
-}
-
-function printSavedEstimate(id) {
-    const e = db.estimates.find(x=>x.id===id);
-    if (e) printEstimateDoc(e);
-}
-
-function printEstimateDoc(e) {
-    const c = db.company;
-    const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Estimate</title><style>
-        body { font-family: sans-serif; padding: 20px; color: #000; }
-        .hdr { text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 20px; }
-        .hdr h1 { color: #f97316; margin-bottom: 4px; }
-        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
-        th, td { border: 1px solid #333; padding: 8px; text-align: left; }
-        th { background: #f3f4f6; }
-        .totals { text-align: right; margin-top: 15px; }
-        .totals .row { display: flex; justify-content: flex-end; gap: 20px; padding: 4px 0; }
-        .totals .total { font-size: 20px; font-weight: bold; border-top: 2px solid #000; padding-top: 8px; }
-    </style></head><body>
-        <div class="hdr">
-            <h1>${esc(c.name)} ${esc(c.sub)}</h1>
-            <p>${esc(c.address)} ${c.phone?' • 📞 '+esc(c.phone):''} ${c.email?' • '+esc(c.email):''}</p>
-            ${c.pan?'<p>PAN: '+esc(c.pan)+'</p>':''}
-            <h2 style="margin-top: 14px;">ESTIMATE / बकौता</h2>
-        </div>
-        <div style="display:flex; justify-content:space-between;">
-            <div>
-                <b>Bill To:</b><br>
-                ${esc(e.customer)}<br>
-                ${esc(e.address||'')}<br>
-                ${e.phone?'📞 '+esc(e.phone):''}
-            </div>
-            <div>
-                <b>Date:</b> ${esc(e.date)}<br>
-                <b>Estimate #:</b> EST-${e.id||uid()}
-            </div>
-        </div>
-        <table>
-            <thead><tr><th>#</th><th>वस्तु</th><th>Qty</th><th>Rate</th><th>Amount</th></tr></thead>
-            <tbody>${e.items.map((it,i)=>`<tr><td>${i+1}</td><td>${esc(it.item)}</td><td>${it.qty}</td><td>रू ${fmt(it.rate)}</td><td>रू ${fmt(it.qty*it.rate)}</td></tr>`).join('')}</tbody>
-        </table>
-        <div class="totals">
-            <div class="row"><span>Subtotal:</span><span>रू ${fmt(e.subtotal)}</span></div>
-            ${e.discount?`<div class="row"><span>Discount:</span><span>- रू ${fmt(e.discount)}</span></div>`:''}
-            ${e.vat?`<div class="row"><span>VAT (13%):</span><span>+ रू ${fmt(e.vat)}</span></div>`:''}
-            <div class="row total"><span>Total:</span><span>रू ${fmt(e.total)}</span></div>
-        </div>
-        <div style="margin-top: 40px; display:flex; justify-content:space-between;">
-            <div>_________________<br>Prepared by</div>
-            <div>_________________<br>Customer Signature</div>
-        </div>
-    </body></html>`;
-    const w = window.open('', '_blank'); w.document.write(html); w.document.close();
-    setTimeout(()=>w.print(), 500);
-}
-
-// ============================================================
-// VISITING CARD
-// ============================================================
-function renderVCard() {
-    const c = db.company;
-    document.getElementById('vc-name').innerText = c.name || 'PRERAK MULTIPURPOSE';
-    document.getElementById('vc-sub').innerText = c.sub || 'PVT LTD';
-    document.getElementById('vc-contact').innerText = c.contact || 'Admin';
-    document.getElementById('vc-phone').innerText = c.phone || '—';
-    document.getElementById('vc-email').innerText = c.email || '—';
-    document.getElementById('vc-addr').innerText = c.address || '—';
-    document.getElementById('vc-pan').innerText = 'PAN: ' + (c.pan || '—');
-}
-
-function shareVCard() {
-    const c = db.company;
-    const text = `${c.name} ${c.sub}\n📞 ${c.phone}\n📧 ${c.email}\n📍 ${c.address}\nPAN: ${c.pan}`;
-    if (navigator.share) {
-        navigator.share({title: c.name, text}).catch(()=>{});
-    } else {
-        navigator.clipboard.writeText(text);
-        toast('✓ Copy भयो');
-    }
-}
-
-// ============================================================
-// STOCK
-// ============================================================
-function saveStock() {
-    const name = document.getElementById('stName').value.trim();
-    const qty = parseFloat(document.getElementById('stQty').value);
-    if (!name||qty===undefined||isNaN(qty)) return alert('नाम र मौज्दात चाहिन्छ।');
-    db.stock.unshift({
-        id: uid(), name, qty,
-        buy: parseFloat(document.getElementById('stBuy').value)||0,
-        sell: parseFloat(document.getElementById('stSell').value)||0,
-        unit: document.getElementById('stUnit').value.trim()||'pc',
-        minStock: parseFloat(document.getElementById('stMin').value)||0
-    });
-    saveDB();
-    ['stName','stQty','stBuy','stSell','stUnit','stMin'].forEach(i=>document.getElementById(i).value='');
-    renderStock(); toast('✓ वस्तु सेभ');
-}
-
-function updateStockQty(id) {
-    const s = db.stock.find(x=>x.id===id);
-    const n = parseFloat(prompt(`${s.name} - नयाँ मौज्दात:`, s.qty));
-    if (isNaN(n)) return;
-    s.qty = n; saveDB(); renderStock();
-}
-
-function delStock(id) { if (!confirm('मेटाउने?')) return; db.stock = db.stock.filter(s=>s.id!==id); saveDB(); renderStock(); }
-
-function renderStock() {
-    const el = document.getElementById('stock_list');
-    if (!db.stock.length) { el.innerHTML='<div class="empty"><div class="big">📦</div><p>कुनै वस्तु छैन</p></div>'; return; }
-    el.innerHTML = db.stock.map(s => {
-        const low = s.minStock > 0 && s.qty <= s.minStock;
-        return `<div class="list-item" ${low?'style="border-left: 4px solid var(--danger);"':''}>
-            <div class="body">
-                <p class="i-name">${esc(s.name)} ${low?'<span class="pill pill-lost">⚠️ Low Stock</span>':''}</p>
-                <p class="i-sub">📦 ${fmt(s.qty)} ${esc(s.unit)} • खरिद: रू ${fmt(s.buy)} • बिक्री: रू ${fmt(s.sell)}</p>
-                ${s.minStock?`<p class="i-sub">Alert मा: ${fmt(s.minStock)} ${esc(s.unit)}</p>`:''}
-            </div>
-            <div class="actions">
-                <button onclick="updateStockQty(${s.id})" class="btn btn-primary btn-ic">✏️</button>
-                <button onclick="delStock(${s.id})" class="btn btn-danger btn-ic">🗑️</button>
-            </div>
-        </div>`;
-    }).join('');
-}
-
-// ============================================================
-// SALES TEAM
-// ============================================================
-function saveSales() {
-    const name = document.getElementById('spName').value.trim();
-    if (!name) return alert('नाम चाहिन्छ।');
-    db.salesTeam.unshift({
-        id: uid(), name,
-        phone: document.getElementById('spPhone').value.trim(),
-        area: document.getElementById('spArea').value.trim(),
-        commission: parseFloat(document.getElementById('spComm').value)||0,
-        sales: []
-    });
-    saveDB();
-    ['spName','spPhone','spArea','spComm'].forEach(i=>document.getElementById(i).value='');
-    renderSalesTeam(); toast('✓ Team Member सेभ');
-}
-
-function addSale(id) {
-    const a = parseFloat(prompt('बिक्री रकम (रू):'));
-    if (!a||a<=0) return;
-    const note = prompt('ग्राहकको नाम वा नोट:') || '';
-    const s = db.salesTeam.find(x=>x.id===id);
-    s.sales.push({ id: uid(), date: today(), amount: a, note });
-    saveDB(); renderSalesTeam(); toast('✓ बिक्री रेकर्ड');
-}
-
-function delSalesperson(id) { if (!confirm('मेटाउने?')) return; db.salesTeam = db.salesTeam.filter(s=>s.id!==id); saveDB(); renderSalesTeam(); }
-
-function renderSalesTeam() {
-    const el = document.getElementById('sales_list');
-    if (!db.salesTeam.length) { el.innerHTML='<div class="empty"><div class="big">🎯</div><p>कुनै team member छैन</p></div>'; return; }
-    const m = thisMonth();
-    el.innerHTML = db.salesTeam.map(s => {
-        const mSales = s.sales.filter(x=>x.date.startsWith(m));
-        const total = mSales.reduce((a,x)=>a+x.amount,0);
-        const comm = total * (s.commission/100);
-        return `<div class="card">
-            <div style="display:flex; justify-content:space-between;">
-                <div>
-                    <p class="i-name">${esc(s.name)}</p>
-                    <p class="i-sub">${esc(s.area||'—')} ${s.phone?' • 📞 '+esc(s.phone):''} • ${s.commission}% commission</p>
-                </div>
-                <button onclick="delSalesperson(${s.id})" class="close-x">✕</button>
-            </div>
-            <div class="mini-grid3" style="margin:10px 0;">
-                <div class="mini-box blue"><div class="lbl">बिक्री Count</div><div class="val">${mSales.length}</div></div>
-                <div class="mini-box green"><div class="lbl">कुल बिक्री</div><div class="val">रू ${fmt(total)}</div></div>
-                <div class="mini-box orange"><div class="lbl">Commission</div><div class="val">रू ${fmt(Math.round(comm))}</div></div>
-            </div>
-            <button onclick="addSale(${s.id})" class="btn btn-primary btn-block">+ बिक्री दर्ज</button>
-        </div>`;
-    }).join('');
-}
-
-// ============================================================
-// DAILY REPORT
-// ============================================================
-function renderDailyReport() {
-    const d = document.getElementById('drDate').value || today();
-    const txs = db.transactions.filter(t=>t.date===d);
-    const inc = txs.filter(t=>t.type==='income').reduce((a,t)=>a+t.amount,0);
-    const exp = txs.filter(t=>t.type==='expense').reduce((a,t)=>a+t.amount,0);
-    const newCust = db.customers.filter(c=>c.date===d).length;
-    const newEst = db.estimates.filter(e=>e.date===d).length;
-    const presentStaff = db.staff.filter(s=>s.attendance.includes(d));
-    const el = document.getElementById('daily-report-body');
-    el.innerHTML = `
-        <div class="grid g3 mb-2">
-            <div class="stat income"><div class="lbl">आय</div><div class="val sm">रू ${fmt(inc)}</div></div>
-            <div class="stat expense"><div class="lbl">खर्च</div><div class="val sm">रू ${fmt(exp)}</div></div>
-            <div class="stat"><div class="lbl">NET</div><div class="val sm">रू ${fmt(inc-exp)}</div></div>
-        </div>
-        <div class="grid g3 mb-2">
-            <div class="stat"><div class="lbl">नयाँ ग्राहक</div><div class="val sm">${newCust}</div></div>
-            <div class="stat"><div class="lbl">नयाँ Estimate</div><div class="val sm">${newEst}</div></div>
-            <div class="stat"><div class="lbl">हाजिर स्टाफ</div><div class="val sm">${presentStaff.length}</div></div>
-        </div>
-        <div class="card">
-            <div class="card-title">कारोबार विवरण</div>
-            ${txs.length ? txs.map(t=>`
-                <div class="activity-row">
-                    <span>${t.type==='income'?'⬇️':'⬆️'} ${esc(t.category)} ${t.party?' ('+esc(t.party)+')':''}</span>
-                    <b style="color:${t.type==='income'?'var(--success)':'var(--danger)'}">रू ${fmt(t.amount)}</b>
-                </div>`).join('') : '<p class="text-muted text-center">कुनै कारोबार छैन</p>'}
-        </div>
-        <div class="card">
-            <div class="card-title">हाजिर स्टाफ</div>
-            ${presentStaff.length ? presentStaff.map(s=>`<div class="activity-row"><span>👷 ${esc(s.name)} (${esc(s.role||'Staff')})</span><span>रू ${fmt(s.wage)}</span></div>`).join('') : '<p class="text-muted text-center">कोही हाजिर छैन</p>'}
-        </div>`;
-}
-
-// ============================================================
-// DAY BOOK
-// ============================================================
-function renderDaybook() {
-    const from = document.getElementById('dbFrom').value;
-    const to = document.getElementById('dbTo').value;
-    if (!from||!to) return;
-    const txs = db.transactions.filter(t=>t.date>=from && t.date<=to).sort((a,b)=>a.date.localeCompare(b.date));
-    const byDate = {};
-    txs.forEach(t => { if(!byDate[t.date]) byDate[t.date]=[]; byDate[t.date].push(t); });
-    const el = document.getElementById('daybook-body');
-    if (!txs.length) { el.innerHTML='<div class="empty"><div class="big">📒</div><p>यो अवधिमा कुनै कारोबार छैन</p></div>'; return; }
-    let cumulative = 0;
-    el.innerHTML = Object.keys(byDate).sort().map(d => {
-        const dayTxs = byDate[d];
-        const inc = dayTxs.filter(t=>t.type==='income').reduce((a,t)=>a+t.amount,0);
-        const exp = dayTxs.filter(t=>t.type==='expense').reduce((a,t)=>a+t.amount,0);
-        cumulative += (inc-exp);
-        return `<div class="card">
-            <div style="display:flex; justify-content:space-between; padding-bottom:8px; border-bottom:1px solid var(--border); margin-bottom:8px;">
-                <b>📅 ${esc(d)}</b>
-                <span style="font-size:12px;">
-                    <span style="color:var(--success);">+${fmt(inc)}</span> •
-                    <span style="color:var(--danger);">-${fmt(exp)}</span> •
-                    <b style="color:var(--primary);">Bal: ${fmt(cumulative)}</b>
-                </span>
-            </div>
-            ${dayTxs.map(t=>`
-                <div class="activity-row">
-                    <span>${t.type==='income'?'⬇️':'⬆️'} ${esc(t.category)}${t.party?' ('+esc(t.party)+')':''} ${t.desc?'— '+esc(t.desc):''}</span>
-                    <b style="color:${t.type==='income'?'var(--success)':'var(--danger)'}">रू ${fmt(t.amount)}</b>
-                </div>`).join('')}
-        </div>`;
-    }).join('');
-}
-
-// ============================================================
-// BULK MESSAGE
-// ============================================================
-function renderBulk() {
-    const el = document.getElementById('bulk-customers');
-    if (!db.customers.length) { el.innerHTML='<p class="text-muted text-center" style="padding:20px;">पहिले ग्राहक थप्नुहोस्</p>'; return; }
-    el.innerHTML = db.customers.map(c=>`
-        <label style="display:flex; align-items:center; gap:10px; padding:8px; border-bottom:1px solid var(--border);">
-            <input type="checkbox" class="bulk-chk" data-id="${c.id}" data-name="${esc(c.name)}" data-phone="${esc(c.phone)}">
-            <div style="flex:1;">
-                <b>${esc(c.name)}</b>
-                <span class="text-muted" style="font-size:12px;"> • ${esc(c.phone)}</span>
-            </div>
-        </label>`).join('');
-}
-
-function toggleAllBulk() {
-    const chks = document.querySelectorAll('.bulk-chk');
-    const allOn = [...chks].every(c=>c.checked);
-    chks.forEach(c => c.checked = !allOn);
-}
-
-function getBulkSelected() {
-    return [...document.querySelectorAll('.bulk-chk:checked')].map(c => ({
-        id: c.dataset.id, name: c.dataset.name, phone: c.dataset.phone
-    }));
-}
-
-function sendBulkSMS() {
-    const sel = getBulkSelected();
-    if (!sel.length) return alert('ग्राहक छान्नुहोस्।');
-    const tmpl = document.getElementById('bulkMsg').value;
-    // Create SMS URI with first contact
-    const phones = sel.map(s=>s.phone).join(',');
-    const firstMsg = tmpl.replace(/\{name\}/g, sel[0].name);
-    const uri = `sms:${phones}?body=${encodeURIComponent(firstMsg)}`;
-    window.location.href = uri;
-    toast(`📱 ${sel.length} जनाका लागि SMS खुल्यो`);
-}
-
-function exportBulkCSV() {
-    const sel = getBulkSelected();
-    if (!sel.length) return alert('ग्राहक छान्नुहोस्।');
-    const tmpl = document.getElementById('bulkMsg').value;
-    const rows = [['Name','Phone','Message']];
-    sel.forEach(s => rows.push([s.name, s.phone, tmpl.replace(/\{name\}/g, s.name)]));
-    const csv = rows.map(r=>r.map(x=>'"'+String(x).replace(/"/g,'""')+'"').join(',')).join('\n');
-    const blob = new Blob([csv], {type:'text/csv'});
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = `bulk_message_${today()}.csv`;
-    a.click();
-    toast('✓ CSV डाउनलोड');
-}
-
-function copyBulk() {
-    const sel = getBulkSelected();
-    if (!sel.length) return alert('ग्राहक छान्नुहोस्।');
-    const tmpl = document.getElementById('bulkMsg').value;
-    const text = sel.map(s => `${s.name} (${s.phone}):\n${tmpl.replace(/\{name\}/g, s.name)}\n`).join('\n---\n');
-    navigator.clipboard.writeText(text).then(()=>toast('✓ Copy भयो'));
-}
-
-// ============================================================
-// ADMIN
-// ============================================================
-function renderAdmin() {
-    const c = db.company;
-    document.getElementById('adName').value = c.name||'';
-    document.getElementById('adSub').value = c.sub||'';
-    document.getElementById('adContact').value = c.contact||'';
-    document.getElementById('adPhone').value = c.phone||'';
-    document.getElementById('adEmail').value = c.email||'';
-    document.getElementById('adPan').value = c.pan||'';
-    document.getElementById('adAddr').value = c.address||'';
-    document.getElementById('admin-stats').innerHTML = `
-        <div class="mini-grid3" style="gap:6px;">
-            <div class="mini-box blue"><div class="lbl">ग्राहक</div><div class="val">${db.customers.length}</div></div>
-            <div class="mini-box green"><div class="lbl">कारोबार</div><div class="val">${db.transactions.length}</div></div>
-            <div class="mini-box orange"><div class="lbl">स्टाफ</div><div class="val">${db.staff.length}</div></div>
-            <div class="mini-box blue"><div class="lbl">Estimate</div><div class="val">${db.estimates.length}</div></div>
-            <div class="mini-box green"><div class="lbl">Stock</div><div class="val">${db.stock.length}</div></div>
-            <div class="mini-box orange"><div class="lbl">Sales Team</div><div class="val">${db.salesTeam.length}</div></div>
-        </div>`;
-}
-
-function saveAdmin() {
-    db.company = {
-        name: document.getElementById('adName').value.trim()||'PRERAK MULTIPURPOSE',
-        sub: document.getElementById('adSub').value.trim()||'PVT LTD',
-        contact: document.getElementById('adContact').value.trim()||'Admin',
-        phone: document.getElementById('adPhone').value.trim(),
-        email: document.getElementById('adEmail').value.trim(),
-        pan: document.getElementById('adPan').value.trim(),
-        address: document.getElementById('adAddr').value.trim()
-    };
-    saveDB(); updateBrand(); toast('✓ सेभ भयो');
-}
-
-function savePwd() {
-    const p = document.getElementById('adPwd').value;
-    if (!p) return;
-    db.adminPassword = p; saveDB();
-    document.getElementById('adPwd').value='';
-    toast('✓ Password update');
-}
-
-// ============================================================
-// BACKUP / RESTORE / CLEAR
-// ============================================================
-function downloadBackup() {
-    const blob = new Blob([JSON.stringify(db,null,2)], {type:'application/json'});
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = `prerak_backup_${today()}.json`;
-    document.body.appendChild(a); a.click(); document.body.removeChild(a);
-    toast('✓ Backup डाउनलोड');
-}
-
-function restoreBackup() { document.getElementById('restoreInput').click(); }
-
-function handleRestore(e) {
-    const f = e.target.files[0]; if (!f) return;
-    const r = new FileReader();
-    r.onload = evt => {
-        try {
-            const d = JSON.parse(evt.target.result);
-            if (!d.customers || !d.transactions) throw 0;
-            if (confirm('⚠️ सबै डाटा प्रतिस्थापन हुनेछ। पक्का?')) {
-                db = { ...defaultDB(), ...d };
-                saveDB(); renderAll(); updateBrand(); toast('✓ Restore भयो');
-            }
-        } catch(err) { alert('गलत फाइल।'); }
-    };
-    r.readAsText(f); e.target.value='';
-}
-
-function clearAll() {
-    if (!confirm('⚠️ सबै डाटा मेटिनेछ। पक्का?')) return;
-    if (!confirm('अन्तिम पटक: साँच्चै सबै मेट्ने?')) return;
-    localStorage.removeItem(DB_KEY);
-    db = loadDB();
-    renderAll(); updateBrand(); updateSidebar();
-    toast('✓ Clear भयो');
-}
-
-// ============================================================
-// DASHBOARD / SIDEBAR
-// ============================================================
-function renderDashboard() {
-    document.getElementById('dc-cust').innerText = db.customers.length;
-    document.getElementById('dc-staff').innerText = db.staff.length;
-    const m = thisMonth();
-    const mi = db.transactions.filter(t=>t.type==='income'&&t.date.startsWith(m)).reduce((a,t)=>a+t.amount,0);
-    const me = db.transactions.filter(t=>t.type==='expense'&&t.date.startsWith(m)).reduce((a,t)=>a+t.amount,0);
-    const ti = db.transactions.filter(t=>t.type==='income').reduce((a,t)=>a+t.amount,0);
-    const te = db.transactions.filter(t=>t.type==='expense').reduce((a,t)=>a+t.amount,0);
-    document.getElementById('dc-income').innerText = 'Rs.'+fmt(mi);
-    document.getElementById('dc-expense').innerText = 'Rs.'+fmt(me);
-    document.getElementById('dc-balance').innerText = 'Rs.'+fmt(ti-te);
-
-    const recent = [
-        ...db.customers.slice(0,3).map(c=>({ic:'👤',t:`नयाँ ग्राहक: <b>${esc(c.name)}</b>`,d:c.date})),
-        ...db.transactions.slice(0,4).map(t=>({ic:t.type==='income'?'⬇️':'⬆️',t:`${esc(t.category)}: रू ${fmt(t.amount)}`,d:t.date})),
-        ...db.estimates.slice(0,2).map(e=>({ic:'📋',t:`Estimate: ${esc(e.customer)} रू ${fmt(e.total)}`,d:e.date}))
-    ].sort((a,b)=>(b.d||'').localeCompare(a.d||'')).slice(0,6);
-    document.getElementById('dc-recent').innerHTML = recent.length
-        ? recent.map(r=>`<div class="activity-row"><span>${r.ic} ${r.t}</span><span class="date">${esc(r.d)}</span></div>`).join('')
-        : '<p class="text-muted text-center" style="padding:14px 0;">कुनै गतिविधि छैन</p>';
-}
-
-function updateSidebar() {
-    const t = today();
-    const ti = db.transactions.filter(x=>x.type==='income' && x.date===t).reduce((a,x)=>a+x.amount,0);
-    const te = db.transactions.filter(x=>x.type==='expense' && x.date===t).reduce((a,x)=>a+x.amount,0);
-    const m = thisMonth();
-    const totalAdv = db.staff.reduce((a,s)=>a+s.advances.filter(ad=>ad.date.startsWith(m)).reduce((b,ad)=>b+ad.amount,0),0);
-    const todayFu = db.customers.filter(c=>c.followup===t).length;
-    document.getElementById('sb-today-income').innerText = 'Rs.'+fmt(ti);
-    document.getElementById('sb-today-expense').innerText = 'Rs.'+fmt(te);
-    document.getElementById('sb-today-net').innerText = 'Rs.'+fmt(ti-te);
-    document.getElementById('sb-advance').innerText = 'Rs.'+fmt(totalAdv);
-    document.getElementById('sb-followup').innerText = todayFu + ' आज';
-}
-
-function updateBrand() {
-    const c = db.company;
-    document.querySelector('.brand-inline h1').innerHTML = '🔨 ' + esc(c.name);
-    document.querySelector('.brand-inline .tagline').innerText = (c.sub||'') + ' • Business OS';
-    document.querySelector('.sidebar-head h2').innerText = c.name.split(' ')[0] || 'PRERAK';
-    document.querySelector('.sidebar-head p').innerText = (c.name.split(' ').slice(1).join(' ') + ' ' + (c.sub||'')).trim();
-    document.getElementById('userName').innerText = c.contact || 'Admin';
-}
-
-function renderAll() {
-    renderDashboard(); renderCRM(); renderAcc(); renderStaff(); renderRate();
-    renderBakauta(); renderVCard(); renderStock(); renderSalesTeam();
-    renderBulk(); updateSidebar();
-}
-
-// ============================================================
-// INIT
-// ============================================================
-document.getElementById('tDate').value = today();
-document.getElementById('bsDateDisplay').innerText = bsDateStr();
-applyTheme();
-updateBrand();
-renderAll();
-go('dash');
 </script>
 </body>
 </html>
+Aba weblai complete garne claude bata yo code chha hera yasma.sudhar garnuparne sudharera banau code final draft la
