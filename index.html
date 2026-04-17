@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PRERAK CRM - Masterpiece v2</title>
+<title>PRERAK CRM - Ultimate v3</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Syne:wght@700;800&family=Tiro+Devanagari+Sanskrit&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -13,148 +13,211 @@
 }
 
 * { margin:0; padding:0; box-sizing:border-box; }
-body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); display: flex; min-height: 100vh; overflow-x: hidden; }
+body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); display: flex; min-height: 100vh; }
 
-/* WELCOME OVERLAY */
-#welcome-overlay { position: fixed; inset: 0; z-index: 9999; display: flex; align-items: center; justify-content: center; background: #000; transition: 0.8s ease; }
-#welcome-overlay.hide { opacity: 0; pointer-events: none; transform: scale(1.1); }
-.om-glyph { font-family: 'Tiro Devanagari Sanskrit', serif; font-size: 8rem; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 30px rgba(255, 95, 31, 0.4)); animation: pulse 3s infinite; }
-@keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
-
-/* SIDEBAR */
-#sidebar { width: 260px; background: var(--panel); border-right: 1px solid var(--border); display: flex; flex-direction: column; position: fixed; height: 100vh; z-index: 100; transition: 0.3s; }
+/* SIDEBAR FIX */
+#sidebar { 
+    width: 260px; background: var(--panel); border-right: 1px solid var(--border); 
+    display: flex; flex-direction: column; height: 100vh; position: fixed; left: 0; top: 0; z-index: 100;
+}
 .logo-box { padding: 30px 20px; border-bottom: 1px solid var(--border); }
 .logo-title { font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 800; color: var(--accent); }
-nav { flex: 1; padding: 20px 10px; }
-.nav-item { display: flex; align-items: center; gap: 12px; padding: 12px 15px; border-radius: 12px; color: var(--muted); cursor: pointer; transition: 0.3s; margin-bottom: 5px; }
+
+nav { flex: 1; padding: 20px 10px; display: flex; flex-direction: column; gap: 8px; }
+.nav-item { 
+    display: flex; align-items: center; gap: 12px; padding: 14px 18px; 
+    border-radius: 12px; color: var(--muted); cursor: pointer; transition: 0.3s; 
+    font-weight: 600; text-decoration: none;
+}
 .nav-item:hover, .nav-item.active { background: rgba(255, 95, 31, 0.1); color: #fff; }
 .nav-item.active { background: var(--grad); color: white; box-shadow: 0 5px 15px rgba(255, 95, 31, 0.3); }
 
-/* MAIN CONTENT */
-#main { margin-left: 260px; flex: 1; display: flex; flex-direction: column; min-height: 100vh; }
-.top-nav { padding: 20px 30px; background: rgba(5, 5, 8, 0.8); backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 50; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-.page { display: none; padding: 30px; animation: fadeInUp 0.5s ease forwards; }
-.page.active { display: block; }
-@keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+/* MAIN CONTENT FIX */
+#main { margin-left: 260px; flex: 1; display: flex; flex-direction: column; min-height: 100vh; width: calc(100% - 260px); }
+.top-nav { padding: 20px 30px; background: rgba(5, 5, 8, 0.9); backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 50; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
 
-/* CARDS & TABLES */
+.page { display: none; padding: 30px; animation: fadeInUp 0.4s ease forwards; }
+.page.active { display: block; }
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+/* CARDS, TABLES, BUTTONS */
 .card { background: var(--panel); border: 1px solid var(--border); border-radius: 20px; padding: 25px; margin-bottom: 20px; }
-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-th { text-align: left; color: var(--muted); font-size: 0.75rem; text-transform: uppercase; padding: 12px; border-bottom: 1px solid var(--border); }
-td { padding: 15px 12px; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
-.btn { padding: 10px 20px; border-radius: 10px; border: none; cursor: pointer; font-weight: 600; transition: 0.3s; }
+.stat-val { font-size: 3rem; font-weight: 800; color: var(--accent); margin-top: 10px; }
+
+table { width: 100%; border-collapse: collapse; margin-top: 15px; min-width: 500px; }
+th { text-align: left; color: var(--muted); font-size: 0.8rem; padding: 12px; border-bottom: 1px solid var(--border); }
+td { padding: 15px 12px; border-bottom: 1px solid var(--border); font-size: 0.95rem; }
+
+.btn { padding: 10px 20px; border-radius: 10px; border: none; cursor: pointer; font-weight: 700; transition: 0.3s; }
 .btn-primary { background: var(--grad); color: white; }
 .btn-wa { background: #25D366; color: white; }
-input { width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 10px; color: white; }
+input, textarea { width: 100%; padding: 14px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 12px; color: white; margin-top: 8px; font-size: 1rem; }
 
-#toast { position: fixed; bottom: 30px; right: 30px; background: white; color: black; padding: 15px 25px; border-radius: 12px; font-weight: 600; box-shadow: 0 10px 30px rgba(0,0,0,0.5); transform: translateY(100px); transition: 0.4s; z-index: 999; }
+#toast { position: fixed; bottom: 30px; right: 30px; background: white; color: black; padding: 15px 25px; border-radius: 12px; font-weight: 700; transform: translateY(100px); transition: 0.4s; z-index: 1000; }
 #toast.show { transform: translateY(0); }
 
-@media (max-width: 768px) { #sidebar { transform: translateX(-100%); } #main { margin-left: 0; } }
+@media (max-width: 900px) {
+    #sidebar { transform: translateX(-100%); }
+    #main { margin-left: 0; width: 100%; }
+    .nav-active #sidebar { transform: translateX(0); }
+}
 </style>
 </head>
 <body>
 
-<div id="welcome-overlay">
-  <div style="text-align: center;">
-    <div class="om-glyph">ॐ</div>
-    <h1 style="color: #ffd700; margin-top: 20px;">ॐ नमः शिवाय</h1>
-    <p style="color: var(--muted); margin-top: 10px;">PRERAK CRM - सुभ बिहानी साथी!</p>
-    <button class="btn btn-primary" onclick="closeWelcome()" style="margin-top: 40px; border-radius: 50px; padding: 15px 40px;">🙏 प्रवेश गर्नुहोस्</button>
-  </div>
-</div>
-
 <aside id="sidebar">
-  <div class="logo-box"><div class="logo-title">PRERAK<span>.</span></div><p style="font-size: 0.7rem; color: var(--muted);">ACCOUNTKEER v2</p></div>
+  <div class="logo-box">
+    <div class="logo-title">PRERAK<span style="color:var(--green)">.</span></div>
+    <p style="font-size: 0.7rem; color: var(--muted); letter-spacing: 1px;">ACCOUNTKEER v3</p>
+  </div>
   <nav>
-    <div class="nav-item active" onclick="navigate('dash', this)">🏠 ड्यासबोर्ड</div>
-    <div class="nav-item" onclick="navigate('cust', this)">👥 ग्राहकहरू</div>
-    <div class="nav-item" onclick="navigate('add', this)">✨ नयाँ थप्नुहोस्</div>
+    <div class="nav-item active" onclick="navigate('dash', this)">📊 ड्यासबोर्ड</div>
+    <div class="nav-item" onclick="navigate('cust', this)">👥 ग्राहक सूची</div>
+    <div class="nav-item" onclick="navigate('add', this)">✨ नयाँ ग्राहक</div>
+    <div class="nav-item" onclick="navigate('tasks', this)">👷‍♂️ स्टाफ टास्क</div>
   </nav>
 </aside>
 
 <main id="main">
   <div class="top-nav">
     <h3 id="page-title">ड्यासबोर्ड</h3>
-    <span id="bs-clock" style="color: var(--accent); font-weight: bold;">बि.सं. २०८३ बैशाख</span>
+    <div style="text-align: right;">
+        <span id="nepali-date" style="color: var(--accent); font-weight: bold; font-size: 0.9rem;">बैशाख २०८३</span>
+    </div>
   </div>
 
   <div class="page active" id="page-dash">
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px;">
       <div class="card">
-        <p style="color: var(--muted); font-size: 0.8rem;">कुल ग्राहक</p>
-        <h1 id="stat-total" style="font-size: 3rem; color: var(--accent); margin-top: 10px;">0</h1>
+        <p style="color: var(--muted); font-size: 0.85rem;">कुल दर्ता भएका ग्राहक</p>
+        <div id="stat-total" class="stat-val">0</div>
       </div>
       <div class="card">
-        <p style="color: var(--muted); font-size: 0.8rem;">आजको मिति</p>
-        <h3 id="nepali-date" style="margin-top: 10px;">बैशाख ०५, २०८३</h3>
+        <p style="color: var(--muted); font-size: 0.85rem;">बाँकी काम (Tasks)</p>
+        <div id="stat-tasks" class="stat-val" style="color:var(--green)">0</div>
       </div>
     </div>
   </div>
 
   <div class="page" id="page-cust">
     <div class="card">
-      <input type="text" id="search" oninput="render()" placeholder="नाम वा फोनबाट खोज्नुहोस्...">
-      <div style="overflow-x: auto;"><table id="cust-table"><thead><tr><th>नाम</th><th>सम्पर्क</th><th>एक्सन</th></tr></thead><tbody id="cust-body"></tbody></table></div>
+      <input type="text" id="search" oninput="renderCustomers()" placeholder="नाम वा फोन नम्बरबाट खोज्नुहोस्...">
+      <div style="overflow-x: auto;">
+        <table>
+          <thead><tr><th>नाम</th><th>फोन नम्बर</th><th>एक्सन</th></tr></thead>
+          <tbody id="cust-body"></tbody>
+        </table>
+      </div>
     </div>
   </div>
 
   <div class="page" id="page-add">
-    <div class="card" style="max-width: 500px; margin: auto;">
-      <h2 style="margin-bottom: 25px;">नयाँ ग्राहक विवरण</h2>
-      <label style="color: var(--muted); font-size: 0.75rem;">पुरा नाम</label><input type="text" id="c-name" style="margin-bottom: 20px;">
-      <label style="color: var(--muted); font-size: 0.75rem;">फोन नम्बर</label><input type="tel" id="c-phone" style="margin-bottom: 30px;">
-      <button class="btn btn-primary" onclick="add()" style="width: 100%;">सुरक्षित गर्नुहोस् ➔</button>
+    <div class="card" style="max-width: 550px; margin: auto;">
+      <h2 style="margin-bottom: 25px; font-family: 'Syne';">नयाँ ग्राहक थप्नुहोस्</h2>
+      <label style="color: var(--muted); font-size: 0.8rem;">ग्राहकको पुरा नाम</label>
+      <input type="text" id="c-name" placeholder="उदा: राम बहादुर">
+      <label style="display:block; margin-top:20px; color: var(--muted); font-size: 0.8rem;">फोन नम्बर</label>
+      <input type="tel" id="c-phone" placeholder="98XXXXXXXX">
+      <button class="btn btn-primary" onclick="addCustomer()" style="width: 100%; margin-top: 30px; padding: 16px;">सुरक्षित गर्नुहोस् ➔</button>
+    </div>
+  </div>
+
+  <div class="page" id="page-tasks">
+    <div class="card">
+        <h2 style="margin-bottom: 20px; font-family: 'Syne';">👷‍♂️ स्टाफ टास्क म्यानेजर</h2>
+        <div style="display: flex; gap: 10px;">
+            <input type="text" id="task-input" placeholder="स्टाफको लागि नयाँ काम लेख्नुहोस्...">
+            <button class="btn btn-primary" onclick="addTask()">थप्नुहोस्</button>
+        </div>
+        <div id="task-list" style="margin-top: 25px;"></div>
     </div>
   </div>
 </main>
 
-<div id="toast">✅ सुरक्षित भयो!</div>
+<div id="toast">✅ सफलता!</div>
 
 <script>
 let customers = JSON.parse(localStorage.getItem('p_master_cust') || '[]');
+let tasks = JSON.parse(localStorage.getItem('p_master_tasks') || '[]');
 
-function save() { localStorage.setItem('p_master_cust', JSON.stringify(customers)); }
-function showToast(m) { const t = document.getElementById('toast'); t.textContent = m; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3000); }
+function save() { 
+    localStorage.setItem('p_master_cust', JSON.stringify(customers)); 
+    localStorage.setItem('p_master_tasks', JSON.stringify(tasks)); 
+}
+
+function showToast(m) { 
+    const t = document.getElementById('toast'); t.textContent = m; t.classList.add('show'); 
+    setTimeout(() => t.classList.remove('show'), 3000); 
+}
 
 function navigate(page, el) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById('page-' + page).classList.add('active');
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  el.classList.add('active');
-  document.getElementById('page-title').textContent = el.textContent;
-  if(page === 'dash') updateDash();
-  if(page === 'cust') render();
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + page).classList.add('active');
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('page-title').textContent = el.textContent;
+    if(page === 'dash') updateDash();
+    if(page === 'cust') renderCustomers();
+    if(page === 'tasks') renderTasks();
 }
 
-function add() {
-  const n = document.getElementById('c-name').value, p = document.getElementById('c-phone').value;
-  if(!n || !p) return showToast('नाम र फोन अनिवार्य छ!');
-  customers.push({ id: Date.now(), name: n, phone: p });
-  save(); showToast('✅ ग्राहक सुरक्षित भयो!');
-  document.getElementById('c-name').value = ''; document.getElementById('c-phone').value = '';
-  navigate('cust', document.querySelectorAll('.nav-item')[1]);
+function addCustomer() {
+    const n = document.getElementById('c-name').value, p = document.getElementById('c-phone').value;
+    if(!n || !p) return showToast('नाम र फोन अनिवार्य छ!');
+    customers.push({ id: Date.now(), name: n, phone: p });
+    save(); showToast('✅ ग्राहक सुरक्षित भयो!');
+    document.getElementById('c-name').value = ''; document.getElementById('c-phone').value = '';
+    navigate('cust', document.querySelectorAll('.nav-item')[1]);
 }
 
-function render() {
-  const q = document.getElementById('search').value.toLowerCase();
-  const list = customers.filter(c => c.name.toLowerCase().includes(q) || c.phone.includes(q));
-  document.getElementById('cust-body').innerHTML = list.map(c => `
-    <tr>
-      <td><b>${c.name}</b></td><td>${c.phone}</td>
-      <td><button class="btn btn-wa btn-sm" onclick="send('${c.phone}', '${c.name}')">WhatsApp</button></td>
-    </tr>
-  `).join('');
+function renderCustomers() {
+    const q = document.getElementById('search').value.toLowerCase();
+    const list = customers.filter(c => c.name.toLowerCase().includes(q) || c.phone.includes(q));
+    document.getElementById('cust-body').innerHTML = list.map(c => `
+        <tr>
+            <td><b style="font-size:1rem;">${c.name}</b></td>
+            <td>${c.phone}</td>
+            <td><button class="btn btn-wa btn-sm" onclick="sendWA('${c.phone}', '${c.name}')">WhatsApp</button></td>
+        </tr>
+    `).join('');
 }
 
-function send(phone, name) {
-  const msg = `*नमस्ते ${name} सर,* 🙏\n\nम *PRERAK Construction* बाट बोलिरहेको छु। हेटौँडा-२ मा रहेको हाम्रो सोरुममा हजुरलाई स्वागत छ। हजुरको निर्माण कार्यको लागि हामीसँग उत्कृष्ट *UPVC र एएसी ब्लक* उपलब्ध छन्।\n\nधन्यवाद!`;
-  window.open(`https://wa.me/977${phone}?text=${encodeURIComponent(msg)}`, '_blank');
+function sendWA(phone, name) {
+    const msg = `*नमस्ते ${name} सर,* 🙏\n\nम *PRERAK Construction* बाट बोलिरहेको छु। हेटौँडा-२ मा रहेको हाम्रो सोरुममा हजुरलाई स्वागत छ। हजुरको निर्माण कार्यको लागि हामीसँग उत्कृष्ट *UPVC, एएसी ब्लक र प्रिफ्याब* सेवा उपलब्ध छन्।\n\nधन्यवाद!`;
+    window.open(`https://wa.me/977${phone}?text=${encodeURIComponent(msg)}`, '_blank');
 }
 
-function updateDash() { document.getElementById('stat-total').textContent = customers.length; }
-function closeWelcome() { document.getElementById('welcome-overlay').classList.add('hide'); }
+function addTask() {
+    const val = document.getElementById('task-input').value;
+    if(!val) return;
+    tasks.push({ id: Date.now(), text: val, status: 'pending' });
+    document.getElementById('task-input').value = '';
+    save(); renderTasks(); showToast('👷‍♂️ टास्क थपियो!');
+}
 
+function renderTasks() {
+    document.getElementById('task-list').innerHTML = tasks.map(t => `
+        <div class="card" style="display:flex; justify-content:space-between; align-items:center; padding:15px; margin-bottom:10px; background:rgba(255,255,255,0.03);">
+            <span style="${t.status === 'done' ? 'text-decoration:line-through; color:var(--muted)' : ''}">${t.text}</span>
+            <button class="btn btn-sm" onclick="toggleTask(${t.id})" style="background:${t.status === 'done' ? 'var(--green)' : 'var(--border)'}; color:white;">
+                ${t.status === 'done' ? '✓ सकियो' : 'बाँकी'}
+            </button>
+        </div>
+    `).join('');
+}
+
+function toggleTask(id) {
+    const t = tasks.find(x => x.id === id);
+    t.status = t.status === 'done' ? 'pending' : 'done';
+    save(); renderTasks();
+}
+
+function updateDash() { 
+    document.getElementById('stat-total').textContent = customers.length; 
+    document.getElementById('stat-tasks').textContent = tasks.filter(t => t.status === 'pending').length;
+}
+
+// Initialization
 updateDash();
 </script>
 </body>
