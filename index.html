@@ -1,740 +1,2653 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ne">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>PRERAK MULTIPURPOSE PVT LTD | Building Your Dreams</title>
-<meta name="description" content="PRERAK MULTIPURPOSE PVT LTD - Construction, Interior, UPVC, Gypsum, Solar. Hetauda, Makwanpur, Nepal.">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prerak CRM | प्रेरक मल्टिपर्पोज</title>
 <style>
-:root{
-  --orange:#f97316;--orange-d:#c2410c;--dark:#0c0c0e;--dark2:#161618;
-  --dark3:#1e1e22;--border:rgba(255,255,255,0.08);--text:#f5f5f0;--muted:#9ca3af;
-  --gold:#f59e0b;
+:root {
+    --bg: #f3f4f6; --card: #fff; --card-2: #f9fafb;
+    --text: #1f2937; --text-2: #6b7280; --text-3: #9ca3af;
+    --border: #e5e7eb;
+    --primary: #1e3a8a; --primary-2: #3b82f6;
+    --accent: #f97316;
+    --success: #059669; --danger: #dc2626; --warning: #d97706; --purple: #7c3aed;
+    --success-bg: #ecfdf5; --danger-bg: #fef2f2;
+    --primary-bg: #eff6ff; --warning-bg: #fff7ed; --purple-bg: #faf5ff;
+    --wa: #25D366;
 }
-body.theme-light{
-  --dark:#f8f8f8;--dark2:#ffffff;--dark3:#f0f0f0;--border:rgba(0,0,0,0.1);
-  --text:#111111;--muted:#666666;
+[data-theme="dark"] {
+    --bg: #0f172a; --card: #1e293b; --card-2: #334155;
+    --text: #f1f5f9; --text-2: #cbd5e1; --text-3: #94a3b8;
+    --border: #334155;
+    --primary: #3b82f6; --primary-2: #60a5fa;
+    --success-bg: rgba(5,150,105,0.2); --danger-bg: rgba(220,38,38,0.2);
+    --primary-bg: rgba(59,130,246,0.2); --warning-bg: rgba(217,119,6,0.2);
+    --purple-bg: rgba(124,58,237,0.2);
 }
-body.theme-saffron{
-  --dark:#1a0f00;--dark2:#2a1800;--dark3:#3a2200;--border:rgba(249,115,22,0.2);
-  --text:#fff8f0;--muted:#c8a070;
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body {
+    font-family: -apple-system, 'Segoe UI', Roboto, 'Noto Sans Devanagari', 'Noto Sans', 'Mangal', 'Arial Unicode MS', sans-serif;
+    background: var(--bg); color: var(--text);
+    font-size: 14px; line-height: 1.5;
+    min-height: 100vh;
 }
-*{margin:0;padding:0;box-sizing:border-box;}
-html{scroll-behavior:smooth;}
-body{background:var(--dark);color:var(--text);font-family:'DM Sans',sans-serif;overflow-x:hidden;transition:background .3s,color .3s;}
-::-webkit-scrollbar{width:4px;}
-::-webkit-scrollbar-thumb{background:var(--orange);border-radius:2px;}
+input, select, textarea, button { font-family: inherit; font-size: 14px; color: inherit; }
+button { cursor: pointer; border: none; background: none; }
+a { text-decoration: none; color: inherit; }
 
-/* THEME TOGGLE */
-#theme-bar{position:fixed;bottom:24px;right:24px;z-index:999;display:flex;flex-direction:column;gap:8px;}
-.theme-btn{width:42px;height:42px;border-radius:50%;border:2px solid var(--border);cursor:pointer;
-  display:flex;align-items:center;justify-content:center;font-size:1.1rem;
-  background:var(--dark2);backdrop-filter:blur(10px);transition:all .2s;box-shadow:0 4px 12px rgba(0,0,0,0.3);}
-.theme-btn:hover{transform:scale(1.1);border-color:var(--orange);}
-.theme-btn.active{border-color:var(--orange);background:var(--orange);}
+/* LOGIN */
+#loginScreen {
+    position: fixed; inset: 0; z-index: 100;
+    background: linear-gradient(135deg, #0f172a, #1e3a8a 70%, #f97316);
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+}
+.login-box {
+    background: #fff; padding: 30px 24px; border-radius: 20px;
+    max-width: 400px; width: 100%;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+.login-box .logo {
+    width: 70px; height: 70px; background: #f97316; border-radius: 18px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 36px; margin: 0 auto 14px;
+}
+.login-box h1 { color: #f97316; text-align: center; font-size: 20px; font-weight: 900; }
+.login-box .sub { text-align: center; color: #6b7280; font-size: 12px; margin-bottom: 20px; }
+.login-box .hint { text-align: center; font-size: 11px; color: #9ca3af; margin-top: 12px; }
 
-/* NAV */
-nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:14px 5%;
-  display:flex;align-items:center;justify-content:space-between;
-  background:rgba(12,12,14,0.9);backdrop-filter:blur(20px);
-  border-bottom:1px solid var(--border);transition:all .3s;}
-body.theme-light nav{background:rgba(248,248,248,0.95);}
-.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
-.nav-logo-icon{width:36px;height:36px;border-radius:9px;
-  background:linear-gradient(135deg,#f97316,#c2410c);
-  display:flex;align-items:center;justify-content:center;
-  box-shadow:0 4px 12px rgba(249,115,22,0.4);}
-.nav-logo-text .name{font-family:'Syne',sans-serif;font-weight:900;font-size:1rem;color:var(--orange);letter-spacing:1px;}
-.nav-logo-text .sub{font-size:0.52rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;}
-.nav-links{display:flex;gap:28px;list-style:none;}
-.nav-links a{color:var(--muted);text-decoration:none;font-size:0.85rem;font-weight:500;transition:color .2s;}
-.nav-links a:hover{color:var(--text);}
-.nav-cta{background:var(--orange);color:#fff;padding:8px 18px;border-radius:8px;
-  text-decoration:none;font-weight:700;font-size:0.82rem;transition:all .2s;white-space:nowrap;}
-.nav-cta:hover{background:var(--orange-d);transform:translateY(-1px);}
-.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;}
-.hamburger span{width:22px;height:2px;background:var(--text);border-radius:2px;transition:all .3s;}
-.mobile-menu{display:none;position:fixed;top:65px;left:0;right:0;
-  background:rgba(12,12,14,0.98);backdrop-filter:blur(20px);
-  border-bottom:1px solid var(--border);padding:16px 5%;flex-direction:column;gap:12px;z-index:99;}
-.mobile-menu.open{display:flex;}
-.mobile-menu a{color:var(--muted);text-decoration:none;font-size:0.95rem;padding:8px 0;border-bottom:1px solid var(--border);}
+/* LAYOUT */
+.topbar {
+    position: sticky; top: 0; z-index: 40;
+    background: var(--card); padding: 10px 12px;
+    display: flex; align-items: center; gap: 8px;
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+.ham { width: 38px; height: 38px; background: var(--accent); color: white; border-radius: 10px; font-size: 18px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.brand { flex: 1; min-width: 0; }
+.brand h1 { font-size: 13px; color: var(--accent); font-weight: 900; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.brand p { font-size: 9px; color: var(--text-2); font-weight: 700; text-transform: uppercase; }
+.top-btn { width: 34px; height: 34px; border-radius: 9px; background: var(--card-2); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; position: relative; }
+.badge { position: absolute; top: -3px; right: -3px; background: var(--danger); color: white; font-size: 9px; padding: 1px 5px; border-radius: 99px; font-weight: 900; min-width: 16px; text-align: center; }
+
+/* SIDEBAR */
+.sb-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 90; display: none; }
+.sb-overlay.show { display: block; }
+.sidebar { position: fixed; top: 0; left: 0; bottom: 0; width: 270px; max-width: 82vw; background: var(--card); z-index: 95; transform: translateX(-100%); transition: transform 0.25s; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+.sidebar.show { transform: translateX(0); }
+.sb-head { padding: 18px 16px; background: linear-gradient(135deg, var(--primary), var(--primary-2)); color: white; }
+.sb-head h2 { font-size: 14px; font-weight: 900; }
+.sb-head p { font-size: 10px; opacity: 0.85; }
+.sb-user { padding: 12px 16px; background: var(--primary-bg); margin: 10px; border-radius: 12px; display: flex; align-items: center; gap: 10px; }
+.sb-user .av { width: 32px; height: 32px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+.sb-user .name { font-weight: 700; color: var(--primary); font-size: 13px; }
+.sb-user .role { font-size: 9px; color: var(--text-2); text-transform: uppercase; font-weight: 700; }
+.sb-head-section { padding: 10px 18px 4px; font-size: 9px; font-weight: 900; color: var(--text-3); text-transform: uppercase; letter-spacing: 1px; }
+.sb-btn { display: flex; align-items: center; gap: 12px; width: calc(100% - 16px); margin: 1px 8px; padding: 10px 12px; border-radius: 8px; font-weight: 600; color: var(--text); text-align: left; font-size: 13px; }
+.sb-btn:hover { background: var(--card-2); }
+.sb-btn.active { background: var(--primary-bg); color: var(--primary); font-weight: 800; }
+.sb-btn .ic { font-size: 17px; width: 24px; text-align: center; }
+
+/* MAIN */
+main { padding: 14px; padding-bottom: 80px; max-width: 1000px; margin: 0 auto; }
+.title { font-size: 22px; font-weight: 900; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; }
+.title .extra { font-size: 12px; color: var(--primary); cursor: pointer; font-weight: 700; }
+.hide { display: none !important; }
+
+/* CARDS */
+.card { background: var(--card); border-radius: 14px; padding: 14px; margin-bottom: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.04); border: 1px solid var(--border); }
+.card-head { font-size: 11px; color: var(--text-2); font-weight: 800; text-transform: uppercase; margin-bottom: 10px; letter-spacing: 0.4px; display: flex; justify-content: space-between; align-items: center; }
+
+/* STATS */
+.stats { display: grid; gap: 8px; margin-bottom: 12px; }
+.stats.g2 { grid-template-columns: 1fr 1fr; }
+.stats.g3 { grid-template-columns: 1fr 1fr 1fr; }
+.stats.g4 { grid-template-columns: 1fr 1fr; }
+@media (min-width: 720px) { .stats.g4 { grid-template-columns: repeat(4, 1fr); } }
+.stat { padding: 12px; border-radius: 12px; background: var(--card); border: 1px solid var(--border); }
+.stat .l { font-size: 10px; color: var(--text-2); font-weight: 700; text-transform: uppercase; }
+.stat .v { font-size: 20px; font-weight: 900; color: var(--primary); margin-top: 2px; }
+.stat.green .v { color: var(--success); font-size: 15px; }
+.stat.red .v { color: var(--danger); font-size: 15px; }
+.stat.small .v { font-size: 14px; }
 
 /* HERO */
-.hero{min-height:100vh;display:flex;align-items:center;position:relative;overflow:hidden;padding:100px 5% 60px;}
-.hero-bg{position:absolute;inset:0;
-  background:radial-gradient(ellipse 60% 50% at 65% 50%,rgba(249,115,22,0.12),transparent),
-  linear-gradient(135deg,var(--dark) 0%,var(--dark2) 100%);}
-.hero-grid{position:absolute;inset:0;opacity:0.03;
-  background-image:linear-gradient(rgba(249,115,22,1) 1px,transparent 1px),linear-gradient(90deg,rgba(249,115,22,1) 1px,transparent 1px);
-  background-size:60px 60px;}
-.hero-img{position:absolute;right:0;top:0;bottom:0;width:48%;overflow:hidden;}
-.hero-img img{width:100%;height:100%;object-fit:cover;opacity:0.2;}
-.hero-img::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,var(--dark) 0%,transparent 50%);z-index:1;}
-.hero-content{position:relative;z-index:2;max-width:640px;}
-.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(249,115,22,0.1);
-  border:1px solid rgba(249,115,22,0.25);padding:5px 14px;border-radius:20px;
-  font-size:0.72rem;color:var(--orange);font-weight:600;letter-spacing:1px;text-transform:uppercase;
-  margin-bottom:20px;animation:fadeUp .8s both;}
-.hero-badge::before{content:'';width:6px;height:6px;background:var(--orange);border-radius:50%;animation:pulse 2s infinite;}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.5)}}
-.hero h1{font-family:'Syne',sans-serif;font-size:clamp(2.2rem,5.5vw,3.8rem);font-weight:900;
-  line-height:1.06;margin-bottom:18px;animation:fadeUp .8s .1s both;}
-.hero h1 .accent{color:var(--orange);display:block;}
-.hero p{font-size:1rem;color:var(--muted);line-height:1.7;max-width:520px;margin-bottom:32px;animation:fadeUp .8s .2s both;}
-.hero-btns{display:flex;gap:12px;flex-wrap:wrap;animation:fadeUp .8s .3s both;}
-.btn-primary{background:var(--orange);color:#fff;padding:13px 26px;border-radius:10px;
-  text-decoration:none;font-weight:700;font-size:0.9rem;display:flex;align-items:center;gap:7px;
-  transition:all .2s;box-shadow:0 8px 24px rgba(249,115,22,0.35);}
-.btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(249,115,22,0.45);}
-.btn-secondary{border:1px solid var(--border);color:var(--text);padding:13px 26px;border-radius:10px;
-  text-decoration:none;font-weight:600;font-size:0.9rem;display:flex;align-items:center;gap:7px;
-  transition:all .2s;background:rgba(255,255,255,0.04);}
-.btn-secondary:hover{border-color:rgba(249,115,22,0.4);background:rgba(249,115,22,0.06);}
-.hero-stats{display:flex;gap:36px;margin-top:48px;padding-top:36px;border-top:1px solid var(--border);flex-wrap:wrap;animation:fadeUp .8s .4s both;}
-.hero-stat .num{font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:900;color:var(--orange);line-height:1;}
-.hero-stat .label{font-size:0.7rem;color:var(--muted);margin-top:3px;text-transform:uppercase;letter-spacing:1px;}
-@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.hero { background: linear-gradient(135deg, var(--primary), var(--primary-2)); color: white; padding: 18px; border-radius: 14px; margin-bottom: 12px; }
+.hero .l { font-size: 11px; opacity: 0.85; text-transform: uppercase; font-weight: 700; }
+.hero .v { font-size: 26px; font-weight: 900; margin-top: 4px; color: white; }
+.hero .s { font-size: 11px; opacity: 0.8; margin-top: 2px; }
 
-/* SECTION */
-section{padding:80px 5%;}
-.section-label{font-size:0.68rem;color:var(--orange);letter-spacing:3px;text-transform:uppercase;
-  font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:10px;}
-.section-label::before{content:'';width:22px;height:2px;background:var(--orange);}
-.section-title{font-family:'Syne',sans-serif;font-size:clamp(1.7rem,3.5vw,2.6rem);font-weight:800;line-height:1.15;margin-bottom:14px;}
-.section-sub{color:var(--muted);font-size:0.95rem;max-width:500px;line-height:1.7;margin-bottom:44px;}
-.reveal{opacity:0;transform:translateY(28px);transition:opacity .6s ease,transform .6s ease;}
-.reveal.visible{opacity:1;transform:translateY(0);}
+/* FORMS */
+.fg { display: grid; gap: 10px; }
+.fg.c2 { grid-template-columns: 1fr 1fr; }
+.input { width: 100%; padding: 11px 13px; background: var(--card-2); border: 1px solid var(--border); border-radius: 10px; outline: none; color: var(--text); }
+.input:focus { border-color: var(--primary); background: var(--card); }
+textarea.input { min-height: 80px; resize: vertical; }
 
-/* SERVICES */
-.services-section{background:var(--dark2);}
-.services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;}
-.service-card{background:var(--dark3);border:1px solid var(--border);border-radius:16px;
-  overflow:hidden;cursor:pointer;transition:all .3s;position:relative;}
-.service-card:hover{transform:translateY(-6px);border-color:rgba(249,115,22,0.4);
-  box-shadow:0 20px 40px rgba(0,0,0,0.3);}
-.service-card-img{width:100%;height:180px;object-fit:cover;display:block;transition:transform .5s;}
-.service-card:hover .service-card-img{transform:scale(1.05);}
-.service-card-img-wrap{overflow:hidden;position:relative;}
-.service-card-img-wrap::after{content:'';position:absolute;inset:0;
-  background:linear-gradient(to bottom,transparent 50%,rgba(0,0,0,0.6) 100%);}
-.service-card-body{padding:20px;}
-.service-icon{font-size:1.8rem;margin-bottom:10px;}
-.service-card h3{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:700;margin-bottom:8px;}
-.service-card p{color:var(--muted);font-size:0.82rem;line-height:1.6;margin-bottom:12px;}
-.service-tags{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px;}
-.service-tag{background:rgba(249,115,22,0.08);border:1px solid rgba(249,115,22,0.15);
-  color:var(--orange);font-size:0.65rem;padding:2px 8px;border-radius:20px;font-weight:600;}
-.service-more{color:var(--orange);font-size:0.78rem;font-weight:700;display:flex;align-items:center;gap:5px;}
+/* BUTTONS */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 11px 16px; border-radius: 10px; font-weight: 700; }
+.btn-block { width: 100%; }
+.btn-primary { background: var(--primary); color: white; }
+.btn-success { background: var(--success); color: white; }
+.btn-danger { background: var(--danger); color: white; }
+.btn-orange { background: var(--accent); color: white; }
+.btn-purple { background: var(--purple); color: white; }
+.btn-wa { background: var(--wa); color: white; }
+.btn-ghost { background: var(--card-2); border: 1px solid var(--border); color: var(--text); }
+.btn-sm { padding: 7px 11px; font-size: 12px; }
+.btn-ic { width: 34px; height: 34px; padding: 0; }
+.btn-row { display: flex; gap: 6px; flex-wrap: wrap; }
+.btn-row .btn { flex: 1; min-width: 0; padding: 10px; font-size: 12px; }
 
-/* SERVICE MODAL */
-.svc-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:500;
-  align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(8px);}
-.svc-overlay.open{display:flex;}
-.svc-modal{background:var(--dark2);border:1px solid var(--border);border-radius:20px;
-  max-width:800px;width:100%;max-height:90vh;overflow-y:auto;}
-.svc-modal-header{position:relative;}
-.svc-modal-img{width:100%;height:240px;object-fit:cover;border-radius:20px 20px 0 0;}
-.svc-modal-close{position:absolute;top:12px;right:12px;background:rgba(0,0,0,0.6);
-  border:none;color:#fff;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1rem;
-  display:flex;align-items:center;justify-content:center;}
-.svc-modal-body{padding:24px;}
-.svc-modal-body h2{font-family:'Syne',sans-serif;font-weight:800;font-size:1.4rem;margin-bottom:12px;}
-.svc-modal-body p{color:var(--muted);line-height:1.7;margin-bottom:16px;}
-.svc-modal-gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:16px 0;}
-.svc-modal-gallery img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:8px;cursor:pointer;transition:transform .2s;}
-.svc-modal-gallery img:hover{transform:scale(1.03);}
-.svc-modal-features{display:flex;flex-direction:column;gap:8px;margin:16px 0;}
-.svc-feat{display:flex;align-items:center;gap:10px;font-size:0.85rem;}
-.svc-feat::before{content:'✅';font-size:0.75rem;}
-.svc-cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px;}
+/* LISTS */
+.item { background: var(--card); padding: 12px; border-radius: 12px; display: flex; gap: 8px; margin-bottom: 8px; border: 1px solid var(--border); }
+.item .body { flex: 1; min-width: 0; }
+.item .actions { display: flex; flex-direction: column; gap: 4px; }
+.i-name { font-weight: 700; font-size: 14px; }
+.i-sub { font-size: 12px; color: var(--text-2); margin-top: 2px; }
+.i-note { font-size: 11px; color: var(--text-3); font-style: italic; margin-top: 3px; }
 
-/* VIDEO SECTION */
-.video-section{background:var(--dark3);}
-.video-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
-.video-card{border-radius:14px;overflow:hidden;border:1px solid var(--border);position:relative;cursor:pointer;}
-.video-card:first-child{grid-column:span 2;}
-.video-thumb{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;transition:transform .4s;}
-.video-card:hover .video-thumb{transform:scale(1.03);}
-.video-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.45);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  transition:background .3s;}
-.video-card:hover .video-overlay{background:rgba(0,0,0,0.3);}
-.play-btn{width:64px;height:64px;border-radius:50%;background:var(--orange);
-  display:flex;align-items:center;justify-content:center;margin-bottom:12px;
-  box-shadow:0 8px 24px rgba(249,115,22,0.5);transition:transform .2s;}
-.video-card:hover .play-btn{transform:scale(1.1);}
-.play-btn svg{margin-left:4px;}
-.video-label{background:var(--orange);color:#fff;font-size:0.65rem;font-weight:700;
-  padding:3px 10px;border-radius:20px;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;}
-.video-overlay h4{color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:0.95rem;text-align:center;}
+/* PILLS */
+.pill { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 10px; font-weight: 700; margin-left: 4px; cursor: pointer; }
+.p-lead { background: var(--card-2); color: var(--text-2); }
+.p-quoted { background: var(--warning-bg); color: var(--warning); }
+.p-progress { background: var(--primary-bg); color: var(--primary); }
+.p-done { background: var(--success-bg); color: var(--success); }
+.p-lost { background: var(--danger-bg); color: var(--danger); }
 
-/* VIDEO MODAL */
-.vid-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.95);z-index:600;
-  align-items:center;justify-content:center;padding:16px;}
-.vid-overlay.open{display:flex;}
-.vid-modal{max-width:900px;width:100%;position:relative;}
-.vid-close{position:absolute;top:-40px;right:0;background:none;border:none;color:#fff;
-  font-size:1.5rem;cursor:pointer;}
-.vid-modal iframe,.vid-modal video{width:100%;aspect-ratio:16/9;border-radius:12px;border:none;}
+/* FOLDERS */
+.tabs { display: flex; gap: 6px; overflow-x: auto; margin-bottom: 10px; padding-bottom: 4px; }
+.tab { padding: 7px 14px; background: var(--card-2); border: 1px solid var(--border); border-radius: 999px; font-weight: 700; font-size: 12px; white-space: nowrap; flex-shrink: 0; color: var(--text-2); }
+.tab.active { background: var(--primary); color: white; border-color: var(--primary); }
+.tab .c { opacity: 0.7; margin-left: 3px; font-size: 10px; }
 
-/* WHY US */
-.why-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;}
-.why-img-wrap{border-radius:20px;overflow:hidden;aspect-ratio:4/3;border:1px solid var(--border);position:relative;}
-.why-img-wrap img{width:100%;height:100%;object-fit:cover;opacity:.85;}
-.why-badge-box{position:absolute;bottom:-16px;right:-16px;background:var(--orange);
-  padding:14px 18px;border-radius:12px;box-shadow:0 14px 36px rgba(249,115,22,0.45);}
-.why-badge-box .num{font-family:'Syne',sans-serif;font-size:2rem;font-weight:900;color:#fff;line-height:1;}
-.why-badge-box .txt{font-size:0.68rem;color:rgba(255,255,255,.8);font-weight:600;}
-.why-points{display:flex;flex-direction:column;gap:16px;}
-.why-point{display:flex;gap:14px;padding:16px;border-radius:12px;border:1px solid var(--border);transition:all .2s;}
-.why-point:hover{border-color:rgba(249,115,22,.3);background:rgba(249,115,22,.04);}
-.why-icon{width:42px;height:42px;border-radius:10px;background:rgba(249,115,22,.12);
-  display:flex;align-items:center;justify-content:center;font-size:1.15rem;flex-shrink:0;}
-.why-point h4{font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;margin-bottom:3px;}
-.why-point p{color:var(--muted);font-size:0.8rem;line-height:1.6;}
+/* QA */
+.qa-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.qa { padding: 14px 6px; border-radius: 12px; font-weight: 800; font-size: 12px; text-align: center; }
+.qa .e { display: block; font-size: 22px; margin-bottom: 3px; }
+.qa-b { background: var(--primary-bg); color: var(--primary); }
+.qa-g { background: var(--success-bg); color: var(--success); }
+.qa-p { background: var(--purple-bg); color: var(--purple); }
+.qa-o { background: var(--warning-bg); color: var(--warning); }
 
-/* PROJECTS */
-.projects-section{background:var(--dark2);}
-.proj-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
-.proj-card{border-radius:12px;overflow:hidden;position:relative;border:1px solid var(--border);cursor:pointer;}
-.proj-card:first-child{grid-column:span 2;aspect-ratio:16/9;}
-.proj-card:not(:first-child){aspect-ratio:4/3;}
-.proj-card img{width:100%;height:100%;object-fit:cover;transition:transform .5s;}
-.proj-card:hover img{transform:scale(1.06);}
-.proj-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.8) 0%,transparent 60%);
-  display:flex;flex-direction:column;justify-content:flex-end;padding:16px;}
-.proj-tag{background:var(--orange);color:#fff;font-size:0.62rem;font-weight:700;
-  padding:2px 9px;border-radius:20px;display:inline-block;margin-bottom:5px;
-  width:fit-content;letter-spacing:1px;text-transform:uppercase;}
-.proj-overlay h4{font-family:'Syne',sans-serif;font-weight:700;font-size:0.92rem;}
-.proj-overlay p{color:rgba(255,255,255,.65);font-size:0.72rem;margin-top:2px;}
+/* BOTTOM NAV */
+.bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card); border-top: 1px solid var(--border); display: flex; padding: 5px 4px; z-index: 50; }
+.bottom-nav button { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 1px; padding: 5px; color: var(--text-2); }
+.bottom-nav button.active { color: var(--primary); }
+.bottom-nav .e { font-size: 18px; }
+.bottom-nav .l { font-size: 9px; font-weight: 700; }
 
-/* TESTIMONIALS */
-.test-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;}
-.test-card{background:var(--dark2);border:1px solid var(--border);border-radius:14px;padding:24px;transition:all .2s;}
-.test-card:hover{border-color:rgba(249,115,22,.25);transform:translateY(-2px);}
-.stars{color:var(--gold);font-size:0.85rem;margin-bottom:12px;}
-.test-card p{color:var(--muted);font-size:0.87rem;line-height:1.7;margin-bottom:16px;font-style:italic;}
-.test-author{display:flex;align-items:center;gap:10px;}
-.test-avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--orange),var(--orange-d));
-  display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:0.95rem;color:#fff;flex-shrink:0;}
-.test-author .name{font-weight:700;font-size:0.85rem;}
-.test-author .loc{font-size:0.7rem;color:var(--muted);margin-top:1px;}
+/* MODAL */
+.modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 200; display: none; align-items: center; justify-content: center; padding: 16px; }
+.modal-bg.show { display: flex; }
+.modal { background: var(--card); border-radius: 18px; padding: 20px; max-width: 420px; width: 100%; max-height: 90vh; overflow-y: auto; }
+.modal h3 { font-size: 16px; font-weight: 900; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; }
+.modal h3 .x { color: var(--text-3); font-size: 20px; padding: 4px 10px; }
 
-/* CTA */
-.cta-section{text-align:center;padding:80px 5%;
-  background:linear-gradient(135deg,rgba(249,115,22,.12),rgba(249,115,22,.04));
-  border-top:1px solid rgba(249,115,22,.15);border-bottom:1px solid rgba(249,115,22,.15);}
-.cta-section h2{font-family:'Syne',sans-serif;font-size:clamp(1.7rem,3.5vw,2.8rem);font-weight:900;margin-bottom:14px;}
-.cta-section p{color:var(--muted);max-width:460px;margin:0 auto 28px;line-height:1.7;}
+/* NOTIF */
+.notif-panel { position: fixed; top: 58px; right: 10px; width: 300px; max-width: calc(100vw - 20px); max-height: 60vh; overflow-y: auto; background: var(--card); border: 1px solid var(--border); border-radius: 14px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); z-index: 80; display: none; }
+.notif-panel.show { display: block; }
+.notif-panel .h { padding: 12px; border-bottom: 1px solid var(--border); font-weight: 900; font-size: 13px; display: flex; justify-content: space-between; align-items: center; }
+.notif-item { padding: 10px 12px; border-bottom: 1px solid var(--border); cursor: pointer; font-size: 12px; }
+.notif-item:hover { background: var(--card-2); }
+.notif-item .t { font-weight: 700; margin-bottom: 2px; }
+.notif-item .d { font-size: 11px; color: var(--text-2); }
+.notif-empty { padding: 24px; text-align: center; color: var(--text-3); font-size: 12px; }
 
-/* CONTACT */
-.contact-section{background:var(--dark2);}
-.contact-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:50px;align-items:start;}
-.contact-info{display:flex;flex-direction:column;gap:16px;}
-.contact-item{display:flex;gap:12px;padding:16px;border-radius:12px;border:1px solid var(--border);}
-.contact-item-icon{width:42px;height:42px;border-radius:10px;background:rgba(249,115,22,.12);
-  display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
-.contact-item h4{font-weight:700;font-size:0.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px;}
-.contact-item p,.contact-item a{font-size:0.88rem;color:var(--text);text-decoration:none;line-height:1.5;}
-.contact-item a:hover{color:var(--orange);}
-.wa-btn{display:flex;align-items:center;gap:10px;background:#25D366;color:#fff;
-  padding:13px 22px;border-radius:12px;text-decoration:none;font-weight:700;font-size:0.9rem;
-  transition:all .2s;box-shadow:0 8px 24px rgba(37,211,102,.3);margin-top:8px;}
-.wa-btn:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(37,211,102,.4);}
-.contact-form{background:var(--dark3);border:1px solid var(--border);border-radius:18px;padding:28px;}
-.contact-form h3{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:800;margin-bottom:20px;}
-.fg{margin-bottom:14px;}
-.fg label{display:block;font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;font-weight:600;}
-.fg input,.fg select,.fg textarea{width:100%;padding:11px 13px;background:rgba(255,255,255,.04);
-  border:1px solid var(--border);border-radius:9px;color:var(--text);font-size:0.88rem;
-  font-family:'DM Sans',sans-serif;outline:none;transition:border-color .2s;}
-.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:rgba(249,115,22,.5);}
-.fg textarea{resize:vertical;min-height:90px;}
-.fg select option{background:var(--dark3);}
-.form-submit{width:100%;padding:13px;background:var(--orange);color:#fff;border:none;
-  border-radius:9px;font-size:0.9rem;font-weight:700;cursor:pointer;transition:all .2s;
-  font-family:'DM Sans',sans-serif;margin-top:6px;}
-.form-submit:hover{background:var(--orange-d);transform:translateY(-1px);}
-#form-success{display:none;text-align:center;padding:16px;color:#22c55e;font-weight:600;}
+/* EMPTY */
+.empty { text-align: center; padding: 30px 16px; color: var(--text-3); }
+.empty .big { font-size: 36px; margin-bottom: 8px; opacity: 0.5; }
 
-/* FOOTER */
-footer{background:var(--dark);border-top:1px solid var(--border);padding:44px 5% 20px;}
-.footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:36px;margin-bottom:36px;}
-.footer-brand .tagline{color:var(--muted);font-size:0.82rem;line-height:1.7;margin:10px 0 18px;max-width:250px;}
-.footer-socials{display:flex;gap:8px;}
-.soc-btn{width:34px;height:34px;border-radius:8px;background:var(--dark3);border:1px solid var(--border);
-  display:flex;align-items:center;justify-content:center;text-decoration:none;font-size:0.85rem;transition:all .2s;}
-.soc-btn:hover{border-color:rgba(249,115,22,.4);background:rgba(249,115,22,.08);}
-.footer-col h4{font-family:'Syne',sans-serif;font-weight:700;font-size:0.8rem;letter-spacing:1px;
-  text-transform:uppercase;color:var(--text);margin-bottom:14px;}
-.footer-col ul{list-style:none;display:flex;flex-direction:column;gap:7px;}
-.footer-col ul a{color:var(--muted);text-decoration:none;font-size:0.82rem;transition:color .2s;}
-.footer-col ul a:hover{color:var(--orange);}
-.footer-bottom{border-top:1px solid var(--border);padding-top:18px;
-  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;}
-.footer-bottom p{color:var(--muted);font-size:0.75rem;}
+/* TOAST */
+.toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: var(--success); color: white; padding: 10px 22px; border-radius: 99px; font-weight: 700; font-size: 13px; z-index: 999; box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
 
-/* RESPONSIVE */
-@media(max-width:900px){
-  .nav-links,.nav-cta{display:none;}
-  .hamburger{display:flex;}
-  .why-grid,.contact-grid{grid-template-columns:1fr;}
-  .why-img-wrap{display:none;}
-  .video-grid{grid-template-columns:1fr;}
-  .video-card:first-child{grid-column:span 1;}
-  .proj-grid{grid-template-columns:1fr 1fr;}
-  .proj-card:first-child{grid-column:span 2;aspect-ratio:16/9;}
-  .footer-grid{grid-template-columns:1fr 1fr;}
-  .hero-img{display:none;}
-  .svc-modal-gallery{grid-template-columns:1fr 1fr;}
+/* UTILS */
+.tc { text-align: center; }
+.muted { color: var(--text-2); }
+.mt { margin-top: 10px; }
+.mb { margin-bottom: 10px; }
+.flex-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+
+/* VCARD */
+.vcard { background: linear-gradient(135deg, #0f172a, #1e3a8a); color: white; padding: 22px; border-radius: 18px; position: relative; overflow: hidden; }
+.vcard::before { content: ''; position: absolute; top: -50%; right: -30%; width: 60%; height: 150%; background: rgba(249,115,22,0.15); transform: rotate(25deg); }
+.vcard h2 { font-size: 19px; font-weight: 900; color: #f97316; position: relative; }
+.vcard .sub { font-size: 10px; opacity: 0.8; text-transform: uppercase; margin-bottom: 12px; position: relative; }
+.vcard .line { display: flex; gap: 8px; margin: 5px 0; font-size: 13px; position: relative; }
+
+/* INV */
+.inv-row { display: grid; grid-template-columns: 2fr 1fr 1fr auto; gap: 6px; margin-bottom: 6px; }
+.inv-row input { padding: 8px; font-size: 12px; }
+.inv-row button { color: var(--danger); padding: 4px 8px; font-size: 18px; }
+.inv-total { border-top: 2px dashed var(--border); padding-top: 10px; margin-top: 10px; }
+.inv-total .r { display: flex; justify-content: space-between; padding: 3px 0; font-size: 13px; }
+.inv-total .total { font-weight: 900; font-size: 17px; color: var(--primary); border-top: 1px solid var(--border); padding-top: 8px; margin-top: 4px; }
+
+/* QR */
+.qr { background: white; padding: 16px; border-radius: 14px; text-align: center; }
+.qr svg { max-width: 240px; width: 100%; height: auto; display: block; margin: 0 auto; }
+
+/* SCANNER */
+.scanner-box { position: relative; border-radius: 14px; overflow: hidden; }
+.scanner-box video { width: 100%; max-height: 320px; background: #000; object-fit: cover; }
+.scanner-frame { position: absolute; inset: 20%; border: 3px solid #f97316; border-radius: 14px; box-shadow: 0 0 0 9999px rgba(0,0,0,0.3); }
+
+/* RATE */
+.rate-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media (min-width: 720px) { .rate-grid { grid-template-columns: repeat(3, 1fr); } }
+.rate-card { background: var(--card); border-radius: 14px; border: 1px solid var(--border); overflow: hidden; cursor: pointer; transition: all 0.2s; position: relative; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+.rate-card:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); border-color: var(--primary); }
+.rate-card .ph { height: 100px; background: linear-gradient(135deg, var(--primary-bg), var(--warning-bg)); display: flex; align-items: center; justify-content: center; font-size: 40px; position: relative; overflow: hidden; }
+.rate-card .ph img { width: 100%; height: 100%; object-fit: cover; }
+.rate-card .cat { position: absolute; top: 8px; left: 8px; background: rgba(30,58,138,0.9); color: white; padding: 3px 8px; border-radius: 99px; font-size: 9px; font-weight: 800; backdrop-filter: blur(4px); }
+.rate-card .del { position: absolute; top: 6px; right: 6px; width: 26px; height: 26px; background: rgba(255,255,255,0.9); color: var(--danger); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; backdrop-filter: blur(4px); z-index: 2; }
+.rate-card .body { padding: 10px; }
+.rate-card .name { font-weight: 800; font-size: 12px; line-height: 1.2; height: 28px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.rate-card .price { font-size: 16px; font-weight: 900; color: var(--primary); margin-top: 4px; }
+.rate-card .unit { font-size: 9px; color: var(--text-3); font-weight: 600; }
+
+.rate-add-btn {
+    background: linear-gradient(135deg, var(--accent), #fb923c);
+    color: white; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    border-radius: 14px; min-height: 165px;
+    font-weight: 800; font-size: 13px;
+    box-shadow: 0 4px 12px rgba(249,115,22,0.3);
+    cursor: pointer; transition: all 0.2s;
 }
-@media(max-width:600px){
-  .proj-grid{grid-template-columns:1fr;}
-  .proj-card:first-child{grid-column:span 1;}
-  .footer-grid{grid-template-columns:1fr;}
-  nav{padding:12px 4%;}
-  section{padding:60px 4%;}
-  #theme-bar{bottom:16px;right:16px;}
-  .svc-modal-gallery{grid-template-columns:1fr 1fr;}
+.rate-add-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(249,115,22,0.4); }
+.rate-add-btn .icon { font-size: 40px; margin-bottom: 6px; }
+
+/* Rate Details Modal */
+.rate-detail img { width: 100%; max-height: 220px; object-fit: cover; border-radius: 12px; margin-bottom: 12px; }
+.rate-detail-icon { width: 100%; height: 180px; background: linear-gradient(135deg, var(--primary-bg), var(--warning-bg)); display: flex; align-items: center; justify-content: center; font-size: 80px; border-radius: 12px; margin-bottom: 12px; }
+.rate-detail h4 { font-size: 18px; font-weight: 900; color: var(--text); margin-bottom: 4px; }
+.rate-detail .cat-badge { display: inline-block; background: var(--primary-bg); color: var(--primary); padding: 3px 10px; border-radius: 99px; font-size: 10px; font-weight: 800; margin-bottom: 10px; }
+.rate-detail .price-lg { font-size: 28px; font-weight: 900; color: var(--primary); }
+.rate-detail .price-lg small { font-size: 12px; color: var(--text-3); font-weight: 600; }
+.rate-detail .desc { font-size: 13px; color: var(--text-2); line-height: 1.5; margin: 10px 0; padding: 10px; background: var(--card-2); border-radius: 10px; }
+
+/* PRINT */
+@media print {
+    .topbar, .bottom-nav, .sidebar, .sb-overlay, .no-print, .modal-bg { display: none !important; }
+    body { background: white; color: black; }
+    main { padding: 0; padding-bottom: 0; max-width: none; }
+    .card { box-shadow: none; border: 1px solid #ccc; }
 }
+
+/* GREETING */
+#greetingScreen { position: fixed; inset: 0; z-index: 500; background: linear-gradient(135deg, #0f172a, #1e3a8a); align-items: center; justify-content: center; padding: 20px; color: white; text-align: center; display: none; }
+#greetingScreen.show { display: flex; }
+.greet-wave { font-size: 70px; animation: wave 1.5s infinite; display: inline-block; }
+@keyframes wave { 0%,100% { transform: rotate(0); } 25% { transform: rotate(15deg); } 75% { transform: rotate(-10deg); } }
+.greet-hello { font-size: 42px; font-weight: 900; color: #fbbf24; margin: 10px 0 6px; }
+.greet-co { font-size: 22px; font-weight: 800; color: #f97316; margin-bottom: 4px; }
+.greet-sub { font-size: 13px; opacity: 0.85; margin-bottom: 24px; }
+.greet-form { background: rgba(255,255,255,0.12); padding: 18px; border-radius: 16px; }
+.greet-form input { background: rgba(255,255,255,0.2); color: white; border-color: rgba(255,255,255,0.3); }
+.greet-form input::placeholder { color: rgba(255,255,255,0.7); }
+.greet-x { position: absolute; top: 16px; right: 16px; width: 42px; height: 42px; border-radius: 50%; background: rgba(255,255,255,0.2); color: white; font-size: 20px; }
+
+/* PHOTO UPLOAD */
+.photo-upload { border: 2px dashed var(--border); border-radius: 12px; padding: 16px; text-align: center; cursor: pointer; background: var(--card-2); transition: all 0.2s; }
+.photo-upload:hover { border-color: var(--primary); background: var(--primary-bg); }
+.photo-upload .icon { font-size: 32px; margin-bottom: 4px; }
+.photo-upload .txt { font-size: 12px; color: var(--text-2); font-weight: 700; }
+.photo-preview { max-width: 100%; height: auto; max-height: 200px; border-radius: 10px; margin-top: 8px; display: block; object-fit: cover; }
+.photo-thumb { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; border: 1px solid var(--border); }
+.photo-lg { width: 100%; max-width: 300px; height: auto; border-radius: 10px; margin: 8px 0; }
 </style>
 </head>
 <body>
 
-<!-- THEME BAR -->
-<div id="theme-bar">
-  <button class="theme-btn active" onclick="setTheme('dark')" title="Dark">🌙</button>
-  <button class="theme-btn" onclick="setTheme('light')" title="Light">☀️</button>
-  <button class="theme-btn" onclick="setTheme('saffron')" title="Saffron">🔶</button>
-</div>
-
-<!-- NAV -->
-<nav id="navbar">
-  <a href="#" class="nav-logo">
-    <div class="nav-logo-icon">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-        <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" stroke="#fff" stroke-width="2.5" stroke-linejoin="round"/>
-        <polyline points="9,22 9,12 15,12 15,22" stroke="#fff" stroke-width="2.5" stroke-linejoin="round"/>
-      </svg>
-    </div>
-    <div class="nav-logo-text">
-      <div class="name">PRERAK</div>
-      <div class="sub">Multipurpose Pvt Ltd</div>
-    </div>
-  </a>
-  <ul class="nav-links">
-    <li><a href="#services">Services</a></li>
-    <li><a href="#videos">Videos</a></li>
-    <li><a href="#why-us">Why Us</a></li>
-    <li><a href="#projects">Projects</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
-  <a href="tel:9855069733" class="nav-cta">📞 Call Now</a>
-  <div class="hamburger" onclick="toggleMenu()" id="hamburger">
-    <span></span><span></span><span></span>
-  </div>
-</nav>
-<div class="mobile-menu" id="mobileMenu">
-  <a href="#services" onclick="toggleMenu()">Services</a>
-  <a href="#videos" onclick="toggleMenu()">Videos</a>
-  <a href="#why-us" onclick="toggleMenu()">Why Choose Us</a>
-  <a href="#projects" onclick="toggleMenu()">Projects</a>
-  <a href="#contact" onclick="toggleMenu()">Contact</a>
-  <a href="tel:9855069733" style="color:var(--orange);font-weight:700">📞 9855069733</a>
-</div>
-
-<!-- HERO -->
-<section class="hero" id="home">
-  <div class="hero-bg"></div>
-  <div class="hero-grid"></div>
-  <div class="hero-img">
-    <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1400&q=80" alt="Construction">
-  </div>
-  <div class="hero-content">
-    <div class="hero-badge">Hetauda, Makwanpur, Nepal</div>
-    <h1>Building Your <span class="accent">Dreams</span> Into Reality</h1>
-    <p>PRERAK MULTIPURPOSE PVT LTD — Nepal's trusted partner for construction, interior design, UPVC, gypsum, solar & complete renovation solutions.</p>
-    <div class="hero-btns">
-      <a href="#contact" class="btn-primary">🏗️ Get Free Quote</a>
-      <a href="#services" class="btn-secondary">View Services →</a>
-    </div>
-    <div class="hero-stats">
-      <div class="hero-stat"><div class="num">500+</div><div class="label">Projects Done</div></div>
-      <div class="hero-stat"><div class="num">10+</div><div class="label">Years Experience</div></div>
-      <div class="hero-stat"><div class="num">100%</div><div class="label">Satisfaction</div></div>
-    </div>
-  </div>
-</section>
-
-<!-- SERVICES -->
-<section class="services-section" id="services">
-  <div class="section-label">What We Do</div>
-  <h2 class="section-title">Our Services</h2>
-  <p class="section-sub">Complete construction & interior solutions — click any service to learn more.</p>
-  <div class="services-grid reveal" id="services-grid"></div>
-</section>
-
-<!-- SERVICE MODAL -->
-<div class="svc-overlay" id="svc-overlay" onclick="if(event.target===this)closeSvc()">
-  <div class="svc-modal" id="svc-modal">
-    <div class="svc-modal-header">
-      <img id="svc-img" src="" alt="" class="svc-modal-img">
-      <button class="svc-modal-close" onclick="closeSvc()">✕</button>
-    </div>
-    <div class="svc-modal-body">
-      <div style="font-size:2rem;margin-bottom:8px" id="svc-icon"></div>
-      <h2 id="svc-title"></h2>
-      <p id="svc-desc"></p>
-      <div class="svc-modal-gallery" id="svc-gallery"></div>
-      <div id="svc-features" class="svc-modal-features"></div>
-      <div class="svc-cta">
-        <a href="#contact" class="btn-primary" onclick="closeSvc()">🏗️ Get Quote</a>
-        <a id="svc-wa" href="#" target="_blank" class="wa-btn">💬 WhatsApp</a>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- VIDEOS -->
-<section class="video-section" id="videos">
-  <div class="section-label">Our Work</div>
-  <h2 class="section-title">See Our Projects</h2>
-  <p class="section-sub">Watch our completed projects and work process videos.</p>
-  <div class="video-grid reveal">
-    <div class="video-card" onclick="openVideo('https://www.youtube.com/embed/dQw4w9WgXcQ','Construction Work - Hetauda')">
-      <div class="video-thumb" style="background:linear-gradient(135deg,#1a1a2e,#16213e);height:100%;display:flex;align-items:center;justify-content:center;aspect-ratio:16/9">
-        <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1200&q=80" alt="Construction" class="video-thumb" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.7">
-      </div>
-      <div class="video-overlay">
-        <div class="video-label">Featured</div>
-        <div class="play-btn"><svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><polygon points="5,3 19,12 5,21"/></svg></div>
-        <h4>PRERAK Construction Work — Hetauda</h4>
-      </div>
-    </div>
-    <div class="video-card" onclick="openVideo('https://www.youtube.com/embed/dQw4w9WgXcQ','Interior Design')">
-      <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=600&q=80" alt="Interior" class="video-thumb">
-      <div class="video-overlay">
-        <div class="video-label">Interior</div>
-        <div class="play-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><polygon points="5,3 19,12 5,21"/></svg></div>
-        <h4>Interior Design Project</h4>
-      </div>
-    </div>
-    <div class="video-card" onclick="openVideo('https://www.youtube.com/embed/dQw4w9WgXcQ','UPVC Work')">
-      <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=600&q=80" alt="UPVC" class="video-thumb">
-      <div class="video-overlay">
-        <div class="video-label">UPVC</div>
-        <div class="play-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><polygon points="5,3 19,12 5,21"/></svg></div>
-        <h4>UPVC Windows Installation</h4>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- VIDEO MODAL -->
-<div class="vid-overlay" id="vid-overlay" onclick="if(event.target===this)closeVideo()">
-  <div class="vid-modal">
-    <button class="vid-close" onclick="closeVideo()">✕</button>
-    <iframe id="vid-frame" src="" allowfullscreen></iframe>
-  </div>
-</div>
-
-<!-- WHY US -->
-<section id="why-us">
-  <div class="why-grid reveal">
-    <div class="why-visual">
-      <div class="why-img-wrap">
-        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80" alt="Interior">
-        <div class="why-badge-box"><div class="num">10+</div><div class="txt">Years Nepal</div></div>
-      </div>
-    </div>
-    <div>
-      <div class="section-label">Why Choose Us</div>
-      <h2 class="section-title">Quality You Can Trust</h2>
-      <p class="section-sub">We combine expertise, quality materials and honest pricing.</p>
-      <div class="why-points">
-        <div class="why-point"><div class="why-icon">⭐</div><div><h4>Quality Materials</h4><p>Certified, premium materials — no shortcuts.</p></div></div>
-        <div class="why-point"><div class="why-icon">⏱️</div><div><h4>On-Time Delivery</h4><p>Projects delivered on schedule, always.</p></div></div>
-        <div class="why-point"><div class="why-icon">💰</div><div><h4>Transparent Pricing</h4><p>No hidden charges. Best value in Nepal.</p></div></div>
-        <div class="why-point"><div class="why-icon">🤝</div><div><h4>After-Sales Support</h4><p>Full warranty and after-sales service.</p></div></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- PROJECTS -->
-<section class="projects-section" id="projects">
-  <div class="section-label">Our Work</div>
-  <h2 class="section-title">Recent Projects</h2>
-  <p class="section-sub">Completed projects across Hetauda and Makwanpur.</p>
-  <div class="proj-grid reveal">
-    <div class="proj-card"><img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80" alt="Interior"><div class="proj-overlay"><span class="proj-tag">Interior</span><h4>Modern Living Room</h4><p>Hetauda Residential</p></div></div>
-    <div class="proj-card"><img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=600&q=80" alt="Kitchen"><div class="proj-overlay"><span class="proj-tag">Kitchen</span><h4>Modular Kitchen</h4><p>Makwanpur</p></div></div>
-    <div class="proj-card"><img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=600&q=80" alt="Ceiling"><div class="proj-overlay"><span class="proj-tag">Gypsum</span><h4>False Ceiling</h4><p>Commercial</p></div></div>
-    <div class="proj-card"><img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=600&q=80" alt="UPVC"><div class="proj-overlay"><span class="proj-tag">UPVC</span><h4>UPVC Windows</h4><p>Residential</p></div></div>
-    <div class="proj-card"><img src="https://images.unsplash.com/photo-1501183638710-841dd1904471?auto=format&fit=crop&w=600&q=80" alt="Bedroom"><div class="proj-overlay"><span class="proj-tag">Interior</span><h4>Master Bedroom</h4><p>Hetauda</p></div></div>
-  </div>
-</section>
-
-<!-- TESTIMONIALS -->
-<section id="testimonials">
-  <div class="section-label">Happy Clients</div>
-  <h2 class="section-title">What Clients Say</h2>
-  <p class="section-sub">Trusted by hundreds across Makwanpur.</p>
-  <div class="test-grid reveal">
-    <div class="test-card"><div class="stars">★★★★★</div><p>"PRERAK ले हाम्रो घरको interior design गर्यो — बिल्कुल सपना जस्तै। Quality र time दुवैमा best!"</p><div class="test-author"><div class="test-avatar">र</div><div><div class="name">Ramesh Sharma</div><div class="loc">Hetauda-6</div></div></div></div>
-    <div class="test-card"><div class="stars">★★★★★</div><p>"UPVC windows and doors ko quality ekdam ramro. Rate pani fair thiyo. Strongly recommend!"</p><div class="test-author"><div class="test-avatar">स</div><div><div class="name">Sita Thapa</div><div class="loc">Hetauda-4</div></div></div></div>
-    <div class="test-card"><div class="stars">★★★★★</div><p>"Gypsum ceiling ko kaam top level. Team professional, deadline pani meet garyo. Best!"</p><div class="test-author"><div class="test-avatar">ब</div><div><div class="name">Bikash Adhikari</div><div class="loc">Hetauda-3</div></div></div></div>
-  </div>
-</section>
-
-<!-- CTA -->
-<section class="cta-section reveal">
-  <div class="section-label" style="justify-content:center">Start Today</div>
-  <h2>Ready to Build Your Dream?</h2>
-  <p>Free site visit & detailed quotation. No obligation.</p>
-  <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
-    <a href="#contact" class="btn-primary">🏗️ Get Free Quote</a>
-    <a href="https://wa.me/9779855069733?text=नमस्ते%20PRERAK%20जी!" target="_blank" class="wa-btn">💬 WhatsApp Us</a>
-  </div>
-</section>
-
-<!-- CONTACT -->
-<section class="contact-section" id="contact">
-  <div class="section-label">Get In Touch</div>
-  <h2 class="section-title">Contact Us</h2>
-  <p class="section-sub">Call, WhatsApp or send a message. We respond within 2 hours.</p>
-  <div class="contact-grid reveal">
-    <div class="contact-info">
-      <div class="contact-item"><div class="contact-item-icon">📍</div><div><h4>Address</h4><p>Hetauda-4, Kantirajpath<br>Makwanpur, Nepal</p></div></div>
-      <div class="contact-item"><div class="contact-item-icon">📞</div><div><h4>Phone</h4><a href="tel:9855069733">9855069733</a><br><a href="tel:9801069733">9801069733</a><br><a href="tel:057590733">057-590733</a></div></div>
-      <div class="contact-item"><div class="contact-item-icon">📧</div><div><h4>Email</h4><a href="mailto:prerakconstrucion21@gmail.com">prerakconstrucion21@gmail.com</a></div></div>
-      <div class="contact-item"><div class="contact-item-icon">⏰</div><div><h4>Hours</h4><p>Sun–Fri: 8AM–6PM<br>Sat: 9AM–4PM</p></div></div>
-      <a href="https://wa.me/9779855069733?text=नमस्ते%20PRERAK%20जी!" target="_blank" class="wa-btn">💬 Chat on WhatsApp</a>
-    </div>
-    <div class="contact-form">
-      <h3>Get Free Quote 🏗️</h3>
-      <div id="formContent">
-        <div class="fg"><label>Name *</label><input type="text" id="cf-name" placeholder="Your name"></div>
-        <div class="fg"><label>Phone *</label><input type="tel" id="cf-phone" placeholder="98XXXXXXXX"></div>
-        <div class="fg"><label>Service</label>
-          <select id="cf-svc">
-            <option>-- Select --</option>
-            <option>Construction</option><option>Interior Design</option>
-            <option>Gypsum Ceiling</option><option>UPVC & Aluminum</option>
-            <option>Flooring</option><option>Solar</option><option>Renovation</option>
-          </select>
+<!-- LOGIN -->
+<div id="loginScreen">
+    <div class="login-box">
+        <div style="text-align:center; color:#f97316; font-size:16px; font-weight:900; margin-bottom:6px;">🙏 ॐ नमः शिवाय 🙏</div>
+        <div style="text-align:center; color:#6b7280; font-size:11px; margin-bottom:14px;" id="welcomeDate">—</div>
+        <div class="logo">🔨</div>
+        <h1>PRERAK MULTIPURPOSE</h1>
+        <p class="sub">प्रा. लि. • व्यवसाय प्रणाली</p>
+        <div class="fg">
+            <input type="text" id="liUser" class="input" placeholder="प्रयोगकर्ता नाम" value="prerak">
+            <div style="position:relative;">
+                <input type="password" id="liPass" class="input" placeholder="पासवर्ड" onkeypress="if(event.key==='Enter')doLogin()" style="padding-right:40px;">
+                <button onclick="togglePassView('liPass', this)" type="button" style="position:absolute; right:10px; top:50%; transform:translateY(-50%); background:none; font-size:18px; color:#6b7280; padding:0; cursor:pointer;">👁️</button>
+            </div>
         </div>
-        <div class="fg"><label>Message</label><textarea id="cf-msg" placeholder="Tell us about your project..."></textarea></div>
-        <button class="form-submit" onclick="submitForm()">Send Message 📤</button>
-      </div>
-      <div id="form-success">✅ Message sent! We'll contact you shortly.<br><strong>WhatsApp: 9855069733</strong></div>
+        <button onclick="doLogin()" class="btn btn-primary btn-block mt">🔓 लगइन गर्नुहोस्</button>
+        <button onclick="showGreet()" class="btn btn-ghost btn-block mt">👋 स्वागत मोड</button>
+        <p class="hint">लगइन: <b style="color:#f97316;">prerak</b> / <b style="color:#f97316;">prerak123</b><br><a href="#" onclick="forgotPwd();return false;" style="color:var(--primary);">पासवर्ड बिर्सनुभयो?</a></p>
     </div>
-  </div>
+</div>
+
+<!-- WALK-IN GREETING -->
+<div id="greetingScreen">
+    <button class="greet-x" onclick="hideGreet()">✕</button>
+    <div>
+        <div class="greet-wave">👋</div>
+        <div class="greet-hello">नमस्ते!</div>
+        <div class="greet-co" id="grCo">PRERAK MULTIPURPOSE</div>
+        <div class="greet-sub">तपाईंलाई हार्दिक स्वागत छ</div>
+        <div class="greet-form">
+            <h3 style="font-size: 13px; margin-bottom: 10px;">📝 आफ्नो विवरण दर्ता गर्नुहोस्</h3>
+            <div class="fg">
+                <input type="text" id="grName" class="input" placeholder="तपाईंको नाम">
+                <input type="tel" id="grPhone" class="input" placeholder="फोन नम्बर">
+                <input type="text" id="grWork" class="input" placeholder="कुन काम? (UPVC, Interior...)">
+            </div>
+            <div class="btn-row mt">
+                <button onclick="saveWalkin()" class="btn btn-orange">✓ दर्ता</button>
+                <button onclick="hideGreet()" class="btn btn-ghost">पछि</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="app" class="hide">
+
+<!-- TOPBAR -->
+<header class="topbar no-print">
+    <button class="ham" onclick="toggleSb()">☰</button>
+    <div class="brand">
+        <h1 id="brandT">🔨 PRERAK MULTIPURPOSE</h1>
+        <p id="brandS">प्रा. लि. • Business OS</p>
+    </div>
+    <button class="top-btn" onclick="toggleNotif()" title="Notifications">
+        🔔<span class="badge hide" id="notifBadge">0</span>
+    </button>
+    <button class="top-btn" onclick="openScanner()" title="Scan">📷</button>
+    <button class="top-btn" onclick="toggleTheme()" id="themeIcon" title="Theme">🌙</button>
+</header>
+
+<!-- NOTIFICATION PANEL -->
+<div class="notif-panel" id="notifPanel">
+    <div class="h">🔔 सूचनाहरू <button onclick="toggleNotif()" style="color:var(--text-3); font-size:18px;">✕</button></div>
+    <div id="notifBody"></div>
+</div>
+
+<!-- SIDEBAR -->
+<div class="sb-overlay" id="sbOverlay" onclick="toggleSb()"></div>
+<aside class="sidebar" id="sidebar">
+    <div class="sb-head">
+        <h2>🔨 PRERAK MULTIPURPOSE</h2>
+        <p>प्रा. लि. • व्यवसाय OS</p>
+    </div>
+    <div class="sb-user">
+        <div class="av">👤</div>
+        <div style="flex:1;"><div class="name" id="userName">Admin</div><div class="role">ADMINISTRATOR</div></div>
+    </div>
+    
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; padding: 0 10px 10px;">
+        <button onclick="go('dash')" class="sb-prom" id="sb-dash-prom" style="background:var(--accent); color:white; padding:12px; border-radius:10px; font-weight:800; font-size:13px;">🏠 Dashboard</button>
+        <button onclick="logout()" style="background:var(--card-2); color:var(--danger); padding:12px; border-radius:10px; font-weight:800; font-size:13px; border:1px solid var(--border);">🚪 Out</button>
+    </div>
+    
+    <div class="sb-head-section">👥 CUSTOMERS</div>
+    <button class="sb-btn" onclick="go('crm', 'list')" id="sb-crm"><span class="ic">👥</span> Customer List</button>
+    <button class="sb-btn" onclick="go('crm', 'add')" id="sb-crm-add"><span class="ic">➕</span> Add Customer</button>
+    
+    <div class="sb-head-section">📋 QUOTATIONS</div>
+    <button class="sb-btn" onclick="go('estimate', 'list')" id="sb-est-list"><span class="ic">📋</span> Quotation List</button>
+    <button class="sb-btn" onclick="go('estimate', 'add')" id="sb-estimate"><span class="ic">📝</span> New Quotation</button>
+    
+    <div class="sb-head-section">📅 FOLLOW-UPS</div>
+    <button class="sb-btn" onclick="go('followup')" id="sb-followup"><span class="ic">📅</span> Follow-up Tracker</button>
+    <button class="sb-btn" onclick="go('crm', 'followup')" id="sb-fu-add"><span class="ic">🔔</span> Add Follow-up</button>
+    
+    <div class="sb-head-section">🏪 SHOWROOM</div>
+    <button class="sb-btn" onclick="showGreet()"><span class="ic">👋</span> Walk-in Greeting</button>
+    <button class="sb-btn" onclick="go('qr')" id="sb-qr"><span class="ic">📱</span> QR Code</button>
+    <button class="sb-btn" onclick="openScanner()"><span class="ic">🔍</span> QR Scanner</button>
+    
+    <div class="sb-head-section">💼 BUSINESS</div>
+    <button class="sb-btn" onclick="go('rate')" id="sb-rate"><span class="ic">🏷️</span> Rate List</button>
+    <button class="sb-btn" onclick="go('acc')" id="sb-acc"><span class="ic">💰</span> Accounting</button>
+    <button class="sb-btn" onclick="go('staff')" id="sb-staff"><span class="ic">👷</span> Staff Log</button>
+    <button class="sb-btn" onclick="go('vcard')" id="sb-vcard"><span class="ic">💼</span> Visiting Card</button>
+    <button class="sb-btn" onclick="go('stock')" id="sb-stock"><span class="ic">📦</span> Stock / Items</button>
+    <button class="sb-btn" onclick="go('sales')" id="sb-sales"><span class="ic">🎯</span> Sales Team</button>
+    
+    <div class="sb-head-section">📊 REPORTS</div>
+    <button class="sb-btn" onclick="go('daily')" id="sb-daily"><span class="ic">📈</span> Daily Report</button>
+    <button class="sb-btn" onclick="go('daybook')" id="sb-daybook"><span class="ic">📒</span> Day Book</button>
+    <button class="sb-btn" onclick="go('bulk')" id="sb-bulk"><span class="ic">📢</span> Bulk Message</button>
+    
+    <div class="sb-head-section">💳 ACCOUNT</div>
+    <div style="margin: 6px 10px 14px; padding: 12px; background: var(--card-2); border-radius: 12px; border: 1px solid var(--border);">
+        <div style="font-size:10px; color:var(--text-2); font-weight:800; text-transform:uppercase; margin-bottom:8px;">📊 आजको SUMMARY</div>
+        <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:4px; margin-bottom:5px;">
+            <div style="padding:6px; background:var(--success-bg); border-radius:8px; text-align:center;"><div style="font-size:8px; color:var(--text-2); font-weight:700;">आम्दानी</div><div style="font-size:11px; font-weight:900; color:var(--success);" id="sbInc">Rs.0</div></div>
+            <div style="padding:6px; background:var(--danger-bg); border-radius:8px; text-align:center;"><div style="font-size:8px; color:var(--text-2); font-weight:700;">खर्च</div><div style="font-size:11px; font-weight:900; color:var(--danger);" id="sbExp">Rs.0</div></div>
+            <div style="padding:6px; background:var(--warning-bg); border-radius:8px; text-align:center;"><div style="font-size:8px; color:var(--text-2); font-weight:700;">NET</div><div style="font-size:11px; font-weight:900; color:var(--warning);" id="sbNet">Rs.0</div></div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:4px;">
+            <div style="padding:6px; background:var(--card); border:1px solid var(--border); border-radius:8px; text-align:center;"><div style="font-size:8px; color:var(--text-2); font-weight:700;">📗 Advance</div><div style="font-size:11px; font-weight:900; color:var(--accent);" id="sbAdv">Rs.0</div></div>
+            <div style="padding:6px; background:var(--card); border:1px solid var(--border); border-radius:8px; text-align:center;"><div style="font-size:8px; color:var(--text-2); font-weight:700;">📅 Follow-ups</div><div style="font-size:11px; font-weight:900; color:var(--primary);" id="sbFu">0 आज</div></div>
+        </div>
+    </div>
+    
+    <button class="sb-btn" onclick="go('admin')" id="sb-admin" style="margin:6px 8px 14px; background:var(--warning-bg); color:var(--warning);"><span class="ic">🔒</span> Admin Panel</button>
+    
+    <div style="padding: 10px 16px 20px; font-size: 10px; color: var(--text-3); text-align: center;">v8.0 • Offline Ready<br>© Prerak Multipurpose</div>
+</aside>
+
+<main>
+
+<!-- DASHBOARD -->
+<section id="page-dash">
+    <div class="title">Dashboard</div>
+    <div class="stats g4">
+        <div class="stat"><div class="l">कुल ग्राहक</div><div class="v" id="st-cust">0</div></div>
+        <div class="stat green"><div class="l">यस महिना आय</div><div class="v" id="st-inc">रू 0</div></div>
+        <div class="stat red"><div class="l">यस महिना खर्च</div><div class="v" id="st-exp">रू 0</div></div>
+        <div class="stat"><div class="l">कुल स्टाफ</div><div class="v" id="st-staff">0</div></div>
+    </div>
+    <div class="hero">
+        <div class="l">नेट ब्यालेन्स</div>
+        <div class="v" id="st-bal">रू 0</div>
+        <div class="s">कुल आय − कुल खर्च</div>
+    </div>
+    <div class="card">
+        <div class="card-head">📊 यस हप्ताको आय/खर्च</div>
+        <div id="chart"></div>
+        <div class="flex-row" style="justify-content:center; font-size:11px; margin-top:8px;">
+            <span><span style="display:inline-block;width:10px;height:10px;background:var(--success);border-radius:2px;margin-right:4px;"></span>आय</span>
+            <span style="margin-left:16px;"><span style="display:inline-block;width:10px;height:10px;background:var(--danger);border-radius:2px;margin-right:4px;"></span>खर्च</span>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-head">📅 आजको Follow-ups</div>
+        <div id="dashFu"></div>
+    </div>
+    <div class="card">
+        <div class="card-head">⚡ द्रुत कार्य</div>
+        <div class="qa-grid">
+            <button class="qa qa-b" onclick="go('crm')"><span class="e">➕</span>ग्राहक</button>
+            <button class="qa qa-g" onclick="go('acc')"><span class="e">💰</span>कारोबार</button>
+            <button class="qa qa-p" onclick="go('staff')"><span class="e">✓</span>हाजिर</button>
+            <button class="qa qa-o" onclick="go('estimate')"><span class="e">📋</span>Estimate</button>
+            <button class="qa qa-b" onclick="go('followup')"><span class="e">📅</span>Follow-up</button>
+            <button class="qa qa-g" onclick="openScanner()"><span class="e">📷</span>Scan QR</button>
+        </div>
+    </div>
 </section>
 
-<!-- FOOTER -->
-<footer>
-  <div class="footer-grid">
-    <div class="footer-brand">
-      <a href="#" class="nav-logo"><div class="nav-logo-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" stroke="#fff" stroke-width="2.5" stroke-linejoin="round"/><polyline points="9,22 9,12 15,12 15,22" stroke="#fff" stroke-width="2.5" stroke-linejoin="round"/></svg></div><div class="nav-logo-text"><div class="name">PRERAK</div><div class="sub">Multipurpose Pvt Ltd</div></div></a>
-      <p class="tagline">Building dreams across Hetauda & Makwanpur since 2012.</p>
-      <div class="footer-socials">
-        <a href="https://wa.me/9779855069733" target="_blank" class="soc-btn">💬</a>
-        <a href="mailto:prerakconstrucion21@gmail.com" class="soc-btn">📧</a>
-        <a href="tel:9855069733" class="soc-btn">📞</a>
-      </div>
+<!-- CRM -->
+<section id="page-crm" class="hide">
+    <div class="title">CRM - ग्राहक <span class="extra" onclick="openScanner()">📷 Scan</span></div>
+    <div class="card">
+        <div class="card-head">➕ नयाँ ग्राहक</div>
+        <div class="fg c2">
+            <input type="text" id="cName" class="input" placeholder="नाम *">
+            <input type="tel" id="cPhone" class="input" placeholder="फोन *">
+            <input type="text" id="cAddr" class="input" placeholder="ठेगाना">
+            <select id="cType" class="input">
+                <option value="">प्रकार छान्नुहोस्</option>
+                <option>Construction</option>
+                <option>Interior Design</option>
+                <option>Gypsum Ceiling</option>
+                <option>UPVC & Aluminum</option>
+                <option>Flooring</option>
+                <option>Solar</option>
+                <option>Renovation</option>
+                <option>AAC Block</option>
+                <option>अन्य</option>
+            </select>
+            <select id="cStatus" class="input">
+                <option value="Lead">Lead</option>
+                <option value="Quoted">Quoted</option>
+                <option value="In Progress">चलिरहेको</option>
+                <option value="Completed">सकिएको</option>
+                <option value="Lost">गुमेको</option>
+            </select>
+            <div class="flex-row" style="gap:4px;">
+                <input type="date" id="cFu" class="input" style="flex:1;" title="Follow-up">
+                <button onclick="openBSPicker(d=>document.getElementById('cFu').value=d)" class="btn btn-ghost btn-ic">📅</button>
+            </div>
+        </div>
+        <input type="text" id="cNote" class="input mt" placeholder="नोट">
+        <div class="mt">
+            <label class="photo-upload" for="cPhoto">
+                <div class="icon">📷</div>
+                <div class="txt" id="cPhotoLabel">तस्बिर अपलोड गर्नुहोस् (optional)</div>
+                <img id="cPhotoPreview" class="photo-preview" style="display:none;">
+            </label>
+            <input type="file" id="cPhoto" accept="image/*" style="display:none;" onchange="handlePhotoUpload(event, 'cPhotoPreview', 'cPhotoLabel')">
+        </div>
+        <button onclick="saveCust()" class="btn btn-primary btn-block mt">+ ग्राहक सेभ</button>
     </div>
-    <div class="footer-col"><h4>Services</h4><ul><li><a href="#services">Construction</a></li><li><a href="#services">Interior Design</a></li><li><a href="#services">Gypsum Ceiling</a></li><li><a href="#services">UPVC & Aluminum</a></li><li><a href="#services">Solar</a></li></ul></div>
-    <div class="footer-col"><h4>Company</h4><ul><li><a href="#why-us">About</a></li><li><a href="#projects">Projects</a></li><li><a href="#videos">Videos</a></li><li><a href="#contact">Contact</a></li></ul></div>
-    <div class="footer-col"><h4>Contact</h4><ul><li><a href="tel:9855069733">📞 9855069733</a></li><li><a href="tel:9801069733">📞 9801069733</a></li><li><a href="tel:057590733">☎️ 057-590733</a></li><li><a href="#">📍 Hetauda-4, Makwanpur</a></li></ul></div>
-  </div>
-  <div class="footer-bottom">
-    <p>© 2025 PRERAK MULTIPURPOSE PVT LTD. All rights reserved.</p>
-    <p>Hetauda, Makwanpur, Nepal</p>
-  </div>
-</footer>
+    <div class="flex-row">
+        <input type="text" id="search" class="input" oninput="renderCRM()" placeholder="🔍 खोज्नुहोस्...">
+    </div>
+    <div class="tabs" id="crmTabs"></div>
+    <div id="crmList"></div>
+</section>
+
+<!-- FOLLOW-UP -->
+<section id="page-followup" class="hide">
+    <div class="title">📅 Follow-up Tracker</div>
+    <div class="stats g3">
+        <div class="stat"><div class="l">आज</div><div class="v" id="fu-today">0</div></div>
+        <div class="stat red"><div class="l">ढिलो</div><div class="v" id="fu-over">0</div></div>
+        <div class="stat"><div class="l">आउने ७ दिन</div><div class="v" id="fu-up">0</div></div>
+    </div>
+    <div class="card"><div class="card-head">🔴 ढिलो (Overdue)</div><div id="fu-overList"></div></div>
+    <div class="card"><div class="card-head">📅 आज</div><div id="fu-todayList"></div></div>
+    <div class="card"><div class="card-head">⏭️ आउँदै</div><div id="fu-upList"></div></div>
+</section>
+
+<!-- ACCOUNTING -->
+<section id="page-acc" class="hide">
+    <div class="title">💰 Accounting</div>
+    <div class="card">
+        <div class="card-head">नयाँ कारोबार</div>
+        <div class="fg c2">
+            <select id="tType" class="input">
+                <option value="income">💰 आय (Income)</option>
+                <option value="expense">💸 खर्च (Expense)</option>
+            </select>
+            <input type="number" id="tAmt" class="input" placeholder="रकम (रू) *">
+            <div class="flex-row" style="gap:4px;">
+                <input type="date" id="tDate" class="input" style="flex:1;">
+                <button onclick="openBSPicker(d=>document.getElementById('tDate').value=d)" class="btn btn-ghost btn-ic">📅</button>
+            </div>
+            <input type="text" id="tCat" class="input" placeholder="Category">
+            <input type="text" id="tParty" class="input" placeholder="पार्टी">
+            <input type="text" id="tDesc" class="input" placeholder="विवरण">
+        </div>
+        <button onclick="saveTx()" class="btn btn-primary btn-block mt">+ कारोबार सेभ</button>
+    </div>
+    <div class="stats g3">
+        <div class="stat green"><div class="l">कुल आय</div><div class="v" id="ac-inc">रू 0</div></div>
+        <div class="stat red"><div class="l">कुल खर्च</div><div class="v" id="ac-exp">रू 0</div></div>
+        <div class="stat"><div class="l">ब्यालेन्स</div><div class="v" id="ac-bal">रू 0</div></div>
+    </div>
+    <select id="accFilter" class="input mb" onchange="renderAcc()">
+        <option value="all">सबै</option>
+        <option value="income">आय मात्र</option>
+        <option value="expense">खर्च मात्र</option>
+        <option value="month">यो महिना</option>
+        <option value="today">आज</option>
+    </select>
+    <div id="accList"></div>
+</section>
+
+<!-- STAFF -->
+<section id="page-staff" class="hide">
+    <div class="title">👷 Staff Log</div>
+    <div class="card">
+        <div class="card-head">नयाँ स्टाफ</div>
+        <div class="fg c2">
+            <input type="text" id="sName" class="input" placeholder="नाम *">
+            <input type="tel" id="sPhone" class="input" placeholder="फोन">
+            <input type="text" id="sRole" class="input" placeholder="पद">
+            <input type="number" id="sWage" class="input" placeholder="दैनिक ज्याला *">
+        </div>
+        <button onclick="saveStaff()" class="btn btn-primary btn-block mt">+ स्टाफ सेभ</button>
+    </div>
+    <div id="staffList"></div>
+</section>
+
+<!-- RATE LIST -->
+<section id="page-rate" class="hide">
+    <div class="title">🏷️ Rate List <span class="extra" onclick="openRateAdd()">+ नयाँ थप्नुहोस्</span></div>
+    <div class="tabs" id="rateTabs"></div>
+    <div class="rate-grid" id="rateList"></div>
+</section>
+
+<!-- ESTIMATE -->
+<section id="page-estimate" class="hide">
+    <div class="title">📋 Estimate / बकौता</div>
+    <div class="card">
+        <div class="card-head">नयाँ Estimate</div>
+        <div class="fg c2">
+            <input type="text" id="eCust" class="input" placeholder="ग्राहकको नाम *">
+            <input type="tel" id="ePhone" class="input" placeholder="फोन">
+        </div>
+        <input type="text" id="eAddr" class="input mt" placeholder="ठेगाना">
+        <div class="muted mt" style="font-size:12px; font-weight:700;">वस्तुहरू:</div>
+        <div id="invItems"></div>
+        <button onclick="addInvItem()" class="btn btn-ghost btn-sm mt">+ वस्तु थप्नुहोस्</button>
+        <div class="inv-total">
+            <div class="r"><span>Subtotal:</span><span id="invSub">रू 0</span></div>
+            <div class="r"><span>VAT (13%):</span>
+                <label class="flex-row" style="gap:6px;">
+                    <input type="checkbox" id="invVat" onchange="calcInv()">
+                    <span id="invVatAmt">रू 0</span>
+                </label>
+            </div>
+            <div class="r"><span>Discount:</span>
+                <input type="number" id="invDisc" class="input" value="0" oninput="calcInv()" style="width:90px; padding:4px 8px;">
+            </div>
+            <div class="r total"><span>कुल:</span><span id="invTotal">रू 0</span></div>
+        </div>
+        <div class="btn-row mt">
+            <button onclick="saveEst()" class="btn btn-primary">💾 सेभ</button>
+            <button onclick="printEst()" class="btn btn-purple">🖨️ Print</button>
+            <button onclick="shareEstWA()" class="btn btn-wa">💚 WhatsApp</button>
+        </div>
+    </div>
+    <div class="card-head" style="padding-left:4px;">पहिलेका Estimates</div>
+    <div id="estList"></div>
+</section>
+
+<!-- VISITING CARD -->
+<section id="page-vcard" class="hide">
+    <div class="title">💼 Visiting Card</div>
+    <div class="vcard">
+        <h2 id="vc-name">PRERAK MULTIPURPOSE</h2>
+        <div class="sub" id="vc-sub">प्रा. लि.</div>
+        <div class="line">👤 <span id="vc-contact">Admin</span></div>
+        <div class="line">📞 <span id="vc-phone">—</span></div>
+        <div class="line">📧 <span id="vc-email">—</span></div>
+        <div class="line">📍 <span id="vc-addr">—</span></div>
+        <div class="line">🏷️ PAN: <span id="vc-pan">—</span></div>
+    </div>
+    <div class="btn-row mt">
+        <button onclick="showVCardQR()" class="btn btn-primary">📱 QR</button>
+        <button onclick="window.print()" class="btn btn-purple">🖨️ Print</button>
+        <button onclick="shareVCard()" class="btn btn-wa">💚 Share</button>
+        <button onclick="go('admin')" class="btn btn-ghost">✏️ Edit</button>
+    </div>
+</section>
+
+<!-- QR -->
+<section id="page-qr" class="hide">
+    <div class="title">📱 QR Code / Scanner</div>
+    <div class="card">
+        <div class="card-head">📱 QR बनाउनुहोस्</div>
+        <div class="fg">
+            <select id="qrType" class="input">
+                <option value="vcard">Visiting Card</option>
+                <option value="text">Text / URL</option>
+                <option value="phone">फोन नम्बर</option>
+                <option value="wifi">WiFi</option>
+            </select>
+            <input type="text" id="qrInput" class="input" placeholder="Text / URL / Phone...">
+        </div>
+        <button onclick="genCustomQR()" class="btn btn-primary btn-block mt">📱 QR देखाउनुहोस्</button>
+    </div>
+    <div class="card">
+        <div class="card-head">📷 Scanner</div>
+        <p class="muted mb" style="font-size:12px;">Camera खोलेर अर्को QR scan गर्नुहोस्।</p>
+        <button onclick="openScanner()" class="btn btn-success btn-block">📷 Scanner खोल्नुहोस्</button>
+    </div>
+</section>
+
+<!-- STOCK -->
+<section id="page-stock" class="hide">
+    <div class="title">📦 Stock / Items</div>
+    <div class="card">
+        <div class="card-head">नयाँ वस्तु</div>
+        <div class="fg c2">
+            <input type="text" id="stName" class="input" placeholder="नाम *">
+            <input type="number" id="stQty" class="input" placeholder="मौज्दात *">
+            <input type="number" id="stBuy" class="input" placeholder="खरिद मूल्य">
+            <input type="number" id="stSell" class="input" placeholder="बिक्री मूल्य">
+            <input type="text" id="stUnit" class="input" placeholder="Unit">
+            <input type="number" id="stMin" class="input" placeholder="Low Alert मा">
+        </div>
+        <div class="mt">
+            <label class="photo-upload" for="stPhoto">
+                <div class="icon">📷</div>
+                <div class="txt" id="stPhotoLabel">वस्तुको तस्बिर (optional)</div>
+                <img id="stPhotoPreview" class="photo-preview" style="display:none;">
+            </label>
+            <input type="file" id="stPhoto" accept="image/*" style="display:none;" onchange="handlePhotoUpload(event, 'stPhotoPreview', 'stPhotoLabel')">
+        </div>
+        <button onclick="saveStock()" class="btn btn-primary btn-block mt">+ सेभ</button>
+    </div>
+    <div id="stockList"></div>
+</section>
+
+<!-- SALES -->
+<section id="page-sales" class="hide">
+    <div class="title">🎯 Sales Team</div>
+    <div class="card">
+        <div class="card-head">नयाँ Member</div>
+        <div class="fg c2">
+            <input type="text" id="spName" class="input" placeholder="नाम *">
+            <input type="tel" id="spPhone" class="input" placeholder="फोन">
+            <input type="text" id="spArea" class="input" placeholder="Area">
+            <input type="number" id="spComm" class="input" placeholder="Commission %">
+        </div>
+        <button onclick="saveSales()" class="btn btn-primary btn-block mt">+ सेभ</button>
+    </div>
+    <div id="salesList"></div>
+</section>
+
+<!-- DAILY REPORT -->
+<section id="page-daily" class="hide">
+    <div class="title">📈 Daily Report</div>
+    <div class="card">
+        <label style="font-size:11px; color:var(--text-2); font-weight:700;">मिति:</label>
+        <div class="flex-row mt" style="gap:4px;">
+            <input type="date" id="drDate" class="input" onchange="renderDaily()" style="flex:1;">
+            <button onclick="openBSPicker(d=>{document.getElementById('drDate').value=d; renderDaily();})" class="btn btn-ghost btn-ic">📅</button>
+        </div>
+    </div>
+    <div id="dailyBody"></div>
+    <button onclick="window.print()" class="btn btn-primary btn-block mt">🖨️ Print</button>
+</section>
+
+<!-- DAY BOOK -->
+<section id="page-daybook" class="hide">
+    <div class="title">📒 Day Book</div>
+    <div class="card">
+        <div class="flex-row">
+            <input type="date" id="dbFrom" class="input" onchange="renderDaybook()">
+            <span class="muted">देखि</span>
+            <input type="date" id="dbTo" class="input" onchange="renderDaybook()">
+        </div>
+    </div>
+    <div id="daybookBody"></div>
+    <button onclick="window.print()" class="btn btn-primary btn-block mt">🖨️ Print</button>
+</section>
+
+<!-- BULK MESSAGE -->
+<section id="page-bulk" class="hide">
+    <div class="title">📢 Bulk Message / Greetings</div>
+    <div class="card">
+        <div class="card-head">📝 Template छान्नुहोस्</div>
+        <select id="bulkTemplate" class="input mb" onchange="loadTemplate()">
+            <option value="welcome">🙏 Welcome Message (स्वागत सन्देश)</option>
+            <option value="services">✅ Full Services List (सम्पूर्ण सेवाहरू)</option>
+            <option value="upvc">🪟 UPVC Service Info</option>
+            <option value="gypsum">🏛️ Gypsum Ceiling Info</option>
+            <option value="solar">☀️ Solar System Info</option>
+            <option value="flash">🔥 Flash Sale / Offer</option>
+            <option value="followup">📞 Follow-up Reminder</option>
+            <option value="workstart">🚧 Work Start Notice</option>
+            <option value="workdone">✅ Work Completed</option>
+            <option value="payment">💰 Payment Reminder</option>
+            <option value="thanks">🙏 Thank You Message</option>
+            <option value="dashain">🎊 Dashain/Tihar Greetings</option>
+            <option value="newyear">🎆 नयाँ वर्ष Greetings</option>
+            <option value="custom">✏️ Custom (आफ्नै लेख्नुहोस्)</option>
+        </select>
+        <textarea id="bulkMsg" class="input" style="min-height:180px; font-size:13px;" placeholder="{name} = ग्राहकको नाम"></textarea>
+        <p class="muted mt" style="font-size:11px;">💡 <b>{name}</b> = ग्राहकको नाम, <b>{phone}</b> = कम्पनी फोन, <b>{date}</b> = आजको मिति</p>
+    </div>
+    <div class="card">
+        <div class="card-head">👥 ग्राहक छान्नुहोस् <span class="muted" onclick="toggleAllBulk()" style="cursor:pointer; color:var(--primary);">सबै छान्नुहोस्</span></div>
+        <div class="tabs" id="bulkTabs"></div>
+        <div id="bulkList"></div>
+    </div>
+    <div class="btn-row">
+        <button onclick="sendBulkWA()" class="btn btn-wa">💚 WhatsApp</button>
+        <button onclick="sendBulkSMS()" class="btn btn-primary">💬 SMS</button>
+        <button onclick="exportBulkCSV()" class="btn btn-orange">📥 CSV</button>
+        <button onclick="copyBulk()" class="btn btn-purple">📋 Copy</button>
+    </div>
+</section>
+
+<!-- ADMIN -->
+<section id="page-admin" class="hide">
+    <div class="title">🛡️ Admin Panel</div>
+    <div class="card">
+        <div class="card-head">🏢 कम्पनी जानकारी</div>
+        <div class="fg c2">
+            <input type="text" id="adName" class="input" placeholder="Name">
+            <input type="text" id="adSub" class="input" placeholder="Subtitle">
+            <input type="text" id="adContact" class="input" placeholder="Contact Person">
+            <input type="tel" id="adPhone" class="input" placeholder="Phone">
+            <input type="email" id="adEmail" class="input" placeholder="Email">
+            <input type="text" id="adPan" class="input" placeholder="PAN">
+        </div>
+        <input type="text" id="adAddr" class="input mt" placeholder="Address">
+        <button onclick="saveAdmin()" class="btn btn-primary btn-block mt">💾 सेभ</button>
+    </div>
+    <div class="card">
+        <div class="card-head">🔐 Login Credentials</div>
+        <div class="fg c2">
+            <input type="text" id="adUser" class="input" placeholder="Username">
+            <div style="position:relative;">
+                <input type="password" id="adPwd" class="input" placeholder="नयाँ Password" style="padding-right:40px;">
+                <button onclick="togglePassView('adPwd', this)" type="button" style="position:absolute; right:10px; top:50%; transform:translateY(-50%); background:none; font-size:18px; color:var(--text-2); padding:0;">👁️</button>
+            </div>
+        </div>
+        <div style="background:var(--card-2); padding:10px; border-radius:10px; margin-top:10px; font-size:12px;">
+            <b>वर्तमान Password:</b> <span id="curPwdShow">••••••••</span>
+            <button onclick="togglePwdShow()" style="color:var(--primary); font-weight:700; margin-left:8px;">👁️ देखाउनुहोस्</button>
+        </div>
+        <div class="btn-row mt">
+            <button onclick="savePwd()" class="btn btn-primary">🔒 Update</button>
+            <button onclick="resetPwdToDefault()" class="btn btn-danger">♻️ Default Reset</button>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-head">📊 Statistics</div>
+        <div id="adminStats"></div>
+    </div>
+    <div class="card">
+        <div class="card-head">💾 डाटा</div>
+        <div class="btn-row">
+            <button onclick="backup()" class="btn btn-primary">📥 Backup</button>
+            <button onclick="restore()" class="btn btn-success">📤 Restore</button>
+            <button onclick="clearAll()" class="btn btn-danger">🗑️ Clear</button>
+        </div>
+    </div>
+</section>
+
+</main>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav no-print">
+    <button id="nav-dash" onclick="go('dash')"><span class="e">📊</span><span class="l">Home</span></button>
+    <button id="nav-crm" onclick="go('crm')"><span class="e">👥</span><span class="l">CRM</span></button>
+    <button id="nav-acc" onclick="go('acc')"><span class="e">💰</span><span class="l">Cash</span></button>
+    <button id="nav-estimate" onclick="go('estimate')"><span class="e">📋</span><span class="l">Estimate</span></button>
+    <button id="nav-staff" onclick="go('staff')"><span class="e">👷</span><span class="l">Staff</span></button>
+</nav>
+
+</div>
+
+<!-- QR MODAL -->
+<div class="modal-bg" id="qrModal">
+    <div class="modal">
+        <h3>📱 QR Code <span class="x" onclick="closeQR()">✕</span></h3>
+        <div id="qrContainer" class="qr"></div>
+        <p class="muted tc mt" style="font-size:11px; word-break:break-all;" id="qrCaption">—</p>
+        <div class="btn-row mt">
+            <button onclick="downloadQR()" class="btn btn-primary">📥 Download</button>
+            <button onclick="shareQR()" class="btn btn-wa">💚 Share</button>
+        </div>
+    </div>
+</div>
+
+<!-- SCANNER MODAL -->
+<div class="modal-bg" id="scannerModal">
+    <div class="modal">
+        <h3>📷 QR Scanner <span class="x" onclick="closeScanner()">✕</span></h3>
+        <div class="scanner-box">
+            <video id="scannerVideo" autoplay muted playsinline></video>
+            <div class="scanner-frame"></div>
+        </div>
+        <p class="muted tc mt" style="font-size:11px;" id="scannerStatus">Camera...</p>
+        <button onclick="closeScanner()" class="btn btn-ghost btn-block mt">रद्द</button>
+    </div>
+</div>
+
+<!-- BS PICKER MODAL -->
+<div class="modal-bg" id="bsModal">
+    <div class="modal">
+        <h3>📅 बि.सं. मिति <span class="x" onclick="closeBSPicker()">✕</span></h3>
+        <div class="fg" style="grid-template-columns:1fr 1fr 1fr;">
+            <select id="bsY" class="input" onchange="updBSPrev()"></select>
+            <select id="bsM" class="input" onchange="updBSPrev()"></select>
+            <select id="bsD" class="input" onchange="updBSPrev()"></select>
+        </div>
+        <div id="bsPrev" style="background:var(--warning-bg); color:var(--warning); padding:10px; border-radius:10px; text-align:center; font-weight:700; margin-top:10px;">—</div>
+        <div class="btn-row mt">
+            <button onclick="confirmBS()" class="btn btn-primary">✓ छान्नुहोस्</button>
+            <button onclick="closeBSPicker()" class="btn btn-ghost">रद्द</button>
+        </div>
+    </div>
+</div>
+
+<!-- RATE DETAIL MODAL -->
+<div class="modal-bg" id="rateDetailModal">
+    <div class="modal">
+        <h3 id="rdTitle">वस्तु विवरण <span class="x" onclick="closeRateDetail()">✕</span></h3>
+        <div class="rate-detail" id="rdBody"></div>
+        <div class="btn-row mt">
+            <button onclick="editCurRate()" class="btn btn-primary">✏️ सम्पादन</button>
+            <button onclick="addToEstimateFromRate()" class="btn btn-success">📋 Estimate मा थप्नुहोस्</button>
+            <button onclick="delCurRate()" class="btn btn-danger">🗑️ मेटाउनुहोस्</button>
+        </div>
+    </div>
+</div>
+
+<!-- RATE ADD/EDIT MODAL -->
+<div class="modal-bg" id="rateEditModal">
+    <div class="modal">
+        <h3 id="reTitle">नयाँ रेट थप्नुहोस् <span class="x" onclick="closeRateEdit()">✕</span></h3>
+        <div class="fg">
+            <input type="text" id="reItem" class="input" placeholder="वस्तु / सेवाको नाम *">
+            <div class="fg c2">
+                <input type="number" id="rePrice" class="input" placeholder="मूल्य (रू) *">
+                <input type="text" id="reUnit" class="input" placeholder="Unit (Sq.Ft, pc, Set)">
+            </div>
+            <select id="reCat" class="input">
+                <option>Construction</option>
+                <option>Interior Design</option>
+                <option>Gypsum Ceiling</option>
+                <option>UPVC & Aluminum</option>
+                <option>Flooring</option>
+                <option>Solar</option>
+                <option>Renovation</option>
+                <option>AAC Block</option>
+                <option>अन्य</option>
+            </select>
+            <input type="text" id="reIcon" class="input" placeholder="Icon/Emoji (🏗️ जस्तै)" maxlength="4">
+            <textarea id="reDesc" class="input" placeholder="काम को विवरण (description)" style="min-height:80px;"></textarea>
+            <label class="photo-upload" for="rePhoto">
+                <div class="icon">📷</div>
+                <div class="txt" id="rePhotoLabel">तस्बिर अपलोड (optional)</div>
+                <img id="rePhotoPreview" class="photo-preview" style="display:none;">
+            </label>
+            <input type="file" id="rePhoto" accept="image/*" style="display:none;" onchange="handlePhotoUpload(event, 'rePhotoPreview', 'rePhotoLabel')">
+        </div>
+        <div class="btn-row mt">
+            <button onclick="saveRateFromModal()" class="btn btn-primary">💾 सेभ गर्नुहोस्</button>
+            <button onclick="closeRateEdit()" class="btn btn-ghost">रद्द</button>
+        </div>
+    </div>
+</div>
+
+<input type="file" id="restoreInput" accept=".json" style="display:none" onchange="handleRestore(event)">
 
 <script>
-// ══ THEME ══
-function setTheme(t){
-  document.body.className = t==='dark'?'':('theme-'+t);
-  localStorage.setItem('pw_theme',t);
-  document.querySelectorAll('.theme-btn').forEach(b=>b.classList.remove('active'));
-  const map={dark:0,light:1,saffron:2};
-  document.querySelectorAll('.theme-btn')[map[t]]?.classList.add('active');
-}
-(function(){
-  const t=localStorage.getItem('pw_theme')||'dark';
-  setTheme(t);
-})();
+/* ==================== QR GENERATOR (MIT, Nayuki) ==================== */
+var QrCode=(function(){function a(a,c){if(a<1||a>40)throw"Ver";this.version=a;this.size=a*4+17;this.errorCorrectionLevel=c.ecl;var b=[],g=[];for(var d=0;d<this.size;d++){var e=[],h=[];for(var f=0;f<this.size;f++)e.push(!1),h.push(!1);b.push(e);g.push(h)}this.modules=b;this.isFunction=g;l(this);var j=m(this,c.data);n(this,j);if(c.mask==-1){var k=1e9;for(var o=0;o<8;o++){p(this,o);q(this,o);var r=s(this);if(r<k)c.mask=o,k=r;p(this,o)}}this.mask=c.mask;p(this,c.mask);q(this,c.mask);this.isFunction=null}function l(a){for(var b=0;b<a.size;b++)t(a,6,b,b%2==0),t(a,b,6,b%2==0);u(a,3,3);u(a,a.size-4,3);u(a,3,a.size-4);var c=v(a.version),d=c.length;for(var b=0;b<d;b++)for(var e=0;e<d;e++)b==0&&e==0||b==0&&e==d-1||b==d-1&&e==0||w(a,c[b],c[e]);q(a,0);x(a)}function q(a,b){var c=a.errorCorrectionLevel.formatBits<<3|b,d=c;for(var e=0;e<10;e++)d=d<<1^(d>>>9)*1335;var f=(c<<10|d)^21522;for(var e=0;e<=5;e++)t(a,8,e,y(f,e));t(a,8,7,y(f,6));t(a,8,8,y(f,7));t(a,7,8,y(f,8));for(var e=9;e<15;e++)t(a,14-e,8,y(f,e));for(var e=0;e<8;e++)t(a,a.size-1-e,8,y(f,e));for(var e=8;e<15;e++)t(a,8,a.size-15+e,y(f,e));t(a,8,a.size-8,!0)}function x(a){if(a.version<7)return;var b=a.version;for(var c=0;c<12;c++)b=b<<1^(b>>>11)*7973;var d=a.version<<12|b;for(var c=0;c<18;c++){var e=y(d,c),f=a.size-11+c%3,g=Math.floor(c/3);t(a,f,g,e);t(a,g,f,e)}}function u(a,b,c){for(var d=-4;d<=4;d++)for(var e=-4;e<=4;e++){var f=Math.max(Math.abs(e),Math.abs(d)),g=b+e,h=c+d;0<=g&&g<a.size&&0<=h&&h<a.size&&t(a,g,h,f!=2&&f!=4)}}function w(a,b,c){for(var d=-2;d<=2;d++)for(var e=-2;e<=2;e++)t(a,b+e,c+d,Math.max(Math.abs(e),Math.abs(d))!=1)}function t(a,b,c,d){a.modules[c][b]=d;a.isFunction[c][b]=!0}function m(a,b){var c=a.version,d=a.errorCorrectionLevel,e=z[d.ordinal][c],f=A[d.ordinal][c],g=Math.floor(B(c)/8),h=e-g%e,j=Math.floor(g/e),k=[],l=C(f);for(var m=0,o=0;m<e;m++){var p=b.slice(o,o+j-f+(m<h?0:1));o+=p.length;var r=D(p,l);m<h&&p.push(0);k.push(p.concat(r))}var s=[];for(var m=0;m<k[0].length;m++)for(var o=0;o<k.length;o++)(m!=j-f||o>=h)&&s.push(k[o][m]);return s}function n(a,b){var c=0;for(var d=a.size-1;d>=1;d-=2){d==6&&d--;for(var e=0;e<a.size;e++)for(var f=0;f<2;f++){var g=d-f,h=(d+1&2)==0,i=h?a.size-1-e:e;!a.isFunction[i][g]&&c<b.length*8&&(a.modules[i][g]=y(b[c>>>3],7-(c&7)),c++)}}}function p(a,b){for(var c=0;c<a.size;c++)for(var d=0;d<a.size;d++){var e;switch(b){case 0:e=(d+c)%2==0;break;case 1:e=c%2==0;break;case 2:e=d%3==0;break;case 3:e=(d+c)%3==0;break;case 4:e=(Math.floor(d/3)+Math.floor(c/2))%2==0;break;case 5:e=d*c%2+d*c%3==0;break;case 6:e=(d*c%2+d*c%3)%2==0;break;case 7:e=((d+c)%2+d*c%3)%2==0;break}!a.isFunction[c][d]&&e&&(a.modules[c][d]=!a.modules[c][d])}}function s(a){var b=0;for(var c=0;c<a.size;c++){var d=!1,e=0,f=[0,0,0,0,0,0,0];for(var g=0;g<a.size;g++)if(a.modules[c][g]==d){e++;e==5?b+=3:e>5&&b++}else{E(e,f,a.size);!d&&(b+=F(f,a.size)*40);d=a.modules[c][g];e=1}b+=G(d,e,f,a.size)*40}for(var g=0;g<a.size;g++){var d=!1,h=0,f=[0,0,0,0,0,0,0];for(var c=0;c<a.size;c++)if(a.modules[c][g]==d){h++;h==5?b+=3:h>5&&b++}else{E(h,f,a.size);!d&&(b+=F(f,a.size)*40);d=a.modules[c][g];h=1}b+=G(d,h,f,a.size)*40}for(var c=0;c<a.size-1;c++)for(var g=0;g<a.size-1;g++){var i=a.modules[c][g];i==a.modules[c][g+1]&&i==a.modules[c+1][g]&&i==a.modules[c+1][g+1]&&(b+=3)}var j=0;for(var c=0;c<a.size;c++)for(var g=0;g<a.size;g++)a.modules[c][g]&&j++;var k=a.size*a.size,l=Math.ceil(Math.abs(j*20-k*10)/k)-1;b+=l*10;return b}function F(a){var b=a[1],c=b>0&&a[2]==b&&a[3]==b*3&&a[4]==b&&a[5]==b;return(c&&a[0]>=b*4&&a[6]>=b?1:0)+(c&&a[6]>=b*4&&a[0]>=b?1:0)}function G(a,b,c,d){a&&(E(b,c,d),b=0);b+=d;E(b,c,d);return F(c)}function E(a,b,c){b[0]==0&&(a+=c);b.pop();b.unshift(a)}function v(a){if(a==1)return[];var b=Math.floor(a/7)+2,c=a==32?26:Math.ceil((a*4+4)/(b*2-2))*2,d=[6];for(var e=a*4+10;d.length<b;e-=c)d.splice(1,0,e);return d}function B(a){var b=(16*a+128)*a+64;if(a>=2){var c=Math.floor(a/7)+2;b-=(25*c-10)*c-55;a>=7&&(b-=36)}return b}function H(a,b){return Math.floor(B(a)/8)-A[b.ordinal][a]*z[b.ordinal][a]}function C(a){var b=[];for(var c=0;c<a-1;c++)b.push(0);b.push(1);var d=1;for(var c=0;c<a;c++){for(var e=0;e<b.length;e++){b[e]=I(b[e],d);e+1<b.length&&(b[e]^=b[e+1])}d=I(d,2)}return b}function D(a,b){var c=b.map(function(){return 0});a.forEach(function(a){var d=a^c.shift();c.push(0);b.forEach(function(a,b){c[b]^=I(a,d)})});return c}function I(a,b){var c=0;for(var d=7;d>=0;d--){c=c<<1^(c>>>7)*285;c^=(b>>>d&1)*a}return c}function y(a,b){return(a>>>b&1)!=0}var J={L:{ordinal:0,formatBits:1},M:{ordinal:1,formatBits:0},Q:{ordinal:2,formatBits:3},H:{ordinal:3,formatBits:2}};a.prototype.getModule=function(a,b){return 0<=a&&a<this.size&&0<=b&&b<this.size&&this.modules[b][a]};function K(a){var b=[];for(var c=0;c<a.length;c++){var d=a.charCodeAt(c);if(d<128)b.push(d);else if(d<2048)b.push(192|d>>6),b.push(128|d&63);else if(d<55296||d>=57344)b.push(224|d>>12),b.push(128|d>>6&63),b.push(128|d&63);else{c++;var e=65536+((d&1023)<<10|a.charCodeAt(c)&1023);b.push(240|e>>18);b.push(128|e>>12&63);b.push(128|e>>6&63);b.push(128|e&63)}}return b}function L(a){var b=K(a),c=[{m:{b:4,cb:function(a){return a<10?8:16}},n:b.length,d:function(){var c=[];for(var d=0;d<b.length;d++)for(var e=7;e>=0;e--)c.push(b[d]>>e&1);return c}}],d=J.M,e,f;for(e=1;;e++){var g=H(e,d)*8,h=M(c,e);if(h<=g){f=h;break}if(e>=40)throw"Long"}var i=[];for(var j=0;j<c.length;j++){var k=c[j];for(var l=k.m.b-1;l>=0;l--)i.push(k.m.b>>l&1);for(var l=k.m.cb(e)-1;l>=0;l--)i.push(k.n>>l&1);var m=k.d();for(var l=0;l<m.length;l++)i.push(m[l])}var n=H(e,d)*8;for(var l=Math.min(4,n-i.length)-1;l>=0;l--)i.push(0);for(var l=(8-i.length%8)%8-1;l>=0;l--)i.push(0);for(var o=236;i.length<n;o^=253){for(var l=7;l>=0;l--)i.push(o>>l&1)}var p=[];for(var j=0;j<i.length/8;j++)p.push(0);for(var j=0;j<i.length;j++)p[j>>>3]|=i[j]<<7-(j&7);return new a(e,{ecl:d,data:p,mask:-1})}function M(a,b){var c=0;for(var d=0;d<a.length;d++){var e=a[d],f=e.m.cb(b);if(e.n>=1<<f)return 1/0;c+=4+f+e.d().length}return c}var z=[[-1,7,10,15,20,26,18,20,24,30,18,20,24,26,30,22,24,28,30,28,28,28,28,30,30,26,28,30,30,30,30,30,30,30,30,30,30,30,30,30,30],[-1,10,16,26,18,24,16,18,22,22,26,30,22,22,24,24,28,28,26,26,26,26,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28],[-1,13,22,18,26,18,24,18,22,20,24,28,26,24,20,30,24,28,28,26,30,28,30,30,30,30,28,30,30,30,30,30,30,30,30,30,30,30,30,30,30],[-1,17,28,22,16,22,28,26,26,24,28,24,28,22,24,24,30,28,28,26,28,30,24,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30]],A=[[-1,1,1,1,1,1,2,2,2,2,4,4,4,4,4,6,6,6,6,7,8,8,9,9,10,12,12,12,13,14,15,16,17,18,19,19,20,21,22,24,25],[-1,1,1,1,2,2,4,4,4,5,5,5,8,9,9,10,10,11,13,14,16,17,17,18,20,21,23,25,26,28,29,31,33,35,37,38,40,43,45,47,49],[-1,1,1,2,2,4,4,6,6,8,8,8,10,12,16,12,17,16,18,21,20,23,23,25,27,29,34,34,35,38,40,43,45,48,51,53,56,59,62,65,68],[-1,1,1,2,4,4,4,5,6,8,8,11,11,16,16,18,16,19,21,25,25,25,34,30,32,35,37,40,42,45,48,51,54,57,60,63,66,70,74,77,81]];return{encode:L}})();
 
-// ══ SERVICES DATA ══
-const SERVICES = [
-  {
-    id:'construction',
-    icon:'🏗️',
-    name:'Construction Works',
-    img:'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=800&q=80',
-    desc:'We provide complete construction services from foundation to finishing. Residential homes, commercial buildings, RCC structures, prefab houses — all under one roof with quality materials and skilled workers.',
-    tags:['Residential','Commercial','RCC','Prefab'],
-    gallery:[
-      'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&w=400&q=80',
-      'https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&w=400&q=80',
-      'https://images.unsplash.com/photo-1486325212027-8081e485255e?auto=format&fit=crop&w=400&q=80'
-    ],
-    features:['Foundation to finishing','RCC structure','Prefab & modular homes','Commercial buildings','Renovation & repair']
-  },
-  {
-    id:'interior',
-    icon:'🛋️',
-    name:'Interior Design',
-    img:'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80',
-    desc:'Transform your space with our expert interior design services. We create beautiful, functional spaces that reflect your personality — from modular kitchens to complete home makeovers.',
-    tags:['Modular Kitchen','Wardrobe','TV Unit','Lighting'],
-    gallery:[
-      'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=400&q=80',
-      'https://images.unsplash.com/photo-1501183638710-841dd1904471?auto=format&fit=crop&w=400&q=80',
-      'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=400&q=80'
-    ],
-    features:['Modular kitchen design','Custom wardrobe','TV unit & partition','Lighting design','Wall decoration']
-  },
-  {
-    id:'gypsum',
-    icon:'🪨',
-    name:'Gypsum & Ceiling',
-    img:'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80',
-    desc:'Professional gypsum ceiling and partition work. We install false ceilings, 2x2 grid ceilings, PVC boards and smart boards with perfect finishing and modern designs.',
-    tags:['False Ceiling','Grid Ceiling','PVC Board','Partition'],
-    gallery:[
-      'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?auto=format&fit=crop&w=400&q=80',
-      'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=400&q=80',
-      'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=400&q=80'
-    ],
-    features:['Gypsum false ceiling','2×2 grid ceiling','PVC & smart board','Office partition','Modern designs']
-  },
-  {
-    id:'upvc',
-    icon:'🪟',
-    name:'UPVC & Aluminum',
-    img:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=800&q=80',
-    desc:'High-quality UPVC windows and doors, aluminum sliding systems and glass work. Our products are waterproof, soundproof and energy efficient — perfect for Nepal\'s climate.',
-    tags:['UPVC Windows','Aluminum','Glass Work','Sliding'],
-    gallery:[
-      'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=400&q=80',
-      'https://images.unsplash.com/photo-1560448075-cbc16bb4af8e?auto=format&fit=crop&w=400&q=80',
-      'https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=400&q=80'
-    ],
-    features:['UPVC windows & doors','Aluminum sliding','Office glass work','Waterproof & soundproof','Energy efficient']
-  },
-  {
-    id:'flooring',
-    icon:'🏠',
-    name:'Flooring & Finishing',
-    img:'https://images.unsplash.com/photo-1504309092620-4d0ec726efa4?auto=format&fit=crop&w=800&q=80',
-    desc:'Complete flooring solutions including parquet, tiles, marble and granite. We also do painting, floor polishing and complete renovation of old houses.',
-    tags:['Parquet','Tiles','Marble','Painting'],
-    gallery:[
-      'https://images.unsplash.com/photo-1504309092620-4d0ec726efa4?auto=format&fit=crop&w=400&q=80',
-      'https://images.unsplash.com/photo-1507089947368-19c1da9775ae?auto=format&fit=crop&w=400&q=80',
-      'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?auto=format&fit=crop&w=400&q=80'
-    ],
-    features:['Parquet flooring','Tile & marble work','Granite finishing','Interior painting','House renovation']
-  },
-  {
-    id:'solar',
-    icon:'☀️',
-    name:'Solar & Electrical',
-    img:'https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=800&q=80',
-    desc:'Complete solar panel installation, electrical wiring, lighting setup, plumbing and bathroom fitting. We provide end-to-end electrical and solar solutions for homes and offices.',
-    tags:['Solar Panel','Electrical','Plumbing','Lighting'],
-    gallery:[
-      'https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=400&q=80',
-      'https://images.unsplash.com/photo-1558449028-b53a39d100fc?auto=format&fit=crop&w=400&q=80',
-      'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=400&q=80'
-    ],
-    features:['Solar panel installation','Electrical wiring','Lighting design','Plumbing','Bathroom fitting']
-  }
-];
-
-// Render services
-document.getElementById('services-grid').innerHTML = SERVICES.map(s=>`
-  <div class="service-card" onclick="openSvc('${s.id}')">
-    <div class="service-card-img-wrap">
-      <img src="${s.img}" alt="${s.name}" class="service-card-img">
-    </div>
-    <div class="service-card-body">
-      <div class="service-icon">${s.icon}</div>
-      <h3>${s.name}</h3>
-      <p>${s.desc.substring(0,90)}...</p>
-      <div class="service-tags">${s.tags.map(t=>`<span class="service-tag">${t}</span>`).join('')}</div>
-      <div class="service-more">View Details <span>→</span></div>
-    </div>
-  </div>`).join('');
-
-function openSvc(id){
-  const s=SERVICES.find(x=>x.id===id);
-  if(!s) return;
-  document.getElementById('svc-img').src=s.img;
-  document.getElementById('svc-icon').textContent=s.icon;
-  document.getElementById('svc-title').textContent=s.name;
-  document.getElementById('svc-desc').textContent=s.desc;
-  document.getElementById('svc-gallery').innerHTML=s.gallery.map(g=>`<img src="${g}" alt="">`).join('');
-  document.getElementById('svc-features').innerHTML=s.features.map(f=>`<div class="svc-feat">${f}</div>`).join('');
-  document.getElementById('svc-wa').href=`https://wa.me/9779855069733?text=नमस्ते PRERAK जी! मलाई ${s.name} को बारे जानकारी चाहियो।`;
-  document.getElementById('svc-overlay').classList.add('open');
-  document.body.style.overflow='hidden';
-}
-function closeSvc(){
-  document.getElementById('svc-overlay').classList.remove('open');
-  document.body.style.overflow='';
+function qrSvg(qr, border, scale){
+    border = border || 4; scale = scale || 8;
+    var parts = [];
+    for (var y = 0; y < qr.size; y++)
+        for (var x = 0; x < qr.size; x++)
+            if (qr.getModule(x,y))
+                parts.push('M'+(x+border)*scale+','+(y+border)*scale+'h'+scale+'v'+scale+'h-'+scale+'z');
+    var total = (qr.size + border*2) * scale;
+    return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+total+' '+total+'" shape-rendering="crispEdges"><rect width="100%" height="100%" fill="#fff"/><path d="'+parts.join('')+'" fill="#000"/></svg>';
 }
 
-// ══ VIDEO ══
-function openVideo(url,title){
-  document.getElementById('vid-frame').src=url+'?autoplay=1';
-  document.getElementById('vid-overlay').classList.add('open');
-  document.body.style.overflow='hidden';
+/* ==================== DATA ==================== */
+const KEY = 'prerak_v8';
+function defaultDB() {
+    return {
+        customers: [], transactions: [], staff: [],
+        rates: [
+            // CONSTRUCTION
+            {id: 1, item: 'Building Construction', price: 1850, unit: 'Sq.Ft', category: 'Construction', icon:'🏗️', desc:'Full building construction from foundation to finishing. RCC structure, quality materials, certified engineers. Includes masonry, plastering, electrical, plumbing.'},
+            {id: 2, item: 'House Foundation', price: 2500, unit: 'Sq.Ft', category: 'Construction', icon:'🏠', desc:'Strong RCC foundation with proper soil testing, reinforcement, and waterproofing. Load-bearing design for Nepal earthquake zones.'},
+            // INTERIOR
+            {id: 3, item: 'Full Interior Design', price: 1200, unit: 'Sq.Ft', category: 'Interior Design', icon:'🎨', desc:'Complete interior design with space planning, furniture layout, color scheme, lighting design and material selection.'},
+            {id: 4, item: 'Modular Kitchen', price: 1800, unit: 'Sq.Ft', category: 'Interior Design', icon:'🍳', desc:'Modern modular kitchen with soft-close hinges, laminate/acrylic finish, granite countertop, chimney, hob and sink included.'},
+            {id: 5, item: 'Master Bedroom Setup', price: 1500, unit: 'Sq.Ft', category: 'Interior Design', icon:'🛏️', desc:'Premium bedroom setup with wardrobe, bed, dressing unit, side tables. Customizable designs and finishes.'},
+            {id: 6, item: 'Modern Living Room', price: 1400, unit: 'Sq.Ft', category: 'Interior Design', icon:'🛋️', desc:'TV unit, sofa setup, false ceiling, wall panelling, lighting. Transform your living space into a modern showcase.'},
+            // GYPSUM
+            {id: 7, item: 'Gypsum Ceiling', price: 180, unit: 'Sq.Ft', category: 'Gypsum Ceiling', icon:'🏛️', desc:'Premium gypsum board false ceiling with designer patterns, cove lighting, and profile work. Moisture-resistant options available.'},
+            {id: 8, item: 'POP Ceiling', price: 220, unit: 'Sq.Ft', category: 'Gypsum Ceiling', icon:'✨', desc:'Plaster of Paris ceiling with decorative moldings, borders and designs. Ideal for traditional looks.'},
+            {id: 9, item: 'False Ceiling with Lights', price: 250, unit: 'Sq.Ft', category: 'Gypsum Ceiling', icon:'💡', desc:'Complete false ceiling with LED cove lights, spotlights, chandeliers ready. Modern minimalist to classic designs.'},
+            // UPVC & ALUMINUM
+            {id: 10, item: 'UPVC Window', price: 950, unit: 'Sq.Ft', category: 'UPVC & Aluminum', icon:'🪟', desc:'German-technology UPVC windows. Sound-proof, heat-resistant, weather-sealed. 10-year warranty. Sliding & casement options.'},
+            {id: 11, item: 'UPVC Door', price: 1100, unit: 'Sq.Ft', category: 'UPVC & Aluminum', icon:'🚪', desc:'UPVC doors with multi-point locking. Termite-proof, waterproof, low maintenance. Bathroom, balcony, main door designs.'},
+            {id: 12, item: 'Aluminum Window', price: 850, unit: 'Sq.Ft', category: 'UPVC & Aluminum', icon:'🪟', desc:'Powder-coated aluminum windows. Sliding, casement, tilt-turn designs. Strong, durable, cost-effective.'},
+            {id: 13, item: 'Aluminum Partition', price: 750, unit: 'Sq.Ft', category: 'UPVC & Aluminum', icon:'🔲', desc:'Office and home aluminum partitions. Glass/board combinations. Quick installation, professional finish.'},
+            // FLOORING
+            {id: 14, item: 'Tile Flooring', price: 90, unit: 'Sq.Ft', category: 'Flooring', icon:'🧱', desc:'Ceramic, vitrified, or porcelain tile flooring. Wide designs available. Expert installation with proper leveling.'},
+            {id: 15, item: 'Marble Flooring', price: 280, unit: 'Sq.Ft', category: 'Flooring', icon:'⬜', desc:'Premium Italian/Indian marble flooring. Mirror polish, designs inlay work. Luxury finish for living rooms and foyers.'},
+            {id: 16, item: 'Wooden Flooring', price: 350, unit: 'Sq.Ft', category: 'Flooring', icon:'🪵', desc:'Laminate and engineered wood flooring. Waterproof options. European style, warm natural look.'},
+            {id: 17, item: 'Vinyl Flooring', price: 120, unit: 'Sq.Ft', category: 'Flooring', icon:'🏠', desc:'Affordable vinyl/PVC flooring. Wood and tile finish options. Easy maintenance, water-resistant.'},
+            // SOLAR
+            {id: 18, item: 'Solar Panel 5kW System', price: 450000, unit: 'Set', category: 'Solar', icon:'☀️', desc:'Complete 5kW solar system. Panels, inverter, batteries, installation. Powers a medium-size home. Govt. subsidy eligible.'},
+            {id: 19, item: 'Solar Panel 3kW System', price: 275000, unit: 'Set', category: 'Solar', icon:'🔆', desc:'3kW solar system for small homes. Monocrystalline panels, smart inverter, maintenance-free batteries.'},
+            {id: 20, item: 'Solar Water Heater', price: 85000, unit: 'Set', category: 'Solar', icon:'🌞', desc:'200L solar water heater with evacuated tube collectors. Year-round hot water, electricity-saving.'},
+            {id: 21, item: 'Solar Inverter (5kVA)', price: 45000, unit: 'pc', category: 'Solar', icon:'⚡', desc:'Pure sine wave solar inverter. MPPT technology, high efficiency. With warranty and installation.'},
+            // RENOVATION
+            {id: 22, item: 'Full House Renovation', price: 950, unit: 'Sq.Ft', category: 'Renovation', icon:'🔨', desc:'Complete house renovation. Electrical, plumbing, flooring, painting, kitchen, bathroom - all upgraded.'},
+            {id: 23, item: 'Kitchen Renovation', price: 1200, unit: 'Sq.Ft', category: 'Renovation', icon:'🍽️', desc:'Kitchen makeover with new modular cabinets, countertop, backsplash, flooring and electrical.'},
+            {id: 24, item: 'Bathroom Renovation', price: 1500, unit: 'Sq.Ft', category: 'Renovation', icon:'🚿', desc:'Modern bathroom with new tiles, fixtures, plumbing, ventilation. Waterproofing guaranteed.'},
+            {id: 25, item: 'Painting Work', price: 45, unit: 'Sq.Ft', category: 'Renovation', icon:'🎨', desc:'Interior/exterior painting. Asian Paints, Berger quality. Primer + 2 coats. Includes putty and crack fill.'},
+            // AAC
+            {id: 26, item: 'AAC ब्लक निर्माण', price: 1100, unit: 'Cubic', category: 'AAC Block', icon:'🧱', desc:'Autoclaved Aerated Concrete block walls. Lightweight, fire-resistant, earthquake-safe, thermal insulation.'}
+        ],
+        estimates: [], stock: [], salesTeam: [], walkins: [],
+        company: {
+            name: 'PRERAK MULTIPURPOSE',
+            sub: 'प्रा. लि.',
+            contact: 'Admin',
+            phone: '9855069733',
+            phone2: '9801069733',
+            phone3: '057-590733',
+            email: 'prerakconstrucion21@gmail.com',
+            address: 'Hetauda-4, Kantirajpath, Makwanpur, Nepal',
+            pan: '',
+            website: 'prerakmultipurpose.com',
+            tagline: 'Building Your Dreams Into Reality'
+        },
+        auth: {username:'prerak', password:'prerak123'},
+        theme: 'light', loggedIn: false, rateFilter: 'all', bulkFilter: 'all'
+    };
 }
-function closeVideo(){
-  document.getElementById('vid-frame').src='';
-  document.getElementById('vid-overlay').classList.remove('open');
-  document.body.style.overflow='';
+let db = defaultDB();
+try { 
+    const saved = localStorage.getItem(KEY);
+    if (saved) db = Object.assign(defaultDB(), JSON.parse(saved));
+} catch(e){}
+
+function save() { 
+    try { localStorage.setItem(KEY, JSON.stringify(db)); } 
+    catch(e) { alert('Storage error: '+e.message); }
 }
 
-// ══ NAV ══
-function toggleMenu(){
-  document.getElementById('mobileMenu').classList.toggle('open');
+/* ==================== UTILS ==================== */
+function fmt(n) { return Number(n||0).toLocaleString('en-IN'); }
+function today() { return new Date().toISOString().split('T')[0]; }
+function thisMonth() { return new Date().toISOString().substring(0, 7); }
+function uid() { return Date.now() + Math.floor(Math.random()*1000); }
+function esc(s) { return String(s==null?'':s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function toast(m) {
+    const t = document.createElement('div'); t.className='toast'; t.innerText=m;
+    document.body.appendChild(t); setTimeout(()=>t.remove(), 2000);
 }
-window.addEventListener('scroll',function(){
-  document.getElementById('navbar').style.padding=window.scrollY>50?'10px 5%':'14px 5%';
-});
-document.addEventListener('click',function(e){
-  const m=document.getElementById('mobileMenu'),h=document.getElementById('hamburger');
-  if(m.classList.contains('open')&&!m.contains(e.target)&&!h.contains(e.target))m.classList.remove('open');
-});
-
-// ══ SCROLL REVEAL ══
-const obs=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});
-},{threshold:0.1});
-document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
-
-// ══ CONTACT FORM ══
-function submitForm(){
-  const name=(document.getElementById('cf-name').value||'').trim();
-  const phone=(document.getElementById('cf-phone').value||'').trim();
-  const svc=document.getElementById('cf-svc').value;
-  const msg=(document.getElementById('cf-msg').value||'').trim();
-  if(!name||!phone){alert('कृपया नाम र फोन हाल्नुस्।');return;}
-  const waMsg=`🏗️ *New Quote Request*\n\n👤 ${name}\n📞 ${phone}\n🔧 ${svc||'General'}\n📝 ${msg||'—'}\n\n_From PRERAK Website_`;
-  window.open('https://wa.me/9779855069733?text='+encodeURIComponent(waMsg),'_blank');
-  document.getElementById('formContent').style.display='none';
-  document.getElementById('form-success').style.display='block';
+function waLink(phone, msg) {
+    const clean = (phone||'').replace(/\D/g,'');
+    const full = clean ? (clean.startsWith('977') ? clean : '977'+clean) : '';
+    return 'https://wa.me/' + full + (msg ? '?text=' + encodeURIComponent(msg) : '');
 }
+
+/* BS Calendar */
+const bsMonths = ['बैशाख','जेठ','असार','साउन','भदौ','असोज','कार्तिक','मंसिर','पुष','माघ','फागुन','चैत'];
+const bsData = {
+    2080: {days:[31,31,31,32,31,31,30,29,30,29,30,30], start:new Date(2023,3,14)},
+    2081: {days:[31,31,32,31,31,31,30,29,30,29,30,30], start:new Date(2024,3,13)},
+    2082: {days:[31,32,31,32,31,30,30,29,30,29,30,30], start:new Date(2025,3,14)},
+    2083: {days:[31,31,32,31,31,30,30,30,29,30,30,30], start:new Date(2026,3,14)},
+    2084: {days:[31,31,32,32,30,31,30,29,30,29,30,30], start:new Date(2027,3,14)},
+    2085: {days:[31,32,31,32,31,30,30,30,29,30,30,30], start:new Date(2028,3,13)}
+};
+const niDigit = s => String(s).replace(/\d/g, d => '०१२३४५६७८९'[d]);
+function adToBS(d) {
+    d = d || new Date(); d = new Date(d); d.setHours(0,0,0,0);
+    for (let y = 2085; y >= 2080; y--) {
+        if (d >= bsData[y].start) {
+            let diff = Math.floor((d - bsData[y].start) / 86400000);
+            const md = bsData[y].days; let m = 0;
+            while (m < 11 && diff >= md[m]) { diff -= md[m]; m++; }
+            return {y, m, d: diff + 1};
+        }
+    }
+    return null;
+}
+
+/* ==================== LOGIN ==================== */
+function doLogin() {
+    const u = document.getElementById('liUser').value.trim();
+    const p = document.getElementById('liPass').value;
+    if (u === db.auth.username && p === db.auth.password) {
+        db.loggedIn = true; save();
+        show();
+    } else {
+        toast('❌ गलत username वा password');
+    }
+}
+function logout() {
+    if (!confirm('Logout गर्ने?')) return;
+    db.loggedIn = false; save();
+    document.getElementById('loginScreen').style.display = 'flex';
+    document.getElementById('app').classList.add('hide');
+    document.getElementById('liPass').value = '';
+    closeSb();
+}
+/* ==================== PHOTO UPLOAD ==================== */
+// Stores photo as base64 in global variable, pre-resized to avoid localStorage overflow
+const photoStore = {};
+function handlePhotoUpload(event, previewId, labelId, maxWidth = 600, quality = 0.6) {
+    const file = event.target.files[0];
+    if (!file) return;
+    if (!file.type.startsWith('image/')) { alert('तस्बिर मात्र upload गर्नुहोस्'); return; }
+    // Show loading feedback
+    const label = document.getElementById(labelId);
+    if (label) label.innerText = '⏳ Processing...';
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+            try {
+                // Resize to max width while keeping aspect ratio
+                const scale = Math.min(1, maxWidth / img.width);
+                const w = Math.round(img.width * scale);
+                const h = Math.round(img.height * scale);
+                const canvas = document.createElement('canvas');
+                canvas.width = w; canvas.height = h;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, w, h);
+                const dataUrl = canvas.toDataURL('image/jpeg', quality);
+                photoStore[previewId] = dataUrl;
+                const preview = document.getElementById(previewId);
+                if (preview) { preview.src = dataUrl; preview.style.display = 'block'; }
+                if (label) label.innerText = '✓ तस्बिर तयार ('+Math.round(dataUrl.length/1024)+'KB) • फेरि click गरी बदल्न मिल्छ';
+                toast('✓ तस्बिर तयार');
+            } catch(err) {
+                if (label) label.innerText = '❌ Error: ' + err.message;
+                alert('तस्बिर process गर्न सकिएन: ' + err.message);
+            }
+        };
+        img.onerror = () => {
+            if (label) label.innerText = '❌ गलत तस्बिर';
+            alert('तस्बिर load गर्न सकिएन');
+        };
+        img.src = e.target.result;
+    };
+    reader.onerror = () => {
+        if (label) label.innerText = '❌ Read error';
+        alert('File पढ्न सकिएन');
+    };
+    reader.readAsDataURL(file);
+}
+function clearPhoto(previewId, labelId, inputId) {
+    delete photoStore[previewId];
+    const p = document.getElementById(previewId);
+    const l = document.getElementById(labelId);
+    const i = document.getElementById(inputId);
+    if (p) { p.src = ''; p.style.display = 'none'; }
+    if (l) l.innerText = 'तस्बिर अपलोड गर्नुहोस् (optional)';
+    if (i) i.value = '';
+}
+function getPhoto(previewId) { return photoStore[previewId] || null; }
+function setPhotoPreview(previewId, labelId, dataUrl) {
+    if (!dataUrl) return;
+    photoStore[previewId] = dataUrl;
+    const p = document.getElementById(previewId);
+    const l = document.getElementById(labelId);
+    if (p) { p.src = dataUrl; p.style.display = 'block'; }
+    if (l) l.innerText = '✓ मौजुदा तस्बिर (फेरि click गरी बदल्न सकिन्छ)';
+}
+function viewPhoto(dataUrl) {
+    if (!dataUrl) return;
+    const w = window.open('', '_blank');
+    w.document.write('<html><head><title>Photo</title></head><body style="margin:0; background:#000; display:flex; align-items:center; justify-content:center; min-height:100vh;"><img src="'+dataUrl+'" style="max-width:100%; max-height:100vh;"></body></html>');
+}
+
+function forgotPwd() {
+    if (prompt('Reset गर्न "RESET" टाइप गर्नुहोस्:') === 'RESET') {
+        db.auth = {username:'prerak', password:'prerak123'}; save();
+        document.getElementById('liUser').value = 'prerak';
+        document.getElementById('liPass').value = 'prerak123';
+        alert('✓ Reset भयो: prerak / prerak123');
+    }
+}
+
+/* Password view toggle */
+function togglePassView(inputId, btn) {
+    const el = document.getElementById(inputId);
+    if (el.type === 'password') { el.type = 'text'; btn.innerText = '🙈'; }
+    else { el.type = 'password'; btn.innerText = '👁️'; }
+}
+function togglePwdShow() {
+    const el = document.getElementById('curPwdShow');
+    if (el.innerText === '••••••••') {
+        el.innerText = db.auth.password;
+        event.target.innerText = '🙈 लुकाउनुहोस्';
+    } else {
+        el.innerText = '••••••••';
+        event.target.innerText = '👁️ देखाउनुहोस्';
+    }
+}
+function resetPwdToDefault() {
+    if (!confirm('Password को default (prerak123) मा reset गर्ने?')) return;
+    db.auth = {username:'prerak', password:'prerak123'};
+    save();
+    document.getElementById('adUser').value = 'prerak';
+    document.getElementById('adPwd').value = '';
+    document.getElementById('curPwdShow').innerText = '••••••••';
+    alert('✓ Reset भयो!\n\nUsername: prerak\nPassword: prerak123');
+}
+
+/* Welcome date */
+function updWelcomeDate() {
+    const d = new Date();
+    const bs = adToBS(d);
+    const weekdays = ['आइतबार','सोमबार','मंगलबार','बुधबार','बिहिबार','शुक्रबार','शनिबार'];
+    const adStr = d.toLocaleDateString('en-IN', {day:'numeric', month:'long', year:'numeric'});
+    const bsStr = bs ? 'बि.सं. ' + niDigit(bs.y) + ' ' + bsMonths[bs.m] + ' ' + niDigit(bs.d) : '';
+    const el = document.getElementById('welcomeDate');
+    if (el) el.innerHTML = weekdays[d.getDay()] + ' • ' + adStr + (bsStr ? '<br>' + bsStr : '');
+}
+
+function show() {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('app').classList.remove('hide');
+    renderAll();
+    go('dash');
+}
+
+/* ==================== GREETING ==================== */
+function showGreet() {
+    document.getElementById('grCo').innerText = db.company.name;
+    document.getElementById('greetingScreen').classList.add('show');
+}
+function hideGreet() { document.getElementById('greetingScreen').classList.remove('show'); }
+function saveWalkin() {
+    const name = document.getElementById('grName').value.trim();
+    const phone = document.getElementById('grPhone').value.trim();
+    const work = document.getElementById('grWork').value.trim();
+    if (!name && !phone) { toast('नाम वा फोन राख्नुहोस्'); return; }
+    db.walkins.unshift({id:uid(), name, phone, work, date:new Date().toISOString()});
+    if (db.loggedIn && phone) {
+        db.customers.unshift({id:uid(), name:name||'Walk-in', phone, type:work, status:'Lead', note:'Walk-in visitor', date:today(), followup:''});
+    }
+    save();
+    ['grName','grPhone','grWork'].forEach(i=>document.getElementById(i).value='');
+    toast('✓ धन्यवाद!');
+    setTimeout(hideGreet, 1500);
+}
+
+/* ==================== NAV ==================== */
+const pages = ['dash','crm','followup','acc','staff','rate','estimate','vcard','qr','stock','sales','daily','daybook','bulk','admin'];
+function go(tab, focus) {
+    try {
+        if (tab === 'admin' && !db.adminOK) {
+            const p = prompt('🔒 Password:');
+            if (p !== db.auth.password) { toast('❌ गलत'); return; }
+            db.adminOK = true;
+        }
+        document.getElementById('qrModal').classList.remove('show');
+        document.getElementById('notifPanel').classList.remove('show');
+        pages.forEach(p => document.getElementById('page-'+p)?.classList.add('hide'));
+        document.getElementById('page-'+tab)?.classList.remove('hide');
+        document.querySelectorAll('.sb-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.bottom-nav button').forEach(b => b.classList.remove('active'));
+        document.getElementById('sb-'+tab)?.classList.add('active');
+        document.getElementById('nav-'+tab)?.classList.add('active');
+        const renders = {dash:renderDash, crm:renderCRM, followup:renderFU, acc:renderAcc, staff:renderStaff, rate:renderRate, estimate:renderEst, vcard:renderVCard, stock:renderStock, sales:renderSales, daily:()=>{document.getElementById('drDate').value=today();renderDaily();}, daybook:()=>{const t=today();document.getElementById('dbFrom').value=t.substring(0,7)+'-01';document.getElementById('dbTo').value=t;renderDaybook();}, bulk:()=>{renderBulk(); if(!document.getElementById('bulkMsg').value) loadTemplate();}, admin:renderAdmin};
+        try { renders[tab]?.(); } catch(e) { console.error('Render', tab, e); }
+        window.scrollTo(0,0);
+        closeSb();
+        // Focus handling - scroll to specific section after render
+        setTimeout(() => {
+            if (focus === 'add') {
+                if (tab === 'crm') document.getElementById('cName')?.focus();
+                else if (tab === 'estimate') document.getElementById('eCust')?.focus();
+            } else if (focus === 'list') {
+                if (tab === 'crm') document.getElementById('crmList')?.scrollIntoView({behavior:'smooth',block:'start'});
+                else if (tab === 'estimate') document.getElementById('estList')?.scrollIntoView({behavior:'smooth',block:'start'});
+            } else if (focus === 'followup') {
+                if (tab === 'crm') document.getElementById('cFu')?.focus();
+            }
+        }, 200);
+        updSbSummary();
+    } catch(e) { console.error('go', e); }
+}
+function toggleSb() {
+    document.getElementById('sidebar').classList.toggle('show');
+    document.getElementById('sbOverlay').classList.toggle('show');
+}
+function closeSb() {
+    document.getElementById('sidebar').classList.remove('show');
+    document.getElementById('sbOverlay').classList.remove('show');
+}
+
+/* ==================== THEME ==================== */
+function toggleTheme() {
+    db.theme = db.theme === 'light' ? 'dark' : 'light';
+    applyTheme(); save();
+}
+function applyTheme() {
+    document.documentElement.setAttribute('data-theme', db.theme);
+    const ti = document.getElementById('themeIcon');
+    if (ti) ti.innerText = db.theme === 'dark' ? '☀️' : '🌙';
+}
+
+/* ==================== CRM ==================== */
+function saveCust() {
+    const name = document.getElementById('cName').value.trim();
+    const phone = document.getElementById('cPhone').value.trim();
+    if (!name || !phone) return alert('नाम र फोन आवश्यक');
+    db.customers.unshift({
+        id: uid(), name, phone,
+        address: document.getElementById('cAddr').value.trim(),
+        type: document.getElementById('cType').value,
+        status: document.getElementById('cStatus').value,
+        note: document.getElementById('cNote').value.trim(),
+        followup: document.getElementById('cFu').value,
+        photo: getPhoto('cPhotoPreview'),
+        date: today()
+    });
+    save();
+    ['cName','cPhone','cAddr','cNote','cFu'].forEach(i=>document.getElementById(i).value='');
+    clearPhoto('cPhotoPreview', 'cPhotoLabel', 'cPhoto');
+    renderCRM(); renderDash(); updNotifs(); updSbSummary(); toast('✓ सेभ भयो');
+}
+function delCust(id) {
+    if (!confirm('मेटाउने?')) return;
+    db.customers = db.customers.filter(c=>c.id!==id);
+    save(); renderCRM(); renderDash();
+}
+function editCust(id) {
+    const c = db.customers.find(x=>x.id===id);
+    if (!c) return;
+    const n = prompt('नाम:', c.name); if (n===null) return;
+    const p = prompt('फोन:', c.phone); if (p===null) return;
+    const a = prompt('ठेगाना:', c.address||''); if (a===null) return;
+    const t = prompt('प्रकार (UPVC/Gypsum/Interior/AAC Block/Aluminum):', c.type||''); if (t===null) return;
+    const nt = prompt('नोट:', c.note||''); if (nt===null) return;
+    c.name = n.trim() || c.name;
+    c.phone = p.trim() || c.phone;
+    c.address = a.trim();
+    c.type = t.trim();
+    c.note = nt.trim();
+    save(); renderCRM(); toast('✓ Edit भयो');
+}
+function updStatus(id) {
+    const c = db.customers.find(x=>x.id===id);
+    const opts = ['Lead','Quoted','In Progress','Completed','Lost'];
+    const r = prompt('Status:\n'+opts.map((o,i)=>(i+1)+'. '+o).join('\n'), opts.indexOf(c.status)+1);
+    if (opts[r-1]) { c.status = opts[r-1]; save(); renderCRM(); }
+}
+function setFu(id) {
+    const c = db.customers.find(x=>x.id===id);
+    openBSPicker(d => { c.followup = d; save(); renderCRM(); updNotifs(); updSbSummary(); toast('✓'); });
+}
+function showCustQR(id) {
+    const c = db.customers.find(x=>x.id===id);
+    showQR('BEGIN:VCARD\nVERSION:3.0\nFN:'+c.name+'\nTEL:'+c.phone+'\nADR:;;'+(c.address||'')+';;;;\nEND:VCARD', c.name);
+}
+
+/* Quick message to single customer */
+function quickMsg(id) {
+    const c = db.customers.find(x=>x.id===id);
+    if (!c) return;
+    const templates = [
+        {label:'🙏 Welcome', key:'welcome'},
+        {label:'✅ Services', key:'services'},
+        {label:'🔥 Offer', key:'flash'},
+        {label:'📞 Follow-up', key:'followup'},
+        {label:'🚧 Work Start', key:'workstart'},
+        {label:'✅ Work Done', key:'workdone'},
+        {label:'💰 Payment', key:'payment'},
+        {label:'🙏 Thanks', key:'thanks'}
+    ];
+    const choice = prompt('Template number:\n'+templates.map((t,i)=>(i+1)+'. '+t.label).join('\n'), '1');
+    const idx = parseInt(choice) - 1;
+    if (idx < 0 || idx >= templates.length) return;
+    const msg = replacePlaceholders(messageTemplates[templates[idx].key], c.name);
+    window.open(waLink(c.phone, msg), '_blank');
+    toast('💚 WhatsApp खोलियो');
+}
+function pillClass(s) {
+    return {'Lead':'p-lead','Quoted':'p-quoted','In Progress':'p-progress','Completed':'p-done','Lost':'p-lost'}[s]||'p-lead';
+}
+function setCRMFilter(f) { db.crmFilter = f; renderCRM(); }
+function renderCRM() {
+    const q = (document.getElementById('search')?.value||'').toLowerCase();
+    const f = db.crmFilter || 'all';
+    const types = [...new Set(db.customers.map(c=>c.type).filter(Boolean))].sort();
+    const statuses = ['Lead','In Progress','Completed'];
+    const tabsEl = document.getElementById('crmTabs');
+    let html = '<button class="tab '+(f==='all'?'active':'')+'" onclick="setCRMFilter(\'all\')">सबै<span class="c">'+db.customers.length+'</span></button>';
+    html += '<button class="tab '+(f==='today'?'active':'')+'" onclick="setCRMFilter(\'today\')">आज Follow-up<span class="c">'+db.customers.filter(c=>c.followup===today()).length+'</span></button>';
+    statuses.forEach(s => {
+        const c = db.customers.filter(x=>x.status===s).length;
+        html += '<button class="tab '+(f===s?'active':'')+'" onclick="setCRMFilter(\''+s+'\')">'+s+'<span class="c">'+c+'</span></button>';
+    });
+    types.forEach(t => {
+        const c = db.customers.filter(x=>x.type===t).length;
+        html += '<button class="tab '+(f===t?'active':'')+'" onclick="setCRMFilter(\''+esc(t)+'\')">📁 '+esc(t)+'<span class="c">'+c+'</span></button>';
+    });
+    tabsEl.innerHTML = html;
+    
+    let list = db.customers;
+    if (f === 'today') list = list.filter(c => c.followup === today());
+    else if (statuses.includes(f)) list = list.filter(c => c.status === f);
+    else if (f !== 'all') list = list.filter(c => c.type === f);
+    if (q) list = list.filter(c => c.name.toLowerCase().includes(q) || c.phone.includes(q));
+    
+    const el = document.getElementById('crmList');
+    if (!list.length) { el.innerHTML = '<div class="empty"><div class="big">👥</div>कुनै ग्राहक छैन</div>'; return; }
+    el.innerHTML = list.map(c => {
+        const t = today();
+        const photoHtml = c.photo ? '<img src="'+c.photo+'" class="photo-thumb" onclick="viewPhoto(\''+c.photo+'\')" style="float:left; margin-right:10px; cursor:pointer;">' : '';
+        return '<div class="item"><div class="body">'+photoHtml+
+        '<div><span class="i-name">'+esc(c.name)+'</span>'+
+        '<span class="pill '+pillClass(c.status)+'" onclick="updStatus('+c.id+')">'+esc(c.status||'Lead')+'</span>'+
+        (c.followup===t?'<span class="pill p-quoted">📅 आज</span>':'')+'</div>'+
+        '<div class="i-sub">📞 '+esc(c.phone)+(c.address?' • 📍 '+esc(c.address):'')+'</div>'+
+        (c.type?'<div class="i-sub">🏷️ '+esc(c.type)+'</div>':'')+
+        (c.followup?'<div class="i-sub">📅 Follow-up: '+esc(c.followup)+'</div>':'')+
+        (c.note?'<div class="i-note">📝 '+esc(c.note)+'</div>':'')+
+        '</div><div class="actions">'+
+        '<a href="tel:'+esc(c.phone)+'" class="btn btn-success btn-ic">📞</a>'+
+        '<a href="'+waLink(c.phone)+'" target="_blank" class="btn btn-wa btn-ic">💚</a>'+
+        '<button onclick="quickMsg('+c.id+')" class="btn btn-purple btn-ic" title="Quick Message">💬</button>'+
+        '<button onclick="editCust('+c.id+')" class="btn btn-primary btn-ic">✏️</button>'+
+        '<button onclick="setFu('+c.id+')" class="btn btn-orange btn-ic">📅</button>'+
+        '<button onclick="showCustQR('+c.id+')" class="btn btn-purple btn-ic">📱</button>'+
+        '<button onclick="delCust('+c.id+')" class="btn btn-danger btn-ic">🗑️</button>'+
+        '</div></div>';
+    }).join('');
+}
+
+/* ==================== FOLLOW-UP ==================== */
+function renderFU() {
+    const t = today();
+    const all = db.customers.filter(c => c.followup);
+    const over = all.filter(c => c.followup < t);
+    const tdy = all.filter(c => c.followup === t);
+    const up = all.filter(c => c.followup > t).sort((a,b) => a.followup.localeCompare(b.followup));
+    document.getElementById('fu-today').innerText = tdy.length;
+    document.getElementById('fu-over').innerText = over.length;
+    document.getElementById('fu-up').innerText = up.filter(c => (new Date(c.followup)-new Date())/86400000 <= 7).length;
+    const render = (list, empty) => !list.length ? '<p class="muted tc" style="padding:10px;">'+empty+'</p>' :
+        list.map(c => '<div class="item"><div class="body"><div class="i-name">'+esc(c.name)+' <span class="pill '+pillClass(c.status)+'">'+esc(c.status||'Lead')+'</span></div>'+
+        '<div class="i-sub">📞 '+esc(c.phone)+' • 📅 '+esc(c.followup)+'</div>'+
+        (c.note?'<div class="i-note">'+esc(c.note)+'</div>':'')+
+        '</div><div class="actions">'+
+        '<a href="tel:'+esc(c.phone)+'" class="btn btn-success btn-ic">📞</a>'+
+        '<a href="'+waLink(c.phone)+'" target="_blank" class="btn btn-wa btn-ic">💚</a>'+
+        '<button onclick="setFu('+c.id+')" class="btn btn-orange btn-ic">📅</button>'+
+        '</div></div>').join('');
+    document.getElementById('fu-overList').innerHTML = render(over, '🎉 कुनै ढिलो छैन');
+    document.getElementById('fu-todayList').innerHTML = render(tdy, 'आज कुनै follow-up छैन');
+    document.getElementById('fu-upList').innerHTML = render(up, 'आउने follow-up छैन');
+}
+
+/* ==================== ACCOUNTING ==================== */
+function saveTx() {
+    const amt = parseFloat(document.getElementById('tAmt').value);
+    if (!amt || amt <= 0) return alert('सही रकम राख्नुहोस्');
+    db.transactions.unshift({
+        id: uid(), type: document.getElementById('tType').value, amount: amt,
+        date: document.getElementById('tDate').value || today(),
+        category: document.getElementById('tCat').value.trim() || 'General',
+        party: document.getElementById('tParty').value.trim(),
+        desc: document.getElementById('tDesc').value.trim()
+    });
+    save();
+    ['tAmt','tCat','tParty','tDesc'].forEach(i=>document.getElementById(i).value='');
+    document.getElementById('tDate').value = today();
+    renderAcc(); renderDash(); updSbSummary(); toast('✓ सेभ');
+}
+function delTx(id) {
+    if (!confirm('मेटाउने?')) return;
+    db.transactions = db.transactions.filter(t=>t.id!==id);
+    save(); renderAcc(); renderDash(); updSbSummary();
+}
+function editTx(id) {
+    const t = db.transactions.find(x=>x.id===id);
+    if (!t) return;
+    const a = parseFloat(prompt('रकम:', t.amount));
+    if (!a || a <= 0) return;
+    const c = prompt('Category:', t.category); if (c===null) return;
+    const p = prompt('Party:', t.party||''); if (p===null) return;
+    const d = prompt('Description:', t.desc||''); if (d===null) return;
+    t.amount = a; t.category = c.trim()||'General'; t.party = p.trim(); t.desc = d.trim();
+    save(); renderAcc(); renderDash(); toast('✓ Edit भयो');
+}
+function renderAcc() {
+    const inc = db.transactions.filter(t=>t.type==='income').reduce((a,t)=>a+t.amount,0);
+    const exp = db.transactions.filter(t=>t.type==='expense').reduce((a,t)=>a+t.amount,0);
+    document.getElementById('ac-inc').innerText = 'रू '+fmt(inc);
+    document.getElementById('ac-exp').innerText = 'रू '+fmt(exp);
+    document.getElementById('ac-bal').innerText = 'रू '+fmt(inc-exp);
+    const f = document.getElementById('accFilter')?.value || 'all';
+    let list = [...db.transactions];
+    if (f === 'income') list = list.filter(t=>t.type==='income');
+    else if (f === 'expense') list = list.filter(t=>t.type==='expense');
+    else if (f === 'month') list = list.filter(t=>t.date.startsWith(thisMonth()));
+    else if (f === 'today') list = list.filter(t=>t.date===today());
+    const el = document.getElementById('accList');
+    if (!list.length) { el.innerHTML = '<div class="empty"><div class="big">💰</div>कुनै कारोबार छैन</div>'; return; }
+    el.innerHTML = list.map(t => '<div class="item"><div class="body">'+
+        '<div class="i-name">'+(t.type==='income'?'⬇️ ':'⬆️ ')+esc(t.category)+(t.party?' • '+esc(t.party):'')+'</div>'+
+        '<div class="i-sub">'+esc(t.desc||'-')+' • '+esc(t.date)+'</div>'+
+        '</div><div style="display:flex; align-items:center; gap:6px;">'+
+        '<b style="font-size:14px; color:'+(t.type==='income'?'var(--success)':'var(--danger)')+';">'+(t.type==='income'?'+':'-')+'रू '+fmt(t.amount)+'</b>'+
+        '<button onclick="editTx('+t.id+')" style="color:var(--primary); padding:4px 6px; font-size:14px;">✏️</button>'+
+        '<button onclick="delTx('+t.id+')" style="color:var(--text-3); padding:4px 8px;">✕</button>'+
+        '</div></div>').join('');
+}
+
+/* ==================== STAFF ==================== */
+function saveStaff() {
+    const name = document.getElementById('sName').value.trim();
+    const wage = parseFloat(document.getElementById('sWage').value);
+    if (!name || !wage) return alert('नाम र ज्याला चाहिन्छ');
+    db.staff.unshift({
+        id: uid(), name,
+        phone: document.getElementById('sPhone').value.trim(),
+        role: document.getElementById('sRole').value.trim(),
+        wage, attendance: [], advances: []
+    });
+    save();
+    ['sName','sPhone','sRole','sWage'].forEach(i=>document.getElementById(i).value='');
+    renderStaff(); renderDash(); toast('✓ सेभ');
+}
+function markAtt(id) {
+    const s = db.staff.find(x=>x.id===id); const t = today();
+    if (s.attendance.includes(t)) { if (confirm('हाजिर हटाउने?')) { s.attendance = s.attendance.filter(d=>d!==t); save(); renderStaff(); } return; }
+    s.attendance.push(t); save(); renderStaff(); toast('✓ हाजिर');
+}
+function addAdv(id) {
+    const a = parseFloat(prompt('पेश्की (रू):'));
+    if (!a || a <= 0) return;
+    const s = db.staff.find(x=>x.id===id);
+    s.advances.push({id:uid(), date:today(), amount:a});
+    save(); renderStaff(); updSbSummary(); toast('✓');
+}
+function paySal(id) {
+    const s = db.staff.find(x=>x.id===id); const m = thisMonth();
+    const days = s.attendance.filter(d=>d.startsWith(m)).length;
+    const adv = s.advances.filter(a=>a.date.startsWith(m)).reduce((x,a)=>x+a.amount,0);
+    const due = days*s.wage - adv;
+    if (due <= 0) return alert('बाँकी छैन');
+    if (!confirm(s.name+' लाई रू '+fmt(due)+' तलब दिने?')) return;
+    db.transactions.unshift({id:uid(), type:'expense', amount:due, date:today(), category:'Salary', desc:s.name+' - '+days+' दिन', party:s.name});
+    s.attendance = s.attendance.filter(d=>!d.startsWith(m));
+    s.advances = s.advances.filter(a=>!a.date.startsWith(m));
+    save(); renderStaff(); toast('✓');
+}
+function delStaff(id) {
+    if (!confirm('मेटाउने?')) return;
+    db.staff = db.staff.filter(s=>s.id!==id);
+    save(); renderStaff();
+}
+function editStaff(id) {
+    const s = db.staff.find(x=>x.id===id);
+    if (!s) return;
+    const n = prompt('नाम:', s.name); if (n===null) return;
+    const p = prompt('फोन:', s.phone||''); if (p===null) return;
+    const r = prompt('पद:', s.role||''); if (r===null) return;
+    const w = parseFloat(prompt('दैनिक ज्याला (रू):', s.wage));
+    if (!w || w <= 0) return;
+    s.name = n.trim()||s.name; s.phone = p.trim(); s.role = r.trim(); s.wage = w;
+    save(); renderStaff(); toast('✓ Edit भयो');
+}
+function renderStaff() {
+    const el = document.getElementById('staffList');
+    if (!db.staff.length) { el.innerHTML = '<div class="empty"><div class="big">👷</div>कुनै स्टाफ छैन</div>'; return; }
+    const m = thisMonth();
+    el.innerHTML = db.staff.map(s => {
+        const days = s.attendance.filter(d=>d.startsWith(m)).length;
+        const adv = s.advances.filter(a=>a.date.startsWith(m)).reduce((x,a)=>x+a.amount,0);
+        const earned = days*s.wage; const due = earned - adv;
+        const marked = s.attendance.includes(today());
+        return '<div class="card"><div style="display:flex; justify-content:space-between;">'+
+        '<div><div class="i-name">'+esc(s.name)+'</div><div class="i-sub">'+esc(s.role||'Staff')+' • रू '+fmt(s.wage)+'/दिन</div></div>'+
+        '<div style="display:flex; gap:4px;"><button onclick="editStaff('+s.id+')" style="color:var(--primary); font-size:16px; padding:4px 6px;">✏️</button>'+
+        '<button onclick="delStaff('+s.id+')" style="color:var(--text-3); padding:4px 6px;">✕</button></div></div>'+
+        '<div class="stats g4" style="margin:10px 0;">'+
+        '<div class="stat small"><div class="l">हाजिर</div><div class="v">'+days+'</div></div>'+
+        '<div class="stat green small"><div class="l">कमाई</div><div class="v">'+fmt(earned)+'</div></div>'+
+        '<div class="stat small"><div class="l">पेश्की</div><div class="v" style="color:var(--accent);">'+fmt(adv)+'</div></div>'+
+        '<div class="stat small"><div class="l">बाँकी</div><div class="v" style="color:var(--purple);">'+fmt(due)+'</div></div>'+
+        '</div><div class="btn-row">'+
+        '<button onclick="markAtt('+s.id+')" class="btn '+(marked?'btn-ghost':'btn-success')+'">'+(marked?'✓ हाजिर':'✓ हाजिर गर्नुहोस्')+'</button>'+
+        '<button onclick="addAdv('+s.id+')" class="btn btn-orange">💵 पेश्की</button>'+
+        '<button onclick="paySal('+s.id+')" class="btn btn-purple">👛 तलब</button>'+
+        '</div></div>';
+    }).join('');
+}
+
+/* ==================== RATE ==================== */
+let curRateId = null;
+
+function openRateAdd() {
+    curRateId = null;
+    document.getElementById('reTitle').innerHTML = 'नयाँ रेट थप्नुहोस् <span class="x" onclick="closeRateEdit()">✕</span>';
+    document.getElementById('reItem').value = '';
+    document.getElementById('rePrice').value = '';
+    document.getElementById('reUnit').value = 'Sq.Ft';
+    document.getElementById('reCat').value = 'Construction';
+    document.getElementById('reIcon').value = '🏗️';
+    document.getElementById('reDesc').value = '';
+    clearPhoto('rePhotoPreview', 'rePhotoLabel', 'rePhoto');
+    document.getElementById('rateEditModal').classList.add('show');
+}
+
+function editCurRate() {
+    if (curRateId === null) return;
+    const r = db.rates.find(x => x.id === curRateId);
+    if (!r) return;
+    closeRateDetail();
+    document.getElementById('reTitle').innerHTML = '✏️ रेट सम्पादन <span class="x" onclick="closeRateEdit()">✕</span>';
+    document.getElementById('reItem').value = r.item;
+    document.getElementById('rePrice').value = r.price;
+    document.getElementById('reUnit').value = r.unit;
+    document.getElementById('reCat').value = r.category || 'अन्य';
+    document.getElementById('reIcon').value = r.icon || '🏷️';
+    document.getElementById('reDesc').value = r.desc || '';
+    clearPhoto('rePhotoPreview', 'rePhotoLabel', 'rePhoto');
+    if (r.photo) setPhotoPreview('rePhotoPreview', 'rePhotoLabel', r.photo);
+    document.getElementById('rateEditModal').classList.add('show');
+}
+
+function closeRateEdit() {
+    document.getElementById('rateEditModal').classList.remove('show');
+}
+
+function saveRateFromModal() {
+    const item = document.getElementById('reItem').value.trim();
+    const price = parseFloat(document.getElementById('rePrice').value);
+    if (!item || !price) return alert('वस्तु र मूल्य चाहिन्छ');
+    const data = {
+        item,
+        price,
+        unit: document.getElementById('reUnit').value.trim() || 'pc',
+        category: document.getElementById('reCat').value,
+        icon: document.getElementById('reIcon').value.trim() || '🏷️',
+        desc: document.getElementById('reDesc').value.trim(),
+        photo: getPhoto('rePhotoPreview')
+    };
+    if (curRateId !== null) {
+        // Edit existing
+        const r = db.rates.find(x => x.id === curRateId);
+        if (r) Object.assign(r, data);
+        toast('✓ अपडेट भयो');
+    } else {
+        // Add new
+        db.rates.unshift({id: uid(), ...data});
+        toast('✓ थपियो');
+    }
+    save();
+    closeRateEdit();
+    renderRate();
+}
+
+function showRateDetail(id) {
+    const r = db.rates.find(x => x.id === id);
+    if (!r) return;
+    curRateId = id;
+    const body = document.getElementById('rdBody');
+    const photoOrIcon = r.photo
+        ? '<img src="'+r.photo+'" onclick="viewPhoto(\''+r.photo+'\')" style="cursor:pointer;">'
+        : '<div class="rate-detail-icon">'+(r.icon||'🏷️')+'</div>';
+    body.innerHTML = photoOrIcon +
+        '<h4>'+esc(r.item)+'</h4>'+
+        '<span class="cat-badge">📁 '+esc(r.category||'अन्य')+'</span>'+
+        '<div class="price-lg">रू '+fmt(r.price)+' <small>/ '+esc(r.unit)+'</small></div>'+
+        (r.desc ? '<div class="desc">'+esc(r.desc)+'</div>' : '<div class="desc" style="font-style:italic; color:var(--text-3);">कुनै विवरण छैन। ✏️ सम्पादन बाट थप्न सकिन्छ।</div>');
+    document.getElementById('rdTitle').innerHTML = (r.icon||'🏷️')+' '+esc(r.item)+' <span class="x" onclick="closeRateDetail()">✕</span>';
+    document.getElementById('rateDetailModal').classList.add('show');
+}
+
+function closeRateDetail() {
+    document.getElementById('rateDetailModal').classList.remove('show');
+    curRateId = null;
+}
+
+function delCurRate() {
+    if (curRateId === null) return;
+    if (!confirm('यो रेट मेटाउने?')) return;
+    db.rates = db.rates.filter(r => r.id !== curRateId);
+    save();
+    closeRateDetail();
+    renderRate();
+    toast('✓ मेटियो');
+}
+
+function delRateQuick(id, event) {
+    event.stopPropagation();
+    if (!confirm('मेटाउने?')) return;
+    db.rates = db.rates.filter(r => r.id !== id);
+    save(); renderRate();
+}
+
+function addToEstimateFromRate() {
+    if (curRateId === null) return;
+    const r = db.rates.find(x => x.id === curRateId);
+    if (!r) return;
+    // Go to estimate page and add this as an invoice item
+    if (!invItems[0].item) invItems = [];
+    invItems.push({item: r.item, qty: 1, rate: r.price});
+    closeRateDetail();
+    go('estimate');
+    setTimeout(() => renderInvItems(), 200);
+    toast('✓ Estimate मा थपियो');
+}
+
+function setRateFilter(c) { db.rateFilter = c; save(); renderRate(); }
+
+function renderRate() {
+    const cats = [...new Set(db.rates.map(r=>r.category||'अन्य'))].sort();
+    const active = db.rateFilter || 'all';
+    document.getElementById('rateTabs').innerHTML = 
+        '<button class="tab '+(active==='all'?'active':'')+'" onclick="setRateFilter(\'all\')">📁 सबै<span class="c">'+db.rates.length+'</span></button>' +
+        cats.map(c => {
+            const count = db.rates.filter(r => (r.category||'अन्य')===c).length;
+            return '<button class="tab '+(active===c?'active':'')+'" onclick="setRateFilter(\''+esc(c)+'\')">📁 '+esc(c)+'<span class="c">'+count+'</span></button>';
+        }).join('');
+    let list = active==='all' ? db.rates : db.rates.filter(r => (r.category||'अन्य')===active);
+    const el = document.getElementById('rateList');
+    let html = '<div class="rate-add-btn" onclick="openRateAdd()"><div class="icon">➕</div><div>नयाँ थप्नुहोस्</div></div>';
+    if (!list.length) {
+        el.innerHTML = html + '<div class="empty" style="grid-column:1/-1;"><div class="big">🏷️</div>यो category खाली छ</div>';
+        return;
+    }
+    html += list.map(r => {
+        const img = r.photo 
+            ? '<img src="'+r.photo+'">'
+            : '<span>'+(r.icon||'🏷️')+'</span>';
+        return '<div class="rate-card" onclick="showRateDetail('+r.id+')">'+
+            '<button class="del" onclick="delRateQuick('+r.id+', event)" title="Delete">✕</button>'+
+            '<div class="ph"><span class="cat">'+esc(r.category||'अन्य')+'</span>'+img+'</div>'+
+            '<div class="body">'+
+            '<div class="name">'+esc(r.item)+'</div>'+
+            '<div class="price">रू '+fmt(r.price)+'</div>'+
+            '<div class="unit">प्रति '+esc(r.unit)+'</div>'+
+            '</div></div>';
+    }).join('');
+    el.innerHTML = html;
+}
+
+/* ==================== ESTIMATE ==================== */
+let invItems = [{item:'',qty:1,rate:0}];
+function renderInvItems() {
+    document.getElementById('invItems').innerHTML = invItems.map((it,i) =>
+        '<div class="inv-row">'+
+        '<input type="text" class="input" placeholder="वस्तु" value="'+esc(it.item)+'" oninput="invItems['+i+'].item=this.value">'+
+        '<input type="number" class="input" placeholder="Qty" value="'+it.qty+'" oninput="invItems['+i+'].qty=parseFloat(this.value)||0; calcInv()">'+
+        '<input type="number" class="input" placeholder="Rate" value="'+it.rate+'" oninput="invItems['+i+'].rate=parseFloat(this.value)||0; calcInv()">'+
+        '<button onclick="removeInvItem('+i+')">✕</button></div>').join('');
+    calcInv();
+}
+function addInvItem() { invItems.push({item:'',qty:1,rate:0}); renderInvItems(); }
+function removeInvItem(i) { invItems.splice(i,1); if (!invItems.length) invItems=[{item:'',qty:1,rate:0}]; renderInvItems(); }
+function calcInv() {
+    const sub = invItems.reduce((a,it) => a+(it.qty*it.rate), 0);
+    const disc = parseFloat(document.getElementById('invDisc').value) || 0;
+    const vat = document.getElementById('invVat').checked ? (sub-disc)*0.13 : 0;
+    document.getElementById('invSub').innerText = 'रू '+fmt(sub);
+    document.getElementById('invVatAmt').innerText = 'रू '+fmt(Math.round(vat));
+    document.getElementById('invTotal').innerText = 'रू '+fmt(Math.round(sub-disc+vat));
+}
+function renderEst() {
+    renderInvItems();
+    const el = document.getElementById('estList');
+    if (!db.estimates.length) { el.innerHTML = '<div class="empty"><div class="big">📋</div>कुनै estimate छैन</div>'; return; }
+    el.innerHTML = db.estimates.map(e => '<div class="item"><div class="body">'+
+        '<div class="i-name">'+esc(e.customer)+'</div>'+
+        '<div class="i-sub">'+e.items.length+' वस्तु • रू '+fmt(e.total)+' • '+esc(e.date)+'</div>'+
+        '</div><div class="actions">'+
+        '<button onclick="shareEstWAById('+e.id+')" class="btn btn-wa btn-ic">💚</button>'+
+        '<button onclick="printEstById('+e.id+')" class="btn btn-primary btn-ic">🖨️</button>'+
+        '<button onclick="delEst('+e.id+')" class="btn btn-danger btn-ic">🗑️</button>'+
+        '</div></div>').join('');
+}
+function saveEst() {
+    const cust = document.getElementById('eCust').value.trim();
+    if (!cust) return alert('ग्राहक नाम चाहिन्छ');
+    const valid = invItems.filter(it => it.item && it.qty > 0 && it.rate > 0);
+    if (!valid.length) return alert('कमसेकम एक वस्तु');
+    const sub = valid.reduce((a,it) => a+(it.qty*it.rate), 0);
+    const disc = parseFloat(document.getElementById('invDisc').value) || 0;
+    const vat = document.getElementById('invVat').checked ? Math.round((sub-disc)*0.13) : 0;
+    db.estimates.unshift({
+        id: uid(), customer: cust,
+        phone: document.getElementById('ePhone').value.trim(),
+        address: document.getElementById('eAddr').value.trim(),
+        items: valid, subtotal: sub, discount: disc, vat, total: sub-disc+vat, date: today()
+    });
+    save();
+    ['eCust','ePhone','eAddr'].forEach(i=>document.getElementById(i).value='');
+    invItems = [{item:'',qty:1,rate:0}];
+    document.getElementById('invDisc').value = 0;
+    document.getElementById('invVat').checked = false;
+    renderEst(); toast('✓ सेभ');
+}
+function delEst(id) {
+    if (!confirm('मेटाउने?')) return;
+    db.estimates = db.estimates.filter(e=>e.id!==id);
+    save(); renderEst();
+}
+function buildEstHtml(e) {
+    const c = db.company;
+    return '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Estimate</title><style>body{font-family:sans-serif;padding:20px;color:#000;}.hdr{text-align:center;border-bottom:2px solid #000;padding-bottom:10px;margin-bottom:20px;}.hdr h1{color:#f97316;margin-bottom:4px;}table{width:100%;border-collapse:collapse;margin:20px 0;}th,td{border:1px solid #333;padding:8px;text-align:left;}th{background:#f3f4f6;}.totals{text-align:right;margin-top:15px;}.totals .r{display:flex;justify-content:flex-end;gap:20px;padding:4px 0;}.totals .tot{font-size:20px;font-weight:bold;border-top:2px solid #000;padding-top:8px;}</style></head><body>'+
+    '<div class="hdr"><h1>'+esc(c.name)+' '+esc(c.sub)+'</h1>'+
+    '<p>'+esc(c.address)+(c.phone?' • 📞 '+esc(c.phone):'')+(c.email?' • '+esc(c.email):'')+'</p>'+
+    (c.pan?'<p>PAN: '+esc(c.pan)+'</p>':'')+
+    '<h2 style="margin-top:14px;">ESTIMATE / बकौता</h2></div>'+
+    '<div style="display:flex;justify-content:space-between;"><div><b>Bill To:</b><br>'+esc(e.customer)+'<br>'+esc(e.address||'')+'<br>'+(e.phone?'📞 '+esc(e.phone):'')+'</div>'+
+    '<div><b>Date:</b> '+esc(e.date)+'<br><b>No:</b> EST-'+e.id+'</div></div>'+
+    '<table><thead><tr><th>#</th><th>वस्तु</th><th>Qty</th><th>Rate</th><th>Amount</th></tr></thead><tbody>'+
+    e.items.map((it,i) => '<tr><td>'+(i+1)+'</td><td>'+esc(it.item)+'</td><td>'+it.qty+'</td><td>रू '+fmt(it.rate)+'</td><td>रू '+fmt(it.qty*it.rate)+'</td></tr>').join('')+
+    '</tbody></table>'+
+    '<div class="totals"><div class="r"><span>Subtotal:</span><span>रू '+fmt(e.subtotal)+'</span></div>'+
+    (e.discount?'<div class="r"><span>Discount:</span><span>-रू '+fmt(e.discount)+'</span></div>':'')+
+    (e.vat?'<div class="r"><span>VAT 13%:</span><span>+रू '+fmt(e.vat)+'</span></div>':'')+
+    '<div class="r tot"><span>Total:</span><span>रू '+fmt(e.total)+'</span></div></div>'+
+    '<div style="margin-top:40px;display:flex;justify-content:space-between;"><div>_____________<br>Prepared by</div><div>_____________<br>Customer</div></div>'+
+    '</body></html>';
+}
+function printEstDoc(e) {
+    const w = window.open('', '_blank');
+    w.document.write(buildEstHtml(e)); w.document.close();
+    setTimeout(() => w.print(), 500);
+}
+function printEst() {
+    const cust = document.getElementById('eCust').value.trim();
+    if (!cust) return alert('ग्राहक नाम चाहिन्छ');
+    const valid = invItems.filter(it => it.item && it.qty > 0 && it.rate > 0);
+    if (!valid.length) return alert('वस्तु चाहिन्छ');
+    const sub = valid.reduce((a,it) => a+(it.qty*it.rate), 0);
+    const disc = parseFloat(document.getElementById('invDisc').value) || 0;
+    const vat = document.getElementById('invVat').checked ? Math.round((sub-disc)*0.13) : 0;
+    printEstDoc({id:uid(), customer:cust, phone:document.getElementById('ePhone').value.trim(), address:document.getElementById('eAddr').value.trim(), items:valid, subtotal:sub, discount:disc, vat, total:sub-disc+vat, date:today()});
+}
+function printEstById(id) { const e = db.estimates.find(x=>x.id===id); if (e) printEstDoc(e); }
+function shareEstMsg(e) {
+    const c = db.company;
+    let msg = '*'+c.name+' '+(c.sub||'')+'*\n\n📋 *Estimate*\n\nग्राहक: '+e.customer+'\nमिति: '+e.date+'\n\n';
+    e.items.forEach((it,i) => { msg += (i+1)+'. '+it.item+' - '+it.qty+' × रू '+fmt(it.rate)+' = रू '+fmt(it.qty*it.rate)+'\n'; });
+    msg += '\nSubtotal: रू '+fmt(e.subtotal);
+    if (e.discount) msg += '\nDiscount: -रू '+fmt(e.discount);
+    if (e.vat) msg += '\nVAT 13%: +रू '+fmt(e.vat);
+    msg += '\n*कुल: रू '+fmt(e.total)+'*';
+    if (c.phone) msg += '\n\n📞 '+c.phone;
+    return msg;
+}
+function shareEstWA() {
+    const cust = document.getElementById('eCust').value.trim();
+    if (!cust) return alert('ग्राहक नाम चाहिन्छ');
+    const valid = invItems.filter(it => it.item && it.qty > 0 && it.rate > 0);
+    if (!valid.length) return alert('वस्तु चाहिन्छ');
+    const sub = valid.reduce((a,it) => a+(it.qty*it.rate), 0);
+    const disc = parseFloat(document.getElementById('invDisc').value) || 0;
+    const vat = document.getElementById('invVat').checked ? Math.round((sub-disc)*0.13) : 0;
+    const e = {customer:cust, phone:document.getElementById('ePhone').value.trim(), items:valid, subtotal:sub, discount:disc, vat, total:sub-disc+vat, date:today()};
+    window.open(waLink(e.phone, shareEstMsg(e)), '_blank');
+}
+function shareEstWAById(id) {
+    const e = db.estimates.find(x=>x.id===id); if (!e) return;
+    window.open(waLink(e.phone, shareEstMsg(e)), '_blank');
+}
+
+/* ==================== VISITING CARD ==================== */
+function renderVCard() {
+    const c = db.company;
+    document.getElementById('vc-name').innerText = c.name || 'PRERAK MULTIPURPOSE';
+    document.getElementById('vc-sub').innerText = c.sub || 'प्रा. लि.';
+    document.getElementById('vc-contact').innerText = c.contact || 'Admin';
+    const phones = [c.phone, c.phone2, c.phone3].filter(Boolean).join(' / ');
+    document.getElementById('vc-phone').innerText = phones || '—';
+    document.getElementById('vc-email').innerText = c.email || '—';
+    document.getElementById('vc-addr').innerText = c.address || '—';
+    document.getElementById('vc-pan').innerText = c.pan || (c.website || '—');
+}
+function showVCardQR() {
+    const c = db.company;
+    showQR('BEGIN:VCARD\nVERSION:3.0\nFN:'+c.name+' '+c.sub+'\nORG:'+c.name+'\nTEL:'+c.phone+'\nEMAIL:'+c.email+'\nADR:;;'+c.address+';;;;\nEND:VCARD', 'Visiting Card');
+}
+function shareVCard() {
+    const c = db.company;
+    const t = c.name+' '+c.sub+'\n📞 '+c.phone+'\n📧 '+c.email+'\n📍 '+c.address+'\nPAN: '+c.pan;
+    if (navigator.share) navigator.share({title:c.name, text:t}).catch(()=>{});
+    else { navigator.clipboard.writeText(t); toast('✓ Copy'); }
+}
+
+/* ==================== QR ==================== */
+let curQR = '';
+function showQR(text, caption) {
+    curQR = text;
+    try {
+        const qr = QrCode.encode(text);
+        document.getElementById('qrContainer').innerHTML = qrSvg(qr, 4, 8);
+        document.getElementById('qrCaption').innerText = caption || text.substring(0,60);
+        document.getElementById('qrModal').classList.add('show');
+    } catch(e) { alert('QR बनाउन सकिएन: '+e); }
+}
+function closeQR() { document.getElementById('qrModal').classList.remove('show'); }
+function downloadQR() {
+    const svg = document.querySelector('#qrContainer svg');
+    if (!svg) return;
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([svg.outerHTML], {type:'image/svg+xml'}));
+    a.download = 'qr_'+today()+'.svg';
+    a.click(); toast('✓');
+}
+function shareQR() {
+    if (navigator.share) navigator.share({text:curQR}).catch(()=>{});
+    else { navigator.clipboard.writeText(curQR); toast('✓ Copy'); }
+}
+function genCustomQR() {
+    const type = document.getElementById('qrType').value;
+    const input = document.getElementById('qrInput').value.trim();
+    const c = db.company;
+    let text='', caption='';
+    if (type === 'vcard') { text='BEGIN:VCARD\nVERSION:3.0\nFN:'+c.name+' '+c.sub+'\nTEL:'+c.phone+'\nEMAIL:'+c.email+'\nADR:;;'+c.address+';;;;\nEND:VCARD'; caption='Visiting Card'; }
+    else if (!input) return alert('Text राख्नुहोस्');
+    else if (type === 'text') { text=input; caption='Text'; }
+    else if (type === 'phone') { text='tel:'+input; caption='Phone'; }
+    else if (type === 'wifi') { const pwd = prompt('WiFi Password:'); if (!pwd) return; text='WIFI:T:WPA;S:'+input+';P:'+pwd+';;'; caption='WiFi'; }
+    showQR(text, caption);
+}
+
+/* ==================== SCANNER ==================== */
+let scStream = null, scLoop = null;
+async function openScanner() {
+    document.getElementById('scannerModal').classList.add('show');
+    const v = document.getElementById('scannerVideo');
+    const s = document.getElementById('scannerStatus');
+    try {
+        scStream = await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}});
+        v.srcObject = scStream; await v.play();
+        if ('BarcodeDetector' in window) {
+            const det = new BarcodeDetector({formats:['qr_code']});
+            s.innerText = '📷 Scan गर्दै...';
+            scLoop = setInterval(async () => {
+                try { const codes = await det.detect(v); if (codes.length) { closeScanner(); handleScan(codes[0].rawValue); } } catch(e){}
+            }, 500);
+        } else { s.innerText = '⚠️ Browser ले support गर्दैन'; }
+    } catch(e) { s.innerText = '❌ Camera permission चाहिन्छ'; }
+}
+function closeScanner() {
+    document.getElementById('scannerModal').classList.remove('show');
+    if (scLoop) { clearInterval(scLoop); scLoop = null; }
+    if (scStream) { scStream.getTracks().forEach(t=>t.stop()); scStream = null; }
+}
+function handleScan(data) {
+    toast('✓ QR पढियो');
+    if (data.startsWith('BEGIN:VCARD')) {
+        const lines = data.split('\n');
+        let name='', phone='', addr='';
+        for (const l of lines) {
+            if (l.startsWith('FN:')) name = l.substring(3).trim();
+            else if (l.startsWith('TEL')) phone = l.split(':').pop().trim();
+            else if (l.startsWith('ADR')) addr = l.split(':').pop().split(';').filter(Boolean).join(', ');
+        }
+        if (phone && confirm('ग्राहक थप्ने?\nनाम: '+name+'\nफोन: '+phone)) {
+            db.customers.unshift({id:uid(), name:name||'Scanned', phone, address:addr, note:'QR scan', status:'Lead', date:today(), followup:'', type:''});
+            save(); go('crm'); toast('✓ थपियो');
+        }
+    } else if (data.startsWith('tel:')) {
+        const phone = data.replace('tel:','');
+        if (confirm('ग्राहक थप्ने? फोन: '+phone)) {
+            const name = prompt('नाम:') || 'Scanned';
+            db.customers.unshift({id:uid(), name, phone, note:'QR scan', status:'Lead', date:today(), followup:'', type:'', address:''});
+            save(); go('crm'); toast('✓');
+        }
+    } else alert('QR Data:\n'+data);
+}
+
+/* ==================== STOCK ==================== */
+function saveStock() {
+    const name = document.getElementById('stName').value.trim();
+    const qty = parseFloat(document.getElementById('stQty').value);
+    if (!name || isNaN(qty)) return alert('नाम र मौज्दात चाहिन्छ');
+    db.stock.unshift({id:uid(), name, qty, buy:parseFloat(document.getElementById('stBuy').value)||0, sell:parseFloat(document.getElementById('stSell').value)||0, unit:document.getElementById('stUnit').value.trim()||'pc', minStock:parseFloat(document.getElementById('stMin').value)||0, photo:getPhoto('stPhotoPreview')});
+    save();
+    ['stName','stQty','stBuy','stSell','stUnit','stMin'].forEach(i=>document.getElementById(i).value='');
+    clearPhoto('stPhotoPreview', 'stPhotoLabel', 'stPhoto');
+    renderStock(); updNotifs(); toast('✓');
+}
+function updStockQty(id) {
+    const s = db.stock.find(x=>x.id===id);
+    const n = parseFloat(prompt(s.name+' - नयाँ मौज्दात:', s.qty));
+    if (isNaN(n)) return;
+    s.qty = n; save(); renderStock(); updNotifs();
+}
+function delStock(id) {
+    if (!confirm('मेटाउने?')) return;
+    db.stock = db.stock.filter(s=>s.id!==id);
+    save(); renderStock();
+}
+function editStock(id) {
+    const s = db.stock.find(x=>x.id===id);
+    if (!s) return;
+    const n = prompt('नाम:', s.name); if (n===null) return;
+    const q = parseFloat(prompt('मौज्दात:', s.qty)); if (isNaN(q)) return;
+    const b = parseFloat(prompt('खरिद मूल्य:', s.buy)); 
+    const se = parseFloat(prompt('बिक्री मूल्य:', s.sell));
+    const u = prompt('Unit:', s.unit); if (u===null) return;
+    const mn = parseFloat(prompt('Low Alert:', s.minStock));
+    s.name = n.trim()||s.name; s.qty = q; s.buy = isNaN(b)?s.buy:b; s.sell = isNaN(se)?s.sell:se; s.unit = u.trim()||s.unit; s.minStock = isNaN(mn)?s.minStock:mn;
+    save(); renderStock(); updNotifs(); toast('✓ Edit भयो');
+}
+function renderStock() {
+    const el = document.getElementById('stockList');
+    if (!db.stock.length) { el.innerHTML = '<div class="empty"><div class="big">📦</div>कुनै वस्तु छैन</div>'; return; }
+    el.innerHTML = db.stock.map(s => {
+        const low = s.minStock > 0 && s.qty <= s.minStock;
+        const photoHtml = s.photo ? '<img src="'+s.photo+'" class="photo-thumb" onclick="viewPhoto(\''+s.photo+'\')" style="float:left; margin-right:10px; cursor:pointer;">' : '';
+        return '<div class="item" '+(low?'style="border-left:4px solid var(--danger);"':'')+'><div class="body">'+photoHtml+
+            '<div class="i-name">'+esc(s.name)+(low?' <span class="pill p-lost">⚠️ Low</span>':'')+'</div>'+
+            '<div class="i-sub">📦 '+fmt(s.qty)+' '+esc(s.unit)+' • खरिद: रू '+fmt(s.buy)+' • बिक्री: रू '+fmt(s.sell)+'</div>'+
+            '</div><div class="actions">'+
+            '<button onclick="editStock('+s.id+')" class="btn btn-primary btn-ic">✏️</button>'+
+            '<button onclick="updStockQty('+s.id+')" class="btn btn-orange btn-ic">🔢</button>'+
+            '<button onclick="delStock('+s.id+')" class="btn btn-danger btn-ic">🗑️</button>'+
+            '</div></div>';
+    }).join('');
+}
+
+/* ==================== SALES ==================== */
+function saveSales() {
+    const name = document.getElementById('spName').value.trim();
+    if (!name) return alert('नाम चाहिन्छ');
+    db.salesTeam.unshift({id:uid(), name, phone:document.getElementById('spPhone').value.trim(), area:document.getElementById('spArea').value.trim(), commission:parseFloat(document.getElementById('spComm').value)||0, sales:[]});
+    save();
+    ['spName','spPhone','spArea','spComm'].forEach(i=>document.getElementById(i).value='');
+    renderSales(); toast('✓');
+}
+function addSale(id) {
+    const a = parseFloat(prompt('बिक्री रकम:'));
+    if (!a || a <= 0) return;
+    const n = prompt('ग्राहक/नोट:') || '';
+    const s = db.salesTeam.find(x=>x.id===id);
+    s.sales.push({id:uid(), date:today(), amount:a, note:n});
+    save(); renderSales();
+}
+function delSales(id) {
+    if (!confirm('मेटाउने?')) return;
+    db.salesTeam = db.salesTeam.filter(s=>s.id!==id);
+    save(); renderSales();
+}
+function renderSales() {
+    const el = document.getElementById('salesList');
+    if (!db.salesTeam.length) { el.innerHTML = '<div class="empty"><div class="big">🎯</div>कुनै member छैन</div>'; return; }
+    const m = thisMonth();
+    el.innerHTML = db.salesTeam.map(s => {
+        const mS = s.sales.filter(x=>x.date.startsWith(m));
+        const total = mS.reduce((a,x)=>a+x.amount,0);
+        const comm = total*(s.commission/100);
+        return '<div class="card"><div style="display:flex; justify-content:space-between;">'+
+            '<div><div class="i-name">'+esc(s.name)+'</div><div class="i-sub">'+esc(s.area||'—')+(s.phone?' • 📞 '+esc(s.phone):'')+' • '+s.commission+'%</div></div>'+
+            '<button onclick="delSales('+s.id+')" style="color:var(--text-3);">✕</button></div>'+
+            '<div class="stats g3" style="margin:10px 0;">'+
+            '<div class="stat small"><div class="l">Count</div><div class="v">'+mS.length+'</div></div>'+
+            '<div class="stat green small"><div class="l">बिक्री</div><div class="v">'+fmt(total)+'</div></div>'+
+            '<div class="stat small"><div class="l">Comm.</div><div class="v" style="color:var(--accent);">'+fmt(Math.round(comm))+'</div></div>'+
+            '</div><button onclick="addSale('+s.id+')" class="btn btn-primary btn-block">+ बिक्री</button></div>';
+    }).join('');
+}
+
+/* ==================== DAILY / DAYBOOK ==================== */
+function renderDaily() {
+    const d = document.getElementById('drDate').value || today();
+    const txs = db.transactions.filter(t=>t.date===d);
+    const inc = txs.filter(t=>t.type==='income').reduce((a,t)=>a+t.amount,0);
+    const exp = txs.filter(t=>t.type==='expense').reduce((a,t)=>a+t.amount,0);
+    const newC = db.customers.filter(c=>c.date===d).length;
+    const newE = db.estimates.filter(e=>e.date===d).length;
+    const ps = db.staff.filter(s=>s.attendance.includes(d));
+    document.getElementById('dailyBody').innerHTML = 
+        '<div class="stats g3"><div class="stat green"><div class="l">आय</div><div class="v">रू '+fmt(inc)+'</div></div>'+
+        '<div class="stat red"><div class="l">खर्च</div><div class="v">रू '+fmt(exp)+'</div></div>'+
+        '<div class="stat"><div class="l">NET</div><div class="v">रू '+fmt(inc-exp)+'</div></div></div>'+
+        '<div class="stats g3"><div class="stat small"><div class="l">नयाँ ग्राहक</div><div class="v">'+newC+'</div></div>'+
+        '<div class="stat small"><div class="l">Estimates</div><div class="v">'+newE+'</div></div>'+
+        '<div class="stat small"><div class="l">हाजिर</div><div class="v">'+ps.length+'</div></div></div>'+
+        '<div class="card"><div class="card-head">कारोबार</div>'+
+        (txs.length ? txs.map(t=>'<div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--border); font-size:13px;"><span>'+(t.type==='income'?'⬇️':'⬆️')+' '+esc(t.category)+(t.party?' ('+esc(t.party)+')':'')+'</span><b style="color:'+(t.type==='income'?'var(--success)':'var(--danger)')+'">रू '+fmt(t.amount)+'</b></div>').join('') : '<p class="muted tc">कुनै कारोबार छैन</p>')+
+        '</div>';
+}
+function renderDaybook() {
+    const f = document.getElementById('dbFrom').value; const t = document.getElementById('dbTo').value;
+    if (!f || !t) return;
+    const txs = db.transactions.filter(tx=>tx.date>=f && tx.date<=t).sort((a,b)=>a.date.localeCompare(b.date));
+    const by = {}; txs.forEach(tx => { if (!by[tx.date]) by[tx.date]=[]; by[tx.date].push(tx); });
+    const el = document.getElementById('daybookBody');
+    if (!txs.length) { el.innerHTML = '<div class="empty"><div class="big">📒</div>कुनै कारोबार छैन</div>'; return; }
+    let cum = 0;
+    el.innerHTML = Object.keys(by).sort().map(d => {
+        const dt = by[d];
+        const i = dt.filter(x=>x.type==='income').reduce((a,x)=>a+x.amount,0);
+        const e = dt.filter(x=>x.type==='expense').reduce((a,x)=>a+x.amount,0);
+        cum += (i-e);
+        return '<div class="card"><div style="display:flex; justify-content:space-between; padding-bottom:8px; border-bottom:1px solid var(--border); margin-bottom:8px;"><b>📅 '+esc(d)+'</b>'+
+            '<span style="font-size:12px;"><span style="color:var(--success);">+'+fmt(i)+'</span> • <span style="color:var(--danger);">-'+fmt(e)+'</span> • <b style="color:var(--primary);">Bal: '+fmt(cum)+'</b></span></div>'+
+            dt.map(x=>'<div style="display:flex; justify-content:space-between; padding:4px 0; font-size:13px;"><span>'+(x.type==='income'?'⬇️':'⬆️')+' '+esc(x.category)+'</span><b style="color:'+(x.type==='income'?'var(--success)':'var(--danger)')+'">रू '+fmt(x.amount)+'</b></div>').join('')+
+            '</div>';
+    }).join('');
+}
+
+/* ==================== BULK ==================== */
+const messageTemplates = {
+    welcome: `नमस्ते {name} जी! 🙏
+
+PRERAK MULTIPURPOSE PVT LTD मा हार्दिक स्वागत छ!
+
+हाम्रा सेवाहरू:
+✅ UPVC / Aluminum Window & Door
+✅ Gypsum / False Ceiling
+✅ Interior Design & Decoration
+✅ Tiles / Marble / Parquet Flooring
+✅ Painting / Texture Work
+✅ WPC Door & Panel
+✅ Solar Water Heater & Panel
+✅ Construction & Civil Work
+✅ Chimney / Cooking Stove
+✅ Modular Kitchen & Furniture
+✅ Water Purifier Installation
+✅ Prefab Wall / Homes
+✅ Truss Works / Roofing
+
+Quality Work • Best Price • On-time Delivery
+
+📞 9855069733 | 9801069733
+📍 Hetauda-4, Kantirajpath, Makwanpur
+✉️ prerakconstrucion21@gmail.com
+
+"Building Your Dreams"
+तपाईंको सेवामा सदैव तत्पर! 🙏`,
+
+    services: `नमस्ते {name} जी! 🙏
+
+PRERAK MULTIPURPOSE PVT LTD का सम्पूर्ण सेवाहरू:
+
+🏗️ *Construction & Civil*
+• Building Construction
+• House Foundation
+• Prefab Wall / Homes
+• Truss Works / Roofing
+
+🎨 *Interior Design*
+• Modular Kitchen
+• Master Bedroom Setup
+• Modern Living Room
+• Full Interior Decoration
+
+🏛️ *Ceiling Work*
+• Gypsum / POP Ceiling
+• False Ceiling with LED
+
+🪟 *Doors & Windows*
+• UPVC Window/Door (German Profile)
+• Aluminum Window/Door
+• WPC Door & Panel
+
+🧱 *Flooring*
+• Tile / Marble Flooring
+• Wooden / Parquet Flooring
+• Vinyl Flooring
+
+☀️ *Solar Solutions*
+• Solar Panel (3kW/5kW)
+• Solar Water Heater
+• Solar Inverter
+
+🔥 *Kitchen & Bath*
+• Chimney / Cooking Stove
+• Water Purifier
+• Modular Kitchen
+
+🎨 *Finishing*
+• Painting / Texture
+• Renovation
+
+📞 9855069733 | 9801069733
+📍 Hetauda-4, Kantirajpath, Makwanpur
+✉️ prerakconstrucion21@gmail.com
+
+Free Site Visit & Quotation!
+🙏 PRERAK MULTIPURPOSE PVT LTD`,
+
+    upvc: `नमस्ते {name} जी! 🙏
+
+PRERAK को UPVC सेवाबारे जानकारी:
+
+🏠 UPVC Window — Single/Double Glass
+🚪 UPVC Door — Sliding / Casement
+🏗️ Aluminum Partition & Cladding
+✅ High Quality German Profile
+✅ 10 Year Warranty
+✅ Free Installation
+✅ Sound-proof र Heat-resistant
+✅ Weather-sealed
+
+💰 Rate: Rs.950/sqft देखि सुरु
+📞 9855069733 — आजै Quote लिनुस्!
+
+PRERAK MULTIPURPOSE PVT LTD 🙏`,
+
+    gypsum: `नमस्ते {name} जी! 🙏
+
+PRERAK को Gypsum Ceiling सेवा:
+
+🏛️ Gypsum Ceiling — Rs.180/sqft
+✨ POP Ceiling — Rs.220/sqft
+💡 False Ceiling with LED — Rs.250/sqft
+
+✅ Designer Patterns
+✅ Cove Lighting
+✅ Moisture-Resistant
+✅ Professional Installation
+✅ Quality Materials
+
+📞 9855069733 — Free Design Consultation!
+
+PRERAK MULTIPURPOSE PVT LTD 🙏`,
+
+    solar: `नमस्ते {name} जी! 🙏
+
+PRERAK को Solar Solutions:
+
+☀️ Solar Panel 5kW — Rs.4,50,000
+🔆 Solar Panel 3kW — Rs.2,75,000
+🌞 Solar Water Heater — Rs.85,000
+⚡ Solar Inverter 5kVA — Rs.45,000
+
+✅ Monocrystalline Panels
+✅ MPPT Technology
+✅ Govt. Subsidy Eligible
+✅ Maintenance-free Batteries
+✅ Complete Installation
+
+💡 Electricity Bill Zero गर्नुहोस्!
+📞 9855069733 — Free Site Visit!
+
+PRERAK MULTIPURPOSE PVT LTD 🙏`,
+
+    flash: `नमस्ते {name} जी! 🔥
+
+FLASH SALE — Limited Time! 🔥
+
+PRERAK Construction Special Offer:
+• UPVC Window/Door — Best Price
+• Gypsum Ceiling — Lowest Rate
+• Solar Water Heater — Discount
+• Interior Design — Free Consultation
+• Tile/Marble Flooring — Offer
+
+🎁 आजै Call गर्नुस् र पाउनुस् Special Rate!
+
+📞 9855069733
+📞 9801069733
+
+PRERAK MULTIPURPOSE PVT LTD 🙏`,
+
+    followup: `नमस्ते {name} जी,
+
+PRERAK बाट याद दिलाउन चाहन्छौं — तपाईंसँग हामीले पहिले कुराकानी गरेका थियौं।
+
+कामको विषयमा अझै केही छलफल गर्न बाँकी छ कि? 
+
+कृपया सम्पर्कमा रहनुहोस्।
+
+📞 9855069733
+धन्यवाद! 🙏
+
+PRERAK MULTIPURPOSE PVT LTD`,
+
+    workstart: `नमस्ते {name} जी,
+
+तपाईंको कामको तयारी सम्पन्न भएको छ।
+हामी आजै देखि काम सुरु गर्ने तयारीमा छौं।
+
+कामको समय: सामान्यतया बिहान ९ देखि साँझ ५ सम्म
+कार्य स्थल: तपाईंको दिएको ठेगानामा
+
+थप जानकारीको लागि सम्पर्क गर्नुहोस्।
+
+📞 9855069733
+PRERAK Construction — Quality Service 🙏`,
+
+    workdone: `नमस्ते {name} जी! 🙏
+
+तपाईंको काम सफलतापूर्वक सम्पन्न भएको छ।
+PRERAK लाई विश्वास गरेकोमा हार्दिक धन्यवाद!
+
+कामको Quality मा satisfaction भएमा:
+⭐ Review/Rating दिन सक्नुहुन्छ
+📱 Google/Facebook मा share गर्न सक्नुहुन्छ
+
+कुनै पनि समस्या भए वा थप सेवा चाहिए:
+📞 9855069733
+
+PRERAK MULTIPURPOSE PVT LTD
+"Building Your Dreams" 🙏`,
+
+    payment: `नमस्ते {name} जी,
+
+PRERAK बाट सादर नमस्कार!
+
+तपाईंको कामको बकाया रकम भुक्तान गर्न अनुरोध छ।
+सम्बन्धित विवरण:
+
+🏦 Bank: [Bank Name]
+📱 eSewa: 9855069733
+💰 कुल रकम: (Invoice अनुसार)
+
+कुनै समस्या भए वा थप स्पष्टीकरण चाहिए सम्पर्क गर्नुहोस्।
+
+📞 9855069733
+
+PRERAK Construction — धन्यवाद 🙏`,
+
+    thanks: `नमस्ते {name} जी! 🙏
+
+PRERAK लाई मौका दिनुभएकोमा हार्दिक धन्यवाद!
+
+तपाईं जस्ता ग्राहकको विश्वास नै हाम्रो सफलताको आधार हो।
+भविष्यमा पनि हाम्रो सेवा प्रयोग गर्नुहुनेछ भन्ने आशा छ।
+
+अन्य आफन्त/साथीलाई पनि refer गर्न सक्नुहुन्छ — 
+📞 9855069733
+
+PRERAK MULTIPURPOSE PVT LTD
+"Building Your Dreams" 🙏`,
+
+    dashain: `🎊 दशैं/तिहारको शुभकामना! 🎊
+
+आदरणीय {name} जी,
+
+यस पावन पर्वको उपलक्ष्यमा PRERAK MULTIPURPOSE PVT LTD को तर्फबाट हार्दिक मंगलमय शुभकामना!
+
+दुर्गा माताको कृपाले तपाईं र तपाईंको परिवारमा सुख, समृद्धि र खुशी बर्षियोस्।
+
+🎁 पर्व विशेष Offer:
+• सबै सेवामा 10% Discount
+• Free Consultation
+• EMI सुविधा
+
+📞 9855069733
+PRERAK MULTIPURPOSE PVT LTD 🙏`,
+
+    newyear: `🎆 नयाँ वर्षको शुभकामना! 🎆
+
+आदरणीय {name} जी,
+
+नयाँ वर्ष {date} को हार्दिक मंगलमय शुभकामना!
+
+यो नयाँ वर्षले तपाईंको जीवनमा नयाँ उमंग, नयाँ सपना, नयाँ सफलता ल्याओस्।
+
+🏠 सपनाको घर बनाउने सोच छ?
+PRERAK तयार छ तपाईंको सेवामा!
+
+📞 9855069733
+"Building Your Dreams" 🙏
+PRERAK MULTIPURPOSE PVT LTD`,
+
+    custom: `नमस्ते {name},
+
+यहाँ आफ्नो message लेख्नुहोस्...
+
+📞 9855069733
+PRERAK MULTIPURPOSE PVT LTD 🙏`
+};
+
+function loadTemplate() {
+    const t = document.getElementById('bulkTemplate').value;
+    const msg = messageTemplates[t] || messageTemplates.custom;
+    document.getElementById('bulkMsg').value = msg;
+    toast('✓ Template loaded');
+}
+
+function replacePlaceholders(msg, customerName) {
+    return msg
+        .replace(/\{name\}/g, customerName || 'ग्राहक')
+        .replace(/\{phone\}/g, db.company.phone || '')
+        .replace(/\{date\}/g, (function(){
+            const bs = adToBS();
+            return bs ? niDigit(bs.y)+' '+bsMonths[bs.m] : new Date().toLocaleDateString();
+        })());
+}
+
+function setBulkFilter(f) { db.bulkFilter = f; save(); renderBulk(); }
+function renderBulk() {
+    const f = db.bulkFilter || 'all';
+    const types = [...new Set(db.customers.map(c=>c.type).filter(Boolean))].sort();
+    const cats = [
+        {k:'all', l:'👥 सबै', m:()=>true},
+        {k:'Lead', l:'🆕 Lead', m:c=>c.status==='Lead'},
+        {k:'In Progress', l:'🔧 चलिरहेको', m:c=>c.status==='In Progress'},
+        {k:'Completed', l:'✅ सकिएको', m:c=>c.status==='Completed'}
+    ];
+    document.getElementById('bulkTabs').innerHTML = cats.map(c => '<button class="tab '+(f===c.k?'active':'')+'" onclick="setBulkFilter(\''+c.k+'\')">'+c.l+'<span class="c">'+db.customers.filter(c.m).length+'</span></button>').join('') + 
+        types.map(t => '<button class="tab '+(f===t?'active':'')+'" onclick="setBulkFilter(\''+esc(t)+'\')">📁 '+esc(t)+'<span class="c">'+db.customers.filter(c=>c.type===t).length+'</span></button>').join('');
+    const cat = cats.find(c => c.k === f);
+    const filtered = cat ? db.customers.filter(cat.m) : db.customers.filter(c => c.type === f);
+    const el = document.getElementById('bulkList');
+    if (!filtered.length) { el.innerHTML = '<p class="muted tc" style="padding:20px;">यो folder खाली छ</p>'; return; }
+    el.innerHTML = filtered.map(c => '<label style="display:flex; align-items:center; gap:10px; padding:8px; border-bottom:1px solid var(--border); cursor:pointer;">'+
+        '<input type="checkbox" class="bulk-chk" data-name="'+esc(c.name)+'" data-phone="'+esc(c.phone)+'">'+
+        '<div style="flex:1;"><b>'+esc(c.name)+'</b><span class="muted" style="font-size:12px;"> • '+esc(c.phone)+(c.type?' • '+esc(c.type):'')+'</span></div></label>').join('');
+}
+function toggleAllBulk() {
+    const cs = document.querySelectorAll('.bulk-chk');
+    const all = [...cs].every(c=>c.checked);
+    cs.forEach(c=>c.checked=!all);
+}
+function getBulkSel() {
+    return [...document.querySelectorAll('.bulk-chk:checked')].map(c=>({name:c.dataset.name, phone:c.dataset.phone}));
+}
+function sendBulkWA() {
+    const sel = getBulkSel(); if (!sel.length) return alert('ग्राहक छान्नुहोस्');
+    const t = document.getElementById('bulkMsg').value;
+    const msg = replacePlaceholders(t, sel[0].name);
+    window.open(waLink(sel[0].phone, msg), '_blank');
+    if (sel.length > 1) {
+        const list = sel.slice(1).map(s=>s.name+' ('+s.phone+')').join('\n');
+        navigator.clipboard?.writeText(list);
+        toast('💚 पहिलो WA खोलियो, '+(sel.length-1)+' copy भयो');
+    } else toast('💚 WhatsApp');
+}
+function sendBulkSMS() {
+    const sel = getBulkSel(); if (!sel.length) return alert('ग्राहक छान्नुहोस्');
+    const t = document.getElementById('bulkMsg').value;
+    const msg = replacePlaceholders(t, sel[0].name);
+    window.location.href = 'sms:'+sel.map(s=>s.phone).join(',')+'?body='+encodeURIComponent(msg);
+}
+function exportBulkCSV() {
+    const sel = getBulkSel(); if (!sel.length) return alert('ग्राहक छान्नुहोस्');
+    const t = document.getElementById('bulkMsg').value;
+    const rows = [['Name','Phone','Message']];
+    sel.forEach(s=>rows.push([s.name, s.phone, replacePlaceholders(t, s.name)]));
+    const csv = rows.map(r=>r.map(x=>'"'+String(x).replace(/"/g,'""')+'"').join(',')).join('\n');
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([csv], {type:'text/csv'}));
+    a.download = 'bulk_'+today()+'.csv'; a.click();
+}
+function copyBulk() {
+    const sel = getBulkSel(); if (!sel.length) return alert('ग्राहक छान्नुहोस्');
+    const t = document.getElementById('bulkMsg').value;
+    const text = sel.map(s=>s.name+' ('+s.phone+'):\n'+replacePlaceholders(t, s.name)).join('\n---\n');
+    navigator.clipboard.writeText(text).then(()=>toast('✓ Copy'));
+}
+
+/* ==================== ADMIN ==================== */
+function renderAdmin() {
+    const c = db.company;
+    document.getElementById('adName').value = c.name||'';
+    document.getElementById('adSub').value = c.sub||'';
+    document.getElementById('adContact').value = c.contact||'';
+    document.getElementById('adPhone').value = c.phone||'';
+    document.getElementById('adEmail').value = c.email||'';
+    document.getElementById('adPan').value = c.pan||'';
+    document.getElementById('adAddr').value = c.address||'';
+    document.getElementById('adUser').value = db.auth.username;
+    document.getElementById('adminStats').innerHTML = 
+        '<div class="stats g3"><div class="stat small"><div class="l">ग्राहक</div><div class="v">'+db.customers.length+'</div></div>'+
+        '<div class="stat small"><div class="l">कारोबार</div><div class="v">'+db.transactions.length+'</div></div>'+
+        '<div class="stat small"><div class="l">स्टाफ</div><div class="v">'+db.staff.length+'</div></div></div>'+
+        '<div class="stats g3"><div class="stat small"><div class="l">Estimate</div><div class="v">'+db.estimates.length+'</div></div>'+
+        '<div class="stat small"><div class="l">Stock</div><div class="v">'+db.stock.length+'</div></div>'+
+        '<div class="stat small"><div class="l">Walk-ins</div><div class="v">'+db.walkins.length+'</div></div></div>';
+}
+function saveAdmin() {
+    db.company = {
+        name: document.getElementById('adName').value.trim()||'PRERAK MULTIPURPOSE',
+        sub: document.getElementById('adSub').value.trim()||'प्रा. लि.',
+        contact: document.getElementById('adContact').value.trim()||'Admin',
+        phone: document.getElementById('adPhone').value.trim(),
+        email: document.getElementById('adEmail').value.trim(),
+        pan: document.getElementById('adPan').value.trim(),
+        address: document.getElementById('adAddr').value.trim()
+    };
+    save(); updBrand(); renderVCard(); toast('✓ सेभ');
+}
+function savePwd() {
+    const u = document.getElementById('adUser').value.trim();
+    const p = document.getElementById('adPwd').value;
+    if (u) db.auth.username = u;
+    if (p) db.auth.password = p;
+    save();
+    document.getElementById('adPwd').value = '';
+    toast('✓ Updated');
+}
+function backup() {
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([JSON.stringify(db,null,2)], {type:'application/json'}));
+    a.download = 'prerak_backup_'+today()+'.json';
+    a.click(); toast('✓');
+}
+function restore() { document.getElementById('restoreInput').click(); }
+function handleRestore(e) {
+    const f = e.target.files[0]; if (!f) return;
+    const r = new FileReader();
+    r.onload = ev => {
+        try {
+            const d = JSON.parse(ev.target.result);
+            if (!d.customers) throw 0;
+            if (confirm('⚠️ सबै डाटा replace हुनेछ')) { db = Object.assign(defaultDB(), d, {loggedIn:true}); save(); renderAll(); updBrand(); toast('✓ Restored'); }
+        } catch(err) { alert('गलत फाइल'); }
+    };
+    r.readAsText(f); e.target.value = '';
+}
+function clearAll() {
+    if (!confirm('⚠️ सबै डाटा मेटिनेछ')) return;
+    if (!confirm('पक्का?')) return;
+    const auth = db.auth; const company = db.company;
+    db = defaultDB(); db.auth = auth; db.company = company; db.loggedIn = true;
+    save(); renderAll(); toast('✓');
+}
+
+/* ==================== DASHBOARD ==================== */
+function renderDash() {
+    document.getElementById('st-cust').innerText = db.customers.length;
+    document.getElementById('st-staff').innerText = db.staff.length;
+    const m = thisMonth();
+    const mi = db.transactions.filter(t=>t.type==='income'&&t.date.startsWith(m)).reduce((a,t)=>a+t.amount,0);
+    const me = db.transactions.filter(t=>t.type==='expense'&&t.date.startsWith(m)).reduce((a,t)=>a+t.amount,0);
+    const ti = db.transactions.filter(t=>t.type==='income').reduce((a,t)=>a+t.amount,0);
+    const te = db.transactions.filter(t=>t.type==='expense').reduce((a,t)=>a+t.amount,0);
+    document.getElementById('st-inc').innerText = 'रू '+fmt(mi);
+    document.getElementById('st-exp').innerText = 'रू '+fmt(me);
+    document.getElementById('st-bal').innerText = 'रू '+fmt(ti-te);
+    const fu = db.customers.filter(c=>c.followup===today());
+    document.getElementById('dashFu').innerHTML = fu.length
+        ? fu.map(c=>'<div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--border);"><span><b>'+esc(c.name)+'</b> • 📞 '+esc(c.phone)+'</span><a href="tel:'+esc(c.phone)+'" class="btn btn-success btn-sm">📞 Call</a></div>').join('')
+        : '<p class="muted tc">आज कुनै follow-up छैन</p>';
+    renderChart();
+}
+function renderChart() {
+    const days = [];
+    for (let i = 6; i >= 0; i--) {
+        const d = new Date(); d.setDate(d.getDate() - i);
+        const iso = d.toISOString().split('T')[0];
+        days.push({
+            iso, label: ['आइत','सोम','मंगल','बुध','बिहि','शुक्र','शनि'][d.getDay()],
+            inc: db.transactions.filter(t=>t.type==='income'&&t.date===iso).reduce((a,t)=>a+t.amount,0),
+            exp: db.transactions.filter(t=>t.type==='expense'&&t.date===iso).reduce((a,t)=>a+t.amount,0)
+        });
+    }
+    const max = Math.max(1, ...days.map(d => Math.max(d.inc, d.exp)));
+    const W = 320, H = 130, pad = 28, bw = (W - pad*2) / 14;
+    let svg = '<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;height:auto;" xmlns="http://www.w3.org/2000/svg">';
+    for (let i = 0; i <= 4; i++) {
+        const y = pad + (H - pad*2) * (i/4);
+        svg += '<line x1="'+pad+'" y1="'+y+'" x2="'+(W-pad/2)+'" y2="'+y+'" stroke="var(--border)" stroke-width="0.5" stroke-dasharray="2"/>';
+    }
+    days.forEach((d,i) => {
+        const x = pad + i * (bw*2 + 4);
+        const hI = d.inc/max * (H-pad*2);
+        const hE = d.exp/max * (H-pad*2);
+        svg += '<rect x="'+x+'" y="'+(H-pad-hI)+'" width="'+bw+'" height="'+hI+'" fill="#059669" rx="2"/>';
+        svg += '<rect x="'+(x+bw+1)+'" y="'+(H-pad-hE)+'" width="'+bw+'" height="'+hE+'" fill="#dc2626" rx="2"/>';
+        svg += '<text x="'+(x+bw)+'" y="'+(H-10)+'" fill="var(--text-2)" font-size="9" text-anchor="middle">'+d.label+'</text>';
+    });
+    svg += '<text x="'+(pad-4)+'" y="'+(pad+4)+'" fill="var(--text-3)" font-size="9" text-anchor="end">रू '+fmt(max)+'</text>';
+    svg += '</svg>';
+    document.getElementById('chart').innerHTML = svg;
+}
+
+/* ==================== NOTIFICATIONS ==================== */
+function getNotifs() {
+    const t = today(); const n = [];
+    db.customers.filter(c=>c.followup && c.followup < t).forEach(c => n.push({icon:'⏰', title:'ढिलो Follow-up', desc:c.name+' — '+c.followup, go:'followup'}));
+    db.customers.filter(c=>c.followup === t).forEach(c => n.push({icon:'📅', title:'आजको Follow-up', desc:c.name+' — 📞 '+c.phone, go:'followup'}));
+    db.stock.filter(s=>s.minStock > 0 && s.qty <= s.minStock).forEach(s => n.push({icon:'📦', title:'Stock कम', desc:s.name+' — '+s.qty+' बाँकी', go:'stock'}));
+    return n;
+}
+function updNotifs() {
+    const n = getNotifs();
+    const b = document.getElementById('notifBadge');
+    if (n.length > 0) { b.classList.remove('hide'); b.innerText = n.length; }
+    else b.classList.add('hide');
+    const body = document.getElementById('notifBody');
+    body.innerHTML = n.length === 0
+        ? '<div class="notif-empty">🎉 कुनै सूचना छैन!</div>'
+        : n.map((x,i) => '<div class="notif-item" onclick="go(\''+x.go+'\'); toggleNotif();"><div class="t">'+x.icon+' '+esc(x.title)+'</div><div class="d">'+esc(x.desc)+'</div></div>').join('');
+}
+function toggleNotif() { document.getElementById('notifPanel').classList.toggle('show'); }
+
+/* ==================== BS PICKER ==================== */
+let bsCallback = null;
+function openBSPicker(cb) {
+    bsCallback = cb;
+    const ySel = document.getElementById('bsY'), mSel = document.getElementById('bsM'), dSel = document.getElementById('bsD');
+    ySel.innerHTML = Object.keys(bsData).map(y=>'<option value="'+y+'">'+niDigit(y)+'</option>').join('');
+    mSel.innerHTML = bsMonths.map((m,i)=>'<option value="'+i+'">'+m+'</option>').join('');
+    const bs = adToBS() || {y:2083, m:0, d:1};
+    ySel.value = bs.y; mSel.value = bs.m;
+    updBSDays(); dSel.value = bs.d; updBSPrev();
+    document.getElementById('bsModal').classList.add('show');
+}
+function updBSDays() {
+    const y = parseInt(document.getElementById('bsY').value);
+    const m = parseInt(document.getElementById('bsM').value);
+    const days = bsData[y] ? bsData[y].days[m] : 30;
+    const dSel = document.getElementById('bsD');
+    const cur = dSel.value;
+    dSel.innerHTML = '';
+    for (let d = 1; d <= days; d++) dSel.innerHTML += '<option value="'+d+'">'+niDigit(d)+'</option>';
+    dSel.value = Math.min(parseInt(cur)||1, days);
+}
+function updBSPrev() {
+    updBSDays();
+    const y = parseInt(document.getElementById('bsY').value);
+    const m = parseInt(document.getElementById('bsM').value);
+    const d = parseInt(document.getElementById('bsD').value);
+    document.getElementById('bsPrev').innerText = 'बि.सं. '+niDigit(y)+' '+bsMonths[m]+' '+niDigit(d);
+}
+function closeBSPicker() { document.getElementById('bsModal').classList.remove('show'); bsCallback = null; }
+function confirmBS() {
+    const y = parseInt(document.getElementById('bsY').value);
+    const m = parseInt(document.getElementById('bsM').value);
+    const d = parseInt(document.getElementById('bsD').value);
+    const yd = bsData[y]; if (!yd) return;
+    let days = d - 1;
+    for (let i = 0; i < m; i++) days += yd.days[i];
+    const ad = new Date(yd.start);
+    ad.setDate(ad.getDate() + days);
+    if (bsCallback) bsCallback(ad.toISOString().split('T')[0]);
+    closeBSPicker();
+}
+
+/* ==================== BRAND & ALL ==================== */
+function updBrand() {
+    const c = db.company;
+    document.getElementById('brandT').innerText = '🔨 ' + c.name;
+    document.getElementById('brandS').innerText = (c.sub||'') + ' • Business OS';
+    document.getElementById('userName').innerText = c.contact || 'Admin';
+}
+function updSbSummary() {
+    const t = today(); const m = thisMonth();
+    const ti = db.transactions.filter(x=>x.type==='income' && x.date===t).reduce((a,x)=>a+x.amount,0);
+    const te = db.transactions.filter(x=>x.type==='expense' && x.date===t).reduce((a,x)=>a+x.amount,0);
+    const adv = db.staff.reduce((a,s)=>a+s.advances.filter(ad=>ad.date.startsWith(m)).reduce((b,ad)=>b+ad.amount,0),0);
+    const fu = db.customers.filter(c=>c.followup===t).length;
+    const el = id => document.getElementById(id);
+    if (el('sbInc')) el('sbInc').innerText = 'Rs.'+fmt(ti);
+    if (el('sbExp')) el('sbExp').innerText = 'Rs.'+fmt(te);
+    if (el('sbNet')) el('sbNet').innerText = 'Rs.'+fmt(ti-te);
+    if (el('sbAdv')) el('sbAdv').innerText = 'Rs.'+fmt(adv);
+    if (el('sbFu')) el('sbFu').innerText = fu + ' आज';
+}
+function renderAll() {
+    const fns = [['dash',renderDash],['crm',renderCRM],['fu',renderFU],['acc',renderAcc],['staff',renderStaff],['rate',renderRate],['est',renderEst],['vc',renderVCard],['stock',renderStock],['sales',renderSales],['bulk',renderBulk],['notif',updNotifs],['sbsum',updSbSummary]];
+    fns.forEach(([n,f]) => { try { f(); } catch(e) { console.error(n, e); } });
+}
+
+/* ==================== INIT ==================== */
+applyTheme();
+updBrand();
+updWelcomeDate();
+document.getElementById('tDate').value = today();
+document.getElementById('liUser').value = db.auth.username;
+
+if (db.loggedIn) show();
+
+setInterval(() => {
+    updWelcomeDate();
+    if (db.loggedIn) updNotifs();
+}, 60000);
 </script>
 </body>
 </html>
-Aba weblai complete garne claude bata yo code chha hera yasma.sudhar garnuparne sudharera banau code final draft la
