@@ -679,7 +679,7 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
     <div class="nav-item" data-page="audit" data-role="admin" onclick="App.navigate('audit')"><span class="icon">📜</span>Audit Log</div>
     <div class="nav-item" data-page="settings" onclick="App.navigate('settings')"><span class="icon">⚙️</span>Settings</div>
     <div class="nav-item" id="nav-admin-link" onclick="Auth.openUsersModal()" style="display:none;"><span class="icon">🔐</span>Admin Panel</div>
-    <div class="nav-item" id="nav-superadmin-link" data-page="admin-dashboard" onclick="App.navigate('admin-dashboard')" style="display:none;"><span class="icon">🛡️</span>Super Admin</div>
+    <div class="nav-item" id="nav-superadmin-link" data-page="admin-dashboard" onclick="Auth.openSuperAdminGate()" style="display:none;"><span class="icon">🛡️</span>Super Admin</div>
 
     <div class="sb-summary-box">
       <div class="sb-summary-title">📊 आजको Summary</div>
@@ -792,24 +792,23 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
         <div style="max-height:220px;overflow-y:auto;"><table><tbody id="dash-rate-list"></tbody></table></div>
       </div>
     </div>
-    <div class="card" style="margin-bottom:14px;">
-      <div class="card-head"><span>📅 Nepali Calendar (बि.सं.)</span><button onclick="BSCal.goToday()" class="btn btn-xs btn-primary" style="font-size:0.68rem;">📅 आज</button></div>
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 14px 0;gap:4px;">
-        <div style="display:flex;gap:3px;">
-          <button onclick="BSCal.prevYear()" class="btn btn-xs btn-secondary" style="padding:3px 7px;">«</button>
-          <button onclick="BSCal.prev()" class="btn btn-xs btn-secondary" style="padding:3px 8px;">◀</button>
-        </div>
+    <div class="card bscal-compact" style="margin-bottom:14px;max-height:260px;overflow:hidden;">
+      <div class="card-head"><span style="font-size:0.86rem;">📅 Nepali Calendar (बि.सं.)</span>
         <div style="display:flex;gap:4px;">
-          <select id="bscal-month-sel" onchange="BSCal.jumpTo()" style="background:var(--surface-2);border:1px solid var(--accent);color:var(--accent);border-radius:8px;padding:3px 5px;font-size:0.75rem;font-weight:700;"></select>
-          <select id="bscal-year-sel" onchange="BSCal.jumpTo()" style="background:var(--surface-2);border:1px solid var(--accent);color:var(--accent);border-radius:8px;padding:3px 5px;font-size:0.75rem;font-weight:700;"></select>
-        </div>
-        <div style="display:flex;gap:3px;">
-          <button onclick="BSCal.next()" class="btn btn-xs btn-secondary" style="padding:3px 8px;">▶</button>
-          <button onclick="BSCal.nextYear()" class="btn btn-xs btn-secondary" style="padding:3px 7px;">»</button>
+          <button onclick="BSCal.goToday()" class="btn btn-xs btn-primary" style="font-size:0.66rem;padding:2px 8px;">आज</button>
+          <button onclick="BSCal.openFull()" class="btn btn-xs btn-secondary" style="font-size:0.66rem;padding:2px 8px;">⛶ Open</button>
         </div>
       </div>
-      <div id="bscal-device-date" style="padding:4px 14px 2px;font-size:0.68rem;text-align:center;min-height:16px;"></div>
-      <div id="bscal-grid" style="padding:10px 14px;"></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:4px 10px 0;gap:3px;">
+        <button onclick="BSCal.prev()" class="btn btn-xs btn-secondary" style="padding:2px 7px;font-size:0.7rem;">◀</button>
+        <div style="display:flex;gap:3px;">
+          <select id="bscal-month-sel" onchange="BSCal.jumpTo()" style="background:var(--surface-2);border:1px solid var(--accent);color:var(--accent);border-radius:6px;padding:2px 4px;font-size:0.68rem;font-weight:700;"></select>
+          <select id="bscal-year-sel" onchange="BSCal.jumpTo()" style="background:var(--surface-2);border:1px solid var(--accent);color:var(--accent);border-radius:6px;padding:2px 4px;font-size:0.68rem;font-weight:700;"></select>
+        </div>
+        <button onclick="BSCal.next()" class="btn btn-xs btn-secondary" style="padding:2px 7px;font-size:0.7rem;">▶</button>
+      </div>
+      <div id="bscal-device-date" style="padding:2px 10px;font-size:0.62rem;text-align:center;min-height:14px;color:var(--text-muted);"></div>
+      <div id="bscal-grid" style="padding:4px 10px 8px;"></div>
     </div>
     <div class="card" style="margin-bottom:14px;">
       <div class="card-head"><span>⚡ Recent Activity</span><button onclick="Dashboard.clearActivity()" class="btn btn-xs btn-secondary">Clear</button></div>
@@ -1143,7 +1142,10 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
   <div class="page" id="page-followups">
     <div class="section-head">
       <div class="btn-group"><button class="btn btn-sm btn-primary" id="fu-f-all" onclick="Followups.filter('all')">सबै</button><button class="btn btn-sm btn-secondary" id="fu-f-today" onclick="Followups.filter('today')">आज 🔴</button><button class="btn btn-sm btn-secondary" id="fu-f-upcoming" onclick="Followups.filter('upcoming')">Upcoming 🔵</button><button class="btn btn-sm btn-secondary" id="fu-f-overdue" onclick="Followups.filter('overdue')">Overdue ⚠️</button><button class="btn btn-sm btn-secondary" id="fu-f-done" onclick="Followups.filter('done')">Done ✅</button></div>
-      <button onclick="App.navigate('add-followup')" class="btn btn-sm btn-primary">+ Add</button>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;">
+        <button onclick="Followups.openGreetAll()" class="btn btn-sm" style="background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;font-weight:700;">🎉 Greet All</button>
+        <button onclick="App.navigate('add-followup')" class="btn btn-sm btn-primary">+ Add</button>
+      </div>
     </div>
     <div id="fu-list"></div>
     <div id="no-fu" class="empty-state" style="display:none;"><div class="icon">📅</div><div class="title">Follow-up छैन</div><button onclick="App.navigate('add-followup')" class="btn btn-primary">+ Add Follow-up</button></div>
@@ -1359,6 +1361,22 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
     <div style="max-width:640px;display:grid;gap:14px;">
       <div class="card card-body">
         <div class="section-title">🏢 Company Information</div>
+        <!-- ── COMPANY LOGO (v4.0.4): edit / add / delete ── -->
+        <div style="display:flex;align-items:center;gap:14px;margin:14px 0 4px;padding:14px;background:var(--surface-2);border-radius:10px;border:1px solid var(--border);">
+          <div id="set-logo-preview" style="width:90px;height:90px;border-radius:12px;background:var(--surface-3);border:2px dashed var(--border);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;">
+            <span id="set-logo-placeholder" style="font-size:2.2rem;color:var(--text-dim);">🏢</span>
+            <img id="set-logo-img" src="" style="display:none;width:100%;height:100%;object-fit:contain;cursor:pointer;background:#fff;" onclick="RateList.previewImageFull(this.src)">
+          </div>
+          <div style="flex:1;min-width:0;">
+            <div style="font-size:0.84rem;font-weight:700;margin-bottom:4px;">🖼️ Company Logo</div>
+            <div style="font-size:0.7rem;color:var(--text-muted);margin-bottom:8px;">Will appear on quotations, invoices &amp; brochures (PNG/JPG, max 2MB)</div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;">
+              <input type="file" id="set-logo-file" accept="image/*" onchange="Settings.uploadLogo(event)" style="display:none;">
+              <button type="button" onclick="document.getElementById('set-logo-file').click()" class="btn btn-sm btn-primary">📤 Upload / Change</button>
+              <button type="button" id="set-logo-del-btn" onclick="Settings.deleteLogo()" class="btn btn-sm btn-danger" style="display:none;">🗑️ Delete</button>
+            </div>
+          </div>
+        </div>
         <div class="form-grid" style="margin-top:14px;">
           <div class="form-group full"><label>Company Name</label><input type="text" id="set-co-name" oninput="Settings.save()"></div>
           <div class="form-group full"><label>Tagline</label><input type="text" id="set-co-tagline" oninput="Settings.save()"></div>
@@ -1539,7 +1557,10 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
 
       <!-- Danger Zone -->
       <div class="card card-body" style="margin-bottom:12px;border-color:var(--red);border-width:1.5px;">
-        <div class="section-title" style="color:var(--red);margin-bottom:12px;">⚠️ Danger Zone (Super Admin Only)</div>
+        <div class="section-title" style="color:var(--red);margin-bottom:6px;">⚠️ Danger Zone (Super Admin Only)</div>
+        <div style="font-size:0.72rem;color:var(--text-muted);margin-bottom:12px;line-height:1.5;">
+          🔒 हरेक action गर्न Super Admin password पुनः टाइप गर्नुपर्छ। Action हरू <strong style="color:var(--red);">undo हुँदैनन्</strong> — पहिले Backup → Export गर्नुस्।
+        </div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;">
           <button onclick="AdminDash.clearAudit()" class="btn btn-sm" style="background:var(--red);color:#fff;">🗑️ Clear Audit Log</button>
           <button onclick="AdminDash.resetTemplates()" class="btn btn-sm" style="background:var(--red);color:#fff;">🔄 Reset All Templates</button>
@@ -1721,12 +1742,32 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
       </div>
       <div class="form-grid">
         <input type="hidden" id="rl-edit-id">
+        <input type="hidden" id="rl-item-image">
         <div class="form-group full"><label>Item Name *</label><input type="text" id="rl-item-name" placeholder="Item name"></div>
         <div class="form-group"><label>Rate (Rs.) *</label><input type="number" id="rl-item-rate" placeholder="0" min="0"></div>
         <div class="form-group"><label>Unit</label><input type="text" id="rl-item-unit" placeholder="e.g. sqft, rft, pcs"></div>
         <div class="form-group full"><label>Category</label><select id="rl-item-cat"><option value="">-- Select Category --</option></select></div>
+        <div class="form-group full">
+          <label>📷 Image (optional)</label>
+          <div style="display:flex;gap:8px;align-items:flex-start;flex-wrap:wrap;">
+            <input type="file" id="rl-item-image-file" accept="image/*" onchange="RateList.handleImageUpload(event)" style="flex:1;min-width:200px;font-size:0.78rem;background:var(--surface-2);border:1.5px solid var(--border);border-radius:10px;padding:8px;">
+            <div id="rl-item-image-preview" style="display:none;position:relative;width:80px;height:80px;border-radius:8px;overflow:hidden;border:2px solid var(--accent);">
+              <img id="rl-item-image-img" src="" style="width:100%;height:100%;object-fit:cover;cursor:pointer;" onclick="RateList.previewImageFull(this.src)">
+              <button type="button" onclick="RateList.removeImage()" style="position:absolute;top:2px;right:2px;background:var(--red);color:#fff;border:none;border-radius:50%;width:20px;height:20px;font-size:0.7rem;cursor:pointer;display:flex;align-items:center;justify-content:center;">×</button>
+            </div>
+          </div>
+          <div style="font-size:0.68rem;color:var(--text-muted);margin-top:4px;">Tip: Image छानेपछि compress भएर local store मा रहन्छ</div>
+        </div>
       </div>
       <div class="form-actions"><button class="btn btn-secondary" onclick="document.getElementById('rate-modal').classList.remove('open')">Cancel</button><button class="btn btn-primary" onclick="RateList.saveItem()">💾 Save</button></div>
+    </div>
+  </div>
+
+  <!-- Image Preview Modal (full-size view) -->
+  <div class="modal-overlay" id="img-preview-modal" onclick="if(event.target===this)this.classList.remove('open')">
+    <div class="modal" style="max-width:600px;background:transparent;box-shadow:none;border:none;padding:0;">
+      <button class="modal-close" onclick="document.getElementById('img-preview-modal').classList.remove('open')" style="position:absolute;top:-40px;right:0;background:rgba(0,0,0,0.6);color:#fff;border-radius:50%;width:32px;height:32px;">✕</button>
+      <img id="img-preview-full" src="" style="width:100%;height:auto;max-height:80vh;object-fit:contain;border-radius:12px;">
     </div>
   </div>
 
@@ -1776,6 +1817,53 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
       <div id="users-modal-body"></div>
     </div>
   </div>
+
+  <!-- ═══════════════ SUPER ADMIN GATE MODAL (v4.0 security add-on) ═══════════════ -->
+  <div class="modal-overlay" id="superadmin-gate-modal">
+    <div class="modal modal-sm">
+      <div class="modal-head">
+        <div>
+          <div class="modal-title">🛡️ Super Admin Access</div>
+          <div class="modal-sub" style="font-size:0.72rem;color:var(--text-muted);margin-top:2px;">
+            Restricted area — enter Super Admin credentials
+          </div>
+        </div>
+        <button class="modal-close" onclick="Auth.closeSuperAdminGate()">✕</button>
+      </div>
+      <div style="padding:4px 2px 6px;">
+        <div style="background:rgba(168,85,247,0.08);border:1px solid rgba(168,85,247,0.25);border-radius:8px;padding:10px 12px;margin-bottom:14px;font-size:0.76rem;color:var(--text-muted);line-height:1.5;">
+          ⚠️ यो क्षेत्रमा user management, password reset, र data clear जस्ता उच्च-जोखिम कार्यहरू छन्।
+        </div>
+        <div class="form-group" style="margin-bottom:10px;">
+          <label>👤 Username <span style="font-weight:400;color:var(--text-dim);text-transform:none;">(optional)</span></label>
+          <input type="text" id="sa-gate-user" placeholder="Super Admin username (e.g. punya)" autocomplete="off"
+            onkeydown="if(event.key==='Enter') document.getElementById('sa-gate-pass').focus();">
+        </div>
+        <div class="form-group" style="margin-bottom:12px;">
+          <label>🔒 Super Admin Password</label>
+          <div style="position:relative;">
+            <input type="password" id="sa-gate-pass" placeholder="Super Admin password" autocomplete="off"
+              onkeydown="if(event.key==='Enter') Auth.verifySuperAdminPassword(); if(event.key==='Escape') Auth.closeSuperAdminGate();">
+            <button type="button" onclick="var i=document.getElementById('sa-gate-pass'); i.type=i.type==='password'?'text':'password';"
+              style="position:absolute;right:8px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1rem;padding:4px 8px;color:var(--text-muted);">👁️</button>
+          </div>
+        </div>
+        <div id="sa-gate-err" style="display:none;color:var(--red);font-size:0.76rem;margin-bottom:10px;padding:8px 10px;background:rgba(248,113,113,0.1);border-radius:6px;border-left:3px solid var(--red);">
+          ❌ गलत Super Admin Password
+        </div>
+        <div id="sa-gate-info" style="display:none;font-size:0.7rem;color:var(--text-muted);margin-bottom:10px;text-align:center;">
+          🕐 Unlock 10 मिनेटसम्म मात्र मान्य हुनेछ
+        </div>
+      </div>
+      <div class="form-actions" style="display:flex;gap:8px;">
+        <button class="btn btn-secondary" onclick="Auth.closeSuperAdminGate()" style="flex:1;">Cancel</button>
+        <button class="btn btn-primary" onclick="Auth.verifySuperAdminPassword()" style="flex:1;background:linear-gradient(135deg,#a855f7,#7c3aed);">
+          🛡️ Verify & Enter
+        </button>
+      </div>
+    </div>
+  </div>
+  <!-- ═══════════════ END SUPER ADMIN GATE MODAL ═══════════════ -->
 
   <!-- Greet Modal (Walk-in) -->
   <div class="modal-overlay" id="greet-modal">
@@ -2186,14 +2274,28 @@ var Auth = {
   },
   logout: function() {
     if(!confirm('Logout गर्नुहुन्छ?')) return;
+    // Clear Super Admin unlock so next user can't inherit it
+    try { this.lockSuperAdmin(); } catch(e){}
+    // Clear in-memory state
     currentUser=null; STORE.del('pk3_session');
-    document.getElementById('login-screen').classList.remove('hide');
-    document.getElementById('main').style.display='none';
-    document.getElementById('hamburger').style.display='none';
-    document.getElementById('sb-backdrop').classList.remove('show');
-    document.getElementById('sidebar').classList.remove('open');
-    setVal('login-user',''); setVal('login-pass','');
+    // Stop any running timers (clock, etc.) to prevent ghost intervals after reload
+    try { if(CRMClock && CRMClock.destroy) CRMClock.destroy(); } catch(e){}
+    // Show toast briefly, then do a clean reload — this is the most reliable
+    // way to reset all module state (Dashboard, Customers, etc.) without leaving
+    // ghost listeners or half-rendered DOM. Fixes the "page load error after logout".
     App.toast('👋 Logout भयो','info');
+    setTimeout(function(){
+      try {
+        // Hide UI immediately while reload happens
+        var ls = document.getElementById('login-screen'); if(ls) ls.classList.remove('hide');
+        var mn = document.getElementById('main');         if(mn) mn.style.display='none';
+        var hb = document.getElementById('hamburger');    if(hb) hb.style.display='none';
+        var sb = document.getElementById('sidebar');      if(sb) sb.classList.remove('open');
+        var bd = document.getElementById('sb-backdrop');  if(bd) bd.classList.remove('show');
+      } catch(e){}
+      // Force a clean reload — fastest, most reliable reset
+      window.location.reload();
+    }, 400);
   },
   _showApp: function() {
     document.getElementById('login-screen').classList.add('hide');
@@ -2204,36 +2306,178 @@ var Auth = {
     // Role badge
     var rb=document.getElementById('sb-role-badge');
     if(rb) rb.innerHTML='<span class="role-badge '+currentUser.role+'">'+currentUser.role.toUpperCase()+'</span>';
-    // Hide admin-only nav items for staff
+    // Hide admin-only nav items for staff (BUT show them for superadmin too)
     document.querySelectorAll('.nav-item[data-role="admin"]').forEach(function(el){
-      el.style.display = (currentUser.role==='admin')?'':'none';
+      el.style.display = (currentUser.role==='admin' || currentUser.role==='superadmin')?'':'none';
     });
     // Admin panel link (admin only)
     var adminLink=document.getElementById('nav-admin-link');
     if(adminLink) adminLink.style.display = (currentUser.role==='admin'||currentUser.role==='superadmin')?'flex':'none';
-    // Super admin link
+    // Super admin link — visible to admin AND superadmin (admin must enter SA password)
     var saLink=document.getElementById('nav-superadmin-link');
-    if(saLink) saLink.style.display = (currentUser.role==='admin'||currentUser.role==='superadmin')?'flex':'none';
+    if(saLink) saLink.style.display = (currentUser.role==='admin' || currentUser.role==='superadmin')?'flex':'none';
     // Update role badge with superadmin
     var roleColors = {superadmin:'#a78bfa',admin:'var(--accent)',staff:'var(--green)'};
     if(rb) rb.innerHTML='<span class="role-badge" style="background:'+(roleColors[currentUser.role]||'var(--accent)')+';color:#fff;padding:2px 8px;border-radius:10px;font-size:0.7rem;font-weight:700;">'+currentUser.role.toUpperCase()+'</span>';
     setText('dash-username', currentUser.name);
     App.init();
     Greet.checkBirthdays();
+    // ── SAFETY (v4.0.2): re-assert Super Admin & Admin Panel visibility after init,
+    // in case any module re-rendered the sidebar mid-init and accidentally hid them.
+    setTimeout(function(){
+      var sa = document.getElementById('nav-superadmin-link');
+      if(sa && currentUser && (currentUser.role==='admin' || currentUser.role==='superadmin')){
+        sa.style.display = 'flex';
+      }
+      var ap = document.getElementById('nav-admin-link');
+      if(ap && currentUser && (currentUser.role==='admin' || currentUser.role==='superadmin')){
+        ap.style.display = 'flex';
+      }
+      // Also re-show admin-only items for superadmin
+      if(currentUser && currentUser.role==='superadmin'){
+        document.querySelectorAll('.nav-item[data-role="admin"]').forEach(function(el){
+          el.style.display = '';
+        });
+      }
+    }, 300);
   },
   togglePw: function() {
     var inp=document.getElementById('login-pass');
     inp.type=inp.type==='password'?'text':'password';
   },
   openUsersModal: function() {
-    if(!currentUser||currentUser.role!=='admin'){ App.toast('🔒 Admin only','error'); return; }
+    if(!currentUser || (currentUser.role!=='admin' && currentUser.role!=='superadmin')){
+      App.toast('🔒 Admin only','error'); return;
+    }
     var body=document.getElementById('users-modal-body');
     body.innerHTML='<div style="font-size:0.8rem;color:var(--text-muted);margin-bottom:12px;">Credentials are managed in code. Current users:</div>'+
       USERS_CONFIG.map(function(u){ return '<div style="padding:10px;background:var(--surface-2);border-radius:8px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;">'+
         '<div><strong>'+u.name+'</strong><div style="font-size:0.72rem;color:var(--text-muted);">@'+u.user+' • '+u.role+'</div></div>'+
         '<span class="role-badge '+u.role+'">'+u.role.toUpperCase()+'</span></div>';}).join('');
     document.getElementById('users-modal').classList.add('open');
+  },
+
+  // ═══════════════ SUPER ADMIN GATE (v4.0 security add-on) ═══════════════
+  // Session flag is in-memory only (not localStorage) — re-locks on refresh.
+  _superAdminUnlock: { ok:false, expiresAt:0 },
+  _SA_TIMEOUT_MS: 10 * 60 * 1000, // 10 minutes
+
+  isSuperAdminUnlocked: function() {
+    var u = this._superAdminUnlock;
+    if(!u || !u.ok) return false;
+    if(Date.now() > u.expiresAt){
+      this.lockSuperAdmin();
+      return false;
+    }
+    return true;
+  },
+
+  openSuperAdminGate: function() {
+    // Step 1: Login required
+    if(!currentUser){
+      App.toast('🔒 पहिले login गर्नुहोस्।','error');
+      return;
+    }
+    // Step 2: Staff blocked
+    if(currentUser.role !== 'admin' && currentUser.role !== 'superadmin'){
+      App.toast('🛑 यो पेज Super Admin लाई मात्र हो।','error',3500);
+      return;
+    }
+    // Step 3: If still within unlock window, skip password and go straight in
+    if(this.isSuperAdminUnlocked()){
+      App.navigate('admin-dashboard');
+      return;
+    }
+    // Step 4: Show password gate modal
+    var m = document.getElementById('superadmin-gate-modal');
+    if(!m) return;
+    var inp = document.getElementById('sa-gate-pass');
+    if(inp){ inp.value=''; }
+    var uinp = document.getElementById('sa-gate-user');
+    if(uinp){ uinp.value=''; }
+    var err = document.getElementById('sa-gate-err');
+    if(err) err.style.display='none';
+    var info = document.getElementById('sa-gate-info');
+    if(info) info.style.display='block';
+    m.classList.add('open');
+    // Auto-focus password field
+    setTimeout(function(){ var i=document.getElementById('sa-gate-pass'); if(i) i.focus(); }, 100);
+  },
+
+  closeSuperAdminGate: function() {
+    var m = document.getElementById('superadmin-gate-modal');
+    if(m) m.classList.remove('open');
+    var inp = document.getElementById('sa-gate-pass');
+    if(inp) inp.value='';
+    var uinp = document.getElementById('sa-gate-user');
+    if(uinp) uinp.value='';
+    var err = document.getElementById('sa-gate-err');
+    if(err) err.style.display='none';
+  },
+
+  verifySuperAdminPassword: function() {
+    if(!currentUser || (currentUser.role !== 'admin' && currentUser.role !== 'superadmin')){
+      App.toast('🛑 यो पेज Super Admin लाई मात्र हो।','error');
+      this.closeSuperAdminGate();
+      return;
+    }
+    var entered = (document.getElementById('sa-gate-pass')||{}).value || '';
+    var enteredUser = ((document.getElementById('sa-gate-user')||{}).value || '').trim();
+    var err = document.getElementById('sa-gate-err');
+    if(!entered){
+      if(err){ err.textContent='❌ Password खाली छ।'; err.style.display='block'; }
+      return;
+    }
+    // Verification logic:
+    //  • If username provided → must match a superadmin user with that password
+    //  • If username blank → password must match ANY superadmin user's password
+    var matched = null;
+    USERS_CONFIG.forEach(function(u){
+      if(u.role !== 'superadmin') return;
+      if(enteredUser && u.user !== enteredUser) return;
+      if(u.pass === entered) matched = u;
+    });
+    if(!matched){
+      if(err){ err.textContent='❌ गलत Super Admin Password'; err.style.display='block'; }
+      App.toast('गलत Super Admin Password','error');
+      // Audit failed attempt
+      try { Audit.log('SECURITY','Failed Super Admin verification by '+(currentUser.user||'?')); } catch(e){}
+      // Shake input for visual feedback
+      var inp = document.getElementById('sa-gate-pass');
+      if(inp){
+        inp.style.borderColor = 'var(--red)';
+        setTimeout(function(){ inp.style.borderColor=''; },1500);
+      }
+      return;
+    }
+    // ✅ Success — set unlock flag with 10-min expiry
+    this._superAdminUnlock = {
+      ok: true,
+      expiresAt: Date.now() + this._SA_TIMEOUT_MS,
+      verifiedAs: matched.user
+    };
+    try { Audit.log('SECURITY','Super Admin unlocked by '+currentUser.user+' (verified as '+matched.user+', 10min)'); } catch(e){}
+    App.toast('🛡️ Super Admin unlocked (10 min)','success',2500);
+    this.closeSuperAdminGate();
+    // Navigate — bypasses gate via the unlock flag
+    App.navigate('admin-dashboard');
+    // Schedule auto-lock toast at expiry
+    var self = this;
+    setTimeout(function(){
+      if(self._superAdminUnlock.ok && Date.now() >= self._superAdminUnlock.expiresAt){
+        self.lockSuperAdmin();
+        if(App.currentPage === 'admin-dashboard'){
+          App.toast('🔒 Super Admin session expired — पुनः verify गर्नुस्','warning',4000);
+          App.navigate('dashboard');
+        }
+      }
+    }, this._SA_TIMEOUT_MS + 100);
+  },
+
+  lockSuperAdmin: function() {
+    this._superAdminUnlock = { ok:false, expiresAt:0 };
   }
+  // ═══════════════ END SUPER ADMIN GATE ═══════════════
 };
 
 // ─── APP MODULE ───────────────────────────────────────────────
@@ -2595,8 +2839,22 @@ var App = {
     setText('tb-fy','FY '+fy);
   },
   navigate: function(page) {
-    // Role check
-    if(currentUser && currentUser.role!=='admin' && STAFF_PAGES.indexOf(page)===-1) {
+    // ═══════ SUPER ADMIN GATE (v4.0) — block direct access ═══════
+    if(page === 'admin-dashboard'){
+      // Must be admin or superadmin
+      if(!currentUser || (currentUser.role !== 'admin' && currentUser.role !== 'superadmin')){
+        App.toast('🛑 यो पेज Super Admin लाई मात्र हो।','error',3500);
+        return;
+      }
+      // Must have valid (non-expired) unlock — if not, route through gate
+      if(!Auth.isSuperAdminUnlocked()){
+        Auth.openSuperAdminGate();
+        return;
+      }
+      // Unlocked — fall through to normal navigation below
+    }
+    // Role check (admin AND superadmin can access non-STAFF pages)
+    if(currentUser && currentUser.role!=='admin' && currentUser.role!=='superadmin' && STAFF_PAGES.indexOf(page)===-1) {
       App.toast('🔒 Admin access only','error'); return;
     }
     if(this.currentPage!==page) this.pageHistory.push(this.currentPage);
@@ -2784,8 +3042,16 @@ var Customers = {
     var sub  = document.getElementById('c-subwork');
     if (!sub || !work) return;
     var val = work.value;
+    // ── FIX (v4.0.1): Don't wipe the static optgroup list when no service picked ──
+    // Save the original full optgroup HTML the first time so we can restore it later.
+    if (!sub._originalHTML) sub._originalHTML = sub.innerHTML;
+    if (!val) {
+      // Main Service cleared → restore the full grouped list
+      sub.innerHTML = sub._originalHTML;
+      return;
+    }
+    // User picked a Main Service → narrow to that category's subs only
     sub.innerHTML = '<option value="">-- Select Sub Service --</option>';
-    if (!val) return;
     var subs = SERVICES_MAP[val] || [];
     subs.forEach(function(x) {
       var o = document.createElement('option');
@@ -2860,13 +3126,14 @@ var Customers = {
     tb.innerHTML=list.map(function(c){
       var fuClass=''; var fuBadge='';
       if(c.fuDateBs){var cmp=compareBs(c.fuDateBs,today);if(cmp<0)fuClass=' style="color:var(--red)"';else if(cmp===0)fuClass=' style="color:var(--accent)"';}
-      return '<tr id="cr-'+c.id+'"><td><div style="display:flex;align-items:center;gap:8px;">'+(c.photo?'<img src="'+c.photo+'" class="photo-thumb sm">':'<div style="width:36px;height:36px;border-radius:7px;background:var(--accent);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:0.9rem;">'+c.name.charAt(0)+'</div>')+
+      // Whole row clickable to expand details — buttons use stopPropagation
+      return '<tr id="cr-'+c.id+'" onclick="Customers.detail(\''+c.id+'\')" style="cursor:pointer;" onmouseover="this.style.background=\'var(--surface-2)\'" onmouseout="this.style.background=\'\'"><td><div style="display:flex;align-items:center;gap:8px;">'+(c.photo?'<img src="'+c.photo+'" class="photo-thumb sm">':'<div style="width:36px;height:36px;border-radius:7px;background:var(--accent);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:0.9rem;">'+c.name.charAt(0)+'</div>')+
       '<div><div style="font-weight:700;font-size:0.88rem;">'+c.name+'</div><div style="font-size:0.72rem;color:var(--text-muted);">'+c.phone+'</div></div></div></td>'+
       '<td><div style="font-size:0.82rem;">'+( c.work||'—')+'</div>'+(c.subwork?'<div style="font-size:0.7rem;color:var(--text-muted);">'+c.subwork+'</div>':'')+
       (c.advance?'<div style="font-size:0.7rem;color:var(--green);">💰 '+fmtRs(c.advance)+'</div>':'')+'</td>'+
       '<td><div style="font-size:0.78rem;"'+fuClass+'>'+(c.issueDateBs?bsStringToDisplay(c.issueDateBs):'—')+'</div>'+
       (c.fuDateBs?'<div style="font-size:0.7rem;"'+fuClass+'> 🔔 '+bsStringToDisplay(c.fuDateBs)+'</div>':'')+'</td>'+
-      '<td><div class="btn-group"><button onclick="Customers.detail(\''+c.id+'\')" class="btn btn-xs btn-secondary">👁</button><button onclick="Customers.edit(\''+c.id+'\')" class="btn btn-xs btn-secondary">✏️</button><button onclick="Customers.addFollowup(\''+c.id+'\')" class="btn btn-xs btn-yellow">🔔</button><button onclick="Customers.del(\''+c.id+'\')" class="btn btn-xs btn-danger">🗑</button></div></td></tr>'+
+      '<td onclick="event.stopPropagation();"><div class="btn-group"><button onclick="event.stopPropagation();Customers.detail(\''+c.id+'\')" class="btn btn-xs btn-secondary" title="View details">👁</button><button onclick="event.stopPropagation();Customers.edit(\''+c.id+'\')" class="btn btn-xs btn-secondary" title="Edit">✏️</button><button onclick="event.stopPropagation();Customers.addFollowup(\''+c.id+'\')" class="btn btn-xs btn-yellow" title="Add follow-up">🔔</button><button onclick="event.stopPropagation();Customers.del(\''+c.id+'\')" class="btn btn-xs btn-danger" title="Delete">🗑</button></div></td></tr>'+
       '<tr class="expand-row" id="cr-expand-'+c.id+'" style="display:none;"><td colspan="4"><div class="expand-inner" id="cr-exp-body-'+c.id+'"></div></td></tr>';
     }).join('');
   },
@@ -2875,22 +3142,38 @@ var Customers = {
     var c=this.getData().find(function(x){return x.id===id;}); if(!c) return;
     var row=document.getElementById('cr-expand-'+id);
     if(row.style.display==='table-row'){row.style.display='none';return;}
+    // Close any other open expansions first
+    document.querySelectorAll('[id^="cr-expand-"]').forEach(function(r){r.style.display='none';});
     row.style.display='table-row';
     var body=document.getElementById('cr-exp-body-'+id);
     var quotations=STORE.get('pk3_quotations',[]).filter(function(q){return q.custId===id||q.custName===c.name;});
-    body.innerHTML='<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;font-size:0.82rem;">'+
+    var followups =STORE.get('pk3_followups',[]).filter(function(f){return f.custId===id||f.custName===c.name;});
+    var invoices  =STORE.get('pk3_invoices',[]).filter(function(i){return i.custId===id||i.custName===c.name;});
+    var phoneClean = (c.phone||'').replace(/[^0-9]/g,'');
+    body.innerHTML='<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;font-size:0.82rem;margin-bottom:10px;">'+
       '<div><b>📍 Address:</b> '+(c.address||'—')+'</div>'+
       '<div><b>💼 Service:</b> '+(c.work||'—')+(c.subwork?' / '+c.subwork:'')+'</div>'+
       '<div><b>📝 Notes:</b> '+(c.notes||'—')+'</div>'+
       '<div><b>👤 Sales:</b> '+(c.sales||'—')+'</div>'+
       '<div><b>💰 Advance:</b> '+fmtRs(c.advance||0)+'</div>'+
       '<div><b>📊 Total:</b> '+fmtRs(c.total||0)+'</div>'+
+      (c.birthdayBs?'<div><b>🎂 Birthday:</b> '+bsStringToDisplay(c.birthdayBs)+'</div>':'')+
+      (c.annivBs?'<div><b>💍 Anniversary:</b> '+bsStringToDisplay(c.annivBs)+'</div>':'')+
       '</div>'+
-      (quotations.length?'<div style="margin-top:10px;font-size:0.82rem;"><b>📋 Quotations ('+quotations.length+'):</b> '+quotations.map(function(q){return q.status+' — '+fmtRs(q.amount);}).join(', ')+'</div>':'')+
-      '<div class="btn-group" style="margin-top:10px;">'+
-      '<button onclick="window.open(\'https://wa.me/977'+c.phone.replace(/[^0-9]/g,'')+'\',\'_blank\')" class="btn btn-sm btn-wa">📱 WhatsApp</button>'+
-      '<button onclick="window.open(\'tel:'+c.phone+'\')" class="btn btn-sm btn-secondary">📞 Call</button>'+
-      '<button onclick="App.navigate(\'add-quotation\');setTimeout(function(){setVal(\'q-cust\',\''+id+'\');},200);" class="btn btn-sm btn-primary">📋 New Quote</button>'+
+      // Related records summary
+      '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">'+
+        '<span style="background:var(--blue-soft);color:var(--blue);padding:3px 10px;border-radius:12px;font-size:0.72rem;font-weight:600;">📋 '+quotations.length+' Quotations</span>'+
+        '<span style="background:var(--green-soft);color:var(--green);padding:3px 10px;border-radius:12px;font-size:0.72rem;font-weight:600;">🧾 '+invoices.length+' Invoices</span>'+
+        '<span style="background:var(--yellow-soft);color:var(--yellow);padding:3px 10px;border-radius:12px;font-size:0.72rem;font-weight:600;">🔔 '+followups.length+' Follow-ups</span>'+
+      '</div>'+
+      // Action buttons row
+      '<div class="btn-group" style="display:flex;flex-wrap:wrap;gap:6px;">'+
+        '<button onclick="event.stopPropagation();Customers.edit(\''+id+'\')" class="btn btn-sm btn-primary" title="Edit customer">✏️ Edit</button>'+
+        '<button onclick="event.stopPropagation();Customers.addFollowup(\''+id+'\')" class="btn btn-sm btn-yellow" title="Add follow-up">🔔 Follow-up</button>'+
+        '<button onclick="event.stopPropagation();App.navigate(\'add-quotation\');setTimeout(function(){setVal(\'q-cust\',\''+id+'\');Quotations.autoFillService&&Quotations.autoFillService();},200);" class="btn btn-sm btn-secondary" title="New quotation">📋 New Quote</button>'+
+        (phoneClean?'<button onclick="event.stopPropagation();window.open(\'https://wa.me/977'+phoneClean+'\',\'_blank\')" class="btn btn-sm btn-wa" title="WhatsApp">📱 WhatsApp</button>':'')+
+        (phoneClean?'<button onclick="event.stopPropagation();window.open(\'tel:'+c.phone+'\')" class="btn btn-sm btn-secondary" title="Call">📞 Call</button>':'')+
+        '<button onclick="event.stopPropagation();Customers.del(\''+id+'\')" class="btn btn-sm btn-danger" title="Delete customer">🗑 Delete</button>'+
       '</div>';
   },
   edit: function(id) {
@@ -2957,8 +3240,10 @@ var Quotations = {
     var sub  = document.getElementById('q-subwork');
     if (!sub || !work) return;
     var val = work.value;
+    // ── FIX (v4.0.1): Preserve static optgroups when no service selected ──
+    if (!sub._originalHTML) sub._originalHTML = sub.innerHTML;
+    if (!val) { sub.innerHTML = sub._originalHTML; return; }
     sub.innerHTML = '<option value="">-- Select Sub Service --</option>';
-    if (!val) return;
     var subs = SERVICES_MAP[val] || [];
     subs.forEach(function(x) {
       var o = document.createElement('option');
@@ -3083,7 +3368,7 @@ var Quotations = {
     setText('q-filter-label',list.length+' quotations');
     if(!list.length){tb.innerHTML='';ne.style.display='';return;} ne.style.display='none';
     var statusColors={'Pending':'tag-yellow','Approved':'tag-green','Completed':'tag-blue','Cancelled':'tag-red'};
-    tb.innerHTML=list.map(function(q){return '<tr><td><div style="font-weight:600;">'+q.custName+'</div><div style="font-size:0.72rem;color:var(--text-muted);">'+q.custPhone+'</div></td><td style="font-size:0.82rem;">'+(q.work||'—')+'</td><td style="text-align:right;font-weight:700;">'+fmtRs(q.amount)+'</td><td style="text-align:right;color:var(--green);">'+fmtRs(q.advance||0)+'</td><td style="font-size:0.78rem;">'+(q.dateBs?bsStringToDisplay(q.dateBs):fmtDisplayDate(q.date))+'</td><td><span class="tag '+(statusColors[q.status]||'tag-gray')+'">'+q.status+'</span></td><td><div class="btn-group"><button onclick="Quotations.preview(\''+q.id+'\')" class="btn btn-xs btn-secondary">👁</button><button onclick="Quotations.edit(\''+q.id+'\')" class="btn btn-xs btn-secondary">✏️</button><button onclick="Quotations.del(\''+q.id+'\')" class="btn btn-xs btn-danger">🗑</button></div></td></tr>';}).join('');
+    tb.innerHTML=list.map(function(q){return '<tr style="cursor:pointer;" onmouseover="this.style.background=\'var(--surface-2)\'" onmouseout="this.style.background=\'\'" onclick="Quotations.preview(\''+q.id+'\')"><td><div style="font-weight:600;">'+q.custName+'</div><div style="font-size:0.72rem;color:var(--text-muted);">'+q.custPhone+'</div></td><td style="font-size:0.82rem;">'+(q.work||'—')+'</td><td style="text-align:right;font-weight:700;">'+fmtRs(q.amount)+'</td><td style="text-align:right;color:var(--green);">'+fmtRs(q.advance||0)+'</td><td style="font-size:0.78rem;">'+(q.dateBs?bsStringToDisplay(q.dateBs):fmtDisplayDate(q.date))+'</td><td><span class="tag '+(statusColors[q.status]||'tag-gray')+'">'+q.status+'</span></td><td onclick="event.stopPropagation();"><div class="btn-group"><button onclick="event.stopPropagation();Quotations.preview(\''+q.id+'\')" class="btn btn-xs btn-secondary" title="Preview">👁</button><button onclick="event.stopPropagation();Quotations.edit(\''+q.id+'\')" class="btn btn-xs btn-secondary" title="Edit">✏️</button><button onclick="event.stopPropagation();Quotations.del(\''+q.id+'\')" class="btn btn-xs btn-danger" title="Delete">🗑</button></div></td></tr>';}).join('');
   },
   preview: function(id) { var q=this.getData().find(function(x){return x.id===id;}); if(q) this.showPreview(q); },
   edit: function(id) { var q=this.getData().find(function(x){return x.id===id;}); if(!q)return; this._edit=q; App.navigate('add-quotation'); },
@@ -3126,7 +3411,7 @@ var Invoices = {
     var tb=document.getElementById('inv-table'), ne=document.getElementById('no-inv');
     if(!list.length){tb.innerHTML='';ne.style.display='';return;} ne.style.display='none';
     var sc={'Pending':'tag-yellow','Partial':'tag-blue','Paid':'tag-green','Overdue':'tag-red'};
-    tb.innerHTML=list.map(function(i){return '<tr><td style="font-weight:700;">'+i.invNum+'</td><td>'+i.custName+'<div style="font-size:0.7rem;color:var(--text-muted);">'+i.custPhone+'</div></td><td style="font-size:0.78rem;">'+(i.desc||'—')+'</td><td style="text-align:right;">'+fmtRs(i.amount)+'</td><td style="text-align:right;color:var(--green);">'+fmtRs(i.paid||0)+'</td><td style="text-align:right;color:var(--red);">'+fmtRs(i.balance||0)+'</td><td><span class="tag '+(sc[i.status]||'tag-gray')+'">'+i.status+'</span></td><td style="font-size:0.76rem;">'+(i.dateBs?bsStringToDisplay(i.dateBs):fmtDisplayDate(i.date))+'</td><td><div class="btn-group"><button onclick="Invoices.preview(\''+i.id+'\')" class="btn btn-xs btn-secondary">👁</button><button onclick="Invoices.del(\''+i.id+'\')" class="btn btn-xs btn-danger">🗑</button></div></td></tr>';}).join('');
+    tb.innerHTML=list.map(function(i){return '<tr style="cursor:pointer;" onmouseover="this.style.background=\'var(--surface-2)\'" onmouseout="this.style.background=\'\'" onclick="Invoices.preview(\''+i.id+'\')"><td style="font-weight:700;">'+i.invNum+'</td><td>'+i.custName+'<div style="font-size:0.7rem;color:var(--text-muted);">'+i.custPhone+'</div></td><td style="font-size:0.78rem;">'+(i.desc||'—')+'</td><td style="text-align:right;">'+fmtRs(i.amount)+'</td><td style="text-align:right;color:var(--green);">'+fmtRs(i.paid||0)+'</td><td style="text-align:right;color:var(--red);">'+fmtRs(i.balance||0)+'</td><td><span class="tag '+(sc[i.status]||'tag-gray')+'">'+i.status+'</span></td><td style="font-size:0.76rem;">'+(i.dateBs?bsStringToDisplay(i.dateBs):fmtDisplayDate(i.date))+'</td><td onclick="event.stopPropagation();"><div class="btn-group"><button onclick="event.stopPropagation();Invoices.preview(\''+i.id+'\')" class="btn btn-xs btn-secondary" title="Preview">👁</button><button onclick="event.stopPropagation();Invoices.del(\''+i.id+'\')" class="btn btn-xs btn-danger" title="Delete">🗑</button></div></td></tr>';}).join('');
   },
   preview: function(id){ var inv=this.getData().find(function(x){return x.id===id;}); if(!inv)return; setText('view-modal-title','🧾 Invoice Preview'); document.getElementById('view-modal-body').innerHTML='<div style="padding:16px;"><h3>'+inv.invNum+'</h3><p>Customer: '+inv.custName+' | '+inv.custPhone+'</p><p>Amount: '+fmtRs(inv.amount)+' | Paid: '+fmtRs(inv.paid||0)+' | Balance: '+fmtRs(inv.balance||0)+'</p><p>Status: '+inv.status+'</p><p>Date: '+fmtDisplayDate(inv.date)+'</p><button onclick="window.print()" class="btn btn-primary btn-sm">🖨️ Print</button></div>'; document.getElementById('view-modal').classList.add('open'); },
   del: function(id){ if(!confirm('Delete invoice?'))return; STORE.set('pk3_invoices',this.getData().filter(function(x){return x.id!==id;})); this.render(); App.toast('🗑 Deleted','info'); }
@@ -3251,7 +3536,130 @@ var Followups = {
     var phone=f.custPhone.replace(/[^0-9]/g,'');
     window.open('https://wa.me/977'+phone+'?text='+encodeURIComponent(msg),'_blank');
   },
-  del: function(id){ if(!confirm('Delete?'))return; STORE.set('pk3_followups',this.getData().filter(function(x){return x.id!==id;})); this.render(); App.toast('🗑 Deleted','info'); }
+  del: function(id){ if(!confirm('Delete?'))return; STORE.set('pk3_followups',this.getData().filter(function(x){return x.id!==id;})); this.render(); App.toast('🗑 Deleted','info'); },
+
+  // ── BULK GREETING (v4.0.4): send a message to every customer at once ──
+  openGreetAll: function(){
+    var custs = (STORE.get('pk3_customers',[])||[]).filter(function(c){return c.phone;});
+    if(!custs.length){ App.toast('कुनै customer छैन — पहिले add गर्नुस्','warning'); return; }
+    var templates = STORE.get('pk3_templates',null) || (typeof DEFAULT_TEMPLATES!=='undefined'?DEFAULT_TEMPLATES:[]) || Followups._defTpl();
+    // Build modal on the fly so we don't bloat HTML
+    var existing = document.getElementById('greet-all-modal');
+    if(existing) existing.remove();
+    var m = document.createElement('div');
+    m.className = 'modal-overlay';
+    m.id = 'greet-all-modal';
+    var defaultMsg = (templates[0] && (templates[0].text||templates[0].body||templates[0].message)) || 'नमस्ते {name}! PRERAK MULTIPURPOSE PVT LTD बाट तपाईंलाई शुभकामना।';
+    m.innerHTML =
+      '<div class="modal" style="max-width:560px;">'
+      +'<div class="modal-head">'
+        +'<div>'
+          +'<div class="modal-title">🎉 Greet All Customers</div>'
+          +'<div class="modal-sub" style="font-size:0.72rem;color:var(--text-muted);margin-top:2px;">'
+            +custs.length+' customers will receive the greeting via WhatsApp'
+          +'</div>'
+        +'</div>'
+        +'<button class="modal-close" onclick="document.getElementById(\'greet-all-modal\').remove()">✕</button>'
+      +'</div>'
+      // Template picker
+      +'<div style="margin-bottom:10px;">'
+        +'<label style="font-size:0.7rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.4px;">📝 Choose Template</label>'
+        +'<select id="ga-tpl" onchange="Followups._gaPickTpl(this.value)" style="width:100%;margin-top:4px;">'
+          + templates.map(function(t,i){
+              var n = (t.name||'Template '+(i+1)).replace(/</g,'&lt;');
+              return '<option value="'+i+'">'+n+'</option>';
+            }).join('')
+        +'</select>'
+      +'</div>'
+      // Message editor
+      +'<div style="margin-bottom:10px;">'
+        +'<label style="font-size:0.7rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.4px;">💬 Message (use {name}, {phone}, {service}, {company})</label>'
+        +'<textarea id="ga-msg" rows="6" style="width:100%;margin-top:4px;font-size:0.85rem;">'+defaultMsg.replace(/</g,'&lt;')+'</textarea>'
+      +'</div>'
+      // Filter chips
+      +'<div style="margin-bottom:10px;">'
+        +'<label style="font-size:0.7rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.4px;">🎯 Send To</label>'
+        +'<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;" id="ga-filter">'
+          +'<label style="display:inline-flex;align-items:center;gap:5px;font-size:0.78rem;cursor:pointer;text-transform:none;letter-spacing:0;color:var(--text);"><input type="radio" name="ga-f" value="all" checked> All ('+custs.length+')</label>'
+          +'<label style="display:inline-flex;align-items:center;gap:5px;font-size:0.78rem;cursor:pointer;text-transform:none;letter-spacing:0;color:var(--text);"><input type="radio" name="ga-f" value="recent"> Recent 30 days</label>'
+          +'<label style="display:inline-flex;align-items:center;gap:5px;font-size:0.78rem;cursor:pointer;text-transform:none;letter-spacing:0;color:var(--text);"><input type="radio" name="ga-f" value="advance"> With Advance</label>'
+        +'</div>'
+      +'</div>'
+      // Preview area
+      +'<div style="background:var(--surface-2);border-radius:8px;padding:10px 12px;margin-bottom:12px;font-size:0.78rem;color:var(--text-muted);max-height:120px;overflow-y:auto;" id="ga-preview"></div>'
+      // Action buttons
+      +'<div class="form-actions" style="display:flex;gap:8px;flex-wrap:wrap;">'
+        +'<button class="btn btn-secondary" onclick="document.getElementById(\'greet-all-modal\').remove()">Cancel</button>'
+        +'<button class="btn btn-primary" onclick="Followups._gaPreview()">👁 Preview</button>'
+        +'<button class="btn btn-wa" onclick="Followups._gaSend()" style="flex:1;">📱 Open WhatsApp Links</button>'
+      +'</div>'
+      +'</div>';
+    document.body.appendChild(m);
+    m.classList.add('open');
+    Followups._gaPreview();
+  },
+  _gaPickTpl: function(idx){
+    var templates = STORE.get('pk3_templates',null) || (typeof DEFAULT_TEMPLATES!=='undefined'?DEFAULT_TEMPLATES:[]) || Followups._defTpl();
+    var t = templates[parseInt(idx)] || templates[0];
+    var ta = document.getElementById('ga-msg');
+    if(ta) ta.value = (t && (t.text||t.body||t.message)) || '';
+    Followups._gaPreview();
+  },
+  _gaFilteredCustomers: function(){
+    var custs = (STORE.get('pk3_customers',[])||[]).filter(function(c){return c.phone;});
+    var sel = document.querySelector('#ga-filter input[name="ga-f"]:checked');
+    var f = sel ? sel.value : 'all';
+    if(f === 'recent'){
+      var cutoff = new Date(); cutoff.setDate(cutoff.getDate() - 30);
+      custs = custs.filter(function(c){
+        var d = c.created || c.updated;
+        if(!d) return false;
+        return new Date(d) >= cutoff;
+      });
+    } else if(f === 'advance'){
+      custs = custs.filter(function(c){ return parseFloat(c.advance||0) > 0; });
+    }
+    return custs;
+  },
+  _gaPreview: function(){
+    var custs = Followups._gaFilteredCustomers();
+    var msg = (document.getElementById('ga-msg')||{}).value || '';
+    var box = document.getElementById('ga-preview');
+    if(!box) return;
+    if(!custs.length){ box.innerHTML = '<em>No customers match this filter</em>'; return; }
+    var first = custs[0];
+    var preview = (typeof fillTemplate === 'function')
+      ? fillTemplate({text:msg}, first)
+      : msg.replace(/\{name\}/g, first.name||'Customer');
+    box.innerHTML = '<div style="font-weight:700;margin-bottom:4px;color:var(--text);">📋 Will send to '+custs.length+' customers</div>'
+      + '<div style="font-size:0.74rem;margin-bottom:6px;">First customer: <strong>'+esc(first.name)+'</strong> — '+esc(first.phone)+'</div>'
+      + '<div style="background:var(--surface);padding:8px 10px;border-radius:6px;white-space:pre-wrap;font-size:0.78rem;color:var(--text);">'+esc(preview)+'</div>';
+  },
+  _gaSend: function(){
+    var custs = Followups._gaFilteredCustomers();
+    var msg = (document.getElementById('ga-msg')||{}).value || '';
+    if(!custs.length){ App.toast('No customers to greet','warning'); return; }
+    if(!msg.trim()){ App.toast('Message खाली छ','error'); return; }
+    if(custs.length > 30 && !confirm(custs.length+' customers — proceed? (browser ले धेरै tab block गर्न सक्छ)')) return;
+    var sent = 0, blocked = 0;
+    custs.forEach(function(c, i){
+      var personalized = (typeof fillTemplate === 'function')
+        ? fillTemplate({text:msg}, c)
+        : msg.replace(/\{name\}/g, c.name||'Customer').replace(/\{phone\}/g, c.phone||'');
+      var phone = (c.phone||'').replace(/[^0-9]/g,'');
+      if(!phone){ blocked++; return; }
+      var url = 'https://wa.me/977'+phone+'?text='+encodeURIComponent(personalized);
+      // Stagger opens slightly so popup blocker isn't triggered
+      setTimeout(function(){
+        var w = window.open(url, '_blank');
+        if(!w) blocked++;
+      }, i * 150);
+      sent++;
+    });
+    try { Audit.log('GREETING','Bulk greeting sent to '+sent+' customers'); } catch(e){}
+    App.toast('🎉 '+sent+' WhatsApp tabs opening (blocked: '+blocked+')','success',4500);
+    setTimeout(function(){ var m=document.getElementById('greet-all-modal'); if(m) m.remove(); }, 800);
+  }
 };
 
 
@@ -3328,8 +3736,14 @@ var RateList = {
         '<span class="rate-cat-title">📁 '+cat+'<span class="rate-cat-count">'+items.length+'</span></span>'+
         '<div class="btn-group"><button onclick="event.stopPropagation();RateList.addItemToCategory(\''+cat+'\')" class="btn btn-xs btn-secondary">+ Add</button>'+
         '<button onclick="event.stopPropagation();RateList.delCategory(\''+cat+'\')" class="btn btn-xs btn-danger">🗑</button></div></div>'+
-        '<div class="rate-cat-body"><table><thead><tr><th>Item</th><th style="text-align:right;">Rate</th><th>Unit</th><th></th></tr></thead><tbody>'+
-        items.map(function(item,i){return '<tr><td>'+item.name+'</td><td style="text-align:right;font-weight:700;">'+fmtRs(item.rate)+'</td><td style="color:var(--text-muted);">'+item.unit+'</td><td><div class="btn-group"><button onclick="RateList.editItem(\''+cat+'\','+i+')" class="btn btn-xs btn-secondary">✏️</button><button onclick="RateList.delItem(\''+cat+'\','+i+')" class="btn btn-xs btn-danger">🗑</button></div></td></tr>';}).join('')+
+        '<div class="rate-cat-body"><table><thead><tr><th style="width:50px;">📷</th><th>Item</th><th style="text-align:right;">Rate</th><th>Unit</th><th></th></tr></thead><tbody>'+
+        items.map(function(item,i){
+          // ── IMAGE THUMBNAIL (v4.0.4): click to preview full-size ──
+          var imgCell = item.image
+            ? '<img src="'+item.image+'" alt="" onclick="event.stopPropagation();RateList.previewImageFull(this.src)" style="width:42px;height:42px;border-radius:6px;object-fit:cover;cursor:pointer;border:1px solid var(--border);" title="Click to enlarge">'
+            : '<div style="width:42px;height:42px;border-radius:6px;background:var(--surface-3);display:flex;align-items:center;justify-content:center;color:var(--text-dim);font-size:1rem;" title="No image">📷</div>';
+          return '<tr><td>'+imgCell+'</td><td>'+item.name+'</td><td style="text-align:right;font-weight:700;">'+fmtRs(item.rate)+'</td><td style="color:var(--text-muted);">'+item.unit+'</td><td><div class="btn-group"><button onclick="RateList.editItem(\''+cat+'\','+i+')" class="btn btn-xs btn-secondary" title="Edit">✏️</button><button onclick="RateList.delItem(\''+cat+'\','+i+')" class="btn btn-xs btn-danger" title="Delete">🗑</button></div></td></tr>';
+        }).join('')+
         '</tbody></table></div></div>';
     }).join('');
   },
@@ -3340,7 +3754,8 @@ var RateList = {
     var rates=this.getData(); var cats=Object.keys(rates);
     var catSel=document.getElementById('rl-item-cat');
     if(catSel) catSel.innerHTML='<option value="">-- Category --</option>'+cats.map(function(c){return '<option value="'+c+'">'+c+'</option>';}).join('');
-    setVal('rl-edit-id',''); setVal('rl-item-name',''); setVal('rl-item-rate',''); setVal('rl-item-unit','sqft');
+    setVal('rl-edit-id',''); setVal('rl-item-name',''); setVal('rl-item-rate',''); setVal('rl-item-unit','sqft'); setVal('rl-item-image','');
+    this._resetImagePreview();
     setText('rate-modal-title','💰 Add Rate Item');
     document.getElementById('rate-modal').classList.add('open');
   },
@@ -3350,17 +3765,79 @@ var RateList = {
     var catSel=document.getElementById('rl-item-cat');
     if(catSel) catSel.innerHTML='<option value="'+cat+'">'+cat+'</option>';
     setVal('rl-edit-id',cat+'::'+idx); setVal('rl-item-name',item.name); setVal('rl-item-rate',item.rate); setVal('rl-item-unit',item.unit||'');
+    setVal('rl-item-image', item.image || '');
+    if(item.image){
+      var img = document.getElementById('rl-item-image-img');
+      var prev = document.getElementById('rl-item-image-preview');
+      if(img) img.src = item.image;
+      if(prev) prev.style.display = '';
+    } else {
+      this._resetImagePreview();
+    }
     setText('rate-modal-title','✏️ Edit Rate Item');
     document.getElementById('rate-modal').classList.add('open');
   },
+  // ── IMAGE HANDLING (v4.0.4) ──
+  handleImageUpload: function(event){
+    var file = event.target.files && event.target.files[0];
+    if(!file) return;
+    if(!/^image\//.test(file.type)){ App.toast('Image file मात्र छान्नुस्','error'); return; }
+    if(file.size > 5*1024*1024){ App.toast('Image too large (max 5MB)','error'); return; }
+    var reader = new FileReader();
+    reader.onload = function(e){
+      // Compress: draw on canvas resized to max 600px, then re-encode as JPEG
+      var img = new Image();
+      img.onload = function(){
+        var canvas = document.createElement('canvas');
+        var maxSize = 600;
+        var ratio = Math.min(maxSize/img.width, maxSize/img.height, 1);
+        canvas.width = Math.round(img.width * ratio);
+        canvas.height = Math.round(img.height * ratio);
+        var ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        var dataUrl = canvas.toDataURL('image/jpeg', 0.78);
+        setVal('rl-item-image', dataUrl);
+        var imgEl = document.getElementById('rl-item-image-img');
+        var prev = document.getElementById('rl-item-image-preview');
+        if(imgEl) imgEl.src = dataUrl;
+        if(prev) prev.style.display = '';
+        App.toast('📷 Image attached','success',1500);
+      };
+      img.onerror = function(){ App.toast('Image load failed','error'); };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  },
+  removeImage: function(){
+    setVal('rl-item-image','');
+    this._resetImagePreview();
+    var fileInp = document.getElementById('rl-item-image-file');
+    if(fileInp) fileInp.value = '';
+  },
+  _resetImagePreview: function(){
+    var img = document.getElementById('rl-item-image-img');
+    var prev = document.getElementById('rl-item-image-preview');
+    if(img) img.src = '';
+    if(prev) prev.style.display = 'none';
+    var fileInp = document.getElementById('rl-item-image-file');
+    if(fileInp) fileInp.value = '';
+  },
+  previewImageFull: function(src){
+    var modal = document.getElementById('img-preview-modal');
+    var img = document.getElementById('img-preview-full');
+    if(modal && img){ img.src = src; modal.classList.add('open'); }
+  },
   saveItem: function(){
     var name=getVal('rl-item-name'), rate=parseFloat(getVal('rl-item-rate'))||0, unit=getVal('rl-item-unit')||'sqft', cat=getVal('rl-item-cat');
+    var image = getVal('rl-item-image') || '';
     if(!name){App.toast('Item नाम चाहिन्छ!','error');return;}
     if(!cat){App.toast('Category छान्नुस्!','error');return;}
     var rates=this.getData(); if(!rates[cat])rates[cat]=[];
     var editId=getVal('rl-edit-id');
-    if(editId){var p=editId.split('::');rates[p[0]][parseInt(p[1])]={name:name,rate:rate,unit:unit};}
-    else rates[cat].push({name:name,rate:rate,unit:unit});
+    var rec = {name:name,rate:rate,unit:unit};
+    if(image) rec.image = image;
+    if(editId){var p=editId.split('::');rates[p[0]][parseInt(p[1])]=rec;}
+    else rates[cat].push(rec);
     STORE.set('pk3_rates',rates); document.getElementById('rate-modal').classList.remove('open'); this.render(); App.toast('✅ Rate saved!','success');
   },
   delItem: function(cat,idx){ if(!confirm('Delete?'))return; var r=this.getData(); r[cat].splice(idx,1); STORE.set('pk3_rates',r); this.render(); },
@@ -3776,6 +4253,8 @@ var Settings = {
     var notifEl=document.getElementById('set-notif'); if(notifEl)notifEl.checked=!!s.notifications;
     var bdayEl=document.getElementById('set-bday'); if(bdayEl)bdayEl.checked=!!s.bdayReminders;
     var muteEl=document.getElementById('set-mute'); if(muteEl)muteEl.checked=!!s.muteTost;
+    // ── Render company logo (v4.0.4) ──
+    this._renderLogo(s.logo || '');
     var aiKey=STORE.get('pk3_ai_key',''); setVal('set-ai-key',aiKey);
     var oaiKey=STORE.get('pk3_oai_key',''); setVal('set-oai-key',oaiKey);
     var aiSettings=STORE.get('pk3_ai_settings',{}); setVal('set-ai-lang',aiSettings.lang||'nepali'); setVal('set-ai-model',aiSettings.model||'claude-sonnet-4-6');
@@ -3783,8 +4262,69 @@ var Settings = {
     this.renderTemplates();
     Backup.render();
   },
+  // ── COMPANY LOGO (v4.0.4): edit / add / delete ──
+  _renderLogo: function(dataUrl){
+    var img = document.getElementById('set-logo-img');
+    var ph  = document.getElementById('set-logo-placeholder');
+    var del = document.getElementById('set-logo-del-btn');
+    if(dataUrl){
+      if(img){ img.src = dataUrl; img.style.display = ''; }
+      if(ph)  ph.style.display = 'none';
+      if(del) del.style.display = '';
+    } else {
+      if(img){ img.src = ''; img.style.display = 'none'; }
+      if(ph)  ph.style.display = '';
+      if(del) del.style.display = 'none';
+    }
+  },
+  uploadLogo: function(event){
+    var file = event.target.files && event.target.files[0];
+    if(!file) return;
+    if(!/^image\//.test(file.type)){ App.toast('Image file मात्र छान्नुस्','error'); return; }
+    if(file.size > 2*1024*1024){ App.toast('Logo too large (max 2MB)','error'); return; }
+    var reader = new FileReader();
+    var self = this;
+    reader.onload = function(e){
+      // Compress: max 400px, PNG to preserve transparency
+      var img = new Image();
+      img.onload = function(){
+        var canvas = document.createElement('canvas');
+        var maxSize = 400;
+        var ratio = Math.min(maxSize/img.width, maxSize/img.height, 1);
+        canvas.width = Math.round(img.width * ratio);
+        canvas.height = Math.round(img.height * ratio);
+        var ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        // Use PNG to keep transparency for logos
+        var dataUrl = canvas.toDataURL('image/png');
+        var s = STORE.get('pk3_settings',{}) || {};
+        s.logo = dataUrl;
+        STORE.set('pk3_settings', s);
+        self._renderLogo(dataUrl);
+        try { Audit.log('SETTINGS','Company logo updated'); } catch(e){}
+        App.toast('🖼️ Logo updated','success',2000);
+      };
+      img.onerror = function(){ App.toast('Image load failed','error'); };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+    // Clear file input so same file can be picked again
+    event.target.value = '';
+  },
+  deleteLogo: function(){
+    if(!confirm('Logo हटाउनुहुन्छ?')) return;
+    var s = STORE.get('pk3_settings',{}) || {};
+    delete s.logo;
+    STORE.set('pk3_settings', s);
+    this._renderLogo('');
+    try { Audit.log('SETTINGS','Company logo removed'); } catch(e){}
+    App.toast('🗑️ Logo removed','info',2000);
+  },
   save: function(){
+    var existing = STORE.get('pk3_settings',{}) || {};
     var s={companyName:getVal('set-co-name'),tagline:getVal('set-co-tagline'),address:getVal('set-co-address'),phone1:getVal('set-co-phone1'),phone2:getVal('set-co-phone2'),email:getVal('set-co-email'),fiscalYear:getVal('set-co-fy'),pan:getVal('set-co-pan'),bankName:getVal('set-bank-name'),bankAcc:getVal('set-bank-acc'),esewa:getVal('set-esewa'),khalti:getVal('set-khalti'),notifications:document.getElementById('set-notif')?document.getElementById('set-notif').checked:false,bdayReminders:document.getElementById('set-bday')?document.getElementById('set-bday').checked:false,muteTost:document.getElementById('set-mute')?document.getElementById('set-mute').checked:false};
+    // Preserve logo (set via uploadLogo, not via inputs)
+    if(existing.logo) s.logo = existing.logo;
     STORE.set('pk3_settings',s);
     var fy=s.fiscalYear; var fyEl=document.getElementById('tb-fy'); if(fyEl)fyEl.textContent='FY '+fy;
   },
@@ -4554,54 +5094,462 @@ var Estimate = {
 // JS PART L: Brochure, Ledger, Reports modules
 // ============================================================
 
+// ─── BROCHURE MODULE (v4.0.4 — A4 templates, editable, scrollable, emoji-rich) ──
 var Brochure = {
-  _items: [],
-  init: function(){
-    this._items = getLS('pk3_templates') || [];
-    this.render();
-  },
+  _editId: null,
+  _data: null,
+  // Pre-built A4 brochure templates (ready-made, fully editable)
+  TEMPLATES: [
+    {
+      id: 'home-services',
+      name: '🏠 Home Services (Combo)',
+      icon: '🏠',
+      preview: '#f97316',
+      data: {
+        title: '🏠 PRERAK Home Solutions',
+        tagline: '✨ Quality • Trust • Experience ✨',
+        intro: 'तपाईंको सपनाको घर हाम्रो जिम्मेवारी 🏗️\nUPVC, Gypsum, Interior — सबै एकै ठाउँमा!',
+        services: [
+          {emoji:'🪟', name:'UPVC Windows & Doors', desc:'Premium German tech, lifetime warranty, sound + heat proof'},
+          {emoji:'🏠', name:'Gypsum False Ceiling', desc:'Modern designs, LED lighting, POP cornice work'},
+          {emoji:'🛋️', name:'Interior Design', desc:'Modular kitchen, wardrobes, full home interior'},
+          {emoji:'🎨', name:'Painting & Texture', desc:'Exterior weather shield, interior emulsion, designs'},
+          {emoji:'🪨', name:'Tile / Marble / Granite', desc:'Italian marble, vitrified tiles, anti-skid bathroom'},
+          {emoji:'⚡', name:'Electrical & Plumbing', desc:'Wiring, switchboards, CP fittings, water tank setup'}
+        ],
+        whyUs: '✅ 100+ Happy Customers in Hetauda\n✅ On-time delivery guarantee\n✅ Free site visit & estimate\n✅ Genuine material with bill\n✅ Skilled team with 10+ years experience',
+        offer: '🎁 Special Offer: Free Site Visit + 5% Discount on Combo Booking!',
+        cta: '📞 Call Today: 9855069733'
+      }
+    },
+    {
+      id: 'upvc-special',
+      name: '🪟 UPVC Specialist',
+      icon: '🪟',
+      preview: '#06b6d4',
+      data: {
+        title: '🪟 PRERAK UPVC Doors & Windows',
+        tagline: '🌟 German Profile • Premium Quality 🌟',
+        intro: 'अब तपाईंको घरमा पनि European-grade UPVC! 🏠\nNo termite • No rust • Sound proof + Heat proof',
+        services: [
+          {emoji:'🪟', name:'UPVC Sliding Window', desc:'Smooth sliding, mosquito mesh option, 5mm-8mm glass'},
+          {emoji:'🚪', name:'UPVC Casement Window', desc:'Side-hung, top-hung, tilt-and-turn variants'},
+          {emoji:'🚪', name:'UPVC Main Door', desc:'Reinforced steel core, 3-point lock, decorative panels'},
+          {emoji:'🪟', name:'Fixed Glass Window', desc:'Maximum light, double-glazed option, energy efficient'},
+          {emoji:'🧱', name:'UPVC Partition', desc:'Office/home partitions, glass + UPVC combo'}
+        ],
+        whyUs: '✅ German VEKA / Encraft profiles\n✅ 10-year warranty on profile\n✅ Lead-free, eco-friendly\n✅ Custom colors: White, Wood-grain, Grey\n✅ Free measurement & installation',
+        offer: '🎁 Sample showroom visit free! Compare with aluminum & wood.',
+        cta: '📞 Quote: 9855069733 / 9801069733'
+      }
+    },
+    {
+      id: 'interior',
+      name: '🛋️ Interior Design',
+      icon: '🛋️',
+      preview: '#a855f7',
+      data: {
+        title: '🛋️ PRERAK Interior Design',
+        tagline: '✨ Style your space, beautifully ✨',
+        intro: 'तपाईंको घर/अफिस लाई आधुनिक रूप दिनुहोस्! 🏡\nFull turnkey solutions — design देखि furniture सम्म',
+        services: [
+          {emoji:'🍳', name:'Modular Kitchen', desc:'L-shape, U-shape, parallel — laminate/acrylic/PU'},
+          {emoji:'👔', name:'Wardrobe', desc:'Sliding/openable, mirror finish, internal organizer'},
+          {emoji:'📺', name:'TV Unit', desc:'Wall-mount, LED back-light, hidden storage'},
+          {emoji:'🛏️', name:'Bedroom Set', desc:'Bed, side tables, dressing unit, study table'},
+          {emoji:'🏢', name:'Office Interior', desc:'Workstations, cabin, reception, conference room'},
+          {emoji:'💡', name:'Lighting Design', desc:'Cove lighting, spot, decorative chandeliers'}
+        ],
+        whyUs: '✅ 3D design preview before work\n✅ Branded materials (Greenply, Century, Asian)\n✅ Fixed timeline contract\n✅ 1-year service warranty\n✅ EMI option available',
+        offer: '🎁 Free 3D design on confirmation!',
+        cta: '📞 Visit Showroom: Hetauda-4 | 9855069733'
+      }
+    },
+    {
+      id: 'blank',
+      name: '📄 Blank A4 (write your own)',
+      icon: '📄',
+      preview: '#64748b',
+      data: {
+        title: 'Your Title Here',
+        tagline: 'Subtitle / tagline',
+        intro: 'Write your introduction here...',
+        services: [
+          {emoji:'⭐', name:'Service 1', desc:'Description'},
+          {emoji:'⭐', name:'Service 2', desc:'Description'},
+          {emoji:'⭐', name:'Service 3', desc:'Description'}
+        ],
+        whyUs: '✅ Reason 1\n✅ Reason 2\n✅ Reason 3',
+        offer: '🎁 Special offer here',
+        cta: '📞 Contact: '
+      }
+    }
+  ],
+  EMOJI_LIB: ['🏠','🏗️','🪟','🚪','🛋️','🍳','👔','📺','🛏️','🏢','💡','🎨','🪨','⚡','🔧','🌟','✨','🎁','📞','📍','✅','⭐','🔥','💎','🌿','☀️','🌧️','💰','📋','📝'],
+
+  getStore: function(){ return STORE.get('pk3_brochures', []) || []; },
+  setStore: function(list){ STORE.set('pk3_brochures', list); },
+
   render: function(){
-    var c = document.getElementById('brochure-list');
-    if(!c) return;
-    if(!this._items.length){ c.innerHTML='<p class="text-muted text-center py-4">No brochures yet. Create one below.</p>'; return; }
-    c.innerHTML = this._items.map(function(b,i){
-      return '<div class="card mb-3 shadow-sm"><div class="card-body"><div class="d-flex justify-content-between align-items-start"><div><h6 class="fw-bold mb-1">'+esc(b.title||'Untitled')+'</h6><small class="text-muted">'+esc(b.subtitle||'')+'</small></div><div class="btn-group btn-group-sm"><button class="btn btn-outline-primary" onclick="Brochure.preview('+i+')"><i class="bi bi-eye"></i></button><button class="btn btn-outline-success" onclick="Brochure.print('+i+')"><i class="bi bi-printer"></i></button><button class="btn btn-outline-danger" onclick="Brochure.del('+i+')"><i class="bi bi-trash"></i></button></div></div></div></div>';
+    // Make sure list view is active, editor hidden
+    var listV = document.getElementById('brochures-list-view');
+    var edV   = document.getElementById('brochures-editor');
+    if(listV) listV.style.display = '';
+    if(edV)   edV.style.display = 'none';
+
+    var list = this.getStore();
+    var grid = document.getElementById('brochures-grid');
+    var empty = document.getElementById('brochures-empty');
+    if(!grid) return;
+    if(!list.length){
+      grid.innerHTML = '';
+      if(empty) empty.style.display = '';
+      return;
+    }
+    if(empty) empty.style.display = 'none';
+    grid.innerHTML = list.map(function(b){
+      var d = b.data || {};
+      return '<div class="card" style="cursor:pointer;overflow:hidden;border:2px solid var(--border);" onclick="Brochure.editBrochure(\''+b.id+'\')">'
+        +'<div style="background:linear-gradient(135deg,'+(b.color||'#f97316')+',rgba(0,0,0,0.3));padding:18px 14px;color:#fff;text-align:center;">'
+          +'<div style="font-size:1.8rem;margin-bottom:4px;">'+(b.icon||'📄')+'</div>'
+          +'<div style="font-weight:800;font-size:0.92rem;line-height:1.2;">'+esc(d.title||b.name||'Brochure')+'</div>'
+        +'</div>'
+        +'<div style="padding:10px 12px;">'
+          +'<div style="font-size:0.72rem;color:var(--text-muted);margin-bottom:6px;">'+esc(d.tagline||'')+'</div>'
+          +'<div style="font-size:0.68rem;color:var(--text-dim);">'+(b.updated||b.created||'')+'</div>'
+          +'<div class="btn-group" style="margin-top:8px;" onclick="event.stopPropagation();">'
+            +'<button onclick="event.stopPropagation();Brochure.editBrochure(\''+b.id+'\')" class="btn btn-xs btn-secondary" title="Edit">✏️</button>'
+            +'<button onclick="event.stopPropagation();Brochure.printBrochure(\''+b.id+'\')" class="btn btn-xs btn-primary" title="Print/PDF">🖨️</button>'
+            +'<button onclick="event.stopPropagation();Brochure.shareBrochure(\''+b.id+'\')" class="btn btn-xs btn-wa" title="WhatsApp">📱</button>'
+            +'<button onclick="event.stopPropagation();Brochure.delBrochure(\''+b.id+'\')" class="btn btn-xs btn-danger" title="Delete">🗑</button>'
+          +'</div>'
+        +'</div>'
+      +'</div>';
     }).join('');
   },
+
+  newBrochure: function(){
+    // Show template picker
+    var existing = document.getElementById('brochure-tpl-modal');
+    if(existing) existing.remove();
+    var m = document.createElement('div');
+    m.className = 'modal-overlay open';
+    m.id = 'brochure-tpl-modal';
+    m.innerHTML =
+      '<div class="modal" style="max-width:640px;">'
+      +'<div class="modal-head">'
+        +'<div class="modal-title">📄 Choose A4 Template</div>'
+        +'<button class="modal-close" onclick="document.getElementById(\'brochure-tpl-modal\').remove()">✕</button>'
+      +'</div>'
+      +'<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;padding:6px 0;">'
+        + this.TEMPLATES.map(function(t){
+            return '<div onclick="Brochure._createFromTemplate(\''+t.id+'\')" style="cursor:pointer;border:2px solid var(--border);border-radius:10px;overflow:hidden;transition:transform 0.15s,border-color 0.15s;" onmouseover="this.style.borderColor=\'var(--accent)\';this.style.transform=\'translateY(-2px)\'" onmouseout="this.style.borderColor=\'var(--border)\';this.style.transform=\'\'">'
+              +'<div style="background:linear-gradient(135deg,'+t.preview+',rgba(0,0,0,0.3));padding:30px 14px;text-align:center;color:#fff;">'
+                +'<div style="font-size:2.6rem;margin-bottom:6px;">'+t.icon+'</div>'
+                +'<div style="font-weight:800;font-size:0.85rem;line-height:1.2;">'+esc(t.name)+'</div>'
+              +'</div>'
+              +'<div style="padding:8px 10px;font-size:0.72rem;color:var(--text-muted);text-align:center;">A4 size · Editable · Print-ready</div>'
+            +'</div>';
+          }).join('')
+      +'</div>'
+      +'</div>';
+    document.body.appendChild(m);
+  },
+
+  _createFromTemplate: function(tplId){
+    var tpl = this.TEMPLATES.find(function(t){return t.id===tplId;});
+    if(!tpl) return;
+    var newId = 'b_' + Date.now().toString(36);
+    var brochure = {
+      id: newId,
+      tplId: tplId,
+      icon: tpl.icon,
+      color: tpl.preview,
+      name: tpl.name,
+      data: JSON.parse(JSON.stringify(tpl.data)), // deep clone
+      created: new Date().toISOString().slice(0,10),
+      updated: new Date().toISOString().slice(0,10)
+    };
+    var list = this.getStore();
+    list.push(brochure);
+    this.setStore(list);
+    var modal = document.getElementById('brochure-tpl-modal');
+    if(modal) modal.remove();
+    try { Audit.log('BROCHURE','Created from template: '+tpl.name); } catch(e){}
+    this.editBrochure(newId);
+  },
+
+  editBrochure: function(id){
+    var list = this.getStore();
+    var b = list.find(function(x){return x.id===id;});
+    if(!b){ App.toast('Brochure not found','error'); return; }
+    this._editId = id;
+    this._data = JSON.parse(JSON.stringify(b.data));
+    // Switch views
+    var listV = document.getElementById('brochures-list-view');
+    var edV   = document.getElementById('brochures-editor');
+    if(listV) listV.style.display = 'none';
+    if(edV)   edV.style.display = '';
+    // Set title
+    var t = document.getElementById('brochure-editor-title');
+    if(t) t.textContent = '✏️ ' + (b.name || 'Brochure');
+    this._renderForm();
+    this._renderPreview();
+  },
+
+  backToList: function(){
+    this._editId = null;
+    this._data = null;
+    this.render();
+  },
+
+  _renderForm: function(){
+    var d = this._data || {};
+    var form = document.getElementById('brochure-form');
+    if(!form) return;
+    var emojiBar = '<div style="display:flex;flex-wrap:wrap;gap:3px;margin-bottom:8px;font-size:1rem;line-height:1;">'
+      + this.EMOJI_LIB.map(function(e){
+          return '<span onclick="Brochure._insertEmojiAt(\''+e+'\')" style="cursor:pointer;padding:4px 6px;border-radius:5px;background:var(--surface-2);" title="Insert '+e+'">'+e+'</span>';
+        }).join('')
+      + '</div>';
+    var html = ''
+      + '<div style="font-size:0.7rem;color:var(--text-muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:1px;">🎨 Quick Emoji (click to copy)</div>'
+      + emojiBar
+      + '<div class="form-group" style="margin-bottom:10px;"><label>📋 Title</label><input type="text" id="br-title" value="'+esc(d.title||'')+'" oninput="Brochure._updateField(\'title\',this.value)"></div>'
+      + '<div class="form-group" style="margin-bottom:10px;"><label>✨ Tagline</label><input type="text" id="br-tagline" value="'+esc(d.tagline||'')+'" oninput="Brochure._updateField(\'tagline\',this.value)"></div>'
+      + '<div class="form-group" style="margin-bottom:10px;"><label>📝 Intro Text</label><textarea id="br-intro" rows="3" oninput="Brochure._updateField(\'intro\',this.value)">'+esc(d.intro||'')+'</textarea></div>'
+      + '<div class="form-group" style="margin-bottom:10px;"><label>⭐ Services / Features</label>'
+        + '<div id="br-services-list">'+this._renderServicesList()+'</div>'
+        + '<button type="button" onclick="Brochure._addService()" class="btn btn-xs btn-secondary" style="margin-top:6px;">+ Add Service</button>'
+      + '</div>'
+      + '<div class="form-group" style="margin-bottom:10px;"><label>✅ Why Choose Us</label><textarea id="br-whyus" rows="5" oninput="Brochure._updateField(\'whyUs\',this.value)">'+esc(d.whyUs||'')+'</textarea></div>'
+      + '<div class="form-group" style="margin-bottom:10px;"><label>🎁 Special Offer</label><input type="text" id="br-offer" value="'+esc(d.offer||'')+'" oninput="Brochure._updateField(\'offer\',this.value)"></div>'
+      + '<div class="form-group" style="margin-bottom:10px;"><label>📞 Call to Action</label><input type="text" id="br-cta" value="'+esc(d.cta||'')+'" oninput="Brochure._updateField(\'cta\',this.value)"></div>';
+    form.innerHTML = html;
+  },
+
+  _renderServicesList: function(){
+    var d = this._data || {};
+    var svcs = d.services || [];
+    return svcs.map(function(s, i){
+      return '<div style="display:flex;gap:5px;margin-bottom:5px;background:var(--surface-2);padding:6px;border-radius:6px;">'
+        + '<input type="text" value="'+esc(s.emoji||'⭐')+'" oninput="Brochure._updateService('+i+',\'emoji\',this.value)" style="width:36px;text-align:center;font-size:0.95rem;padding:5px;">'
+        + '<input type="text" value="'+esc(s.name||'')+'" placeholder="Service name" oninput="Brochure._updateService('+i+',\'name\',this.value)" style="flex:1;font-size:0.78rem;padding:5px;">'
+        + '<input type="text" value="'+esc(s.desc||'')+'" placeholder="Description" oninput="Brochure._updateService('+i+',\'desc\',this.value)" style="flex:2;font-size:0.78rem;padding:5px;">'
+        + '<button type="button" onclick="Brochure._delService('+i+')" class="btn btn-xs btn-danger" style="padding:3px 7px;">×</button>'
+      + '</div>';
+    }).join('') || '<div style="color:var(--text-muted);font-size:0.78rem;padding:6px;">No services yet — click "+ Add Service"</div>';
+  },
+
+  _updateField: function(field, value){
+    if(!this._data) return;
+    this._data[field] = value;
+    this._renderPreview();
+  },
+  _updateService: function(i, key, value){
+    if(!this._data || !this._data.services || !this._data.services[i]) return;
+    this._data.services[i][key] = value;
+    this._renderPreview();
+  },
+  _addService: function(){
+    if(!this._data) return;
+    if(!this._data.services) this._data.services = [];
+    this._data.services.push({emoji:'⭐', name:'New Service', desc:'Description'});
+    this._renderForm();
+    this._renderPreview();
+  },
+  _delService: function(i){
+    if(!this._data || !this._data.services) return;
+    this._data.services.splice(i, 1);
+    this._renderForm();
+    this._renderPreview();
+  },
+  _insertEmojiAt: function(emoji){
+    // Try to insert into the focused input/textarea
+    var el = document.activeElement;
+    if(!el || (el.tagName !== 'INPUT' && el.tagName !== 'TEXTAREA')){
+      // Fall back: copy to clipboard
+      if(navigator.clipboard) navigator.clipboard.writeText(emoji);
+      App.toast('📋 '+emoji+' copied — paste anywhere','info',1500);
+      return;
+    }
+    var start = el.selectionStart || 0;
+    var end = el.selectionEnd || 0;
+    el.value = el.value.slice(0,start) + emoji + el.value.slice(end);
+    el.selectionStart = el.selectionEnd = start + emoji.length;
+    el.dispatchEvent(new Event('input', {bubbles:true}));
+    el.focus();
+  },
+
+  _renderPreview: function(){
+    var d = this._data || {};
+    var co = STORE.get('pk3_settings', {}) || {};
+    var prev = document.getElementById('brochure-live-preview');
+    if(!prev) return;
+    // Find color from current brochure
+    var list = this.getStore();
+    var b = list.find(function(x){return x.id===Brochure._editId;});
+    var color = (b && b.color) || '#f97316';
+    var logo = co.logo || '';
+    // A4 ~ 595×842 px at 72dpi → scale to ~360 wide for preview
+    var scale = 0.55;
+    var html =
+      '<div style="width:595px;min-height:842px;background:#fff;color:#222;font-family:Arial,Helvetica,sans-serif;padding:40px 36px;box-sizing:border-box;transform:scale('+scale+');transform-origin:top left;box-shadow:0 4px 18px rgba(0,0,0,0.3);" id="brochure-page">'
+      // Header band
+      +'<div style="background:linear-gradient(135deg,'+color+',rgba(0,0,0,0.4));padding:24px 22px;border-radius:14px;color:#fff;display:flex;align-items:center;gap:14px;margin-bottom:22px;">'
+        + (logo ? '<img src="'+logo+'" style="width:70px;height:70px;border-radius:10px;background:#fff;object-fit:contain;padding:4px;flex-shrink:0;">' : '<div style="width:70px;height:70px;border-radius:10px;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:2.2rem;flex-shrink:0;">🏢</div>')
+        +'<div style="flex:1;min-width:0;">'
+          +'<div style="font-size:1.6rem;font-weight:900;line-height:1.15;margin-bottom:4px;">'+esc(d.title||'Title')+'</div>'
+          +'<div style="font-size:0.92rem;opacity:0.92;">'+esc(d.tagline||'')+'</div>'
+        +'</div>'
+      +'</div>'
+      // Intro
+      +'<div style="font-size:0.92rem;line-height:1.65;color:#333;margin-bottom:22px;white-space:pre-wrap;">'+esc(d.intro||'')+'</div>'
+      // Services grid
+      +'<div style="background:#f8f8fc;border-radius:12px;padding:16px;margin-bottom:18px;">'
+        +'<div style="font-size:1rem;font-weight:800;color:'+color+';margin-bottom:10px;">⭐ Services / Features</div>'
+        +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">'
+        +(d.services||[]).map(function(s){
+          return '<div style="background:#fff;border-radius:8px;padding:10px;border-left:3px solid '+color+';">'
+            +'<div style="font-size:0.92rem;font-weight:700;margin-bottom:3px;"><span style="font-size:1.1rem;margin-right:5px;">'+esc(s.emoji||'⭐')+'</span>'+esc(s.name||'')+'</div>'
+            +'<div style="font-size:0.78rem;color:#555;line-height:1.4;">'+esc(s.desc||'')+'</div>'
+          +'</div>';
+        }).join('')
+        +'</div>'
+      +'</div>'
+      // Why us
+      +(d.whyUs?'<div style="background:'+color+'22;border:2px dashed '+color+';border-radius:10px;padding:14px 16px;margin-bottom:16px;">'
+        +'<div style="font-size:0.95rem;font-weight:800;color:'+color+';margin-bottom:6px;">💡 Why Choose Us</div>'
+        +'<div style="font-size:0.84rem;line-height:1.7;white-space:pre-wrap;color:#333;">'+esc(d.whyUs)+'</div>'
+      +'</div>':'')
+      // Offer
+      +(d.offer?'<div style="background:linear-gradient(90deg,#fef3c7,#fde68a);border-radius:10px;padding:12px 16px;margin-bottom:16px;text-align:center;font-weight:800;font-size:0.95rem;color:#92400e;">'+esc(d.offer)+'</div>':'')
+      // Footer
+      +'<div style="border-top:2px solid '+color+';padding-top:14px;margin-top:auto;text-align:center;">'
+        +'<div style="font-size:1.05rem;font-weight:900;color:'+color+';">'+esc(d.cta||'')+'</div>'
+        +'<div style="font-size:0.78rem;color:#666;margin-top:6px;">'+esc(co.companyName||'PRERAK MULTIPURPOSE PVT LTD')+' • '+esc(co.address||'Hetauda-4, Makwanpur')+'</div>'
+        +'<div style="font-size:0.74rem;color:#888;margin-top:2px;">📞 '+esc(co.phone1||'9855069733')+(co.phone2?' / '+esc(co.phone2):'')+(co.email?' • '+esc(co.email):'')+'</div>'
+      +'</div>'
+      +'</div>';
+    prev.innerHTML = html;
+    // Adjust preview container size for the scaled page
+    prev.style.width = (595*scale + 16) + 'px';
+  },
+
   save: function(){
-    var title = getVal('brochure-title');
-    var subtitle = getVal('brochure-subtitle');
-    var body = getVal('brochure-body');
-    if(!title){ showToast('Enter brochure title','warning'); return; }
-    var item = { id: Date.now(), title:title, subtitle:subtitle, body:body, created: todayBS() };
-    this._items.push(item);
-    setLS('pk3_templates', this._items);
-    showToast('Brochure saved','success');
-    setVal('brochure-title',''); setVal('brochure-subtitle',''); setVal('brochure-body','');
-    this.render();
-    addActivity('Brochure created: '+title);
+    if(!this._editId || !this._data){ App.toast('Nothing to save','warning'); return; }
+    var list = this.getStore();
+    var idx = list.findIndex(function(x){return x.id===Brochure._editId;});
+    if(idx < 0){ App.toast('Brochure not found','error'); return; }
+    list[idx].data = JSON.parse(JSON.stringify(this._data));
+    list[idx].updated = new Date().toISOString().slice(0,10);
+    this.setStore(list);
+    try { Audit.log('BROCHURE','Saved: '+(this._data.title||'Untitled')); } catch(e){}
+    App.toast('💾 Brochure saved','success');
   },
-  del: function(i){
+
+  delBrochure: function(id){
     if(!confirm('Delete this brochure?')) return;
-    this._items.splice(i,1);
-    setLS('pk3_templates', this._items);
+    var list = this.getStore().filter(function(x){return x.id!==id;});
+    this.setStore(list);
+    try { Audit.log('BROCHURE','Deleted'); } catch(e){}
+    App.toast('🗑 Deleted','info');
     this.render();
   },
-  preview: function(i){
-    var b = this._items[i];
-    if(!b) return;
-    var w = window.open('','_blank','width=700,height=900');
-    var company = getLS('pk3_company') || {};
-    w.document.write('<html><head><title>'+esc(b.title)+'</title></head><body style="font-family:sans-serif;padding:32px;max-width:600px;margin:auto">');
-    w.document.write('<h1 style="color:#1565c0">'+esc(company.name||'PRERAK MULTIPURPOSE PVT LTD')+'</h1>');
-    w.document.write('<hr><h2>'+esc(b.title)+'</h2>');
-    if(b.subtitle) w.document.write('<h4 style="color:#555">'+esc(b.subtitle)+'</h4>');
-    w.document.write('<div style="margin-top:16px;white-space:pre-wrap">'+esc(b.body||'')+'</div>');
-    w.document.write('<hr style="margin-top:40px"><small style="color:#888">'+esc(company.address||'Hetauda-4, Makwanpur')+'</small>');
-    w.document.write('</body></html>');
-    w.document.close();
+
+  printBrochure: function(id){
+    // Save first, then print preview
+    var b;
+    if(id){
+      b = this.getStore().find(function(x){return x.id===id;});
+    } else if(this._editId){
+      this.save();
+      b = this.getStore().find(function(x){return x.id===Brochure._editId;});
+    }
+    if(!b){ App.toast('Brochure not found','error'); return; }
+    var co = STORE.get('pk3_settings', {}) || {};
+    var d = b.data || {};
+    var color = b.color || '#f97316';
+    var logo = co.logo || '';
+    var w = window.open('', '_blank', 'width=820,height=1000');
+    if(!w){ App.toast('Popup blocked — allow popups to print','error'); return; }
+    var doc = w.document;
+    doc.open();
+    doc.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>'+esc(d.title||'Brochure')+'</title>'
+      +'<style>'
+        +'@page{size:A4;margin:0}'
+        +'*{box-sizing:border-box;margin:0;padding:0}'
+        +'body{font-family:Arial,Helvetica,sans-serif;color:#222;background:#fff}'
+        +'.page{width:210mm;min-height:297mm;padding:18mm 16mm;background:#fff}'
+        +'.header{background:linear-gradient(135deg,'+color+',rgba(0,0,0,0.4));padding:20px;border-radius:12px;color:#fff;display:flex;align-items:center;gap:14px;margin-bottom:18px}'
+        +'.header img,.header .logo{width:70px;height:70px;border-radius:10px;background:#fff;padding:4px;object-fit:contain}'
+        +'.header .logo{background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:2rem}'
+        +'.header h1{font-size:1.6rem;line-height:1.2;margin-bottom:3px}'
+        +'.header .tag{font-size:0.92rem;opacity:0.92}'
+        +'.intro{font-size:0.95rem;line-height:1.65;margin-bottom:20px;white-space:pre-wrap}'
+        +'.services{background:#f8f8fc;border-radius:12px;padding:16px;margin-bottom:16px}'
+        +'.services h2{font-size:1rem;color:'+color+';margin-bottom:10px}'
+        +'.svc-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}'
+        +'.svc{background:#fff;border-radius:8px;padding:10px;border-left:3px solid '+color+'}'
+        +'.svc .nm{font-size:0.92rem;font-weight:700;margin-bottom:3px}'
+        +'.svc .em{font-size:1.1rem;margin-right:5px}'
+        +'.svc .ds{font-size:0.78rem;color:#555;line-height:1.4}'
+        +'.why{background:'+color+'22;border:2px dashed '+color+';border-radius:10px;padding:14px 16px;margin-bottom:14px}'
+        +'.why h3{font-size:0.95rem;color:'+color+';margin-bottom:6px}'
+        +'.why pre{font-family:inherit;font-size:0.85rem;line-height:1.7;white-space:pre-wrap}'
+        +'.offer{background:linear-gradient(90deg,#fef3c7,#fde68a);border-radius:10px;padding:12px 16px;margin-bottom:14px;text-align:center;font-weight:800;color:#92400e}'
+        +'.foot{border-top:2px solid '+color+';padding-top:14px;text-align:center}'
+        +'.foot .cta{font-size:1.05rem;font-weight:900;color:'+color+';margin-bottom:5px}'
+        +'.foot .info{font-size:0.78rem;color:#666;line-height:1.5}'
+      +'</style></head><body>'
+      +'<div class="page">'
+        +'<div class="header">'
+          + (logo ? '<img src="'+logo+'">' : '<div class="logo">🏢</div>')
+          +'<div><h1>'+esc(d.title||'Title')+'</h1><div class="tag">'+esc(d.tagline||'')+'</div></div>'
+        +'</div>'
+        +'<div class="intro">'+esc(d.intro||'')+'</div>'
+        +'<div class="services">'
+          +'<h2>⭐ Services / Features</h2>'
+          +'<div class="svc-grid">'
+          + (d.services||[]).map(function(s){
+            return '<div class="svc"><div class="nm"><span class="em">'+esc(s.emoji||'⭐')+'</span>'+esc(s.name||'')+'</div><div class="ds">'+esc(s.desc||'')+'</div></div>';
+          }).join('')
+          +'</div>'
+        +'</div>'
+        + (d.whyUs?'<div class="why"><h3>💡 Why Choose Us</h3><pre>'+esc(d.whyUs)+'</pre></div>':'')
+        + (d.offer?'<div class="offer">'+esc(d.offer)+'</div>':'')
+        +'<div class="foot">'
+          +'<div class="cta">'+esc(d.cta||'')+'</div>'
+          +'<div class="info">'+esc(co.companyName||'PRERAK MULTIPURPOSE PVT LTD')+' • '+esc(co.address||'Hetauda-4, Makwanpur')+'</div>'
+          +'<div class="info">📞 '+esc(co.phone1||'9855069733')+(co.phone2?' / '+esc(co.phone2):'')+(co.email?' • '+esc(co.email):'')+'</div>'
+        +'</div>'
+      +'</div>'
+      +'<script>setTimeout(function(){window.print();},500);<\/script>'
+      +'</body></html>');
+    doc.close();
   },
-  print: function(i){ this.preview(i); }
+
+  shareBrochure: function(id){
+    var b = id ? this.getStore().find(function(x){return x.id===id;}) : (this._editId ? this.getStore().find(function(x){return x.id===Brochure._editId;}) : null);
+    if(!b){ App.toast('Brochure not found','error'); return; }
+    var d = b.data || {};
+    var msg = '*'+(d.title||'Brochure')+'*\n_'+(d.tagline||'')+'_\n\n'
+      + (d.intro||'')+'\n\n'
+      + '⭐ *Services:*\n'
+      + (d.services||[]).map(function(s){ return (s.emoji||'⭐')+' '+s.name+(s.desc?' — '+s.desc:''); }).join('\n')
+      + '\n\n' + (d.whyUs ? '✅ *Why Us:*\n'+d.whyUs+'\n\n' : '')
+      + (d.offer ? '🎁 '+d.offer+'\n\n' : '')
+      + (d.cta || '');
+    var phone = prompt('Send to phone (10 digits, blank for general):');
+    if(phone === null) return;
+    var p = (phone||'').replace(/[^0-9]/g,'');
+    var url = 'https://wa.me/'+(p?'977'+p:'')+'?text='+encodeURIComponent(msg);
+    window.open(url, '_blank');
+  },
+
+  // Legacy aliases (kept for any other code that calls them)
+  shareImage: function(){ this.shareBrochure(); },
+  print: function(){ this.printBrochure(); }
 };
 
 var Ledger = {
@@ -5096,7 +6044,7 @@ var BSCal = {
   _year: 0, _month: 0,
   init: function(){
     var today = todayBS().split('-');
-    this._year = parseInt(today[0]||2081);
+    this._year = parseInt(today[0]||2083);
     this._month = parseInt(today[1]||1);
     this.render();
   },
@@ -5104,46 +6052,152 @@ var BSCal = {
     var el = document.getElementById('bscal-grid');
     if(!el) return;
     this._populateSelects();
-    var yEl = document.getElementById('bscal-year');
-    var mEl = document.getElementById('bscal-month');
-    if(yEl) yEl.textContent = this._year;
-    if(mEl) mEl.textContent = BS_MONTHS[this._month-1]||('Month '+this._month);
-    // simple 7-col grid with days
-    var _bsRow = BS_MONTHS_DATA[this._year - 2000]; var days = (_bsRow && _bsRow[this._month]) ? _bsRow[this._month] : 30;
+    // Show today's AD device date as a small subtitle
+    var devEl = document.getElementById('bscal-device-date');
+    if(devEl){
+      var nowAd = new Date();
+      var adStr = nowAd.toLocaleDateString('en-IN',{weekday:'short',day:'2-digit',month:'short',year:'numeric'});
+      devEl.textContent = '🌐 ' + adStr;
+    }
+    var _bsRow = BS_MONTHS_DATA[this._year - 2000];
+    var days = (_bsRow && _bsRow[this._month]) ? _bsRow[this._month] : 30;
     var todayBS_ = todayBS();
-    var html = '<div class="row g-1 text-center"><div class="col fw-bold text-danger" style="font-size:12px">Sun</div><div class="col fw-bold" style="font-size:12px">Mon</div><div class="col fw-bold" style="font-size:12px">Tue</div><div class="col fw-bold" style="font-size:12px">Wed</div><div class="col fw-bold" style="font-size:12px">Thu</div><div class="col fw-bold" style="font-size:12px">Fri</div><div class="col fw-bold text-primary" style="font-size:12px">Sat</div></div>';
-    // Get first weekday for this BS month (approximate using AD conversion)
+    // ── COMPACT MODE (v4.0.3): smaller cells, tighter padding ──
+    var inFullModal = !!document.querySelector('#bscal-full-modal.open');
+    var cellSize = inFullModal ? '40px' : '28px';
+    var fontSize = inFullModal ? '0.95rem' : '0.7rem';
+    var headFontSize = inFullModal ? '0.78rem' : '0.6rem';
+    var cellPad = inFullModal ? '8px 0' : '4px 0';
+    var gap = inFullModal ? '4px' : '2px';
+    var headers = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    var html = '<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:'+gap+';margin-bottom:2px;">';
+    headers.forEach(function(h, i){
+      var color = i===0 ? 'var(--red)' : (i===6 ? 'var(--blue)' : 'var(--text-muted)');
+      html += '<div style="font-size:'+headFontSize+';font-weight:700;text-align:center;padding:3px 0;color:'+color+';letter-spacing:0.2px;">'+h+'</div>';
+    });
+    html += '</div>';
+    // Get first weekday for this BS month (using AD conversion)
     var ad = bsToAd(this._year, this._month, 1);
     var firstDow = ad ? ad.getDay() : 0;
-    html += '<div class="row g-1 text-center">';
-    var dayCount = 0;
-    for(var i=0;i<firstDow;i++){ html+='<div class="col"></div>'; dayCount++; }
-    for(var d=1;d<=days;d++){
+    html += '<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:'+gap+';">';
+    // Empty cells before day 1
+    for(var i=0; i<firstDow; i++){ html += '<div></div>'; }
+    // Day cells
+    for(var d=1; d<=days; d++){
       var key = this._year+'-'+(this._month<10?'0':'')+this._month+'-'+(d<10?'0':'')+d;
-      var isToday = key===todayBS_;
-      html += '<div class="col"><div class="rounded text-center py-1 '+(isToday?'bg-primary text-white fw-bold':'')+(dayCount%7===0?' text-danger':dayCount%7===6?' text-primary':'')+'" style="font-size:12px;cursor:pointer" onclick="BSCal.selectDay(\''+key+'\')">'+d+'</div></div>';
-      dayCount++;
-      if(dayCount%7===0 && d<days) html += '</div><div class="row g-1 text-center">';
+      var isToday = key === todayBS_;
+      var dow = (firstDow + d - 1) % 7;
+      var dayColor = dow===0 ? 'var(--red)' : (dow===6 ? 'var(--blue)' : 'var(--text)');
+      var style = 'cursor:pointer;text-align:center;padding:'+cellPad+';border-radius:5px;font-size:'+fontSize+';font-weight:600;transition:all 0.15s;line-height:1;min-height:'+cellSize+';display:flex;align-items:center;justify-content:center;';
+      if(isToday){
+        style += 'background:var(--accent);color:#fff;font-weight:800;box-shadow:0 1px 4px var(--accent-glow);';
+      } else {
+        style += 'color:'+dayColor+';background:var(--surface-2);';
+      }
+      html += '<div onclick="BSCal.selectDay(\''+key+'\')" '
+            + (isToday ? 'data-today="1" ' : '')
+            + 'style="'+style+'">'+d+'</div>';
     }
     html += '</div>';
     el.innerHTML = html;
   },
-  prev: function(){ this._month--; if(this._month<1){ this._month=12; this._year--; } this.render(); },
-  next: function(){ this._month++; if(this._month>12){ this._month=1; this._year++; } this.render(); },
-  selectDay: function(date){ showToast('Selected: '+date,'info'); },
+  prev: function(){ this._month--; if(this._month<1){ this._month=12; this._year--; } this.render(); this._renderFull(); },
+  next: function(){ this._month++; if(this._month>12){ this._month=1; this._year++; } this.render(); this._renderFull(); },
+  selectDay: function(date){
+    if(window.showToast) showToast('📅 Selected: '+date,'info');
+    else if(window.App && App.toast) App.toast('📅 Selected: '+date,'info');
+  },
   goToday: function(){
     var t = todayBs().split('-');
     this._year=parseInt(t[0]); this._month=parseInt(t[1]);
-    this.render();
+    this.render(); this._renderFull();
   },
-  prevYear: function(){ this._year--; this.render(); },
-  nextYear: function(){ this._year++; this.render(); },
+  prevYear: function(){ this._year--; this.render(); this._renderFull(); },
+  nextYear: function(){ this._year++; this.render(); this._renderFull(); },
   jumpTo: function(){
     var mSel = document.getElementById('bscal-month-sel');
     var ySel = document.getElementById('bscal-year-sel');
     if(mSel && mSel.value) this._month = parseInt(mSel.value);
     if(ySel && ySel.value) this._year  = parseInt(ySel.value);
-    this.render();
+    this.render(); this._renderFull();
+  },
+  // ── FULL CALENDAR (v4.0.3): opens a large modal version ──
+  openFull: function(){
+    var m = document.getElementById('bscal-full-modal');
+    if(!m){ this._buildFullModal(); m = document.getElementById('bscal-full-modal'); }
+    m.classList.add('open');
+    this._renderFull();
+  },
+  closeFull: function(){
+    var m = document.getElementById('bscal-full-modal');
+    if(m) m.classList.remove('open');
+  },
+  _buildFullModal: function(){
+    var m = document.createElement('div');
+    m.className = 'modal-overlay';
+    m.id = 'bscal-full-modal';
+    m.innerHTML =
+      '<div class="modal" style="max-width:520px;">'
+      +'<div class="modal-head">'
+        +'<div class="modal-title">📅 Nepali Calendar (Full View)</div>'
+        +'<button class="modal-close" onclick="BSCal.closeFull()">✕</button>'
+      +'</div>'
+      +'<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;gap:6px;flex-wrap:wrap;">'
+        +'<div style="display:flex;gap:4px;">'
+          +'<button onclick="BSCal.prevYear()" class="btn btn-sm btn-secondary" style="padding:5px 10px;">«</button>'
+          +'<button onclick="BSCal.prev()" class="btn btn-sm btn-secondary" style="padding:5px 10px;">◀</button>'
+        +'</div>'
+        +'<div id="bscal-full-title" style="font-weight:800;font-size:1rem;color:var(--accent);"></div>'
+        +'<div style="display:flex;gap:4px;">'
+          +'<button onclick="BSCal.next()" class="btn btn-sm btn-secondary" style="padding:5px 10px;">▶</button>'
+          +'<button onclick="BSCal.nextYear()" class="btn btn-sm btn-secondary" style="padding:5px 10px;">»</button>'
+        +'</div>'
+      +'</div>'
+      +'<div id="bscal-full-grid" style="padding:6px 4px;"></div>'
+      +'<div style="display:flex;justify-content:flex-end;gap:8px;margin-top:8px;">'
+        +'<button onclick="BSCal.goToday()" class="btn btn-sm btn-primary">📅 आज</button>'
+        +'<button onclick="BSCal.closeFull()" class="btn btn-sm btn-secondary">Close</button>'
+      +'</div>'
+      +'</div>';
+    document.body.appendChild(m);
+  },
+  _renderFull: function(){
+    var grid = document.getElementById('bscal-full-grid');
+    var title = document.getElementById('bscal-full-title');
+    if(!grid) return;
+    if(title){
+      var monthName = (typeof BS_MONTHS!=='undefined' && BS_MONTHS[this._month-1]) ? BS_MONTHS[this._month-1] : ('Month '+this._month);
+      title.textContent = monthName + ' ' + this._year;
+    }
+    // Reuse render logic by temporarily redirecting target
+    var origGrid = document.getElementById('bscal-grid');
+    // Render into the full grid: replicate the same drawing but bigger
+    var _bsRow = BS_MONTHS_DATA[this._year - 2000];
+    var days = (_bsRow && _bsRow[this._month]) ? _bsRow[this._month] : 30;
+    var todayBS_ = todayBS();
+    var headers = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    var html = '<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-bottom:4px;">';
+    headers.forEach(function(h, i){
+      var color = i===0 ? 'var(--red)' : (i===6 ? 'var(--blue)' : 'var(--text-muted)');
+      html += '<div style="font-size:0.78rem;font-weight:700;text-align:center;padding:6px 0;color:'+color+';">'+h+'</div>';
+    });
+    html += '</div>';
+    var ad = bsToAd(this._year, this._month, 1);
+    var firstDow = ad ? ad.getDay() : 0;
+    html += '<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:5px;">';
+    for(var i=0; i<firstDow; i++){ html += '<div></div>'; }
+    for(var d=1; d<=days; d++){
+      var key = this._year+'-'+(this._month<10?'0':'')+this._month+'-'+(d<10?'0':'')+d;
+      var isToday = key === todayBS_;
+      var dow = (firstDow + d - 1) % 7;
+      var dayColor = dow===0 ? 'var(--red)' : (dow===6 ? 'var(--blue)' : 'var(--text)');
+      var style = 'cursor:pointer;text-align:center;padding:10px 0;border-radius:8px;font-size:0.95rem;font-weight:600;min-height:40px;display:flex;align-items:center;justify-content:center;';
+      style += isToday ? 'background:var(--accent);color:#fff;font-weight:800;box-shadow:0 2px 8px var(--accent-glow);'
+                       : 'color:'+dayColor+';background:var(--surface-2);';
+      html += '<div onclick="BSCal.selectDay(\''+key+'\')" style="'+style+'">'+d+'</div>';
+    }
+    html += '</div>';
+    grid.innerHTML = html;
   },
   _populateSelects: function(){
     var mSel = document.getElementById('bscal-month-sel');
@@ -5746,7 +6800,8 @@ Auth.currentRole = function() {
   return currentUser ? (currentUser.role || 'staff') : 'staff';
 };
 Auth.isSuperAdmin = function() {
-  return this.currentRole() === 'superadmin';
+  // True if logged-in role is superadmin, OR if any admin/superadmin has unlocked the SA gate
+  return this.currentRole() === 'superadmin' || this.isSuperAdminUnlocked();
 };
 Auth.isAdmin = function() {
   var r = this.currentRole(); return r === 'admin' || r === 'superadmin';
@@ -5795,20 +6850,41 @@ var AdminDash = {
         +'<div style="font-size:0.72rem;color:var(--text-muted);">@'+esc(u.user)+' \u00b7 <span style="color:'+(roleColors[u.role]||'inherit')+';">'+u.role.toUpperCase()+'</span></div>';
       info.appendChild(av); info.appendChild(nd);
       var btns = document.createElement('div');
-      btns.style.cssText = 'display:flex;gap:6px;flex-shrink:0;';
+      btns.style.cssText = 'display:flex;gap:6px;flex-shrink:0;flex-wrap:wrap;';
+      // Change role button (cycle through roles) — protect punya
       if (Auth.isSuperAdmin() && u.user !== 'punya') {
         var roles = ['staff','admin','superadmin'];
         var next = roles[(roles.indexOf(u.role)+1) % roles.length];
         var rb2 = document.createElement('button');
         rb2.className = 'btn btn-xs btn-secondary'; rb2.textContent = '\ud83d\udd04 ' + next;
+        rb2.title = 'Change role to '+next;
         rb2.onclick = (function(idx,nr){ return function(){ AdminDash.changeRole(idx,nr); }; })(i, next);
         btns.appendChild(rb2);
       }
+      // Edit username button
+      if (Auth.isSuperAdmin() && u.user !== 'punya') {
+        var eb = document.createElement('button');
+        eb.className = 'btn btn-xs btn-secondary'; eb.textContent = '\u270f\ufe0f Username';
+        eb.title = 'Edit username';
+        eb.onclick = (function(idx){ return function(){ AdminDash.editUsername(idx); }; })(i);
+        btns.appendChild(eb);
+      }
+      // Reset password button
       if (Auth.isSuperAdmin()) {
         var pb = document.createElement('button');
         pb.className = 'btn btn-xs btn-secondary'; pb.textContent = '\ud83d\udd11 Reset Pass';
+        pb.title = 'Reset this user\'s password';
         pb.onclick = (function(idx){ return function(){ AdminDash.resetPass(idx); }; })(i);
         btns.appendChild(pb);
+      }
+      // Delete user button — protect punya and self
+      if (Auth.isSuperAdmin() && u.user !== 'punya' && (!currentUser || u.user !== currentUser.user)) {
+        var db = document.createElement('button');
+        db.className = 'btn btn-xs btn-danger'; db.textContent = '\ud83d\uddd1\ufe0f';
+        db.title = 'Delete user';
+        db.style.background = 'var(--red)'; db.style.color = '#fff';
+        db.onclick = (function(idx){ return function(){ AdminDash.deleteUser(idx); }; })(i);
+        btns.appendChild(db);
       }
       row.appendChild(info); row.appendChild(btns); el.appendChild(row);
     });
@@ -5863,68 +6939,126 @@ var AdminDash = {
 
   runTests: function() { this.renderTests(); App.toast('\u2705 Tests complete','success'); },
 
+  // ── Helper: re-confirm Super Admin password before any destructive action ──
+  _dangerConfirm: function(actionName, callback){
+    if (!Auth.isSuperAdmin()) { App.toast('\u26d4 Super Admin \u092e\u093e\u0924\u094d\u0930','error'); return; }
+    var pw = prompt('🔒 '+actionName+'\n\nपुष्टि गर्न Super Admin password टाइप गर्नुस्:');
+    if(pw === null) return; // user pressed Cancel
+    var ok = USERS_CONFIG.some(function(u){ return u.role==='superadmin' && u.pass===pw; });
+    if(!ok){
+      App.toast('गलत Super Admin Password','error',3000);
+      try { Audit.log('SECURITY','Failed danger-zone confirm: '+actionName+' by '+(currentUser?currentUser.user:'?')); } catch(e){}
+      return;
+    }
+    try { Audit.log('SECURITY','Danger-zone confirmed: '+actionName+' by '+(currentUser?currentUser.user:'?')); } catch(e){}
+    callback();
+  },
+
   changeRole: function(idx, newRole) {
     if (!Auth.isSuperAdmin()) { App.toast('\u26d4 Super Admin \u092e\u093e\u0924\u094d\u0930','error'); return; }
-    if (!confirm('Change role to '+newRole+'?')) return;
+    if(USERS_CONFIG[idx].user === 'punya'){ App.toast('🛡️ Master superadmin lock — role change disabled','warning'); return; }
+    if (!confirm('Change role of @'+USERS_CONFIG[idx].user+' to '+newRole+'?')) return;
     USERS_CONFIG[idx].role = newRole;
+    try { Audit.log('USERS','Role changed: '+USERS_CONFIG[idx].user+' → '+newRole); } catch(e){}
     App.toast('\u2705 Role updated: '+newRole,'success');
     this.renderUsers();
   },
 
   resetPass: function(idx) {
     if (!Auth.isSuperAdmin()) return;
-    var p = prompt('New password for @'+USERS_CONFIG[idx].user+':');
-    if (!p || p.length < 4) { App.toast('Too short','error'); return; }
+    var p = prompt('🔒 New password for @'+USERS_CONFIG[idx].user+':');
+    if (!p) return;
+    if (p.length < 4) { App.toast('Password too short (min 4 chars)','error'); return; }
     USERS_CONFIG[idx].pass = p;
-    App.toast('\u2705 Password updated','success');
+    try { Audit.log('USERS','Password reset for: '+USERS_CONFIG[idx].user); } catch(e){}
+    App.toast('\u2705 Password updated for @'+USERS_CONFIG[idx].user,'success');
+  },
+
+  editUsername: function(idx) {
+    if (!Auth.isSuperAdmin()) return;
+    var u = USERS_CONFIG[idx];
+    if(u.user === 'punya'){ App.toast('🛡️ Master superadmin username locked','warning'); return; }
+    var newUser = prompt('Edit username for "'+u.name+'":', u.user);
+    if(!newUser || newUser.trim()==='') return;
+    newUser = newUser.trim();
+    if(newUser === u.user) return;
+    if(USERS_CONFIG.some(function(x,i){ return i!==idx && x.user===newUser; })){
+      App.toast('❌ Username already exists','error'); return;
+    }
+    var oldUser = u.user;
+    u.user = newUser;
+    // If renaming the currently logged-in user, sync session
+    if(currentUser && currentUser.user === oldUser){ currentUser.user = newUser; }
+    try { Audit.log('USERS','Username changed: '+oldUser+' → '+newUser); } catch(e){}
+    App.toast('\u2705 Username updated: @'+newUser,'success');
+    this.renderUsers();
+  },
+
+  deleteUser: function(idx) {
+    if (!Auth.isSuperAdmin()) return;
+    var u = USERS_CONFIG[idx];
+    if(u.user === 'punya'){ App.toast('🛡️ Master superadmin cannot be deleted','error'); return; }
+    if(currentUser && u.user === currentUser.user){ App.toast('⚠️ आफ्नै account मेटाउन सकिन्न','error'); return; }
+    AdminDash._dangerConfirm('Delete user @'+u.user, function(){
+      USERS_CONFIG.splice(idx, 1);
+      try { Audit.log('USERS','Deleted user: '+u.user+' ('+u.name+')'); } catch(e){}
+      App.toast('🗑️ User deleted: @'+u.user,'success');
+      AdminDash.renderUsers();
+    });
   },
 
   openAddUser: function() {
     if (!Auth.isSuperAdmin()) { App.toast('\u26d4 Super Admin \u092e\u093e\u0924\u094d\u0930 user add \u0917\u0930\u094d\u0928 \u0938\u0915\u094d\u091b\u0964','error'); return; }
     var un=prompt('Username:'); if(!un)return;
+    un = un.trim();
     if(USERS_CONFIG.find(function(u){return u.user===un;})){App.toast('Username exists','error');return;}
-    var pw=prompt('Password:'); if(!pw)return;
+    var pw=prompt('Password (min 4 chars):'); if(!pw||pw.length<4){App.toast('Password too short','error');return;}
     var nm=prompt('Display Name:'); if(!nm)return;
     var rl=prompt('Role (staff/admin/superadmin):','staff')||'staff';
     if(['staff','admin','superadmin'].indexOf(rl)<0) rl='staff';
     USERS_CONFIG.push({user:un,pass:pw,name:nm,role:rl});
+    try { Audit.log('USERS','Added user: '+un+' ('+rl+')'); } catch(e){}
     App.toast('\u2705 User added: '+nm,'success');
     this.renderUsers();
   },
 
   openServiceEditor: function() {
-    if (!Auth.can('service_edit')) { App.toast('\u26d4 Super Admin \u092e\u093e\u0924\u094d\u0930','error'); return; }
+    if (!Auth.can('service_edit') && !Auth.isSuperAdmin()) { App.toast('\u26d4 Super Admin \u092e\u093e\u0924\u094d\u0930','error'); return; }
     App.navigate('settings'); App.toast('Settings \u092e\u093e service manage \u0917\u0930\u094d\u0928\u0941\u0939\u094b\u0938\u094d','info');
   },
 
+  // ── Danger Zone — all wrapped with password re-confirm ──
   clearAudit: function() {
-    if (!Auth.isSuperAdmin()) { App.toast('\u26d4 Super Admin \u092e\u093e\u0924\u094d\u0930','error'); return; }
-    if (!confirm('Clear all audit logs?')) return;
-    STORE.set('pk3_audit',[]); App.toast('\ud83d\uddd1\ufe0f Audit cleared','success');
+    AdminDash._dangerConfirm('Clear ALL Audit Logs', function(){
+      STORE.set('pk3_audit',[]);
+      App.toast('\ud83d\uddd1\ufe0f Audit cleared','success');
+    });
   },
 
   resetTemplates: function() {
-    if (!Auth.isSuperAdmin()) { App.toast('\u26d4 Super Admin \u092e\u093e\u0924\u094d\u0930','error'); return; }
-    if (!confirm('Reset all templates to default?')) return;
-    STORE.set('pk3_templates', DEFAULT_TEMPLATES); App.toast('\u2705 Templates reset','success');
+    AdminDash._dangerConfirm('Reset ALL Message Templates to default', function(){
+      STORE.set('pk3_templates', DEFAULT_TEMPLATES);
+      App.toast('\u2705 Templates reset to default','success');
+    });
   },
 
   resetRates: function() {
-    if (!Auth.isSuperAdmin()) { App.toast('\u26d4 Super Admin \u092e\u093e\u0924\u094d\u0930','error'); return; }
-    if (!confirm('Reset Rate List to default?')) return;
-    RateList.resetDefaults(true); App.toast('\u2705 Rates reset','success');
+    AdminDash._dangerConfirm('Reset Rate List to default', function(){
+      RateList.resetDefaults(true);
+      App.toast('\u2705 Rates reset to default','success');
+    });
   },
 
   clearAllData: function() {
-    if (!Auth.isSuperAdmin()) { App.toast('\u26d4 Super Admin \u092e\u093e\u0924\u094d\u0930','error'); return; }
-    if (!confirm('\u26a0\ufe0f CLEAR ALL DATA? Cannot be undone!')) return;
-    var c=prompt('Type YES to confirm:');
-    if(c!=='YES'){App.toast('Cancelled','info');return;}
-    ['pk3_customers','pk3_quotations','pk3_followups','pk3_daybook','pk3_invoices',
-     'pk3_staff','pk3_stock','pk3_walkins','pk3_estimates','pk3_activity','pk3_audit',
-     'pk3_sales','pk3_tracker','pk3_bulkFolders'].forEach(function(k){STORE.set(k,[]);});
-    App.toast('\ud83d\udca5 All data cleared','error');
-    App.navigate('dashboard');
+    AdminDash._dangerConfirm('CLEAR ALL BUSINESS DATA (cannot be undone!)', function(){
+      var c = prompt('Type YES (uppercase) to confirm permanent data deletion:');
+      if(c !== 'YES'){ App.toast('Cancelled — nothing was deleted','info'); return; }
+      ['pk3_customers','pk3_quotations','pk3_followups','pk3_daybook','pk3_invoices',
+       'pk3_staff','pk3_stock','pk3_walkins','pk3_estimates','pk3_activity','pk3_audit',
+       'pk3_sales','pk3_tracker','pk3_bulkFolders'].forEach(function(k){STORE.set(k,[]);});
+      App.toast('\ud83d\udca5 All business data cleared','error',5000);
+      App.navigate('dashboard');
+    });
   }
 };
 
