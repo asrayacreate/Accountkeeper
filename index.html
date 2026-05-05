@@ -648,6 +648,7 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
     <div class="nav-section">Follow-ups</div>
     <div class="nav-item" data-page="followups" onclick="App.navigate('followups')"><span class="icon">📅</span>Follow-up Tracker<span class="badge" id="fu-badge" style="display:none;">0</span></div>
     <div class="nav-item" data-page="add-followup" onclick="App.navigate('add-followup')"><span class="icon">🔔</span>Add Follow-up</div>
+    <div class="nav-item" data-page="planner" onclick="App.navigate('planner')"><span class="icon">📝</span>Daily Planner<span class="badge" id="pl-badge" style="display:none;">0</span></div>
 
     <div class="nav-section">Showroom</div>
     <div class="nav-item" data-page="walkin" onclick="App.navigate('walkin')"><span class="icon">🚶</span>Walk-in Greeting</div>
@@ -679,7 +680,7 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
     <div class="nav-item" data-page="audit" data-role="admin" onclick="App.navigate('audit')"><span class="icon">📜</span>Audit Log</div>
     <div class="nav-item" data-page="settings" onclick="App.navigate('settings')"><span class="icon">⚙️</span>Settings</div>
     <div class="nav-item" id="nav-admin-link" onclick="Auth.openUsersModal()" style="display:none;"><span class="icon">🔐</span>Admin Panel</div>
-    <div class="nav-item" id="nav-superadmin-link" data-page="admin-dashboard" onclick="Auth.openSuperAdminGate()" style="display:none;"><span class="icon">🛡️</span>Super Admin</div>
+    <div class="nav-item" id="nav-superadmin-link" data-page="admin-dashboard" onclick="Auth.openSuperAdminGate()"><span class="icon">🛡️</span>Super Admin</div>
 
     <div class="sb-summary-box">
       <div class="sb-summary-title">📊 आजको Summary</div>
@@ -810,6 +811,51 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
       <div id="bscal-device-date" style="padding:2px 10px;font-size:0.62rem;text-align:center;min-height:14px;color:var(--text-muted);"></div>
       <div id="bscal-grid" style="padding:4px 10px 8px;"></div>
     </div>
+
+    <!-- ═══════════════ DASHBOARD DAILY PLANNER WIDGET (v4.0.7) ═══════════════ -->
+    <div class="card" id="dash-planner-widget" style="margin-bottom:14px;border:1px solid var(--border);background:linear-gradient(135deg,var(--surface),var(--surface-2));">
+      <div class="card-head" style="background:linear-gradient(135deg,rgba(168,85,247,0.08),rgba(124,58,237,0.04));border-bottom:2px solid rgba(168,85,247,0.2);">
+        <span style="font-size:0.92rem;font-weight:800;display:flex;align-items:center;gap:6px;">
+          📝 Today's Planner
+          <span id="dash-pl-count" style="background:linear-gradient(135deg,#a855f7,#7c3aed);color:#fff;font-size:0.66rem;padding:1px 8px;border-radius:10px;font-weight:700;">0</span>
+          <span id="dash-pl-notif-status" style="font-size:0.65rem;color:var(--text-muted);font-weight:500;"></span>
+        </span>
+        <div style="display:flex;gap:4px;flex-wrap:wrap;">
+          <button onclick="Planner.requestNotificationPermission()" id="dash-pl-notif-btn" class="btn btn-xs btn-secondary" title="Enable browser notifications" style="font-size:0.66rem;padding:3px 8px;">🔔</button>
+          <button onclick="App.navigate('planner')" class="btn btn-xs btn-secondary" style="font-size:0.66rem;padding:3px 8px;" title="Open full planner">⛶ Open</button>
+        </div>
+      </div>
+
+      <!-- Inline quick add bar -->
+      <div style="padding:10px 14px 8px;border-bottom:1px solid var(--border);">
+        <div style="display:grid;grid-template-columns:2fr 90px 110px auto;gap:6px;align-items:center;">
+          <input type="text" id="dash-pl-quick-title" placeholder="⚡ Quick task — what's next?" onkeydown="if(event.key==='Enter')Dashboard.plQuickAdd();" style="font-size:0.82rem;padding:7px 10px;background:var(--surface-2);border:1.5px solid var(--border);border-radius:8px;color:var(--text);">
+          <input type="time" id="dash-pl-quick-time" value="09:00" style="font-size:0.78rem;padding:7px 6px;background:var(--surface-2);border:1.5px solid var(--border);border-radius:8px;color:var(--text);">
+          <select id="dash-pl-quick-cat" style="font-size:0.78rem;padding:7px 6px;background:var(--surface-2);border:1.5px solid var(--border);border-radius:8px;color:var(--text);">
+            <option value="other">📋 Other</option>
+            <option value="wa">📱 WA</option>
+            <option value="call">📞 Call</option>
+            <option value="meeting">🏢 Meet</option>
+            <option value="visit">🚗 Visit</option>
+            <option value="delivery">📦 Deliver</option>
+            <option value="payment">💰 Pay</option>
+          </select>
+          <button onclick="Dashboard.plQuickAdd()" class="btn btn-sm btn-primary" style="background:linear-gradient(135deg,#a855f7,#7c3aed);color:#fff;font-weight:700;padding:7px 12px;font-size:0.78rem;">+ Add</button>
+        </div>
+      </div>
+
+      <!-- Tab strip: Today / Tomorrow / Overdue -->
+      <div style="display:flex;gap:4px;padding:6px 14px;border-bottom:1px solid var(--border);background:var(--surface-2);">
+        <button id="dash-pl-tab-today"    onclick="Dashboard.plTab('today')"    class="btn btn-xs btn-primary"   style="font-size:0.72rem;padding:4px 10px;">📅 आज <span id="dash-pl-tab-today-cnt" style="background:rgba(255,255,255,0.25);padding:0 5px;border-radius:8px;margin-left:3px;">0</span></button>
+        <button id="dash-pl-tab-tomorrow" onclick="Dashboard.plTab('tomorrow')" class="btn btn-xs btn-secondary" style="font-size:0.72rem;padding:4px 10px;">⏭️ भोलि <span id="dash-pl-tab-tomorrow-cnt" style="background:rgba(255,255,255,0.15);padding:0 5px;border-radius:8px;margin-left:3px;">0</span></button>
+        <button id="dash-pl-tab-overdue"  onclick="Dashboard.plTab('overdue')"  class="btn btn-xs btn-secondary" style="font-size:0.72rem;padding:4px 10px;">⚠️ बाँकी <span id="dash-pl-tab-overdue-cnt" style="background:rgba(255,255,255,0.15);padding:0 5px;border-radius:8px;margin-left:3px;">0</span></button>
+      </div>
+
+      <!-- Task list -->
+      <div id="dash-pl-list" style="padding:8px 14px 12px;max-height:280px;overflow-y:auto;"></div>
+    </div>
+    <!-- ═══════════════ END DASHBOARD PLANNER WIDGET ═══════════════ -->
+
     <div class="card" style="margin-bottom:14px;">
       <div class="card-head"><span>⚡ Recent Activity</span><button onclick="Dashboard.clearActivity()" class="btn btn-xs btn-secondary">Clear</button></div>
       <div id="dash-activity" style="max-height:140px;overflow-y:auto;padding:6px 12px;"></div>
@@ -1149,6 +1195,94 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
     </div>
     <div id="fu-list"></div>
     <div id="no-fu" class="empty-state" style="display:none;"><div class="icon">📅</div><div class="title">Follow-up छैन</div><button onclick="App.navigate('add-followup')" class="btn btn-primary">+ Add Follow-up</button></div>
+  </div>
+
+  <!-- ========================= DAILY PLANNER PAGE ========================= -->
+  <div class="page" id="page-planner">
+    <div class="section-head">
+      <div>
+        <div class="section-title">📝 Daily Planner & Notes</div>
+        <div class="section-subtitle" id="pl-today-display">आजको कामहरू व्यवस्थित गर्नुस्</div>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;">
+        <button id="pl-notif-btn" onclick="Planner.requestNotificationPermission()" class="btn btn-sm btn-secondary" title="Enable browser notifications">🔔 Enable Alerts</button>
+        <button onclick="Planner.openAddModal()" class="btn btn-sm btn-primary">+ नयाँ Task</button>
+      </div>
+    </div>
+
+    <!-- Filter chips -->
+    <div class="btn-group" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;">
+      <button class="btn btn-sm btn-primary" id="pl-f-today" onclick="Planner.filter('today')">📅 आज <span id="pl-cnt-today" style="margin-left:4px;background:rgba(255,255,255,0.25);padding:1px 6px;border-radius:8px;font-size:0.7rem;">0</span></button>
+      <button class="btn btn-sm btn-secondary" id="pl-f-tomorrow" onclick="Planner.filter('tomorrow')">⏭️ भोलि <span id="pl-cnt-tomorrow" style="margin-left:4px;background:rgba(255,255,255,0.15);padding:1px 6px;border-radius:8px;font-size:0.7rem;">0</span></button>
+      <button class="btn btn-sm btn-secondary" id="pl-f-week" onclick="Planner.filter('week')">📆 यो हप्ता</button>
+      <button class="btn btn-sm btn-secondary" id="pl-f-overdue" onclick="Planner.filter('overdue')">⚠️ बाँकी <span id="pl-cnt-overdue" style="margin-left:4px;background:rgba(255,255,255,0.15);padding:1px 6px;border-radius:8px;font-size:0.7rem;">0</span></button>
+      <button class="btn btn-sm btn-secondary" id="pl-f-all" onclick="Planner.filter('all')">📋 सबै</button>
+      <button class="btn btn-sm btn-secondary" id="pl-f-done" onclick="Planner.filter('done')">✅ Done</button>
+    </div>
+
+    <!-- Quick add bar -->
+    <div class="card card-body" style="margin-bottom:14px;padding:12px;">
+      <div style="display:grid;grid-template-columns:2fr 1fr 1fr auto;gap:8px;align-items:end;">
+        <div class="form-group" style="margin:0;"><label style="font-size:0.7rem;">⚡ Quick Task</label><input type="text" id="pl-quick-title" placeholder="Task title..." onkeydown="if(event.key==='Enter')Planner.quickAdd();"></div>
+        <div class="form-group" style="margin:0;"><label style="font-size:0.7rem;">⏰ Time</label><input type="time" id="pl-quick-time" value="09:00"></div>
+        <div class="form-group" style="margin:0;"><label style="font-size:0.7rem;">📌 Type</label><select id="pl-quick-cat"><option value="other">📋 Other</option><option value="wa">📱 WhatsApp</option><option value="call">📞 Call</option><option value="meeting">🏢 Meeting</option><option value="visit">🚗 Visit</option><option value="delivery">📦 Delivery</option><option value="payment">💰 Payment</option></select></div>
+        <button onclick="Planner.quickAdd()" class="btn btn-primary" style="height:38px;">+ Add</button>
+      </div>
+    </div>
+
+    <!-- Task list grouped by date -->
+    <div id="pl-list"></div>
+    <div id="pl-empty" class="empty-state" style="display:none;"><div class="icon">📝</div><div class="title">कुनै task छैन</div><div class="subtitle">माथि "+ नयाँ Task" थिच्नुस् वा quick add प्रयोग गर्नुस्</div></div>
+  </div>
+
+  <!-- Planner Add/Edit Modal -->
+  <div class="modal-overlay" id="pl-modal">
+    <div class="modal">
+      <div class="modal-head">
+        <div class="modal-title" id="pl-modal-title">📝 New Task</div>
+        <button class="modal-close" onclick="document.getElementById('pl-modal').classList.remove('open')">✕</button>
+      </div>
+      <div class="form-grid">
+        <input type="hidden" id="pl-edit-id">
+        <div class="form-group full"><label>📋 Task Title *</label><input type="text" id="pl-title" placeholder="What do you need to do?"></div>
+        <div class="form-group full"><label>📝 Notes / Details</label><textarea id="pl-content" rows="3" placeholder="Additional details..."></textarea></div>
+        <div class="form-group">
+          <label>📅 Date (BS)</label>
+          <div onclick="BSPicker.open('pl-date')" style="background:var(--surface-2);border:1.5px solid var(--border);border-radius:10px;padding:9px 12px;cursor:pointer;font-size:0.85rem;">
+            <span id="pl-date-text">📅 आज</span>
+          </div>
+          <input type="hidden" id="pl-date">
+        </div>
+        <div class="form-group"><label>⏰ Time</label><input type="time" id="pl-time" value="09:00"></div>
+        <div class="form-group">
+          <label>📌 Category</label>
+          <select id="pl-category">
+            <option value="other">📋 Other / Note</option>
+            <option value="wa">📱 WhatsApp</option>
+            <option value="call">📞 Phone Call</option>
+            <option value="meeting">🏢 Meeting</option>
+            <option value="visit">🚗 Site Visit</option>
+            <option value="delivery">📦 Delivery</option>
+            <option value="payment">💰 Payment</option>
+            <option value="reminder">🔔 Reminder</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>🎯 Priority</label>
+          <select id="pl-priority">
+            <option value="normal">🟡 Normal</option>
+            <option value="urgent">🔴 Urgent</option>
+            <option value="low">🟢 Low</option>
+          </select>
+        </div>
+        <div class="form-group full"><label>👤 Link Customer (optional)</label><select id="pl-cust"><option value="">— None —</option></select></div>
+        <div class="form-group full" style="display:flex;gap:8px;align-items:center;"><input type="checkbox" id="pl-reminder" checked style="width:18px;height:18px;cursor:pointer;"><label for="pl-reminder" style="margin:0;cursor:pointer;font-size:0.85rem;">🔔 Send browser notification at scheduled time</label></div>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-secondary" onclick="document.getElementById('pl-modal').classList.remove('open')">Cancel</button>
+        <button class="btn btn-primary" onclick="Planner.save()">💾 Save Task</button>
+      </div>
+    </div>
   </div>
 
   <!-- ========================= ADD FOLLOW-UP ========================= -->
@@ -1818,48 +1952,18 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
     </div>
   </div>
 
-  <!-- ═══════════════ SUPER ADMIN GATE MODAL (v4.0 security add-on) ═══════════════ -->
-  <div class="modal-overlay" id="superadmin-gate-modal">
-    <div class="modal modal-sm">
-      <div class="modal-head">
-        <div>
-          <div class="modal-title">🛡️ Super Admin Access</div>
-          <div class="modal-sub" style="font-size:0.72rem;color:var(--text-muted);margin-top:2px;">
-            Restricted area — enter Super Admin credentials
-          </div>
-        </div>
-        <button class="modal-close" onclick="Auth.closeSuperAdminGate()">✕</button>
-      </div>
-      <div style="padding:4px 2px 6px;">
-        <div style="background:rgba(168,85,247,0.08);border:1px solid rgba(168,85,247,0.25);border-radius:8px;padding:10px 12px;margin-bottom:14px;font-size:0.76rem;color:var(--text-muted);line-height:1.5;">
-          ⚠️ यो क्षेत्रमा user management, password reset, र data clear जस्ता उच्च-जोखिम कार्यहरू छन्।
-        </div>
-        <div class="form-group" style="margin-bottom:10px;">
-          <label>👤 Username <span style="font-weight:400;color:var(--text-dim);text-transform:none;">(optional)</span></label>
-          <input type="text" id="sa-gate-user" placeholder="Super Admin username (e.g. punya)" autocomplete="off"
-            onkeydown="if(event.key==='Enter') document.getElementById('sa-gate-pass').focus();">
-        </div>
-        <div class="form-group" style="margin-bottom:12px;">
-          <label>🔒 Super Admin Password</label>
-          <div style="position:relative;">
-            <input type="password" id="sa-gate-pass" placeholder="Super Admin password" autocomplete="off"
-              onkeydown="if(event.key==='Enter') Auth.verifySuperAdminPassword(); if(event.key==='Escape') Auth.closeSuperAdminGate();">
-            <button type="button" onclick="var i=document.getElementById('sa-gate-pass'); i.type=i.type==='password'?'text':'password';"
-              style="position:absolute;right:8px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1rem;padding:4px 8px;color:var(--text-muted);">👁️</button>
-          </div>
-        </div>
-        <div id="sa-gate-err" style="display:none;color:var(--red);font-size:0.76rem;margin-bottom:10px;padding:8px 10px;background:rgba(248,113,113,0.1);border-radius:6px;border-left:3px solid var(--red);">
-          ❌ गलत Super Admin Password
-        </div>
-        <div id="sa-gate-info" style="display:none;font-size:0.7rem;color:var(--text-muted);margin-bottom:10px;text-align:center;">
-          🕐 Unlock 10 मिनेटसम्म मात्र मान्य हुनेछ
-        </div>
-      </div>
-      <div class="form-actions" style="display:flex;gap:8px;">
-        <button class="btn btn-secondary" onclick="Auth.closeSuperAdminGate()" style="flex:1;">Cancel</button>
-        <button class="btn btn-primary" onclick="Auth.verifySuperAdminPassword()" style="flex:1;background:linear-gradient(135deg,#a855f7,#7c3aed);">
-          🛡️ Verify & Enter
-        </button>
+  <!-- ═══════════════ SUPER ADMIN GATE MODAL ═══════════════ -->
+  <div id="superadmin-gate-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9999;align-items:center;justify-content:center;">
+    <div style="background:var(--surface);color:var(--text);padding:20px;border-radius:8px;width:300px;border:1px solid var(--border);box-shadow:0 10px 40px rgba(0,0,0,0.5);">
+      <h3 style="margin:0 0 4px;font-size:1.05rem;">🔐 Super Admin Verification</h3>
+      <div style="font-size:0.72rem;color:var(--text-muted);margin-bottom:8px;">Enter your account password</div>
+      <input type="password" id="superadmin-pass" placeholder="Enter Password" autocomplete="off"
+        onkeydown="if(event.key==='Enter')Auth.verifySuperAdminPassword();if(event.key==='Escape')Auth.lockSuperAdmin();"
+        style="width:100%;padding:8px;margin-top:10px;background:var(--surface-2);color:var(--text);border:1.5px solid var(--border);border-radius:6px;box-sizing:border-box;">
+      <div id="superadmin-gate-err" style="display:none;color:var(--red);font-size:0.74rem;margin-top:8px;">❌ Wrong password</div>
+      <div style="margin-top:15px;display:flex;gap:10px;">
+        <button onclick="Auth.verifySuperAdminPassword()" class="btn btn-primary" style="flex:1;">Verify</button>
+        <button onclick="Auth.lockSuperAdmin()" class="btn btn-secondary" style="flex:1;">Cancel</button>
       </div>
     </div>
   </div>
@@ -2301,6 +2405,21 @@ var Auth = {
     document.getElementById('login-screen').classList.add('hide');
     document.getElementById('welcome-overlay').style.display='none';
     document.getElementById('main').style.display='';
+    // ── STEP 1: Super Admin sidebar visibility (exact spec) ──
+    var sa = document.getElementById('nav-superadmin-link');
+    if(sa){
+      if(currentUser.role === 'staff'){
+        sa.style.display = 'none';
+      } else {
+        sa.style.display = 'flex';
+      }
+    }
+    // Admin Panel link follows same rule
+    var adminLink = document.getElementById('nav-admin-link');
+    if(adminLink){
+      if(currentUser.role === 'staff') adminLink.style.display = 'none';
+      else                              adminLink.style.display = 'flex';
+    }
     // Set username display
     setText('sb-user', currentUser.name);
     // Role badge
@@ -2310,31 +2429,30 @@ var Auth = {
     document.querySelectorAll('.nav-item[data-role="admin"]').forEach(function(el){
       el.style.display = (currentUser.role==='admin' || currentUser.role==='superadmin')?'':'none';
     });
-    // Admin panel link (admin only)
-    var adminLink=document.getElementById('nav-admin-link');
-    if(adminLink) adminLink.style.display = (currentUser.role==='admin'||currentUser.role==='superadmin')?'flex':'none';
-    // Super admin link — visible to admin AND superadmin (admin must enter SA password)
-    var saLink=document.getElementById('nav-superadmin-link');
-    if(saLink) saLink.style.display = (currentUser.role==='admin' || currentUser.role==='superadmin')?'flex':'none';
-    // Update role badge with superadmin
+    // Update role badge with color
     var roleColors = {superadmin:'#a78bfa',admin:'var(--accent)',staff:'var(--green)'};
     if(rb) rb.innerHTML='<span class="role-badge" style="background:'+(roleColors[currentUser.role]||'var(--accent)')+';color:#fff;padding:2px 8px;border-radius:10px;font-size:0.7rem;font-weight:700;">'+currentUser.role.toUpperCase()+'</span>';
     setText('dash-username', currentUser.name);
     App.init();
     Greet.checkBirthdays();
-    // ── SAFETY (v4.0.2): re-assert Super Admin & Admin Panel visibility after init,
-    // in case any module re-rendered the sidebar mid-init and accidentally hid them.
+    // ── SAFETY (v4.0.2/4.0.6): re-assert Super Admin & Admin Panel visibility
+    // after init in case any module re-rendered the sidebar mid-init.
+    // Uses setProperty important so it cannot be overridden again.
     setTimeout(function(){
+      if(!currentUser) return;
+      var isAdminLike2 = (currentUser.role==='admin' || currentUser.role==='superadmin');
       var sa = document.getElementById('nav-superadmin-link');
-      if(sa && currentUser && (currentUser.role==='admin' || currentUser.role==='superadmin')){
-        sa.style.display = 'flex';
+      if(sa){
+        if(isAdminLike2) sa.style.setProperty('display','flex','important');
+        else             sa.style.setProperty('display','none','important');
       }
       var ap = document.getElementById('nav-admin-link');
-      if(ap && currentUser && (currentUser.role==='admin' || currentUser.role==='superadmin')){
-        ap.style.display = 'flex';
+      if(ap){
+        if(isAdminLike2) ap.style.setProperty('display','flex','important');
+        else             ap.style.setProperty('display','none','important');
       }
       // Also re-show admin-only items for superadmin
-      if(currentUser && currentUser.role==='superadmin'){
+      if(currentUser.role==='superadmin'){
         document.querySelectorAll('.nav-item[data-role="admin"]').forEach(function(el){
           el.style.display = '';
         });
@@ -2357,126 +2475,61 @@ var Auth = {
     document.getElementById('users-modal').classList.add('open');
   },
 
-  // ═══════════════ SUPER ADMIN GATE (v4.0 security add-on) ═══════════════
-  // Session flag is in-memory only (not localStorage) — re-locks on refresh.
-  _superAdminUnlock: { ok:false, expiresAt:0 },
-  _SA_TIMEOUT_MS: 10 * 60 * 1000, // 10 minutes
+  // ═══════════════ SUPER ADMIN GATE ═══════════════
+  // Session flag is in-memory only — re-locks on refresh/logout.
+  superAdminUnlocked: false,
 
   isSuperAdminUnlocked: function() {
-    var u = this._superAdminUnlock;
-    if(!u || !u.ok) return false;
-    if(Date.now() > u.expiresAt){
-      this.lockSuperAdmin();
-      return false;
-    }
-    return true;
+    return Auth.superAdminUnlocked === true;
   },
 
   openSuperAdminGate: function() {
-    // Step 1: Login required
     if(!currentUser){
-      App.toast('🔒 पहिले login गर्नुहोस्।','error');
+      alert('Please login first');
       return;
     }
-    // Step 2: Staff blocked
-    if(currentUser.role !== 'admin' && currentUser.role !== 'superadmin'){
-      App.toast('🛑 यो पेज Super Admin लाई मात्र हो।','error',3500);
+    if(currentUser.role === 'staff'){
+      alert('Access denied');
       return;
     }
-    // Step 3: If still within unlock window, skip password and go straight in
-    if(this.isSuperAdminUnlocked()){
-      App.navigate('admin-dashboard');
-      return;
-    }
-    // Step 4: Show password gate modal
     var m = document.getElementById('superadmin-gate-modal');
     if(!m) return;
-    var inp = document.getElementById('sa-gate-pass');
-    if(inp){ inp.value=''; }
-    var uinp = document.getElementById('sa-gate-user');
-    if(uinp){ uinp.value=''; }
-    var err = document.getElementById('sa-gate-err');
-    if(err) err.style.display='none';
-    var info = document.getElementById('sa-gate-info');
-    if(info) info.style.display='block';
-    m.classList.add('open');
-    // Auto-focus password field
-    setTimeout(function(){ var i=document.getElementById('sa-gate-pass'); if(i) i.focus(); }, 100);
-  },
-
-  closeSuperAdminGate: function() {
-    var m = document.getElementById('superadmin-gate-modal');
-    if(m) m.classList.remove('open');
-    var inp = document.getElementById('sa-gate-pass');
-    if(inp) inp.value='';
-    var uinp = document.getElementById('sa-gate-user');
-    if(uinp) uinp.value='';
-    var err = document.getElementById('sa-gate-err');
-    if(err) err.style.display='none';
+    var inp = document.getElementById('superadmin-pass');
+    if(inp) inp.value = '';
+    var err = document.getElementById('superadmin-gate-err');
+    if(err) err.style.display = 'none';
+    m.style.display = 'flex';
+    setTimeout(function(){ var i=document.getElementById('superadmin-pass'); if(i) i.focus(); }, 100);
   },
 
   verifySuperAdminPassword: function() {
-    if(!currentUser || (currentUser.role !== 'admin' && currentUser.role !== 'superadmin')){
-      App.toast('🛑 यो पेज Super Admin लाई मात्र हो।','error');
-      this.closeSuperAdminGate();
-      return;
+    var input = (document.getElementById('superadmin-pass')||{}).value || '';
+    var correct = currentUser ? currentUser.pass : null;
+    var err = document.getElementById('superadmin-gate-err');
+    if(input && correct && input === correct){
+      Auth.superAdminUnlocked = true;
+      var m = document.getElementById('superadmin-gate-modal');
+      if(m) m.style.display = 'none';
+      var inp = document.getElementById('superadmin-pass'); if(inp) inp.value = '';
+      try { Audit.log('SECURITY','Super Admin unlocked by '+currentUser.user); } catch(e){}
+      App.navigate('admin-dashboard');
+    } else {
+      if(err) err.style.display = 'block';
+      try { Audit.log('SECURITY','Failed Super Admin verification by '+(currentUser?currentUser.user:'?')); } catch(e){}
+      alert('Wrong password');
     }
-    var entered = (document.getElementById('sa-gate-pass')||{}).value || '';
-    var enteredUser = ((document.getElementById('sa-gate-user')||{}).value || '').trim();
-    var err = document.getElementById('sa-gate-err');
-    if(!entered){
-      if(err){ err.textContent='❌ Password खाली छ।'; err.style.display='block'; }
-      return;
-    }
-    // Verification logic:
-    //  • If username provided → must match a superadmin user with that password
-    //  • If username blank → password must match ANY superadmin user's password
-    var matched = null;
-    USERS_CONFIG.forEach(function(u){
-      if(u.role !== 'superadmin') return;
-      if(enteredUser && u.user !== enteredUser) return;
-      if(u.pass === entered) matched = u;
-    });
-    if(!matched){
-      if(err){ err.textContent='❌ गलत Super Admin Password'; err.style.display='block'; }
-      App.toast('गलत Super Admin Password','error');
-      // Audit failed attempt
-      try { Audit.log('SECURITY','Failed Super Admin verification by '+(currentUser.user||'?')); } catch(e){}
-      // Shake input for visual feedback
-      var inp = document.getElementById('sa-gate-pass');
-      if(inp){
-        inp.style.borderColor = 'var(--red)';
-        setTimeout(function(){ inp.style.borderColor=''; },1500);
-      }
-      return;
-    }
-    // ✅ Success — set unlock flag with 10-min expiry
-    this._superAdminUnlock = {
-      ok: true,
-      expiresAt: Date.now() + this._SA_TIMEOUT_MS,
-      verifiedAs: matched.user
-    };
-    try { Audit.log('SECURITY','Super Admin unlocked by '+currentUser.user+' (verified as '+matched.user+', 10min)'); } catch(e){}
-    App.toast('🛡️ Super Admin unlocked (10 min)','success',2500);
-    this.closeSuperAdminGate();
-    // Navigate — bypasses gate via the unlock flag
-    App.navigate('admin-dashboard');
-    // Schedule auto-lock toast at expiry
-    var self = this;
-    setTimeout(function(){
-      if(self._superAdminUnlock.ok && Date.now() >= self._superAdminUnlock.expiresAt){
-        self.lockSuperAdmin();
-        if(App.currentPage === 'admin-dashboard'){
-          App.toast('🔒 Super Admin session expired — पुनः verify गर्नुस्','warning',4000);
-          App.navigate('dashboard');
-        }
-      }
-    }, this._SA_TIMEOUT_MS + 100);
   },
 
   lockSuperAdmin: function() {
-    this._superAdminUnlock = { ok:false, expiresAt:0 };
-  }
+    Auth.superAdminUnlocked = false;
+    var m = document.getElementById('superadmin-gate-modal');
+    if(m) m.style.display = 'none';
+    var inp = document.getElementById('superadmin-pass'); if(inp) inp.value = '';
+    var err = document.getElementById('superadmin-gate-err'); if(err) err.style.display = 'none';
+  },
+
+  // Backward-compat alias for any code still calling closeSuperAdminGate
+  closeSuperAdminGate: function() { Auth.lockSuperAdmin(); }
   // ═══════════════ END SUPER ADMIN GATE ═══════════════
 };
 
@@ -2831,6 +2884,7 @@ var App = {
     try { Customers.loadServices(); } catch(e) {}
     try { Quotations.loadServices && Quotations.loadServices(); } catch(e) {}
     try { Settings.render(); } catch(e) { console.warn('Settings render error:',e); }
+    try { Planner.init(); } catch(e) { console.warn('Planner init error:',e); }
     this.updateBsDisplay();
     // Init bottom nav
     var bn = document.getElementById('bottom-nav');
@@ -2892,7 +2946,7 @@ var App = {
     var bnEl=document.getElementById('bn-'+bnKey);
     if(bnEl) bnEl.classList.add('active');
     // Render page
-    var renders={'customers':function(){Customers.render();},'quotations':function(){Quotations.render();},'followups':function(){Followups.render();},'daybook':function(){DayBook.render();},'ratelist':function(){RateList.render();},'staff':function(){Staff.render();},'stocklist':function(){Stock.render();},'salesteam':function(){SalesTeam.render();},'bulkmsg':function(){BulkMsg.render();},'account-summary':function(){AccountSummary.render();},'backup':function(){Backup.render();},'audit':function(){Audit.render();},'settings':function(){Settings.render();},'add-customer':function(){Customers.initForm();},'add-quotation':function(){Quotations.initForm();},'add-followup':function(){Followups.initForm();},'invoices':function(){Invoices.render();},'ledger':function(){Ledger.render();},'bakauta':function(){Bakauta.render();},'estimates-list':function(){Bakauta.renderList();},'estimate-new':function(){Estimate.init();},'vcard':function(){VCard.render();},'brochures':function(){Brochure.render();},'ai-assistant':function(){AIAssistant.render();},'admin-dashboard':function(){AdminDash.render();},'dailyreport':function(){Reports.render();},'walkin':function(){Walkin.render();},'qrcode':function(){QR.render();},'dashboard':function(){Dashboard.render();}};
+    var renders={'customers':function(){Customers.render();},'quotations':function(){Quotations.render();},'followups':function(){Followups.render();},'planner':function(){Planner.render();},'daybook':function(){DayBook.render();},'ratelist':function(){RateList.render();},'staff':function(){Staff.render();},'stocklist':function(){Stock.render();},'salesteam':function(){SalesTeam.render();},'bulkmsg':function(){BulkMsg.render();},'account-summary':function(){AccountSummary.render();},'backup':function(){Backup.render();},'audit':function(){Audit.render();},'settings':function(){Settings.render();},'add-customer':function(){Customers.initForm();},'add-quotation':function(){Quotations.initForm();},'add-followup':function(){Followups.initForm();},'invoices':function(){Invoices.render();},'ledger':function(){Ledger.render();},'bakauta':function(){Bakauta.render();},'estimates-list':function(){Bakauta.renderList();},'estimate-new':function(){Estimate.init();},'vcard':function(){VCard.render();},'brochures':function(){Brochure.render();},'ai-assistant':function(){AIAssistant.render();},'admin-dashboard':function(){AdminDash.render();},'dailyreport':function(){Reports.render();},'walkin':function(){Walkin.render();},'qrcode':function(){QR.render();},'dashboard':function(){Dashboard.render();}};
     if(renders[page]) {
       try { renders[page](); }
       catch(e) { console.error('Page render error ['+page+']:', e); App.toast('⚠️ Page load error: '+e.message,'error'); }
@@ -3518,23 +3572,141 @@ var Followups = {
         '<div><div style="font-weight:700;">'+f.custName+'</div><div style="font-size:0.75rem;color:var(--text-muted);">'+f.custPhone+'</div></div>'+
         '<span class="tag '+(pmap[f.priority]||'tag-gray')+'" style="font-size:0.65rem;">'+f.priority+'</span></div>'+
         '<div style="font-size:0.82rem;margin-top:6px;">'+( f.note||'—')+'</div>'+
-        '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;">'+
+        (f.msg?'<div style="font-size:0.7rem;color:var(--text-muted);margin-top:4px;font-style:italic;">💬 '+(f.msg.length>60?f.msg.slice(0,60)+'…':f.msg)+'</div>':'')+
+        '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;flex-wrap:wrap;gap:6px;">'+
         '<span style="font-size:0.75rem;color:var(--text-muted);">📅 '+(f.fuDateBs?bsStringToDisplay(f.fuDateBs):fmtDisplayDate(f.fuDate))+'</span>'+
-        '<div class="btn-group"><button onclick="event.stopPropagation();Followups.markDone(\''+f.id+'\')" class="btn btn-xs '+(f.status==='Done'?'btn-secondary':'btn-success')+'">'+(f.status==='Done'?'↩ Undo':'✅ Done')+'</button>'+
-        '<button onclick="event.stopPropagation();Followups.sendWA(\''+f.id+'\')" class="btn btn-xs btn-wa">📱 WA</button>'+
-        '<button onclick="event.stopPropagation();Followups.del(\''+f.id+'\')" class="btn btn-xs btn-danger">🗑</button></div></div></div>';
+        '<div class="btn-group" style="flex-wrap:wrap;gap:4px;">'+
+        '<button onclick="event.stopPropagation();Followups.markDone(\''+f.id+'\')" class="btn btn-xs '+(f.status==='Done'?'btn-secondary':'btn-success')+'" title="'+(f.status==='Done'?'Mark pending':'Mark done')+'">'+(f.status==='Done'?'↩ Undo':'✅ Done')+'</button>'+
+        '<button onclick="event.stopPropagation();Followups.edit(\''+f.id+'\')" class="btn btn-xs btn-secondary" title="Edit">✏️ Edit</button>'+
+        '<button onclick="event.stopPropagation();Followups.sendWA(\''+f.id+'\')" class="btn btn-xs btn-wa" title="WhatsApp with greeting picker">📱 WA</button>'+
+        '<button onclick="event.stopPropagation();Followups.del(\''+f.id+'\')" class="btn btn-xs btn-danger" title="Delete">🗑</button></div></div></div>';
     }).join('');
   },
   toggle: function(id){},
+  // ── EDIT (v4.0.5): pre-fill add-followup form with existing record ──
+  edit: function(id){
+    var f = this.getData().find(function(x){return x.id===id;});
+    if(!f){ App.toast('Follow-up not found','error'); return; }
+    // Stash record for initForm to read after navigation
+    Followups._editRec = f;
+    App.navigate('add-followup');
+    // After navigation, the page-add-followup is shown. Wait a tick, then fill.
+    setTimeout(function(){
+      var rec = Followups._editRec; if(!rec) return;
+      // Make sure dropdown is loaded first
+      Followups.loadCustDropdown();
+      Followups.loadTemplateChips();
+      setVal('fu-edit-id', rec.id);
+      setVal('fu-cust', rec.custId || '');
+      setVal('fu-note', rec.note || '');
+      setVal('fu-priority', rec.priority || 'Normal');
+      setVal('fu-msg', rec.msg || '');
+      setVal('fu-date-inp', rec.fuDate || '');
+      setVal('fu-date-inp-bs', rec.fuDateBs || '');
+      var dt = document.getElementById('fu-date-inp-text');
+      if(dt) dt.textContent = rec.fuDateBs ? bsStringToDisplay(rec.fuDateBs) : (rec.fuDate?fmtDisplayDate(rec.fuDate):'📅 मिति छान्नुस्...');
+      setText('add-fu-title','✏️ Edit Follow-up — '+(rec.custName||'Customer'));
+      Followups._editRec = null;
+    }, 200);
+  },
   markDone: function(id){
     var list=this.getData(); var f=list.find(function(x){return x.id===id;});
     if(f){f.status=f.status==='Done'?'Pending':'Done'; STORE.set('pk3_followups',list); this.render();}
   },
+  // ── SEND WA WITH GREETING PICKER (v4.0.5) ──
   sendWA: function(id){
     var f=this.getData().find(function(x){return x.id===id;}); if(!f)return;
-    var msg=f.msg||'नमस्ते '+f.custName+'! PRERAK MULTIPURPOSE बाट follow-up।';
     var phone=f.custPhone.replace(/[^0-9]/g,'');
+    if(!phone){ App.toast('Phone number missing','error'); return; }
+    var customer = Customers.getData().find(function(c){return c.id===f.custId;}) || {name:f.custName, phone:f.custPhone};
+    // Build picker modal
+    var existing = document.getElementById('fu-greet-picker-modal');
+    if(existing) existing.remove();
+    var templates = STORE.get('pk3_templates',null) || (typeof DEFAULT_TEMPLATES!=='undefined'?DEFAULT_TEMPLATES:Followups._defTpl()) || [];
+    var defaultMsg = f.msg || ('नमस्ते '+f.custName+'! PRERAK MULTIPURPOSE बाट follow-up।');
+    var m = document.createElement('div');
+    m.className = 'modal-overlay open';
+    m.id = 'fu-greet-picker-modal';
+    m.innerHTML =
+      '<div class="modal" style="max-width:540px;">'
+      +'<div class="modal-head">'
+        +'<div>'
+          +'<div class="modal-title">📱 WhatsApp Greeting</div>'
+          +'<div class="modal-sub" style="font-size:0.72rem;color:var(--text-muted);margin-top:2px;">To: <strong>'+esc(f.custName)+'</strong> ('+esc(f.custPhone)+')</div>'
+        +'</div>'
+        +'<button class="modal-close" onclick="document.getElementById(\'fu-greet-picker-modal\').remove()">✕</button>'
+      +'</div>'
+      +'<div style="margin-bottom:10px;">'
+        +'<label style="font-size:0.7rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.4px;">📝 Choose Greeting Template</label>'
+        +'<select id="fu-gp-tpl" onchange="Followups._gpPickTpl(this.value,\''+f.id+'\')" style="width:100%;margin-top:4px;">'
+          +'<option value="-1">— Use saved follow-up message —</option>'
+          + templates.map(function(t,i){
+              var n = (t.name||'Template '+(i+1)).replace(/</g,'&lt;');
+              return '<option value="'+i+'">'+n+'</option>';
+            }).join('')
+        +'</select>'
+      +'</div>'
+      +'<div style="margin-bottom:12px;">'
+        +'<label style="font-size:0.7rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.4px;">💬 Message (editable)</label>'
+        +'<textarea id="fu-gp-msg" rows="8" style="width:100%;margin-top:4px;font-size:0.84rem;">'+esc(defaultMsg)+'</textarea>'
+        +'<div style="font-size:0.66rem;color:var(--text-muted);margin-top:3px;">Tip: {name}, {phone}, {service}, {company} placeholders auto-fill</div>'
+      +'</div>'
+      +'<div class="form-actions" style="display:flex;gap:8px;flex-wrap:wrap;">'
+        +'<button class="btn btn-secondary" onclick="document.getElementById(\'fu-greet-picker-modal\').remove()">Cancel</button>'
+        +'<button class="btn btn-primary" onclick="Followups._gpSaveMsg(\''+f.id+'\')">💾 Save to Follow-up</button>'
+        +'<button class="btn btn-wa" onclick="Followups._gpSend(\''+f.id+'\')" style="flex:1;">📱 Send WhatsApp</button>'
+      +'</div>'
+      +'</div>';
+    document.body.appendChild(m);
+    // Save customer reference for placeholder filling
+    Followups._gpCust = customer;
+  },
+  _gpPickTpl: function(idx, fuId){
+    var i = parseInt(idx);
+    var ta = document.getElementById('fu-gp-msg');
+    if(!ta) return;
+    if(i < 0){
+      // Restore saved msg from the follow-up
+      var f = this.getData().find(function(x){return x.id===fuId;});
+      ta.value = (f && f.msg) || ('नमस्ते '+(f?f.custName:'')+'!');
+      return;
+    }
+    var templates = STORE.get('pk3_templates',null) || (typeof DEFAULT_TEMPLATES!=='undefined'?DEFAULT_TEMPLATES:Followups._defTpl()) || [];
+    var t = templates[i] || templates[0];
+    var cust = Followups._gpCust || {};
+    var filled = (typeof fillTemplate === 'function') ? fillTemplate(t, cust) : (t.text||'').replace(/\{name\}/g, cust.name||'Customer');
+    ta.value = filled;
+  },
+  _gpSaveMsg: function(fuId){
+    var ta = document.getElementById('fu-gp-msg');
+    if(!ta) return;
+    var list = this.getData();
+    var idx = list.findIndex(function(x){return x.id===fuId;});
+    if(idx < 0){ App.toast('Follow-up not found','error'); return; }
+    list[idx].msg = ta.value;
+    STORE.set('pk3_followups', list);
+    try { Audit.log('FOLLOWUP','Message updated for '+list[idx].custName); } catch(e){}
+    App.toast('💾 Message saved to follow-up','success');
+    this.render();
+  },
+  _gpSend: function(fuId){
+    var ta = document.getElementById('fu-gp-msg');
+    if(!ta) return;
+    var msg = ta.value;
+    if(!msg.trim()){ App.toast('Message empty','error'); return; }
+    var f = this.getData().find(function(x){return x.id===fuId;});
+    if(!f){ App.toast('Follow-up not found','error'); return; }
+    var phone = (f.custPhone||'').replace(/[^0-9]/g,'');
+    // Save the message back so next time it's pre-filled
+    var list = this.getData();
+    var idx = list.findIndex(function(x){return x.id===fuId;});
+    if(idx >= 0){ list[idx].msg = msg; STORE.set('pk3_followups', list); }
+    try { Audit.log('FOLLOWUP','WA sent to '+f.custName); } catch(e){}
     window.open('https://wa.me/977'+phone+'?text='+encodeURIComponent(msg),'_blank');
+    var modal = document.getElementById('fu-greet-picker-modal');
+    if(modal) modal.remove();
+    App.toast('📱 WhatsApp opened','success',2000);
+    this.render();
   },
   del: function(id){ if(!confirm('Delete?'))return; STORE.set('pk3_followups',this.getData().filter(function(x){return x.id!==id;})); this.render(); App.toast('🗑 Deleted','info'); },
 
@@ -3659,6 +3831,466 @@ var Followups = {
     try { Audit.log('GREETING','Bulk greeting sent to '+sent+' customers'); } catch(e){}
     App.toast('🎉 '+sent+' WhatsApp tabs opening (blocked: '+blocked+')','success',4500);
     setTimeout(function(){ var m=document.getElementById('greet-all-modal'); if(m) m.remove(); }, 800);
+  }
+};
+
+
+// ─── DAILY PLANNER & NOTES MODULE (v4.0.6) ────────────────────────
+// Notification-enabled, daily/weekly planner with WhatsApp integration
+var Planner = {
+  _filter: 'today',
+  _notifInterval: null,
+  CATEGORIES: {
+    other:    {icon:'📋', label:'Other',     color:'#94a3b8'},
+    wa:       {icon:'📱', label:'WhatsApp',  color:'#22c55e'},
+    call:     {icon:'📞', label:'Call',      color:'#3b82f6'},
+    meeting:  {icon:'🏢', label:'Meeting',   color:'#8b5cf6'},
+    visit:    {icon:'🚗', label:'Visit',     color:'#f97316'},
+    delivery: {icon:'📦', label:'Delivery',  color:'#06b6d4'},
+    payment:  {icon:'💰', label:'Payment',   color:'#eab308'},
+    reminder: {icon:'🔔', label:'Reminder',  color:'#a855f7'}
+  },
+  PRIORITIES: {
+    urgent: {icon:'🔴', label:'Urgent', color:'#ef4444'},
+    normal: {icon:'🟡', label:'Normal', color:'#eab308'},
+    low:    {icon:'🟢', label:'Low',    color:'#22c55e'}
+  },
+
+  getData: function(){ return STORE.get('pk3_planner',[]) || []; },
+  setData: function(list){ STORE.set('pk3_planner', list); },
+
+  // ── INITIALIZATION ──
+  init: function(){
+    // Start the due-task checker (runs every 60s)
+    if(this._notifInterval) clearInterval(this._notifInterval);
+    var self = this;
+    this._notifInterval = setInterval(function(){ self.checkDueTasks(); }, 60000);
+    // Update notification button state
+    this._updateNotifButton();
+    // Update sidebar badge
+    this.updateBadge();
+  },
+
+  // ── NOTIFICATION PERMISSION ──
+  requestNotificationPermission: function(){
+    if(!('Notification' in window)){
+      App.toast('यो browser ले notification support गर्दैन','error');
+      return;
+    }
+    if(Notification.permission === 'granted'){
+      App.toast('🔔 Notifications पहिले नै enabled छन्','info');
+      this._updateNotifButton();
+      return;
+    }
+    if(Notification.permission === 'denied'){
+      App.toast('⚠️ Browser settings बाट notifications allow गर्नुस्','warning',4500);
+      return;
+    }
+    Notification.requestPermission().then(function(result){
+      Planner._updateNotifButton();
+      if(result === 'granted'){
+        App.toast('✅ Notifications enabled','success');
+        new Notification('PRERAK CRM 🔔', {body:'Daily Planner notifications enabled!', icon:''});
+      } else {
+        App.toast('Notification permission denied','warning');
+      }
+    });
+  },
+
+  _updateNotifButton: function(){
+    var btn = document.getElementById('pl-notif-btn');
+    if(!btn) return;
+    if(!('Notification' in window)){
+      btn.textContent = '⚠️ Not supported';
+      btn.disabled = true;
+      return;
+    }
+    if(Notification.permission === 'granted'){
+      btn.textContent = '🔔 Enabled';
+      btn.className = 'btn btn-sm btn-success';
+      btn.title = 'Browser notifications are active';
+    } else if(Notification.permission === 'denied'){
+      btn.textContent = '🔕 Blocked';
+      btn.className = 'btn btn-sm btn-danger';
+      btn.title = 'Enable in browser settings';
+    } else {
+      btn.textContent = '🔔 Enable Alerts';
+      btn.className = 'btn btn-sm btn-secondary';
+    }
+  },
+
+  // ── BACKGROUND DUE-TASK CHECKER ──
+  checkDueTasks: function(){
+    var list = this.getData();
+    var todayBs_ = todayBs();
+    var now = new Date();
+    var nowHHMM = (now.getHours()<10?'0':'') + now.getHours() + ':' + (now.getMinutes()<10?'0':'') + now.getMinutes();
+    var dirty = false;
+    list.forEach(function(t){
+      if(t.status === 'done') return;
+      if(!t.reminder) return;
+      if(t.notified) return;
+      if(t.dateBs !== todayBs_) return;
+      if(!t.time) return;
+      // Fire if scheduled time is now or earlier (and not yet notified)
+      if(t.time <= nowHHMM){
+        Planner._fireNotification(t);
+        t.notified = true;
+        dirty = true;
+      }
+    });
+    if(dirty) this.setData(list);
+  },
+
+  _fireNotification: function(t){
+    var cat = this.CATEGORIES[t.category] || this.CATEGORIES.other;
+    var title = cat.icon + ' ' + (t.title || 'Task Reminder');
+    var body  = (t.time?'⏰ '+t.time+'  ':'') + (t.content||'') + (t.custName?'\n👤 '+t.custName:'');
+    // Browser notification (if granted)
+    try {
+      if('Notification' in window && Notification.permission === 'granted'){
+        var n = new Notification(title, {body:body, tag:'pl-'+t.id, requireInteraction:true});
+        n.onclick = function(){ window.focus(); App.navigate('planner'); n.close(); };
+      }
+    } catch(e){}
+    // In-app toast as fallback / supplement
+    if(window.App && App.toast){
+      App.toast('🔔 ' + title + ' — ' + (t.content||'').slice(0,40), 'info', 6000);
+    }
+    // Audio cue (gentle beep using WebAudio — works without an audio file)
+    try {
+      var ctx = new (window.AudioContext||window.webkitAudioContext)();
+      var osc = ctx.createOscillator();
+      var gain = ctx.createGain();
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.type = 'sine'; osc.frequency.value = 880;
+      gain.gain.setValueAtTime(0.001, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.15, ctx.currentTime + 0.05);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 0.45);
+    } catch(e){}
+  },
+
+  // ── BADGE (sidebar count of pending today's tasks) ──
+  updateBadge: function(){
+    var list = this.getData();
+    var todayBs_ = todayBs();
+    var pending = list.filter(function(t){
+      return t.status !== 'done' && t.dateBs === todayBs_;
+    }).length;
+    var badge = document.getElementById('pl-badge');
+    if(badge){
+      if(pending > 0){ badge.textContent = pending; badge.style.display = ''; }
+      else            { badge.style.display = 'none'; }
+    }
+  },
+
+  // ── FILTER & RENDER ──
+  filter: function(view){
+    this._filter = view;
+    ['today','tomorrow','week','overdue','all','done'].forEach(function(f){
+      var btn = document.getElementById('pl-f-'+f);
+      if(btn){
+        btn.className = 'btn btn-sm ' + (f===view ? 'btn-primary' : 'btn-secondary');
+      }
+    });
+    this.render();
+  },
+
+  _todayDisplay: function(){
+    var ad = new Date();
+    var bs = todayBs();
+    var bsParts = bs.split('-');
+    var bsMonth = (typeof BS_MONTHS !== 'undefined' && BS_MONTHS[parseInt(bsParts[1])-1]) ? BS_MONTHS[parseInt(bsParts[1])-1] : ('Month '+bsParts[1]);
+    var adStr = ad.toLocaleDateString('en-IN',{weekday:'long',day:'2-digit',month:'short',year:'numeric'});
+    return '🌐 ' + adStr + '   |   📅 ' + bsParts[2] + ' ' + bsMonth + ' ' + bsParts[0];
+  },
+
+  render: function(){
+    // Update header date display
+    var disp = document.getElementById('pl-today-display');
+    if(disp) disp.innerHTML = this._todayDisplay();
+    // Populate customer dropdown
+    this._populateCustDropdown();
+
+    var list = this.getData();
+    var todayBs_ = todayBs();
+    var view = this._filter || 'today';
+    var filtered = [];
+    if(view === 'today'){
+      filtered = list.filter(function(t){return t.dateBs === todayBs_ && t.status !== 'done';});
+    } else if(view === 'tomorrow'){
+      // Compute tomorrow BS by adding 1 day to AD then converting
+      var tmr = new Date(); tmr.setDate(tmr.getDate()+1);
+      var tmrBs = (typeof adToBs === 'function') ? adToBs(tmr) : todayBs_;
+      filtered = list.filter(function(t){return t.dateBs === tmrBs && t.status !== 'done';});
+    } else if(view === 'week'){
+      // Next 7 days (BS dates)
+      var weekDates = [];
+      for(var i=0;i<7;i++){
+        var d = new Date(); d.setDate(d.getDate()+i);
+        var b = (typeof adToBs === 'function') ? adToBs(d) : null;
+        if(b) weekDates.push(b);
+      }
+      filtered = list.filter(function(t){return weekDates.indexOf(t.dateBs)>=0 && t.status!=='done';});
+    } else if(view === 'overdue'){
+      filtered = list.filter(function(t){return t.status!=='done' && t.dateBs && compareBs(t.dateBs, todayBs_)<0;});
+    } else if(view === 'done'){
+      filtered = list.filter(function(t){return t.status === 'done';});
+    } else { // all
+      filtered = list.slice();
+    }
+
+    // Update count chips
+    var countToday = list.filter(function(t){return t.dateBs===todayBs_ && t.status!=='done';}).length;
+    var tmrDate = new Date(); tmrDate.setDate(tmrDate.getDate()+1);
+    var tmrBsKey = (typeof adToBs === 'function') ? adToBs(tmrDate) : null;
+    var countTmr = tmrBsKey ? list.filter(function(t){return t.dateBs===tmrBsKey && t.status!=='done';}).length : 0;
+    var countOver = list.filter(function(t){return t.status!=='done' && t.dateBs && compareBs(t.dateBs, todayBs_)<0;}).length;
+    var setCnt = function(id, val){ var el = document.getElementById(id); if(el) el.textContent = val; };
+    setCnt('pl-cnt-today', countToday);
+    setCnt('pl-cnt-tomorrow', countTmr);
+    setCnt('pl-cnt-overdue', countOver);
+
+    var listEl = document.getElementById('pl-list');
+    var emptyEl = document.getElementById('pl-empty');
+    if(!listEl) return;
+    if(!filtered.length){
+      listEl.innerHTML = '';
+      if(emptyEl) emptyEl.style.display = '';
+      return;
+    }
+    if(emptyEl) emptyEl.style.display = 'none';
+
+    // Sort: by date asc, then time asc
+    filtered.sort(function(a,b){
+      var d = (a.dateBs||'').localeCompare(b.dateBs||'');
+      if(d !== 0) return d;
+      return (a.time||'00:00').localeCompare(b.time||'00:00');
+    });
+
+    // Group by date
+    var groups = {};
+    filtered.forEach(function(t){
+      var key = t.dateBs || 'no-date';
+      if(!groups[key]) groups[key] = [];
+      groups[key].push(t);
+    });
+
+    var html = '';
+    Object.keys(groups).forEach(function(dateKey){
+      var dateLabel = Planner._dateLabel(dateKey, todayBs_);
+      html += '<div style="margin-bottom:14px;">'
+        + '<div style="font-size:0.78rem;font-weight:800;color:var(--accent);margin-bottom:6px;padding:5px 10px;background:var(--surface-2);border-radius:6px;display:inline-block;">'+dateLabel+'</div>';
+      groups[dateKey].forEach(function(t){
+        html += Planner._cardHtml(t, todayBs_);
+      });
+      html += '</div>';
+    });
+    listEl.innerHTML = html;
+  },
+
+  _dateLabel: function(dateKey, todayBs_){
+    if(dateKey === 'no-date') return '📌 No date';
+    if(dateKey === todayBs_) return '📅 आज (Today) — ' + bsStringToDisplay(dateKey);
+    var cmp = compareBs(dateKey, todayBs_);
+    if(cmp < 0) return '⚠️ ' + bsStringToDisplay(dateKey) + ' (Overdue)';
+    // Tomorrow check
+    var tmr = new Date(); tmr.setDate(tmr.getDate()+1);
+    var tmrBs = (typeof adToBs === 'function') ? adToBs(tmr) : null;
+    if(tmrBs && dateKey === tmrBs) return '⏭️ भोलि (Tomorrow) — ' + bsStringToDisplay(dateKey);
+    return '📅 ' + bsStringToDisplay(dateKey);
+  },
+
+  _cardHtml: function(t, todayBs_){
+    var cat = this.CATEGORIES[t.category] || this.CATEGORIES.other;
+    var pri = this.PRIORITIES[t.priority] || this.PRIORITIES.normal;
+    var done = t.status === 'done';
+    var overdue = !done && t.dateBs && compareBs(t.dateBs, todayBs_) < 0;
+    var border = done ? 'var(--green)' : (overdue ? 'var(--red)' : pri.color);
+    var bg = done ? 'var(--surface-2)' : 'var(--surface)';
+    var opacity = done ? '0.65' : '1';
+    var phoneClean = (t.custPhone||'').replace(/[^0-9]/g,'');
+    var waMsg = encodeURIComponent((t.title||'') + (t.content?'\n\n'+t.content:''));
+    var waBtn = phoneClean
+      ? '<button onclick="event.stopPropagation();window.open(\'https://wa.me/977'+phoneClean+'?text='+waMsg+'\',\'_blank\')" class="btn btn-xs btn-wa" title="WhatsApp '+t.custName+'">📱 WA</button>'
+      : (t.category==='wa' ? '<button onclick="event.stopPropagation();window.open(\'https://wa.me/?text='+waMsg+'\',\'_blank\')" class="btn btn-xs btn-wa" title="WhatsApp">📱 WA</button>' : '');
+    return '<div style="background:'+bg+';border:1px solid var(--border);border-left:4px solid '+border+';border-radius:10px;padding:11px 14px;margin-bottom:6px;opacity:'+opacity+';">'
+      + '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap;">'
+        + '<div style="flex:1;min-width:200px;">'
+          + '<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:3px;">'
+            + (t.time?'<span style="font-size:0.74rem;font-weight:700;color:var(--accent);background:var(--surface-2);padding:2px 8px;border-radius:10px;">⏰ '+t.time+'</span>':'')
+            + '<span style="font-size:0.72rem;background:'+cat.color+'22;color:'+cat.color+';padding:2px 8px;border-radius:10px;font-weight:700;">'+cat.icon+' '+cat.label+'</span>'
+            + (t.priority==='urgent'?'<span style="font-size:0.7rem;background:#ef444422;color:#ef4444;padding:2px 8px;border-radius:10px;font-weight:700;">🔴 Urgent</span>':'')
+            + (t.notified?'<span style="font-size:0.65rem;color:var(--text-muted);" title="Notification fired">🔔</span>':'')
+          + '</div>'
+          + '<div style="font-size:0.92rem;font-weight:700;'+(done?'text-decoration:line-through;color:var(--text-muted);':'')+'">'+esc(t.title||'(Untitled)')+'</div>'
+          + (t.content?'<div style="font-size:0.78rem;color:var(--text-muted);margin-top:3px;white-space:pre-wrap;">'+esc(t.content)+'</div>':'')
+          + (t.custName?'<div style="font-size:0.74rem;color:var(--text-muted);margin-top:4px;">👤 '+esc(t.custName)+(t.custPhone?' • '+esc(t.custPhone):'')+'</div>':'')
+        + '</div>'
+        + '<div class="btn-group" style="display:flex;gap:4px;flex-wrap:wrap;">'
+          + '<button onclick="Planner.toggleDone(\''+t.id+'\')" class="btn btn-xs '+(done?'btn-secondary':'btn-success')+'" title="'+(done?'Mark pending':'Mark done')+'">'+(done?'↩':'✅')+'</button>'
+          + waBtn
+          + '<button onclick="Planner.edit(\''+t.id+'\')" class="btn btn-xs btn-secondary" title="Edit">✏️</button>'
+          + '<button onclick="Planner.del(\''+t.id+'\')" class="btn btn-xs btn-danger" title="Delete">🗑</button>'
+        + '</div>'
+      + '</div>'
+    + '</div>';
+  },
+
+  // ── DROPDOWN HELPERS ──
+  _populateCustDropdown: function(){
+    var sel = document.getElementById('pl-cust');
+    if(!sel) return;
+    var custs = (STORE.get('pk3_customers',[])||[]);
+    sel.innerHTML = '<option value="">— None —</option>'
+      + custs.map(function(c){
+          return '<option value="'+c.id+'">'+esc(c.name)+(c.phone?' ('+esc(c.phone)+')':'')+'</option>';
+        }).join('');
+  },
+
+  // ── ADD / EDIT MODAL ──
+  openAddModal: function(){
+    setVal('pl-edit-id','');
+    setVal('pl-title','');
+    setVal('pl-content','');
+    var t = todayBs();
+    setVal('pl-date', t);
+    var dt = document.getElementById('pl-date-text');
+    if(dt) dt.textContent = '📅 ' + bsStringToDisplay(t) + ' (आज)';
+    var now = new Date();
+    var nextHr = ((now.getHours()+1)<10?'0':'') + (now.getHours()+1) + ':00';
+    setVal('pl-time', nextHr);
+    setVal('pl-category','other');
+    setVal('pl-priority','normal');
+    setVal('pl-cust','');
+    var rem = document.getElementById('pl-reminder'); if(rem) rem.checked = true;
+    setText('pl-modal-title','📝 New Task');
+    this._populateCustDropdown();
+    document.getElementById('pl-modal').classList.add('open');
+  },
+
+  edit: function(id){
+    var t = this.getData().find(function(x){return x.id===id;});
+    if(!t){ App.toast('Task not found','error'); return; }
+    setVal('pl-edit-id', t.id);
+    setVal('pl-title', t.title||'');
+    setVal('pl-content', t.content||'');
+    setVal('pl-date', t.dateBs||todayBs());
+    var dt = document.getElementById('pl-date-text');
+    if(dt) dt.textContent = '📅 ' + bsStringToDisplay(t.dateBs||todayBs());
+    setVal('pl-time', t.time||'09:00');
+    setVal('pl-category', t.category||'other');
+    setVal('pl-priority', t.priority||'normal');
+    this._populateCustDropdown();
+    setVal('pl-cust', t.custId||'');
+    var rem = document.getElementById('pl-reminder'); if(rem) rem.checked = (t.reminder !== false);
+    setText('pl-modal-title','✏️ Edit Task');
+    document.getElementById('pl-modal').classList.add('open');
+  },
+
+  quickAdd: function(){
+    var title = getVal('pl-quick-title').trim();
+    if(!title){ App.toast('Task title चाहिन्छ','error'); return; }
+    var time = getVal('pl-quick-time') || '09:00';
+    var cat = getVal('pl-quick-cat') || 'other';
+    var rec = {
+      id: 'p_'+Date.now().toString(36),
+      title: title,
+      content: '',
+      dateBs: todayBs(),
+      time: time,
+      category: cat,
+      priority: 'normal',
+      status: 'pending',
+      custId: '',
+      custName: '',
+      custPhone: '',
+      reminder: true,
+      notified: false,
+      created: new Date().toISOString()
+    };
+    var list = this.getData();
+    list.push(rec);
+    this.setData(list);
+    setVal('pl-quick-title','');
+    try { Audit.log('PLANNER','Quick task added: '+title); } catch(e){}
+    App.toast('✅ Task added','success',1500);
+    this.render();
+    this.updateBadge();
+  },
+
+  save: function(){
+    var title = getVal('pl-title').trim();
+    if(!title){ App.toast('Title चाहिन्छ','error'); return; }
+    var custId = getVal('pl-cust');
+    var custName = '', custPhone = '';
+    if(custId){
+      var c = (STORE.get('pk3_customers',[])||[]).find(function(x){return x.id===custId;});
+      if(c){ custName = c.name; custPhone = c.phone; }
+    }
+    var editId = getVal('pl-edit-id');
+    var list = this.getData();
+    var rec = {
+      title: title,
+      content: getVal('pl-content'),
+      dateBs: getVal('pl-date') || todayBs(),
+      time: getVal('pl-time') || '09:00',
+      category: getVal('pl-category') || 'other',
+      priority: getVal('pl-priority') || 'normal',
+      custId: custId,
+      custName: custName,
+      custPhone: custPhone,
+      reminder: !!(document.getElementById('pl-reminder')||{}).checked,
+      notified: false  // reset on edit so reminders fire again
+    };
+    if(editId){
+      var idx = list.findIndex(function(x){return x.id===editId;});
+      if(idx >= 0){
+        // Preserve status, id, created
+        rec.id = list[idx].id;
+        rec.status = list[idx].status || 'pending';
+        rec.created = list[idx].created;
+        rec.updated = new Date().toISOString();
+        list[idx] = rec;
+        try { Audit.log('PLANNER','Task edited: '+title); } catch(e){}
+      }
+    } else {
+      rec.id = 'p_'+Date.now().toString(36);
+      rec.status = 'pending';
+      rec.created = new Date().toISOString();
+      list.push(rec);
+      try { Audit.log('PLANNER','Task added: '+title); } catch(e){}
+    }
+    this.setData(list);
+    document.getElementById('pl-modal').classList.remove('open');
+    App.toast('💾 Saved','success');
+    this.render();
+    this.updateBadge();
+  },
+
+  toggleDone: function(id){
+    var list = this.getData();
+    var t = list.find(function(x){return x.id===id;});
+    if(!t) return;
+    t.status = (t.status === 'done') ? 'pending' : 'done';
+    t.completedAt = (t.status === 'done') ? new Date().toISOString() : null;
+    this.setData(list);
+    try { Audit.log('PLANNER',(t.status==='done'?'Done':'Reopened')+': '+t.title); } catch(e){}
+    App.toast(t.status==='done' ? '✅ Done!' : '↩ Reopened','success',1500);
+    this.render();
+    this.updateBadge();
+  },
+
+  del: function(id){
+    if(!confirm('Delete this task?')) return;
+    var list = this.getData().filter(function(x){return x.id!==id;});
+    this.setData(list);
+    try { Audit.log('PLANNER','Task deleted'); } catch(e){}
+    App.toast('🗑 Deleted','info',1500);
+    this.render();
+    this.updateBadge();
   }
 };
 
@@ -5318,14 +5950,200 @@ var Brochure = {
       + '<div class="form-group" style="margin-bottom:10px;"><label>📋 Title</label><input type="text" id="br-title" value="'+esc(d.title||'')+'" oninput="Brochure._updateField(\'title\',this.value)"></div>'
       + '<div class="form-group" style="margin-bottom:10px;"><label>✨ Tagline</label><input type="text" id="br-tagline" value="'+esc(d.tagline||'')+'" oninput="Brochure._updateField(\'tagline\',this.value)"></div>'
       + '<div class="form-group" style="margin-bottom:10px;"><label>📝 Intro Text</label><textarea id="br-intro" rows="3" oninput="Brochure._updateField(\'intro\',this.value)">'+esc(d.intro||'')+'</textarea></div>'
-      + '<div class="form-group" style="margin-bottom:10px;"><label>⭐ Services / Features</label>'
+      // ── SERVICE MIXER (v4.0.5): pull services from any template ──
+      + '<div class="form-group" style="margin-bottom:10px;">'
+        + '<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:4px;"><label style="margin:0;">⭐ Services / Features</label>'
+        + '<button type="button" onclick="Brochure.openServiceMixer()" class="btn btn-xs" style="background:linear-gradient(135deg,#a855f7,#7c3aed);color:#fff;font-weight:700;padding:3px 10px;font-size:0.7rem;">🎯 Mix from Other Templates</button></div>'
         + '<div id="br-services-list">'+this._renderServicesList()+'</div>'
         + '<button type="button" onclick="Brochure._addService()" class="btn btn-xs btn-secondary" style="margin-top:6px;">+ Add Service</button>'
       + '</div>'
       + '<div class="form-group" style="margin-bottom:10px;"><label>✅ Why Choose Us</label><textarea id="br-whyus" rows="5" oninput="Brochure._updateField(\'whyUs\',this.value)">'+esc(d.whyUs||'')+'</textarea></div>'
       + '<div class="form-group" style="margin-bottom:10px;"><label>🎁 Special Offer</label><input type="text" id="br-offer" value="'+esc(d.offer||'')+'" oninput="Brochure._updateField(\'offer\',this.value)"></div>'
-      + '<div class="form-group" style="margin-bottom:10px;"><label>📞 Call to Action</label><input type="text" id="br-cta" value="'+esc(d.cta||'')+'" oninput="Brochure._updateField(\'cta\',this.value)"></div>';
+      + '<div class="form-group" style="margin-bottom:10px;"><label>📞 Call to Action</label><input type="text" id="br-cta" value="'+esc(d.cta||'')+'" oninput="Brochure._updateField(\'cta\',this.value)"></div>'
+      // ── CUSTOM SECTIONS (v4.0.5): add unlimited extra blocks ──
+      + '<div style="border-top:2px dashed var(--border);margin:14px 0 10px;padding-top:10px;">'
+        + '<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:8px;">'
+          + '<label style="margin:0;">🧩 Custom Content Blocks</label>'
+          + '<div style="display:flex;gap:4px;flex-wrap:wrap;">'
+            + '<button type="button" onclick="Brochure._addCustomBlock(\'text\')" class="btn btn-xs btn-secondary" style="font-size:0.68rem;padding:3px 7px;">+ Text</button>'
+            + '<button type="button" onclick="Brochure._addCustomBlock(\'image\')" class="btn btn-xs btn-secondary" style="font-size:0.68rem;padding:3px 7px;">+ Image</button>'
+            + '<button type="button" onclick="Brochure._addCustomBlock(\'list\')" class="btn btn-xs btn-secondary" style="font-size:0.68rem;padding:3px 7px;">+ List</button>'
+            + '<button type="button" onclick="Brochure._addCustomBlock(\'quote\')" class="btn btn-xs btn-secondary" style="font-size:0.68rem;padding:3px 7px;">+ Quote</button>'
+          + '</div>'
+        + '</div>'
+        + '<div id="br-custom-blocks">'+this._renderCustomBlocks()+'</div>'
+      + '</div>';
     form.innerHTML = html;
+  },
+
+  // ── CUSTOM CONTENT BLOCKS (v4.0.5) ──
+  _renderCustomBlocks: function(){
+    var d = this._data || {};
+    var blocks = d.customBlocks || [];
+    if(!blocks.length){
+      return '<div style="color:var(--text-muted);font-size:0.74rem;padding:10px;text-align:center;background:var(--surface-2);border-radius:6px;">No custom blocks yet. Click + Text / + Image / + List / + Quote above.</div>';
+    }
+    return blocks.map(function(b, i){
+      var typeIcon = {text:'📝',image:'🖼️',list:'📋',quote:'💬'}[b.type] || '🧩';
+      var inner = '';
+      if(b.type === 'text'){
+        inner = '<input type="text" value="'+esc(b.heading||'')+'" placeholder="Heading (optional)" oninput="Brochure._updateBlock('+i+',\'heading\',this.value)" style="font-size:0.78rem;padding:5px;margin-bottom:5px;">'
+              + '<textarea rows="3" placeholder="Block content..." oninput="Brochure._updateBlock('+i+',\'content\',this.value)" style="font-size:0.78rem;padding:5px;width:100%;">'+esc(b.content||'')+'</textarea>';
+      } else if(b.type === 'image'){
+        inner = '<input type="text" value="'+esc(b.caption||'')+'" placeholder="Caption (optional)" oninput="Brochure._updateBlock('+i+',\'caption\',this.value)" style="font-size:0.78rem;padding:5px;margin-bottom:5px;">'
+              + '<div style="display:flex;gap:6px;align-items:flex-start;">'
+              + '<input type="file" accept="image/*" onchange="Brochure._uploadBlockImage('+i+', event)" style="flex:1;font-size:0.72rem;padding:4px;background:var(--surface-3);border-radius:5px;">'
+              + (b.image?'<img src="'+b.image+'" style="width:50px;height:50px;border-radius:5px;object-fit:cover;cursor:pointer;border:1px solid var(--border);" onclick="RateList.previewImageFull(this.src)">':'')
+              + '</div>';
+      } else if(b.type === 'list'){
+        inner = '<input type="text" value="'+esc(b.heading||'')+'" placeholder="List heading" oninput="Brochure._updateBlock('+i+',\'heading\',this.value)" style="font-size:0.78rem;padding:5px;margin-bottom:5px;">'
+              + '<textarea rows="4" placeholder="One item per line — emoji सहित लेख्न सकिन्छ&#10;✅ Item 1&#10;✅ Item 2" oninput="Brochure._updateBlock('+i+',\'content\',this.value)" style="font-size:0.78rem;padding:5px;width:100%;">'+esc(b.content||'')+'</textarea>';
+      } else if(b.type === 'quote'){
+        inner = '<textarea rows="2" placeholder="Customer testimonial / quote text" oninput="Brochure._updateBlock('+i+',\'content\',this.value)" style="font-size:0.78rem;padding:5px;margin-bottom:5px;width:100%;">'+esc(b.content||'')+'</textarea>'
+              + '<input type="text" value="'+esc(b.author||'')+'" placeholder="— Author / Customer name" oninput="Brochure._updateBlock('+i+',\'author\',this.value)" style="font-size:0.78rem;padding:5px;">';
+      }
+      return '<div style="background:var(--surface-2);border-radius:8px;padding:8px;margin-bottom:6px;border-left:3px solid var(--accent);">'
+        + '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">'
+          + '<div style="font-size:0.74rem;font-weight:700;color:var(--accent);">'+typeIcon+' '+b.type.toUpperCase()+' BLOCK #'+(i+1)+'</div>'
+          + '<div style="display:flex;gap:3px;">'
+            + (i>0?'<button type="button" onclick="Brochure._moveBlock('+i+',-1)" class="btn btn-xs btn-secondary" style="padding:2px 6px;font-size:0.65rem;" title="Move up">▲</button>':'')
+            + (i<blocks.length-1?'<button type="button" onclick="Brochure._moveBlock('+i+',1)" class="btn btn-xs btn-secondary" style="padding:2px 6px;font-size:0.65rem;" title="Move down">▼</button>':'')
+            + '<button type="button" onclick="Brochure._delCustomBlock('+i+')" class="btn btn-xs btn-danger" style="padding:2px 6px;font-size:0.65rem;">×</button>'
+          + '</div>'
+        + '</div>'
+        + inner
+      + '</div>';
+    }).join('');
+  },
+
+  _addCustomBlock: function(type){
+    if(!this._data) return;
+    if(!this._data.customBlocks) this._data.customBlocks = [];
+    var defaults = {
+      text: {type:'text', heading:'', content:''},
+      image: {type:'image', caption:'', image:''},
+      list: {type:'list', heading:'', content:''},
+      quote: {type:'quote', content:'', author:''}
+    };
+    this._data.customBlocks.push(defaults[type] || defaults.text);
+    this._renderForm(); this._renderPreview();
+  },
+
+  _updateBlock: function(idx, key, value){
+    if(!this._data || !this._data.customBlocks || !this._data.customBlocks[idx]) return;
+    this._data.customBlocks[idx][key] = value;
+    this._renderPreview();
+  },
+
+  _delCustomBlock: function(idx){
+    if(!this._data || !this._data.customBlocks) return;
+    if(!confirm('Delete this block?')) return;
+    this._data.customBlocks.splice(idx, 1);
+    this._renderForm(); this._renderPreview();
+  },
+
+  _moveBlock: function(idx, dir){
+    if(!this._data || !this._data.customBlocks) return;
+    var b = this._data.customBlocks;
+    var ni = idx + dir;
+    if(ni < 0 || ni >= b.length) return;
+    var tmp = b[idx]; b[idx] = b[ni]; b[ni] = tmp;
+    this._renderForm(); this._renderPreview();
+  },
+
+  _uploadBlockImage: function(idx, event){
+    var file = event.target.files && event.target.files[0];
+    if(!file) return;
+    if(!/^image\//.test(file.type)){ App.toast('Image only','error'); return; }
+    if(file.size > 4*1024*1024){ App.toast('Image too large (max 4MB)','error'); return; }
+    var reader = new FileReader();
+    var self = this;
+    reader.onload = function(e){
+      var img = new Image();
+      img.onload = function(){
+        var canvas = document.createElement('canvas');
+        var maxSize = 700;
+        var ratio = Math.min(maxSize/img.width, maxSize/img.height, 1);
+        canvas.width = Math.round(img.width * ratio);
+        canvas.height = Math.round(img.height * ratio);
+        canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+        var dataUrl = canvas.toDataURL('image/jpeg', 0.78);
+        if(self._data.customBlocks && self._data.customBlocks[idx]){
+          self._data.customBlocks[idx].image = dataUrl;
+          self._renderForm(); self._renderPreview();
+          App.toast('🖼️ Image attached','success',1500);
+        }
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  },
+
+  // ── SERVICE MIXER (v4.0.5): pick services from any template ──
+  openServiceMixer: function(){
+    var existing = document.getElementById('br-mixer-modal');
+    if(existing) existing.remove();
+    var allServices = [];
+    this.TEMPLATES.forEach(function(t){
+      if(t.id === 'blank') return;
+      (t.data.services||[]).forEach(function(s){
+        allServices.push({tpl:t.name, tplIcon:t.icon, color:t.preview, emoji:s.emoji, name:s.name, desc:s.desc});
+      });
+    });
+    var current = this._data && this._data.services || [];
+    var currentNames = current.map(function(s){return (s.name||'').toLowerCase();});
+    var m = document.createElement('div');
+    m.className = 'modal-overlay open';
+    m.id = 'br-mixer-modal';
+    m.innerHTML =
+      '<div class="modal" style="max-width:580px;">'
+      +'<div class="modal-head">'
+        +'<div>'
+          +'<div class="modal-title">🎯 Service Mixer</div>'
+          +'<div class="modal-sub" style="font-size:0.72rem;color:var(--text-muted);margin-top:2px;">'+allServices.length+' services available — pick any combination</div>'
+        +'</div>'
+        +'<button class="modal-close" onclick="document.getElementById(\'br-mixer-modal\').remove()">✕</button>'
+      +'</div>'
+      +'<div style="max-height:55vh;overflow-y:auto;margin-bottom:12px;">'
+        + allServices.map(function(s, i){
+            var checked = currentNames.indexOf((s.name||'').toLowerCase()) >= 0;
+            return '<label style="display:flex;align-items:flex-start;gap:8px;padding:8px 10px;background:var(--surface-2);border-radius:6px;margin-bottom:4px;cursor:pointer;border-left:3px solid '+s.color+';">'
+              + '<input type="checkbox" '+(checked?'checked':'')+' data-svc="'+i+'" style="margin-top:3px;flex-shrink:0;accent-color:var(--accent);">'
+              + '<div style="flex:1;min-width:0;">'
+                + '<div style="font-size:0.84rem;font-weight:600;"><span style="margin-right:5px;">'+esc(s.emoji||'⭐')+'</span>'+esc(s.name||'')+'</div>'
+                + '<div style="font-size:0.7rem;color:var(--text-muted);line-height:1.4;">'+esc(s.desc||'')+'</div>'
+                + '<div style="font-size:0.62rem;color:'+s.color+';font-weight:700;text-transform:uppercase;letter-spacing:0.4px;margin-top:2px;">'+esc(s.tplIcon)+' '+esc(s.tpl)+'</div>'
+              + '</div>'
+            + '</label>';
+          }).join('')
+      +'</div>'
+      +'<div class="form-actions" style="display:flex;gap:8px;flex-wrap:wrap;">'
+        +'<button class="btn btn-secondary" onclick="document.getElementById(\'br-mixer-modal\').remove()">Cancel</button>'
+        +'<button class="btn btn-primary" style="flex:1;background:linear-gradient(135deg,#a855f7,#7c3aed);" onclick="Brochure._applyServiceMixer()">✔ Apply Selection</button>'
+      +'</div>'
+      +'</div>';
+    document.body.appendChild(m);
+    // Stash the available list so apply can read it
+    this._mixerAll = allServices;
+  },
+
+  _applyServiceMixer: function(){
+    var modal = document.getElementById('br-mixer-modal');
+    if(!modal || !this._mixerAll) return;
+    var picked = [];
+    modal.querySelectorAll('input[type="checkbox"][data-svc]:checked').forEach(function(cb){
+      var idx = parseInt(cb.getAttribute('data-svc'));
+      var s = Brochure._mixerAll[idx];
+      if(s) picked.push({emoji:s.emoji, name:s.name, desc:s.desc});
+    });
+    if(!picked.length){ App.toast('कुनै service छानिएन','warning'); return; }
+    if(!this._data) this._data = {};
+    this._data.services = picked;
+    this._mixerAll = null;
+    modal.remove();
+    this._renderForm();
+    this._renderPreview();
+    App.toast('🎯 '+picked.length+' services applied','success');
   },
 
   _renderServicesList: function(){
@@ -5424,6 +6242,8 @@ var Brochure = {
       +'</div>':'')
       // Offer
       +(d.offer?'<div style="background:linear-gradient(90deg,#fef3c7,#fde68a);border-radius:10px;padding:12px 16px;margin-bottom:16px;text-align:center;font-weight:800;font-size:0.95rem;color:#92400e;">'+esc(d.offer)+'</div>':'')
+      // Custom Content Blocks (v4.0.5)
+      + this._renderPreviewCustomBlocks(color)
       // Footer
       +'<div style="border-top:2px solid '+color+';padding-top:14px;margin-top:auto;text-align:center;">'
         +'<div style="font-size:1.05rem;font-weight:900;color:'+color+';">'+esc(d.cta||'')+'</div>'
@@ -5434,6 +6254,42 @@ var Brochure = {
     prev.innerHTML = html;
     // Adjust preview container size for the scaled page
     prev.style.width = (595*scale + 16) + 'px';
+  },
+
+  // ── CUSTOM BLOCKS RENDERER (v4.0.5): used by both preview and print ──
+  _renderPreviewCustomBlocks: function(color){
+    var d = this._data || {};
+    var blocks = d.customBlocks || [];
+    if(!blocks.length) return '';
+    return blocks.map(function(b){
+      if(b.type === 'text'){
+        if(!b.heading && !b.content) return '';
+        return '<div style="background:#fafbfc;border-left:4px solid '+color+';border-radius:8px;padding:12px 14px;margin-bottom:14px;">'
+          + (b.heading?'<div style="font-size:0.95rem;font-weight:800;color:'+color+';margin-bottom:5px;">'+esc(b.heading)+'</div>':'')
+          + (b.content?'<div style="font-size:0.86rem;line-height:1.65;color:#333;white-space:pre-wrap;">'+esc(b.content)+'</div>':'')
+        + '</div>';
+      } else if(b.type === 'image'){
+        if(!b.image && !b.caption) return '';
+        return '<div style="text-align:center;margin-bottom:14px;">'
+          + (b.image?'<img src="'+b.image+'" style="max-width:100%;max-height:300px;border-radius:10px;border:2px solid '+color+'33;">':'')
+          + (b.caption?'<div style="font-size:0.78rem;color:#666;margin-top:6px;font-style:italic;">'+esc(b.caption)+'</div>':'')
+        + '</div>';
+      } else if(b.type === 'list'){
+        if(!b.heading && !b.content) return '';
+        var items = (b.content||'').split('\n').filter(function(x){return x.trim();});
+        return '<div style="background:'+color+'15;border-radius:8px;padding:12px 14px;margin-bottom:14px;">'
+          + (b.heading?'<div style="font-size:0.95rem;font-weight:800;color:'+color+';margin-bottom:7px;">📋 '+esc(b.heading)+'</div>':'')
+          + (items.length?'<ul style="margin:0;padding-left:18px;font-size:0.84rem;line-height:1.65;color:#333;">'+items.map(function(x){return '<li style="margin-bottom:3px;">'+esc(x.trim())+'</li>';}).join('')+'</ul>':'')
+        + '</div>';
+      } else if(b.type === 'quote'){
+        if(!b.content) return '';
+        return '<div style="background:linear-gradient(135deg,'+color+'22,'+color+'08);border-left:5px solid '+color+';border-radius:8px;padding:14px 18px;margin-bottom:14px;font-style:italic;">'
+          + '<div style="font-size:0.92rem;line-height:1.65;color:#333;">"'+esc(b.content)+'"</div>'
+          + (b.author?'<div style="font-size:0.78rem;color:'+color+';font-weight:700;margin-top:6px;text-align:right;">— '+esc(b.author)+'</div>':'')
+        + '</div>';
+      }
+      return '';
+    }).join('');
   },
 
   save: function(){
@@ -5498,6 +6354,18 @@ var Brochure = {
         +'.why h3{font-size:0.95rem;color:'+color+';margin-bottom:6px}'
         +'.why pre{font-family:inherit;font-size:0.85rem;line-height:1.7;white-space:pre-wrap}'
         +'.offer{background:linear-gradient(90deg,#fef3c7,#fde68a);border-radius:10px;padding:12px 16px;margin-bottom:14px;text-align:center;font-weight:800;color:#92400e}'
+        +'.cb-text{background:#fafbfc;border-left:4px solid '+color+';border-radius:8px;padding:12px 14px;margin-bottom:12px}'
+        +'.cb-text h4{font-size:0.95rem;font-weight:800;color:'+color+';margin-bottom:5px}'
+        +'.cb-text pre{font-family:inherit;font-size:0.86rem;line-height:1.65;color:#333;white-space:pre-wrap}'
+        +'.cb-image{text-align:center;margin-bottom:12px}'
+        +'.cb-image img{max-width:100%;max-height:300px;border-radius:10px;border:2px solid '+color+'33}'
+        +'.cb-image .cap{font-size:0.78rem;color:#666;margin-top:6px;font-style:italic}'
+        +'.cb-list{background:'+color+'15;border-radius:8px;padding:12px 14px;margin-bottom:12px}'
+        +'.cb-list h4{font-size:0.95rem;font-weight:800;color:'+color+';margin-bottom:7px}'
+        +'.cb-list ul{margin:0;padding-left:18px;font-size:0.84rem;line-height:1.65;color:#333}'
+        +'.cb-quote{background:linear-gradient(135deg,'+color+'22,'+color+'08);border-left:5px solid '+color+';border-radius:8px;padding:14px 18px;margin-bottom:12px;font-style:italic}'
+        +'.cb-quote .q{font-size:0.92rem;line-height:1.65;color:#333}'
+        +'.cb-quote .a{font-size:0.78rem;color:'+color+';font-weight:700;margin-top:6px;text-align:right}'
         +'.foot{border-top:2px solid '+color+';padding-top:14px;text-align:center}'
         +'.foot .cta{font-size:1.05rem;font-weight:900;color:'+color+';margin-bottom:5px}'
         +'.foot .info{font-size:0.78rem;color:#666;line-height:1.5}'
@@ -5518,6 +6386,32 @@ var Brochure = {
         +'</div>'
         + (d.whyUs?'<div class="why"><h3>💡 Why Choose Us</h3><pre>'+esc(d.whyUs)+'</pre></div>':'')
         + (d.offer?'<div class="offer">'+esc(d.offer)+'</div>':'')
+        // Custom Blocks (v4.0.5)
+        + (d.customBlocks||[]).map(function(b){
+            if(b.type === 'text' && (b.heading||b.content)){
+              return '<div class="cb-text">'
+                + (b.heading?'<h4>'+esc(b.heading)+'</h4>':'')
+                + (b.content?'<pre>'+esc(b.content)+'</pre>':'')
+              + '</div>';
+            } else if(b.type === 'image' && (b.image||b.caption)){
+              return '<div class="cb-image">'
+                + (b.image?'<img src="'+b.image+'">':'')
+                + (b.caption?'<div class="cap">'+esc(b.caption)+'</div>':'')
+              + '</div>';
+            } else if(b.type === 'list' && (b.heading||b.content)){
+              var items = (b.content||'').split('\n').filter(function(x){return x.trim();});
+              return '<div class="cb-list">'
+                + (b.heading?'<h4>📋 '+esc(b.heading)+'</h4>':'')
+                + (items.length?'<ul>'+items.map(function(x){return '<li>'+esc(x.trim())+'</li>';}).join('')+'</ul>':'')
+              + '</div>';
+            } else if(b.type === 'quote' && b.content){
+              return '<div class="cb-quote">'
+                + '<div class="q">"'+esc(b.content)+'"</div>'
+                + (b.author?'<div class="a">— '+esc(b.author)+'</div>':'')
+              + '</div>';
+            }
+            return '';
+          }).join('')
         +'<div class="foot">'
           +'<div class="cta">'+esc(d.cta||'')+'</div>'
           +'<div class="info">'+esc(co.companyName||'PRERAK MULTIPURPOSE PVT LTD')+' • '+esc(co.address||'Hetauda-4, Makwanpur')+'</div>'
@@ -5822,6 +6716,9 @@ var Dashboard = {
       // ── Activity ──
       this.renderActivity(activity);
 
+      // ── Daily Planner widget (v4.0.7) ──
+      this.plRender();
+
       // ── Rate list preview ──
       this.renderRateList();
 
@@ -5887,6 +6784,140 @@ var Dashboard = {
     STORE.set('pk3_activity',[]);
     this.renderActivity([]);
     App.toast('Activity cleared','success');
+  },
+
+  // ─── DASHBOARD PLANNER WIDGET (v4.0.7) ──────────────────────────
+  _plTab: 'today',  // current tab: today | tomorrow | overdue
+
+  plTab: function(tab){
+    this._plTab = tab;
+    ['today','tomorrow','overdue'].forEach(function(t){
+      var btn = document.getElementById('dash-pl-tab-'+t);
+      if(btn) btn.className = 'btn btn-xs ' + (t===tab ? 'btn-primary' : 'btn-secondary');
+    });
+    this.plRender();
+  },
+
+  plRender: function(){
+    if(typeof Planner === 'undefined') return;
+    var list = Planner.getData();
+    var todayBs_ = todayBs();
+    // Compute tomorrow BS
+    var tmr = new Date(); tmr.setDate(tmr.getDate()+1);
+    var tmrBs = (typeof adToBs === 'function') ? adToBs(tmr) : todayBs_;
+    // Counts
+    var countToday = list.filter(function(t){return t.dateBs===todayBs_ && t.status!=='done';}).length;
+    var countTmr   = list.filter(function(t){return t.dateBs===tmrBs && t.status!=='done';}).length;
+    var countOver  = list.filter(function(t){return t.status!=='done' && t.dateBs && compareBs(t.dateBs, todayBs_)<0;}).length;
+    var totalToday = countToday;  // header pill = today's pending
+    var setTxt = function(id, val){ var el = document.getElementById(id); if(el) el.textContent = val; };
+    setTxt('dash-pl-count', totalToday);
+    setTxt('dash-pl-tab-today-cnt', countToday);
+    setTxt('dash-pl-tab-tomorrow-cnt', countTmr);
+    setTxt('dash-pl-tab-overdue-cnt', countOver);
+    // Notification status indicator
+    var nStat = document.getElementById('dash-pl-notif-status');
+    var nBtn  = document.getElementById('dash-pl-notif-btn');
+    if(nStat && nBtn){
+      if(!('Notification' in window)){
+        nStat.textContent = '· alerts unsupported';
+        nBtn.style.display = 'none';
+      } else if(Notification.permission === 'granted'){
+        nStat.textContent = '· 🔔 alerts on';
+        nStat.style.color = 'var(--green)';
+        nBtn.style.display = 'none';
+      } else if(Notification.permission === 'denied'){
+        nStat.textContent = '· 🔕 alerts blocked';
+        nStat.style.color = 'var(--red)';
+        nBtn.style.display = 'none';
+      } else {
+        nStat.textContent = '';
+        nBtn.style.display = '';
+      }
+    }
+    // Filter based on current tab
+    var view = this._plTab || 'today';
+    var filtered = [];
+    if(view === 'today')        filtered = list.filter(function(t){return t.dateBs===todayBs_ && t.status!=='done';});
+    else if(view === 'tomorrow') filtered = list.filter(function(t){return t.dateBs===tmrBs && t.status!=='done';});
+    else                          filtered = list.filter(function(t){return t.status!=='done' && t.dateBs && compareBs(t.dateBs, todayBs_)<0;});
+    // Sort by time
+    filtered.sort(function(a,b){return (a.time||'00:00').localeCompare(b.time||'00:00');});
+    var listEl = document.getElementById('dash-pl-list');
+    if(!listEl) return;
+    if(!filtered.length){
+      var emptyMsg = view==='today' ? '🌟 आजको कुनै task छैन — माथिबाट थप्नुस्'
+                   : view==='tomorrow' ? '✨ भोलिको कुनै task छैन'
+                   : '🎉 कुनै task overdue छैन — सबै up to date!';
+      listEl.innerHTML = '<div style="text-align:center;color:var(--text-muted);font-size:0.84rem;padding:18px 12px;">'+emptyMsg+'</div>';
+      return;
+    }
+    var cats = Planner.CATEGORIES || {};
+    listEl.innerHTML = filtered.slice(0, 8).map(function(t){
+      var cat = cats[t.category] || cats.other || {icon:'📋', label:'Other', color:'#94a3b8'};
+      var phoneClean = (t.custPhone||'').replace(/[^0-9]/g,'');
+      var waMsg = encodeURIComponent((t.title||'') + (t.content?'\n\n'+t.content:''));
+      var waBtn = phoneClean
+        ? '<button onclick="event.stopPropagation();window.open(\'https://wa.me/977'+phoneClean+'?text='+waMsg+'\',\'_blank\')" class="btn btn-xs btn-wa" title="WhatsApp" style="padding:3px 8px;font-size:0.7rem;">📱</button>'
+        : '';
+      var overdue = t.dateBs && compareBs(t.dateBs, todayBs_) < 0;
+      var border = overdue ? 'var(--red)' : (t.priority==='urgent' ? '#ef4444' : cat.color);
+      return '<div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--surface);border-left:3px solid '+border+';border-radius:6px;margin-bottom:5px;font-size:0.8rem;">'
+        + '<button onclick="Dashboard.plToggleDone(\''+t.id+'\')" class="btn btn-xs btn-success" style="padding:3px 8px;font-size:0.72rem;flex-shrink:0;" title="Mark done">✅</button>'
+        + (t.time?'<span style="font-size:0.7rem;font-weight:700;color:var(--accent);background:var(--surface-2);padding:2px 6px;border-radius:6px;flex-shrink:0;">⏰ '+t.time+'</span>':'')
+        + '<span style="font-size:0.74rem;background:'+cat.color+'22;color:'+cat.color+';padding:2px 6px;border-radius:6px;font-weight:700;flex-shrink:0;">'+cat.icon+'</span>'
+        + '<div style="flex:1;min-width:0;overflow:hidden;">'
+          + '<div style="font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;'+(t.priority==='urgent'?'color:#ef4444;':'')+'">'+esc(t.title||'')+'</div>'
+          + (t.custName?'<div style="font-size:0.68rem;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">👤 '+esc(t.custName)+'</div>':'')
+        + '</div>'
+        + waBtn
+        + '<button onclick="Planner.edit(\''+t.id+'\');App.navigate(\'planner\');" class="btn btn-xs btn-secondary" style="padding:3px 8px;font-size:0.7rem;flex-shrink:0;" title="Edit">✏️</button>'
+      + '</div>';
+    }).join('') + (filtered.length > 8 ? '<div style="text-align:center;padding:6px;"><button onclick="App.navigate(\'planner\')" class="btn btn-xs btn-secondary">+ '+(filtered.length-8)+' more — Open full planner →</button></div>' : '');
+  },
+
+  plQuickAdd: function(){
+    if(typeof Planner === 'undefined') return;
+    var title = getVal('dash-pl-quick-title').trim();
+    if(!title){ App.toast('Task title चाहिन्छ','error'); return; }
+    var time = getVal('dash-pl-quick-time') || '09:00';
+    var cat = getVal('dash-pl-quick-cat') || 'other';
+    // Decide date by current tab: tomorrow → tomorrow's BS, else today
+    var dateBs;
+    if(this._plTab === 'tomorrow'){
+      var tmr = new Date(); tmr.setDate(tmr.getDate()+1);
+      dateBs = (typeof adToBs === 'function') ? adToBs(tmr) : todayBs();
+    } else {
+      dateBs = todayBs();
+    }
+    var rec = {
+      id: 'p_'+Date.now().toString(36),
+      title: title,
+      content: '',
+      dateBs: dateBs,
+      time: time,
+      category: cat,
+      priority: 'normal',
+      status: 'pending',
+      custId: '', custName: '', custPhone: '',
+      reminder: true,
+      notified: false,
+      created: new Date().toISOString()
+    };
+    var list = Planner.getData();
+    list.push(rec);
+    Planner.setData(list);
+    setVal('dash-pl-quick-title','');
+    try { Audit.log('PLANNER','Quick task from dashboard: '+title); } catch(e){}
+    App.toast('✅ Task added','success',1500);
+    this.plRender();
+    Planner.updateBadge();
+  },
+
+  plToggleDone: function(id){
+    if(typeof Planner === 'undefined') return;
+    Planner.toggleDone(id);
+    this.plRender();
   },
 
   addQuickEntry: function(){
