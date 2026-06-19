@@ -1521,6 +1521,9 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
           <div class="form-group"><label>Fiscal Year</label><input type="text" id="set-co-fy" placeholder="2082/083" onfocus="if(!this.value)this.value=autoFiscalYear();" oninput="Settings.save()"></div>
           <div class="form-group"><label>PAN / VAT</label><input type="text" id="set-co-pan" oninput="Settings.save()"></div>
         </div>
+        <div style="margin-top:14px;display:flex;justify-content:flex-end;">
+          <button type="button" onclick="Settings.saveManual('company')" class="btn btn-primary">💾 Save Company Info</button>
+        </div>
       </div>
       <div class="card card-body">
         <div class="section-title">💳 Payment Details</div>
@@ -1529,6 +1532,9 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
           <div class="form-group"><label>Account Number</label><input type="text" id="set-bank-acc" oninput="Settings.save()"></div>
           <div class="form-group"><label>eSewa ID</label><input type="tel" id="set-esewa" oninput="Settings.save()"></div>
           <div class="form-group"><label>Khalti ID</label><input type="tel" id="set-khalti" oninput="Settings.save()"></div>
+        </div>
+        <div style="margin-top:14px;display:flex;justify-content:flex-end;">
+          <button type="button" onclick="Settings.saveManual('payment')" class="btn btn-primary">💾 Save Payment Details</button>
         </div>
       </div>
       <div class="card card-body">
@@ -1990,8 +1996,8 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
       <div id="inv-preview-body" style="max-height:70vh;overflow-y:auto;"></div>
       <div class="form-actions">
         <button class="btn btn-secondary" onclick="document.getElementById('inv-preview-modal').classList.remove('open')">Close</button>
-        <button class="btn btn-wa" onclick="Invoices.shareWA()">📱 WhatsApp</button>
-        <button class="btn btn-primary" onclick="Invoices.print()">🖨️ Print</button>
+        <button class="btn btn-wa" onclick="Invoices.shareWA(Invoices._curPreviewId)">📱 WhatsApp</button>
+        <button class="btn btn-primary" onclick="window.print()">🖨️ Print</button>
       </div>
     </div>
   </div>
@@ -2349,7 +2355,11 @@ function bsToAd(by,bm,bd) {
   }
 }function currentBs() { var d=new Date(); return adToBs(d.getFullYear(),d.getMonth()+1,d.getDate()); }
 function bsToIsoString(by,bm,bd) { return by+'-'+String(bm).padStart(2,'0')+'-'+String(bd).padStart(2,'0'); }
-function bsStringToDisplay(s) { if(!s)return ''; var p=s.split('-'); if(p.length<3)return s; return bsMonthName(parseInt(p[1]))+' '+p[2]+', '+p[0]; }
+// BS month names — defined early so every helper below can use it.
+var BS_MONTHS = ['Baisakh','Jestha','Asar','Shrawan','Bhadra','Ashwin','Kartik','Mangsir','Poush','Magh','Falgun','Chaitra'];
+// Returns the Nepali month name for a 1-based month number (1=Baisakh).
+function bsMonthName(m){ var i=parseInt(m,10); if(isNaN(i)||i<1||i>12) return ''; return BS_MONTHS[i-1]; }
+function bsStringToDisplay(s) { if(!s)return ''; var p=String(s).split('-'); if(p.length<3)return s; return bsMonthName(parseInt(p[1]))+' '+p[2]+', '+p[0]; }
 
 
 // ─── AUTH MODULE ──────────────────────────────────────────────
@@ -3150,21 +3160,26 @@ var Customers = {
   getData: function() { return STORE.get('pk3_customers',[])||[]; },
   save: function() {
     var name=getVal('c-name'), phone=getVal('c-phone');
-    if(!name){ App.toast('नाम अनिवार्य छ!','error'); return; }
+    if(!name){ App.toast('नाम अनिवार्य छ!','error'); var ne=document.getElementById('c-name'); if(ne){ne.focus();ne.style.borderColor='var(--red)';setTimeout(function(){ne.style.borderColor='';},2000);} return; }
     var list=this.getData();
     var id=getVal('c-edit-id')||uid();
     var isEdit=!!getVal('c-edit-id');
     var adv=parseFloat(getVal('c-advance'))||0;
-    var rec={id:id,name:name,phone:phone,address:getVal('c-address'),work:getVal('c-work'),subwork:getVal('c-subwork')||getVal('c-subwork-text'),notes:getVal('c-notes'),sales:getVal('c-sales'),salesRole:getVal('c-sales-role'),advance:adv,total:parseFloat(getVal('c-total'))||0,issueDate:getVal('c-issue'),issueDateBs:getVal('c-issue-bs'),fuDate:getVal('c-fu'),fuDateBs:getVal('c-fu-bs'),birthday:getVal('c-bday'),birthdayBs:getVal('c-bday-bs'),anniv:getVal('c-anniv'),annivBs:getVal('c-anniv-bs'),photo:document.getElementById('c-photo-preview').src||'',created:isEdit?(list.find(function(x){return x.id===id;})||{}).created||todayISO():todayISO(),updated:todayISO()};
+    // Safe photo read — element may not exist
+    var photoEl=document.getElementById('c-photo-preview');
+    var photo = (photoEl && photoEl.src && photoEl.src.indexOf('data:')===0) ? photoEl.src : (photoEl ? (photoEl.getAttribute('src')||'') : '');
+    var rec={id:id,name:name,phone:phone,address:getVal('c-address'),work:getVal('c-work'),subwork:getVal('c-subwork')||getVal('c-subwork-text'),notes:getVal('c-notes'),sales:getVal('c-sales'),salesRole:getVal('c-sales-role'),advance:adv,total:parseFloat(getVal('c-total'))||0,issueDate:getVal('c-issue'),issueDateBs:getVal('c-issue-bs'),fuDate:getVal('c-fu'),fuDateBs:getVal('c-fu-bs'),birthday:getVal('c-bday'),birthdayBs:getVal('c-bday-bs'),anniv:getVal('c-anniv'),annivBs:getVal('c-anniv-bs'),photo:photo,created:isEdit?(list.find(function(x){return x.id===id;})||{}).created||todayISO():todayISO(),updated:todayISO()};
     if(isEdit) { var idx=list.findIndex(function(x){return x.id===id;}); if(idx>=0)list[idx]=rec; else list.unshift(rec); }
     else { list.unshift(rec); }
     STORE.set('pk3_customers',list);
     // Add advance to daybook if new
     if(!isEdit && adv>0) {
-      var db=STORE.get('pk3_daybook',[]); db.unshift({id:uid(),type:'income',amount:adv,desc:'Advance - '+name,cat:'Advance',date:todayISO(),dateBs:todayBs(),user:currentUser.name}); STORE.set('pk3_daybook',db);
+      try {
+        var db=STORE.get('pk3_daybook',[]); db.unshift({id:uid(),type:'income',amount:adv,desc:'Advance - '+name,cat:'Advance',date:todayISO(),dateBs:todayBs(),user:(currentUser&&currentUser.name)||'system'}); STORE.set('pk3_daybook',db);
+      } catch(e){ console.warn('daybook advance error',e); }
     }
-    Audit.log('CUSTOMER',isEdit?'Edited: '+name:'Added: '+name);
-    Activity.add('👤 Customer '+( isEdit?'updated':'added')+': '+name);
+    try { Audit.log('CUSTOMER',isEdit?'Edited: '+name:'Added: '+name); } catch(e){}
+    try { Activity.add('👤 Customer '+( isEdit?'updated':'added')+': '+name); } catch(e){}
     App.toast('✅ Customer saved!','success');
     App.navigate('customers');
   },
@@ -3502,9 +3517,9 @@ var Quotations = {
     if(isEdit){var idx=list.findIndex(function(x){return x.id===id;});if(idx>=0)list[idx]=rec;else list.unshift(rec);}else{list.unshift(rec);}
     STORE.set('pk3_quotations',list);
     // Add advance to daybook
-    if(!isEdit&&adv>0){var db=STORE.get('pk3_daybook',[]);db.unshift({id:uid(),type:'income',amount:adv,desc:'Quotation Advance - '+cust.name,cat:'Advance',date:todayISO(),dateBs:todayBs(),user:currentUser.name});STORE.set('pk3_daybook',db);}
-    Audit.log('QUOTATION',isEdit?'Edited: '+cust.name:'New: '+cust.name+' Rs.'+total);
-    Activity.add('📋 Quotation '+(isEdit?'updated':'created')+': '+cust.name+' — '+fmtRs(total));
+    if(!isEdit&&adv>0){ try { var db=STORE.get('pk3_daybook',[]);db.unshift({id:uid(),type:'income',amount:adv,desc:'Quotation Advance - '+cust.name,cat:'Advance',date:todayISO(),dateBs:todayBs(),user:(currentUser&&currentUser.name)||'system'});STORE.set('pk3_daybook',db); } catch(e){} }
+    try { Audit.log('QUOTATION',isEdit?'Edited: '+cust.name:'New: '+cust.name+' Rs.'+total); } catch(e){}
+    try { Activity.add('📋 Quotation '+(isEdit?'updated':'created')+': '+cust.name+' — '+fmtRs(total)); } catch(e){}
     if(!preview){App.toast('✅ Quotation saved!','success');App.navigate('quotations');}
     else{this.showPreview(rec);}
   },
@@ -3603,8 +3618,63 @@ var Invoices = {
     var sc={'Pending':'tag-yellow','Partial':'tag-blue','Paid':'tag-green','Overdue':'tag-red'};
     tb.innerHTML=list.map(function(i){return '<tr style="cursor:pointer;" onmouseover="this.style.background=\'var(--surface-2)\'" onmouseout="this.style.background=\'\'" onclick="Invoices.preview(\''+i.id+'\')"><td style="font-weight:700;">'+i.invNum+'</td><td>'+i.custName+'<div style="font-size:0.7rem;color:var(--text-muted);">'+i.custPhone+'</div></td><td style="font-size:0.78rem;">'+(i.desc||'—')+'</td><td style="text-align:right;">'+fmtRs(i.amount)+'</td><td style="text-align:right;color:var(--green);">'+fmtRs(i.paid||0)+'</td><td style="text-align:right;color:var(--red);">'+fmtRs(i.balance||0)+'</td><td><span class="tag '+(sc[i.status]||'tag-gray')+'">'+i.status+'</span></td><td style="font-size:0.76rem;">'+(i.dateBs?bsStringToDisplay(i.dateBs):fmtDisplayDate(i.date))+'</td><td onclick="event.stopPropagation();"><div class="btn-group"><button onclick="event.stopPropagation();Invoices.preview(\''+i.id+'\')" class="btn btn-xs btn-secondary" title="Preview">👁</button><button onclick="event.stopPropagation();Invoices.del(\''+i.id+'\')" class="btn btn-xs btn-danger" title="Delete">🗑</button></div></td></tr>';}).join('');
   },
-  preview: function(id){ var inv=this.getData().find(function(x){return x.id===id;}); if(!inv)return; setText('view-modal-title','🧾 Invoice Preview'); document.getElementById('view-modal-body').innerHTML='<div style="padding:16px;"><h3>'+inv.invNum+'</h3><p>Customer: '+inv.custName+' | '+inv.custPhone+'</p><p>Amount: '+fmtRs(inv.amount)+' | Paid: '+fmtRs(inv.paid||0)+' | Balance: '+fmtRs(inv.balance||0)+'</p><p>Status: '+inv.status+'</p><p>Date: '+fmtDisplayDate(inv.date)+'</p><button onclick="window.print()" class="btn btn-primary btn-sm">🖨️ Print</button></div>'; document.getElementById('view-modal').classList.add('open'); },
-  del: function(id){ if(!confirm('Delete invoice?'))return; STORE.set('pk3_invoices',this.getData().filter(function(x){return x.id!==id;})); this.render(); App.toast('🗑 Deleted','info'); }
+  preview: function(id){
+    var inv=this.getData().find(function(x){return x.id===id;}); if(!inv)return;
+    this._curPreviewId = id;
+    var co=STORE.get('pk3_settings',{})||{};
+    var logo = co.logo || '';
+    var bal = inv.balance != null ? inv.balance : ((parseFloat(inv.amount)||0)-(parseFloat(inv.paid)||0));
+    var html = '<div style="padding:20px;font-family:sans-serif;max-width:600px;margin:0 auto;color:#222;background:#fff;">'
+      + '<div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;border-bottom:2px solid #f97316;padding-bottom:12px;">'
+        + (logo?'<img src="'+logo+'" style="width:60px;height:60px;object-fit:contain;">':'')
+        + '<div style="flex:1;text-align:'+(logo?'left':'center')+';"><div style="font-size:1.3rem;font-weight:900;color:#f97316;">'+esc(co.companyName||'PRERAK MULTIPURPOSE PVT LTD')+'</div>'
+        + '<div style="font-size:0.8rem;color:#666;">'+esc(co.address||'Hetauda-4, Makwanpur')+' • '+esc(co.phone1||'9855069733')+'</div></div>'
+      + '</div>'
+      + '<div style="background:#f97316;color:#fff;padding:8px 14px;border-radius:6px;margin-bottom:14px;display:flex;justify-content:space-between;font-weight:700;">'
+        + '<span>🧾 INVOICE '+esc(inv.invNum||'')+'</span><span>मिति: '+(inv.dateBs?bsStringToDisplay(inv.dateBs):fmtDisplayDate(inv.date))+'</span>'
+      + '</div>'
+      + '<div style="margin-bottom:12px;"><b>Customer:</b> '+esc(inv.custName||'')+' &nbsp;|&nbsp; <b>Phone:</b> '+esc(inv.custPhone||'')+'</div>'
+      + (inv.desc?'<div style="margin-bottom:12px;padding:10px;background:#f8f8f8;border-radius:6px;"><b>Description:</b> '+esc(inv.desc)+'</div>':'')
+      + '<table style="width:100%;border-collapse:collapse;margin-bottom:14px;">'
+        + '<tr style="background:#f8f8f8;"><td style="padding:8px;border:1px solid #eee;">Total Amount</td><td style="padding:8px;border:1px solid #eee;text-align:right;font-weight:700;">'+fmtRs(inv.amount||0)+'</td></tr>'
+        + '<tr><td style="padding:8px;border:1px solid #eee;color:green;">Paid</td><td style="padding:8px;border:1px solid #eee;text-align:right;color:green;">'+fmtRs(inv.paid||0)+'</td></tr>'
+        + '<tr style="background:#fff5f5;"><td style="padding:8px;border:1px solid #eee;color:#d00;font-weight:700;">Balance Due</td><td style="padding:8px;border:1px solid #eee;text-align:right;color:#d00;font-weight:800;">'+fmtRs(bal)+'</td></tr>'
+      + '</table>'
+      + '<div style="display:inline-block;padding:5px 14px;border-radius:20px;font-weight:700;font-size:0.85rem;background:'+(inv.status==='Paid'?'#dcfce7;color:#16a34a':(inv.status==='Partial'?'#fef9c3;color:#ca8a04':'#fee2e2;color:#dc2626'))+';">Status: '+esc(inv.status||'Unpaid')+'</div>'
+      + (co.bankName||co.esewa?'<div style="margin-top:16px;padding:10px;background:#f8f8f8;border-radius:6px;font-size:0.8rem;"><b>💳 Payment:</b> '+(co.bankName?esc(co.bankName)+' - '+esc(co.bankAcc||''):'')+(co.esewa?' &nbsp;|&nbsp; eSewa: '+esc(co.esewa):'')+'</div>':'')
+      + '</div>';
+    setText('view-modal-title','🧾 Invoice Preview');
+    var mb = document.getElementById('view-modal-body');
+    mb.innerHTML = html;
+    var bd=document.createElement('div'); bd.className='btn-group'; bd.style.cssText='display:flex;gap:8px;padding:12px;flex-wrap:wrap;';
+    var pb=document.createElement('button'); pb.className='btn btn-primary btn-sm'; pb.textContent='🖨️ Print'; pb.onclick=function(){window.print();};
+    var wb=document.createElement('button'); wb.className='btn btn-wa btn-sm'; wb.textContent='📱 WhatsApp';
+    var iid=inv.id; wb.onclick=function(){ Invoices.shareWA(iid); };
+    bd.appendChild(pb); bd.appendChild(wb); mb.appendChild(bd);
+    document.getElementById('view-modal').classList.add('open');
+  },
+  del: function(id){ if(!confirm('Delete invoice?'))return; STORE.set('pk3_invoices',this.getData().filter(function(x){return x.id!==id;})); this.render(); App.toast('🗑 Deleted','info'); },
+  shareWA: function(id){
+    var inv = this.getData().find(function(x){ return x.id===id; });
+    if(!inv){ App.toast('Invoice not found','error'); return; }
+    var co = STORE.get('pk3_settings',{})||{};
+    var bal = inv.balance != null ? inv.balance : ((parseFloat(inv.amount)||0)-(parseFloat(inv.paid)||0));
+    var msg = '*🧾 Invoice '+(inv.invNum||'')+'*\n'
+      + (co.companyName||'PRERAK MULTIPURPOSE PVT LTD')+'\n\n'
+      + 'Customer: '+(inv.custName||'')+'\n'
+      + 'Total: '+fmtRs(inv.amount||0)+'\n'
+      + 'Paid: '+fmtRs(inv.paid||0)+'\n'
+      + 'Balance Due: '+fmtRs(bal)+'\n'
+      + 'Status: '+(inv.status||'Unpaid')
+      + (co.esewa?'\n\neSewa: '+co.esewa:'')
+      + (co.bankName?'\nBank: '+co.bankName+' - '+(co.bankAcc||''):'');
+    if(typeof Wa!=='undefined' && Wa.send){ Wa.send(inv.custPhone, msg); }
+    else { var p=(inv.custPhone||'').replace(/[^0-9]/g,''); window.open('https://wa.me/'+(p?'977'+p:'')+'?text='+encodeURIComponent(msg),'_blank'); }
+  },
+  print: function(id){
+    if(id){ this.preview(id); setTimeout(function(){ window.print(); }, 400); }
+    else window.print();
+  }
 };
 
 // ─── FOLLOWUPS MODULE ─────────────────────────────────────────
@@ -3894,15 +3964,15 @@ var Followups = {
       // Message editor
       +'<div style="margin-bottom:10px;">'
         +'<label style="font-size:0.7rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.4px;">💬 Message (use {name}, {phone}, {service}, {company})</label>'
-        +'<textarea id="ga-msg" rows="6" style="width:100%;margin-top:4px;font-size:0.85rem;">'+defaultMsg.replace(/</g,'&lt;')+'</textarea>'
+        +'<textarea id="ga-msg" rows="6" oninput="Followups._gaPreview()" style="width:100%;margin-top:4px;font-size:0.85rem;">'+defaultMsg.replace(/</g,'&lt;')+'</textarea>'
       +'</div>'
       // Filter chips
       +'<div style="margin-bottom:10px;">'
         +'<label style="font-size:0.7rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.4px;">🎯 Send To</label>'
         +'<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;" id="ga-filter">'
-          +'<label style="display:inline-flex;align-items:center;gap:5px;font-size:0.78rem;cursor:pointer;text-transform:none;letter-spacing:0;color:var(--text);"><input type="radio" name="ga-f" value="all" checked> All ('+custs.length+')</label>'
-          +'<label style="display:inline-flex;align-items:center;gap:5px;font-size:0.78rem;cursor:pointer;text-transform:none;letter-spacing:0;color:var(--text);"><input type="radio" name="ga-f" value="recent"> Recent 30 days</label>'
-          +'<label style="display:inline-flex;align-items:center;gap:5px;font-size:0.78rem;cursor:pointer;text-transform:none;letter-spacing:0;color:var(--text);"><input type="radio" name="ga-f" value="advance"> With Advance</label>'
+          +'<label style="display:inline-flex;align-items:center;gap:5px;font-size:0.78rem;cursor:pointer;text-transform:none;letter-spacing:0;color:var(--text);"><input type="radio" name="ga-f" value="all" checked onchange="Followups._gaPreview()"> All ('+custs.length+')</label>'
+          +'<label style="display:inline-flex;align-items:center;gap:5px;font-size:0.78rem;cursor:pointer;text-transform:none;letter-spacing:0;color:var(--text);"><input type="radio" name="ga-f" value="recent" onchange="Followups._gaPreview()"> Recent 30 days</label>'
+          +'<label style="display:inline-flex;align-items:center;gap:5px;font-size:0.78rem;cursor:pointer;text-transform:none;letter-spacing:0;color:var(--text);"><input type="radio" name="ga-f" value="advance" onchange="Followups._gaPreview()"> With Advance</label>'
         +'</div>'
       +'</div>'
       // Preview area
@@ -3926,15 +3996,16 @@ var Followups = {
     Followups._gaPreview();
   },
   _gaFilteredCustomers: function(){
-    var custs = (STORE.get('pk3_customers',[])||[]).filter(function(c){return c.phone;});
+    var custs = (STORE.get('pk3_customers',[])||[]).filter(function(c){return c && c.phone && String(c.phone).replace(/[^0-9]/g,'').length>=7;});
     var sel = document.querySelector('#ga-filter input[name="ga-f"]:checked');
     var f = sel ? sel.value : 'all';
     if(f === 'recent'){
       var cutoff = new Date(); cutoff.setDate(cutoff.getDate() - 30);
       custs = custs.filter(function(c){
-        var d = c.created || c.updated;
+        var d = c.created || c.updated || c.createdAt;
         if(!d) return false;
-        return new Date(d) >= cutoff;
+        var dt = new Date(d);
+        return !isNaN(dt.getTime()) && dt >= cutoff;
       });
     } else if(f === 'advance'){
       custs = custs.filter(function(c){ return parseFloat(c.advance||0) > 0; });
@@ -3946,14 +4017,26 @@ var Followups = {
     var msg = (document.getElementById('ga-msg')||{}).value || '';
     var box = document.getElementById('ga-preview');
     if(!box) return;
-    if(!custs.length){ box.innerHTML = '<em>No customers match this filter</em>'; return; }
+    var sel = document.querySelector('#ga-filter input[name="ga-f"]:checked');
+    var fname = sel ? sel.value : 'all';
+    var fLabel = fname==='recent' ? 'Recent 30 days' : (fname==='advance' ? 'With Advance' : 'All customers');
+    if(!custs.length){
+      box.innerHTML = '<div style="text-align:center;padding:8px;color:var(--text-muted);">'
+        + '<div style="font-size:1.4rem;margin-bottom:4px;">📭</div>'
+        + '<div style="font-weight:600;">"'+fLabel+'" filter मा कुनै customer छैन</div>'
+        + (fname!=='all' ? '<div style="font-size:0.72rem;margin-top:4px;">"All" filter छान्नुहोस् वा अरू customer add गर्नुस्</div>' : '<div style="font-size:0.72rem;margin-top:4px;">Phone number भएको customer चाहिन्छ</div>')
+        + '</div>';
+      return;
+    }
     var first = custs[0];
     var preview = (typeof fillTemplate === 'function')
       ? fillTemplate({text:msg}, first)
       : msg.replace(/\{name\}/g, first.name||'Customer');
-    box.innerHTML = '<div style="font-weight:700;margin-bottom:4px;color:var(--text);">📋 Will send to '+custs.length+' customers</div>'
-      + '<div style="font-size:0.74rem;margin-bottom:6px;">First customer: <strong>'+esc(first.name)+'</strong> — '+esc(first.phone)+'</div>'
-      + '<div style="background:var(--surface);padding:8px 10px;border-radius:6px;white-space:pre-wrap;font-size:0.78rem;color:var(--text);">'+esc(preview)+'</div>';
+    if(!preview || !preview.trim()) preview = '(message खाली छ — माथि लेख्नुस्)';
+    box.innerHTML = '<div style="font-weight:700;margin-bottom:6px;color:var(--accent);">📋 '+custs.length+' customers — "'+fLabel+'"</div>'
+      + '<div style="font-size:0.72rem;margin-bottom:6px;color:var(--text-muted);">👤 Sample: <strong style="color:var(--text);">'+esc(first.name||'(no name)')+'</strong> · '+esc(first.phone)+'</div>'
+      + '<div style="font-weight:600;font-size:0.7rem;color:var(--text-muted);margin-bottom:3px;">PREVIEW MESSAGE:</div>'
+      + '<div style="background:var(--surface);padding:9px 11px;border-radius:6px;white-space:pre-wrap;font-size:0.8rem;color:var(--text);border-left:3px solid var(--accent);">'+esc(preview)+'</div>';
   },
   _gaSend: function(){
     var custs = Followups._gaFilteredCustomers();
@@ -4742,7 +4825,7 @@ var Staff = {
     list[idx].peshki.unshift({id:uid(),amount:amt,note:note,date:todayISO()});
     STORE.set('pk3_staff',list);
     // Add to daybook
-    var db=STORE.get('pk3_daybook',[]); db.unshift({id:uid(),type:'expense',amount:amt,desc:'पेश्की - '+list[idx].name+(note?' ('+note+')':''),cat:'पेश्की',date:todayISO(),dateBs:todayBs(),user:currentUser.name}); STORE.set('pk3_daybook',db);
+    var db=STORE.get('pk3_daybook',[]); db.unshift({id:uid(),type:'expense',amount:amt,desc:'पेश्की - '+list[idx].name+(note?' ('+note+')':''),cat:'पेश्की',date:todayISO(),dateBs:todayBs(),user:(currentUser&&currentUser.name)||'system'}); STORE.set('pk3_daybook',db);
     App.toast('✅ पेश्की added!','success'); setVal('peshki-amt',''); setVal('peshki-note',''); this.render();
   },
   delPeshki: function(staffId,pId){ var list=this.getData(); var idx=list.findIndex(function(x){return x.id===staffId;}); if(idx<0)return; list[idx].peshki=(list[idx].peshki||[]).filter(function(p){return p.id!==pId;}); STORE.set('pk3_staff',list); this.render(); },
@@ -4851,7 +4934,7 @@ var SalesTeam = {
   addModal: function(){ setVal('stm-edit-id',''); setVal('stm-name',''); setVal('stm-phone',''); setVal('stm-role','Sales Executive'); setVal('stm-target',''); setVal('stm-notes',''); setText('stm-modal-title','🎯 Add Sales Member'); document.getElementById('stm-modal').classList.add('open'); },
   save: function(){ var name=getVal('stm-name'); if(!name){App.toast('नाम चाहिन्छ!','error');return;} var id=getVal('stm-edit-id')||uid(); var rec={id:id,name:name,phone:getVal('stm-phone'),role:getVal('stm-role'),target:parseFloat(getVal('stm-target'))||0,notes:getVal('stm-notes')}; var list=this.getData(); var idx=list.findIndex(function(x){return x.id===id;}); if(idx>=0)list[idx]=rec;else list.push(rec); STORE.set('pk3_sales',list); Audit.log('SALES_TEAM','Added: '+name); App.toast('✅ Saved!','success'); document.getElementById('stm-modal').classList.remove('open'); this.render(); },
   del: function(id){ if(!confirm('Delete?'))return; STORE.set('pk3_sales',this.getData().filter(function(x){return x.id!==id;})); this.render(); },
-  trackerOn: function(){ if(navigator.geolocation){navigator.geolocation.getCurrentPosition(function(pos){var d=STORE.get('pk3_tracker',{});if(!d.gps)d.gps=[];d.gps.push({user:currentUser.name,lat:pos.coords.latitude,lng:pos.coords.longitude,time:new Date().toISOString()});STORE.set('pk3_tracker',d);App.toast('📍 Location saved','success');});}else{App.toast('Geolocation not supported','error');} },
+  trackerOn: function(){ if(navigator.geolocation){navigator.geolocation.getCurrentPosition(function(pos){var d=STORE.get('pk3_tracker',{});if(!d.gps)d.gps=[];d.gps.push({user:(currentUser&&currentUser.name)||'system',lat:pos.coords.latitude,lng:pos.coords.longitude,time:new Date().toISOString()});STORE.set('pk3_tracker',d);App.toast('📍 Location saved','success');});}else{App.toast('Geolocation not supported','error');} },
   trackerOff: function(){ App.toast('📍 Tracking stopped','info'); },
   trackerClear: function(){ var d=STORE.get('pk3_tracker',{}); d.gps=[]; STORE.set('pk3_tracker',d); App.toast('🗑 Tracker cleared','info'); }
 };
@@ -5118,6 +5201,13 @@ var Settings = {
     STORE.set('pk3_settings',s);
     var fy=s.fiscalYear; var fyEl=document.getElementById('tb-fy'); if(fyEl)fyEl.textContent='FY '+fy;
   },
+  // Explicit Save button handler — same data write but with clear user feedback
+  saveManual: function(which){
+    this.save();
+    try { Audit.log('SETTINGS', (which==='payment'?'Payment details':'Company info')+' saved'); } catch(e){}
+    var label = which==='payment' ? 'Payment details' : 'Company information';
+    App.toast('✅ '+label+' saved!','success',2200);
+  },
   saveAI: function(){
     STORE.set('pk3_ai_key',getVal('set-ai-key'));
     STORE.set('pk3_oai_key',getVal('set-oai-key'));
@@ -5349,12 +5439,28 @@ var Walkin = {
 
 // ─── QR MODULE ────────────────────────────────────────────────
 var QR = {
-  render: function(){},
+  render: function(){
+    // Pre-fill with company contact URL if empty so the page isn't blank
+    var inp = document.getElementById('qr-url');
+    if(inp && !inp.value){
+      var co = STORE.get('pk3_settings',{})||{};
+      var phone = (co.phone1||'9855069733').replace(/[^0-9]/g,'');
+      // Default to a WhatsApp link for the business
+      inp.value = 'https://wa.me/977'+phone;
+    }
+  },
   generate: function(){
-    var url=getVal('qr-url'); if(!url)return;
-    var wrap=document.getElementById('qr-canvas-wrap'); wrap.innerHTML='';
+    var url=getVal('qr-url'); if(!url){ App.toast('URL वा text राख्नुस्','error'); return; }
+    var wrap=document.getElementById('qr-canvas-wrap'); if(!wrap) return; wrap.innerHTML='';
     if(window.QRCode){ try{new QRCode(wrap,{text:url,width:180,height:180});}catch(e){wrap.innerHTML='<div>QR generated for: '+url+'</div>';} }
-    else wrap.innerHTML='<div style="padding:20px;text-align:center;color:var(--text-muted);">QR: '+url+'</div>';
+    else {
+      // Fallback: use a public QR image API
+      var img=document.createElement('img');
+      img.src='https://api.qrserver.com/v1/create-qr-code/?size=180x180&data='+encodeURIComponent(url);
+      img.alt='QR Code'; img.style.cssText='width:180px;height:180px;border-radius:8px;background:#fff;padding:8px;';
+      img.onerror=function(){ wrap.innerHTML='<div style="padding:20px;text-align:center;color:var(--text-muted);">QR: '+esc(url)+'</div>'; };
+      wrap.appendChild(img);
+    }
     App.toast('✅ QR generated!','success');
   },
   startScan: function(){ App.toast('📷 Scanner — browser camera needed','info'); },
@@ -7562,8 +7668,6 @@ var BSCal = {
     }
   }
 };
-
-var BS_MONTHS = ['Baisakh','Jestha','Asar','Shrawan','Bhadra','Ashwin','Kartik','Mangsir','Poush','Magh','Falgun','Chaitra'];
 
 var CRMClock = {
   _timer: null,
