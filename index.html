@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#f97316">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<title>PRERAK CRM v4.0 World-Class | प्रेरक मल्टिपर्पोज प्रा.लि.</title>
+<title>PRERAK CRM v4.3 World-Class | प्रेरक मल्टिपर्पोज प्रा.लि.</title>
 <meta name="description" content="PRERAK CRM — Complete business management for Prerak Multipurpose Pvt Ltd, Hetauda-4, Makwanpur. Customers, Quotations, Estimates, Follow-ups, BS Calendar, Daybook & more.">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -558,7 +558,7 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
 <div id="login-screen">
   <div class="login-card">
     <div class="login-brand">
-      <div class="login-logo-icon">🏠</div>
+      <div class="login-logo-icon" id="login-logo-icon">🏠</div>
       <div class="login-brand-name">PRERAK</div>
       <div class="login-brand-sub">Multipurpose Pvt Ltd</div>
       <div class="login-tagline">"Building Your Dreams 🏠"</div>
@@ -605,7 +605,7 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
   <div class="sb-head">
     <div class="sb-brand">
       <div class="sb-logo">
-        <div class="sb-logo-icon">
+        <div class="sb-logo-icon" id="sb-logo-icon">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
             <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" stroke="#fff" stroke-width="2.5" stroke-linejoin="round"/>
             <polyline points="9,22 9,12 15,12 15,22" stroke="#fff" stroke-width="2.5" stroke-linejoin="round"/>
@@ -614,7 +614,7 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
         <div class="sb-logo-text">
           <div class="name">🇳🇵 PRERAK</div>
           <div class="sub">Multipurpose Pvt Ltd</div>
-          <div class="ver">v4.0 World-Class ⚡</div>
+          <div class="ver">v4.3 World-Class ⚡</div>
         </div>
       </div>
       <div class="sb-actions">
@@ -641,8 +641,7 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
     <div class="nav-item" data-page="ledger" data-role="admin" onclick="App.navigate('ledger')"><span class="icon">📘</span>Customer Ledger</div>
 
     <div class="nav-section">Quotations</div>
-    <div class="nav-item" data-page="quotations" onclick="App.navigate('quotations')"><span class="icon">📋</span>Quotation List</div>
-    <div class="nav-item" data-page="add-quotation" onclick="App.navigate('add-quotation')"><span class="icon">📝</span>New Quotation</div>
+    <div class="nav-item" data-page="quotations" onclick="App.navigate('quotations')"><span class="icon">📋</span>Quotations</div>
     <div class="nav-item" data-page="invoices" data-role="admin" onclick="App.navigate('invoices')"><span class="icon">🧾</span>Invoices</div>
 
     <div class="nav-section">Follow-ups</div>
@@ -694,7 +693,7 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
   <div class="topbar no-print">
     <div class="topbar-left">
       <button class="back-btn" id="back-btn" onclick="App.goBack()">←</button>
-      <div class="topbar-logo" onclick="App.navigate('dashboard')">
+      <div class="topbar-logo" id="topbar-logo" onclick="App.navigate('dashboard')">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
           <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" stroke="#fff" stroke-width="2.5" stroke-linejoin="round"/>
           <polyline points="9,22 9,12 15,12 15,22" stroke="#fff" stroke-width="2.5" stroke-linejoin="round"/>
@@ -749,6 +748,19 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
       <div class="stat-card c-red" onclick="App.navigate('stocklist')"><div class="stat-label">⚠️ Low Stock</div><div class="stat-value text-red" id="s-lowstock">0</div><div class="stat-foot">Need restock</div></div>
       <div class="stat-card c-red" onclick="App.navigate('followups')"><div class="stat-label">📅 Overdue FU</div><div class="stat-value text-red" id="s-overdue">0</div><div class="stat-foot">Pending overdue</div></div>
     </div>
+
+    <!-- ═══════ BUSINESS OVERVIEW ROUND CHART (v4.1) ═══════ -->
+    <div class="card" style="margin-bottom:14px;">
+      <div class="card-head">
+        <span>📊 Business Overview — Round Chart</span>
+        <select id="rc-period" onchange="Dashboard.renderRoundChart()" style="width:auto;padding:4px 8px;font-size:0.75rem;">
+          <option value="month">यो महिना</option>
+          <option value="all" selected>सबै</option>
+        </select>
+      </div>
+      <div id="dash-round-chart" style="padding:14px;display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:center;"></div>
+    </div>
+
     <div class="card" style="margin-bottom:14px;background:linear-gradient(135deg,rgba(124,58,237,0.1),rgba(236,72,153,0.06));border:1px solid rgba(124,58,237,0.2);">
       <div class="card-head" style="background:linear-gradient(135deg,#7c3aed,#ec4899);color:#fff;">
         <span style="display:flex;align-items:center;gap:8px;"><span style="font-size:20px;">🤖</span>AI Sales Assistant</span>
@@ -931,7 +943,8 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
           <option value="">-- Select Service --</option>
           <option value="Construction / Civil Work">🏗️ Construction / Civil Work</option>
           <option value="Interior Design">🛋️ Interior Design</option>
-          <option value="UPVC / Aluminum">🪟 UPVC / Aluminum</option>
+          <option value="UPVC">🪟 UPVC</option>
+          <option value="Aluminum">🪟 Aluminum</option>
           <option value="Gypsum / False Ceiling">🏠 Gypsum / False Ceiling</option>
           <option value="Plumbing">🔧 Plumbing</option>
           <option value="Electrical">⚡ Electrical</option>
@@ -968,15 +981,23 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
             <option value="Furniture">Furniture</option>
             <option value="Office Interior">Office Interior</option>
           </optgroup>
-          <optgroup label="🪟 UPVC / Aluminum">
+          <optgroup label="🪟 UPVC">
             <option value="UPVC Windows">UPVC Windows</option>
             <option value="UPVC Door">UPVC Door</option>
-            <option value="Sliding Door">Sliding Door</option>
+            <option value="UPVC Sliding Window">UPVC Sliding Window</option>
+            <option value="UPVC Sliding Door">UPVC Sliding Door</option>
+            <option value="UPVC Partition">UPVC Partition</option>
+            <option value="UPVC Fixed Window">UPVC Fixed Window</option>
+            <option value="Glass Work">Glass Work</option>
+          </optgroup>
+          <optgroup label="🪟 Aluminum">
             <option value="Aluminum Window">Aluminum Window</option>
             <option value="Aluminum Door">Aluminum Door</option>
+            <option value="Aluminum Sliding Window">Aluminum Sliding Window</option>
             <option value="Aluminum Partition">Aluminum Partition</option>
-            <option value="Glass Work">Glass Work</option>
             <option value="ACP Panel">ACP Panel</option>
+            <option value="Aluminum Railing">Aluminum Railing</option>
+            <option value="Glass Work">Glass Work</option>
           </optgroup>
           <optgroup label="🏠 Gypsum / False Ceiling">
             <option value="False Ceiling">False Ceiling</option>
@@ -1077,7 +1098,7 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
     <div class="section-head">
       <div class="btn-group"><button onclick="Quotations.setFilter('all')" id="qf-all" class="btn btn-sm btn-primary">सबै</button><button onclick="Quotations.setFilter('today')" id="qf-today" class="btn btn-sm btn-secondary">आज</button><button onclick="Quotations.setFilter('week')" id="qf-week" class="btn btn-sm btn-secondary">७ दिन</button><button onclick="Quotations.setFilter('month')" id="qf-month" class="btn btn-sm btn-secondary">महिना</button></div>
       <div style="flex:1;text-align:right;font-size:0.78rem;color:var(--text-muted);" id="q-filter-label"></div>
-      <button onclick="App.navigate('add-quotation')" class="btn btn-sm btn-primary">+ New</button>
+      <button onclick="App.navigate('add-quotation')" class="btn btn-sm btn-primary" style="font-weight:700;">📝 + New Quotation</button>
     </div>
     <div class="card"><div class="table-wrap"><table><thead><tr><th>Customer</th><th>Service</th><th style="text-align:right;">Amount</th><th style="text-align:right;">Advance</th><th>मिति</th><th>Status</th><th></th></tr></thead><tbody id="quot-table"></tbody></table></div><div id="no-quot" class="empty-state" style="display:none;"><div class="icon">📋</div><div class="title">कुनै Quotation छैन</div><button onclick="App.navigate('add-quotation')" class="btn btn-primary">📝 New Quotation</button></div></div>
   </div>
@@ -1093,7 +1114,8 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
           <option value="">-- Select Service --</option>
           <option value="Construction / Civil Work">🏗️ Construction / Civil Work</option>
           <option value="Interior Design">🛋️ Interior Design</option>
-          <option value="UPVC / Aluminum">🪟 UPVC / Aluminum</option>
+          <option value="UPVC">🪟 UPVC</option>
+          <option value="Aluminum">🪟 Aluminum</option>
           <option value="Gypsum / False Ceiling">🏠 Gypsum / False Ceiling</option>
           <option value="Plumbing">🔧 Plumbing</option>
           <option value="Electrical">⚡ Electrical</option>
@@ -1116,10 +1138,15 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
             <option>TV Unit</option><option>Wall Panel</option><option>False Ceiling Design</option>
             <option>Lighting Setup</option><option>Furniture</option><option>Office Interior</option>
           </optgroup>
-          <optgroup label="🪟 UPVC / Aluminum">
-            <option>UPVC Windows</option><option>UPVC Door</option><option>Sliding Door</option>
-            <option>Aluminum Window</option><option>Aluminum Door</option><option>Aluminum Partition</option>
-            <option>Glass Work</option><option>ACP Panel</option>
+          <optgroup label="🪟 UPVC">
+            <option>UPVC Windows</option><option>UPVC Door</option><option>UPVC Sliding Window</option>
+            <option>UPVC Sliding Door</option><option>UPVC Partition</option><option>UPVC Fixed Window</option>
+            <option>Glass Work</option>
+          </optgroup>
+          <optgroup label="🪟 Aluminum">
+            <option>Aluminum Window</option><option>Aluminum Door</option><option>Aluminum Sliding Window</option>
+            <option>Aluminum Partition</option><option>ACP Panel</option><option>Aluminum Railing</option>
+            <option>Glass Work</option>
           </optgroup>
           <optgroup label="🏠 Gypsum / False Ceiling">
             <option>False Ceiling</option><option>POP Design</option><option>Grid Ceiling</option>
@@ -1167,8 +1194,8 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
         <div class="table-wrap"><table style="font-size:0.85rem;"><thead><tr><th>Item</th><th style="text-align:right;width:60px;">Qty</th><th style="text-align:center;width:65px;">Unit</th><th style="text-align:right;width:90px;">Rate</th><th style="text-align:right;width:95px;">Amount</th><th style="width:28px;"></th></tr></thead><tbody id="q-rows"></tbody></table></div>
         <div style="margin-top:14px;display:flex;flex-direction:column;gap:6px;align-items:flex-end;padding-right:4px;">
           <div style="display:flex;gap:20px;font-size:0.85rem;"><span style="color:var(--text-muted);">Subtotal:</span><span id="q-subtotal" style="min-width:100px;text-align:right;font-weight:600;">Rs. 0</span></div>
-          <div style="display:flex;gap:10px;font-size:0.85rem;align-items:center;"><span style="color:var(--text-muted);">Discount Rs.:</span><input type="number" id="q-discount" value="0" min="0" oninput="Quotations.calc()" style="width:80px;padding:5px 8px;font-size:0.82rem;text-align:right;"></div>
-          <div style="display:flex;gap:10px;font-size:0.85rem;align-items:center;"><span style="color:var(--text-muted);">Tax %:</span><input type="number" id="q-tax" value="0" min="0" oninput="Quotations.calc()" style="width:60px;padding:5px 8px;font-size:0.82rem;text-align:right;"></div>
+          <div style="display:flex;gap:10px;font-size:0.85rem;align-items:center;"><span style="color:var(--text-muted);">Discount Rs.:</span><input type="number" id="q-discount" value="0" min="0" oninput="Quotations.calc()" style="width:80px;padding:5px 8px;font-size:0.82rem;text-align:right;"><span id="q-disc-pct" style="color:var(--text-muted);font-size:0.72rem;min-width:44px;text-align:right;"></span></div>
+          <div style="display:flex;gap:10px;font-size:0.85rem;align-items:center;"><span style="color:var(--text-muted);">Tax % (VAT):</span><input type="number" id="q-tax" value="0" min="0" oninput="Quotations.calc()" style="width:60px;padding:5px 8px;font-size:0.82rem;text-align:right;"><span id="q-tax-amt" style="color:var(--text-muted);font-size:0.72rem;min-width:60px;text-align:right;"></span></div>
           <div style="display:flex;gap:20px;font-size:1.1rem;font-weight:800;color:var(--accent);border-top:2px solid var(--accent);padding-top:8px;margin-top:4px;"><span>Total:</span><span id="q-total" style="min-width:100px;text-align:right;">Rs. 0</span></div>
           <div style="display:flex;gap:10px;font-size:0.85rem;align-items:center;margin-top:6px;"><span style="color:var(--green);font-weight:600;">💵 Advance Rs.:</span><input type="number" id="q-advance" value="0" min="0" oninput="Quotations.calc()" style="width:110px;padding:5px 8px;font-size:0.82rem;text-align:right;border:1px solid var(--green);color:var(--green);font-weight:700;"></div>
           <div style="display:flex;gap:20px;font-size:0.95rem;font-weight:700;color:var(--red);"><span>बाँकी:</span><span id="q-balance" style="min-width:100px;text-align:right;">Rs. 0</span></div>
@@ -1328,7 +1355,7 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
 
   <!-- ========================= RATE LIST PAGE ========================= -->
   <div class="page" id="page-ratelist">
-    <div class="section-head"><div class="search-wrap"><input type="text" id="rl-search" placeholder="Search rate..." oninput="RateList.render()"></div><div class="btn-group"><button onclick="RateList.addCategory()" class="btn btn-sm btn-secondary">📁 + Category</button><button onclick="RateList.cleanEmpty()" class="btn btn-sm btn-secondary" title="Empty categories हटाउनुस्">🧹</button><button onclick="RateList.addItem()" class="btn btn-sm btn-primary">+ Item</button><button onclick="RateList.resetDefaults()" class="btn btn-sm btn-success" title="Default rates load">🔄 Reset</button></div></div>
+    <div class="section-head"><div class="search-wrap"><input type="text" id="rl-search" placeholder="Search rate..." oninput="RateList.render()"></div><div class="btn-group" id="rl-admin-btns" style="display:none;"><button onclick="RateList.addCategory()" class="btn btn-sm btn-secondary">📁 + Category</button><button onclick="RateList.cleanEmpty()" class="btn btn-sm btn-secondary" title="Empty categories हटाउनुस्">🧹</button><button onclick="RateList.addItem()" class="btn btn-sm btn-primary">+ Item</button><button onclick="RateList.resetDefaults()" class="btn btn-sm btn-success" title="Default rates load">🔄 Reset</button></div><div id="rl-viewonly-badge" style="display:none;font-size:0.7rem;color:var(--text-muted);background:var(--surface-2);border:1px solid var(--border);padding:5px 12px;border-radius:20px;">🔒 View Only — Rate Edit/Add Super Admin ले मात्र</div></div>
     <div id="rate-list-empty-msg" style="display:none;text-align:center;padding:40px 20px;border:2px dashed var(--border);border-radius:14px;margin-top:10px;"><div style="font-size:2.8rem;margin-bottom:10px;">📋</div><div style="font-weight:700;font-size:1.05rem;margin-bottom:6px;">Rate List खाली छ</div><button onclick="RateList.resetDefaults()" class="btn btn-primary btn-lg">🔄 Default Rates Load</button></div>
     <div id="rate-list-container"></div>
   </div>
@@ -1363,9 +1390,9 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
     <div class="card card-body" style="max-width:820px;">
       <div class="section-head" style="margin-bottom:14px;"><div><div class="section-title">✨ Professional Estimate</div><div class="section-subtitle">Customer लाई पठाउने final estimate</div></div><div class="btn-group"><button onclick="App.navigate('estimates-list')" class="btn btn-sm btn-blue">📂 Saved</button><button onclick="Estimate.clear()" class="btn btn-sm btn-secondary">🗑️ New</button><button onclick="Estimate.preview()" class="btn btn-sm btn-primary">👁️ Preview</button><button onclick="Estimate.save()" class="btn btn-sm btn-success">💾 Save</button><button onclick="Estimate.toQuotation()" class="btn btn-sm btn-secondary">📋 → Quote</button></div></div>
       <div style="background:var(--surface-2);padding:14px;border-radius:10px;margin-bottom:14px;"><div style="font-weight:700;margin-bottom:10px;color:var(--accent);font-size:0.88rem;">👤 Customer Information</div><div class="form-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;"><div class="form-group"><label>Customer Name *</label><input type="text" id="est-cust-name" placeholder="Full name" list="est-cust-datalist"><datalist id="est-cust-datalist"></datalist></div><div class="form-group"><label>Phone</label><input type="tel" id="est-cust-phone" placeholder="9855069733"></div><div class="form-group" style="grid-column:1/-1;"><label>Address</label><input type="text" id="est-cust-address" placeholder="Site address"></div></div></div>
-      <div style="background:var(--surface-2);padding:14px;border-radius:10px;margin-bottom:14px;"><div style="font-weight:700;margin-bottom:10px;color:var(--accent);font-size:0.88rem;">🏗️ Project Details</div><div class="form-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;"><div class="form-group"><label>Project Title</label><input type="text" id="est-title" placeholder="e.g. House Renovation"></div><div class="form-group"><label>Estimate No.</label><input type="text" id="est-no" readonly></div><div class="form-group"><label>Date</label><div class="bs-picker-display" onclick="BSPicker.open('est-date','Estimate Date')"><span id="est-date-text">📅 आज</span></div><input type="hidden" id="est-date"><input type="hidden" id="est-date-bs"></div><div class="form-group"><label>Validity</label><select id="est-validity"><option>7 days</option><option selected>15 days</option><option>30 days</option><option>60 days</option></select></div></div></div>
+      <div style="background:var(--surface-2);padding:14px;border-radius:10px;margin-bottom:14px;"><div style="font-weight:700;margin-bottom:10px;color:var(--accent);font-size:0.88rem;">🏗️ Project Details</div><div class="form-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;"><div class="form-group"><label>Project Title</label><input type="text" id="est-title" placeholder="e.g. House Renovation" list="est-title-datalist"><datalist id="est-title-datalist"><option>House Construction</option><option>House Renovation</option><option>Interior Design</option><option>Modular Kitchen</option><option>UPVC Windows & Doors</option><option>Aluminum Windows & Doors</option><option>Gypsum False Ceiling</option><option>Solar Installation</option><option>Painting Work</option><option>Tiles & Marble Work</option><option>Electrical Work</option><option>Plumbing Work</option></datalist></div><div class="form-group"><label>Estimate No.</label><input type="text" id="est-no" readonly></div><div class="form-group"><label>Date</label><div class="bs-picker-display" onclick="BSPicker.open('est-date','Estimate Date')"><span id="est-date-text">📅 आज</span></div><input type="hidden" id="est-date"><input type="hidden" id="est-date-bs"></div><div class="form-group"><label>Validity</label><select id="est-validity"><option>7 days</option><option selected>15 days</option><option>30 days</option><option>60 days</option></select></div></div></div>
       <div style="background:var(--surface-2);padding:14px;border-radius:10px;margin-bottom:14px;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;"><div style="font-weight:700;color:var(--accent);font-size:0.88rem;">📦 Items & Services</div><div class="btn-group"><button onclick="Estimate.loadFromRateList()" class="btn btn-xs btn-secondary">📋 From Rate List</button><button onclick="Estimate.addRow()" class="btn btn-xs btn-primary">+ Row</button></div></div><div class="table-wrap"><table style="font-size:0.82rem;"><thead><tr><th style="width:36px;">#</th><th>Description</th><th style="width:60px;">Qty</th><th style="width:60px;">Unit</th><th style="width:90px;">Rate</th><th style="width:90px;">Amount</th><th style="width:40px;"></th></tr></thead><tbody id="est-rows"></tbody></table></div></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;"><div><div style="font-weight:700;margin-bottom:8px;color:var(--accent);font-size:0.88rem;">📝 Terms & Remarks</div><textarea id="est-terms" placeholder="e.g. 50% advance on start..." style="width:100%;min-height:120px;padding:10px;font-size:0.85rem;"></textarea></div><div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end;"><div style="display:flex;gap:16px;font-size:0.88rem;"><span style="color:var(--text-muted);">Subtotal:</span><span id="est-sub" style="min-width:100px;text-align:right;font-weight:600;">Rs. 0</span></div><div style="display:flex;gap:10px;align-items:center;font-size:0.88rem;"><span style="color:var(--text-muted);">Discount:</span><input type="number" id="est-disc" value="0" min="0" oninput="Estimate.calc()" style="width:90px;padding:4px 8px;text-align:right;"></div><div style="display:flex;gap:10px;align-items:center;font-size:0.88rem;"><span style="color:var(--text-muted);">Tax %:</span><input type="number" id="est-tax" value="0" min="0" oninput="Estimate.calc()" style="width:60px;padding:4px 8px;text-align:right;"></div><div style="display:flex;gap:20px;font-size:1.1rem;font-weight:800;color:var(--accent);border-top:2px solid var(--accent);padding-top:8px;"><span>Total:</span><span id="est-total" style="min-width:100px;text-align:right;">Rs. 0</span></div><div style="display:flex;gap:10px;align-items:center;margin-top:6px;"><span style="color:var(--green);font-size:0.88rem;font-weight:600;">💵 Advance:</span><input type="number" id="est-advance" value="0" min="0" oninput="Estimate.calc()" style="width:110px;padding:4px 8px;text-align:right;border:1px solid var(--green);color:var(--green);font-weight:700;"></div><div style="display:flex;gap:20px;font-size:0.95rem;font-weight:700;color:var(--red);"><span>बाँकी:</span><span id="est-balance" style="min-width:100px;text-align:right;">Rs. 0</span></div></div></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;"><div><div style="font-weight:700;margin-bottom:8px;color:var(--accent);font-size:0.88rem;">📝 Terms & Remarks</div><textarea id="est-terms" placeholder="e.g. 50% advance on start..." style="width:100%;min-height:120px;padding:10px;font-size:0.85rem;"></textarea></div><div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end;"><div style="display:flex;gap:16px;font-size:0.88rem;"><span style="color:var(--text-muted);">Subtotal:</span><span id="est-sub" style="min-width:100px;text-align:right;font-weight:600;">Rs. 0</span></div><div style="display:flex;gap:10px;align-items:center;font-size:0.88rem;"><span style="color:var(--text-muted);">Discount:</span><input type="number" id="est-disc" value="0" min="0" oninput="Estimate.calc()" style="width:90px;padding:4px 8px;text-align:right;"><span id="est-disc-pct" style="color:var(--text-muted);font-size:0.78rem;min-width:52px;text-align:right;"></span></div><div style="display:flex;gap:10px;align-items:center;font-size:0.88rem;"><span style="color:var(--text-muted);">Tax % (VAT):</span><input type="number" id="est-tax" value="13" min="0" oninput="Estimate.calc()" style="width:60px;padding:4px 8px;text-align:right;"><span id="est-tax-amt" style="color:var(--text-muted);font-size:0.8rem;min-width:70px;text-align:right;"></span></div><div style="display:flex;gap:20px;font-size:1.1rem;font-weight:800;color:var(--accent);border-top:2px solid var(--accent);padding-top:8px;"><span>Total:</span><span id="est-total" style="min-width:100px;text-align:right;">Rs. 0</span></div><div style="display:flex;gap:10px;align-items:center;margin-top:6px;"><span style="color:var(--green);font-size:0.88rem;font-weight:600;">💵 Advance:</span><input type="number" id="est-advance" value="0" min="0" oninput="Estimate.calc()" style="width:110px;padding:4px 8px;text-align:right;border:1px solid var(--green);color:var(--green);font-weight:700;"></div><div style="display:flex;gap:20px;font-size:0.95rem;font-weight:700;color:var(--red);"><span>बाँकी:</span><span id="est-balance" style="min-width:100px;text-align:right;">Rs. 0</span></div></div></div>
     </div>
   </div>
 
@@ -1503,7 +1530,7 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
           </div>
           <div style="flex:1;min-width:0;">
             <div style="font-size:0.84rem;font-weight:700;margin-bottom:4px;">🖼️ Company Logo</div>
-            <div style="font-size:0.7rem;color:var(--text-muted);margin-bottom:8px;">Will appear on quotations, invoices &amp; brochures (PNG/JPG, max 2MB)</div>
+            <div style="font-size:0.7rem;color:var(--text-muted);margin-bottom:8px;">Will appear on quotations, invoices &amp; brochures (PNG/JPG, max 10MB — auto-resize हुन्छ)</div>
             <div style="display:flex;gap:6px;flex-wrap:wrap;">
               <input type="file" id="set-logo-file" accept="image/*" onchange="Settings.uploadLogo(event)" style="display:none;">
               <button type="button" onclick="document.getElementById('set-logo-file').click()" class="btn btn-sm btn-primary">📤 Upload / Change</button>
@@ -1652,39 +1679,12 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
         </div>
       </div>
 
-      <!-- Quick Actions Grid -->
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:12px;">
-        <div class="card card-body" style="cursor:pointer;text-align:center;" onclick="App.navigate('settings')">
-          <div style="font-size:1.8rem;margin-bottom:6px;">⚙️</div>
-          <div style="font-weight:700;font-size:0.85rem;">Company Settings</div>
-          <div style="font-size:0.72rem;color:var(--text-muted);">Name, phone, address</div>
-        </div>
-        <div class="card card-body" style="cursor:pointer;text-align:center;" onclick="App.navigate('ratelist')">
-          <div style="font-size:1.8rem;margin-bottom:6px;">💰</div>
-          <div style="font-weight:700;font-size:0.85rem;">Rate List</div>
-          <div style="font-size:0.72rem;color:var(--text-muted);">Add/edit/reset rates</div>
-        </div>
-        <div class="card card-body" style="cursor:pointer;text-align:center;" onclick="AdminDash.openServiceEditor()">
-          <div style="font-size:1.8rem;margin-bottom:6px;">🔧</div>
-          <div style="font-weight:700;font-size:0.85rem;">Service Control</div>
-          <div style="font-size:0.72rem;color:var(--text-muted);">Edit service/sub-service</div>
-        </div>
-        <div class="card card-body" style="cursor:pointer;text-align:center;" onclick="App.navigate('settings')">
-          <div style="font-size:1.8rem;margin-bottom:6px;">📝</div>
-          <div style="font-weight:700;font-size:0.85rem;">Templates</div>
-          <div style="font-size:0.72rem;color:var(--text-muted);">Manage message templates</div>
-        </div>
-        <div class="card card-body" style="cursor:pointer;text-align:center;" onclick="App.navigate('backup')">
-          <div style="font-size:1.8rem;margin-bottom:6px;">💾</div>
-          <div style="font-weight:700;font-size:0.85rem;">Backup / Restore</div>
-          <div style="font-size:0.72rem;color:var(--text-muted);">Export & import data</div>
-        </div>
-        <div class="card card-body" style="cursor:pointer;text-align:center;" onclick="App.navigate('audit')">
-          <div style="font-size:1.8rem;margin-bottom:6px;">📜</div>
-          <div style="font-weight:700;font-size:0.85rem;">Audit Log</div>
-          <div style="font-size:0.72rem;color:var(--text-muted);">User activity trail</div>
-        </div>
+      <!-- Quick Actions Grid (drag to reorder — v4.1) -->
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <div style="font-size:0.72rem;color:var(--text-muted);">💡 Card लाई drag गरेर क्रम मिलाउनुस्</div>
+        <button type="button" onclick="QuickActions.reset()" class="btn btn-xs btn-secondary" title="Default order">↺ Reset order</button>
       </div>
+      <div id="qa-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:12px;"></div>
 
       <!-- System Test -->
       <div class="card card-body" style="margin-bottom:12px;">
@@ -2093,9 +2093,10 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
         <div class="modal-title">📱 Share via WhatsApp</div>
         <button class="modal-close" onclick="document.getElementById('vc-wa-modal').classList.remove('open')">✕</button>
       </div>
+      <div style="background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.25);border-radius:8px;padding:8px 12px;margin-bottom:12px;font-size:0.74rem;color:var(--text-muted);line-height:1.5;">🖼️ <b style="color:var(--green);">Card को design image बनेर जान्छ</b> — mobile मा सिधै share sheet खुल्छ; computer मा image download हुन्छ + WhatsApp chat खुल्छ (photo attach गर्नुस्)।</div>
       <div class="form-group" style="margin-bottom:12px;"><label>Phone Number</label><input type="tel" id="vc-wa-phone" placeholder="98XXXXXXXX"></div>
-      <div class="form-group" style="margin-bottom:14px;"><label>Message</label><textarea id="vc-wa-msg" style="min-height:80px;"></textarea></div>
-      <div class="form-actions"><button class="btn btn-secondary" onclick="document.getElementById('vc-wa-modal').classList.remove('open')">Cancel</button><button class="btn btn-wa" onclick="VCard.confirmWA()">📱 Send WhatsApp</button></div>
+      <div class="form-group" style="margin-bottom:14px;"><label>Caption Message (image सँगै)</label><textarea id="vc-wa-msg" style="min-height:80px;"></textarea></div>
+      <div class="form-actions"><button class="btn btn-secondary" onclick="document.getElementById('vc-wa-modal').classList.remove('open')">Cancel</button><button class="btn btn-wa" onclick="VCard.confirmWA()">🖼️ Send Card</button></div>
     </div>
   </div>
 
@@ -2677,7 +2678,8 @@ function getTemplatesBySize(size) {
 var SERVICES_DATA = [
   {name:'Construction / Civil Work', subs:['House Construction','RCC Work','Foundation Work','Brick Work','Plaster Work','Slab Casting','Column / Beam Work','Flooring','Renovation','Turnkey Project']},
   {name:'Interior Design', subs:['Full Interior Setup','Modular Kitchen','Wardrobe','TV Unit','Wall Panel','Partition Work','False Ceiling Design','Lighting Setup','Furniture','Office Interior']},
-  {name:'UPVC / Aluminum', subs:['UPVC Windows','UPVC Door','Sliding Door','Aluminum Window','Aluminum Door','Aluminum Partition','Glass Work','ACP Panel']},
+  {name:'UPVC', subs:['UPVC Windows','UPVC Door','UPVC Sliding Window','UPVC Sliding Door','UPVC Partition','UPVC Fixed Window','Glass Work']},
+  {name:'Aluminum', subs:['Aluminum Window','Aluminum Door','Aluminum Sliding Window','Aluminum Partition','ACP Panel','Aluminum Railing','Glass Work']},
   {name:'Gypsum / False Ceiling', subs:['False Ceiling','POP Design','Grid Ceiling','Gypsum Partition','Ceiling Light Setup','PVC Ceiling']},
   {name:'Plumbing', subs:['Pipe Fitting','Bathroom Setup','Water Tank Installation','Sanitary Work','Drainage','Water Supply']},
   {name:'Electrical', subs:['Wiring','Lighting Setup','Switch Board Installation','MCB/DB Setup','Inverter Wiring','Fan Installation']},
@@ -2692,6 +2694,8 @@ var SERVICES_DATA = [
 var SERVICES_MAP = (function(){
   var m = {};
   SERVICES_DATA.forEach(function(s){ m[s.name] = s.subs; });
+  // Backward compatibility: old records saved with combined "UPVC / Aluminum"
+  m['UPVC / Aluminum'] = ['UPVC Windows','UPVC Door','Sliding Door','Aluminum Window','Aluminum Door','Aluminum Partition','Glass Work','ACP Panel'];
   return m;
 })();
 
@@ -2878,6 +2882,30 @@ function initAppDataSafe() {
 }
 
 
+// ═══════════════ BRAND LOGO EVERYWHERE (v4.3) ═══════════════
+// Shows the uploaded company logo in sidebar, topbar & login screen.
+// Falls back to the default gradient icon when no logo is set.
+var _defaultBrandSvg = {};
+function applyBrandLogo(dataUrl){
+  if(dataUrl === undefined){
+    var s = STORE.get('pk3_settings',{}) || {};
+    dataUrl = s.logo || '';
+  }
+  [['sb-logo-icon',20],['topbar-logo',18],['login-logo-icon',34]].forEach(function(pair){
+    var id = pair[0];
+    var el = document.getElementById(id);
+    if(!el) return;
+    // Remember the original inner content once, so delete can restore it
+    if(_defaultBrandSvg[id] === undefined) _defaultBrandSvg[id] = el.innerHTML;
+    if(dataUrl){
+      el.innerHTML = '<img src="'+dataUrl+'" alt="logo" style="width:100%;height:100%;object-fit:contain;border-radius:inherit;background:#fff;padding:2px;box-sizing:border-box;">';
+    } else {
+      el.innerHTML = _defaultBrandSvg[id];
+    }
+  });
+}
+
+
 // ═══════════════ UNIVERSAL WHATSAPP OPENER (v4.0.8) ═══════════════
 // Single source of truth for opening WhatsApp. Handles:
 //   • Phone cleanup (digits only, auto-prefix 977 if 10-digit)
@@ -3031,6 +3059,8 @@ var App = {
     try { Quotations.loadServices && Quotations.loadServices(); } catch(e) {}
     try { Settings.render(); } catch(e) { console.warn('Settings render error:',e); }
     try { Planner.init(); } catch(e) { console.warn('Planner init error:',e); }
+    try { Backup.initAutoSave(); } catch(e) { console.warn('AutoSave init error:',e); }
+    try { applyBrandLogo(); } catch(e) { console.warn('BrandLogo error:',e); }
     this.updateBsDisplay();
     // Init bottom nav
     var bn = document.getElementById('bottom-nav');
@@ -3194,8 +3224,22 @@ var Customers = {
       setText('add-cust-title','➕ Add New Customer');
       hide('c-dup-alert');
       document.getElementById('c-dup-alert').style.display='none';
+      // ── PREFILL FROM WALKIN SEARCH (v4.0.9): searched name/number auto-fills ──
+      if(this._prefillNew){
+        if(this._prefillNew.name)  setVal('c-name',  this._prefillNew.name);
+        if(this._prefillNew.phone) setVal('c-phone', this._prefillNew.phone);
+        this._prefillNew = null;
+        setTimeout(function(){ var el=document.getElementById(getVal('c-name')?'c-phone':'c-name'); if(el) el.focus(); }, 150);
+      }
     } else {
       var c=this._edit; this._edit=null;
+      // Legacy compat: if saved work value no longer exists as an option, add it dynamically
+      var workSel=document.getElementById('c-work');
+      if(workSel && c.work){
+        var has=false;
+        for(var wi=0;wi<workSel.options.length;wi++){ if(workSel.options[wi].value===c.work){has=true;break;} }
+        if(!has){ var op=document.createElement('option'); op.value=c.work; op.textContent=c.work+' (पुरानो)'; workSel.appendChild(op); }
+      }
       setVal('c-edit-id',c.id); setVal('c-name',c.name); setVal('c-phone',c.phone); setVal('c-address',c.address||''); setVal('c-work',c.work||''); setVal('c-notes',c.notes||''); setVal('c-sales',c.sales||''); setVal('c-sales-role',c.salesRole||''); setVal('c-advance',c.advance||''); setVal('c-total',c.total||'');
       if(c.issueDate){setVal('c-issue',c.issueDate);if(c.issueDateBs){setVal('c-issue-bs',c.issueDateBs);setText('c-issue-text',bsStringToDisplay(c.issueDateBs));}}
       if(c.fuDate){setVal('c-fu',c.fuDate);if(c.fuDateBs){setVal('c-fu-bs',c.fuDateBs);setText('c-fu-text',bsStringToDisplay(c.fuDateBs));}}
@@ -3284,9 +3328,17 @@ var Customers = {
     inp.style.display=inp.style.display==='none'?'':'none';
   },
   loadSalesDatalist: function() {
-    var staff=STORE.get('pk3_sales',[]);
     var dl=document.getElementById('sales-datalist'); if(!dl)return;
-    dl.innerHTML=staff.map(function(s){return '<option value="'+s.name+'">';}).join('');
+    var names = {};
+    // 1. SalesTeam module entries
+    (STORE.get('pk3_sales',[])||[]).forEach(function(s){ if(s&&s.name) names[s.name.trim()]=1; });
+    // 2. Staff module entries
+    (STORE.get('pk3_staff',[])||[]).forEach(function(s){ if(s&&s.name) names[s.name.trim()]=1; });
+    // 3. Salesperson names already used on existing customers (v4.0.9)
+    //    — एक पटक हालेपछि अर्को पटक click गर्दा popup मा देखिन्छ
+    (STORE.get('pk3_customers',[])||[]).forEach(function(c){ if(c&&c.sales&&c.sales.trim()) names[c.sales.trim()]=1; });
+    var list = Object.keys(names).sort();
+    dl.innerHTML=list.map(function(n){return '<option value="'+n.replace(/"/g,'&quot;')+'">';}).join('');
   },
   checkDuplicate: function(phone) {
     if(phone.length<10) { document.getElementById('c-dup-alert').style.display='none'; return; }
@@ -3493,9 +3545,16 @@ var Quotations = {
     var disc=parseFloat(getVal('q-discount'))||0;
     var tax=parseFloat(getVal('q-tax'))||0;
     var adv=parseFloat(getVal('q-advance'))||0;
-    var total=sub-disc+sub*(tax/100);
+    var afterDisc=sub-disc;
+    var taxAmt=afterDisc*(tax/100);
+    var total=afterDisc+taxAmt;
     var bal=total-adv;
     setText('q-subtotal',fmtRs(sub)); setText('q-total',fmtRs(total)); setText('q-balance',fmtRs(bal));
+    // Live helpers: discount % of subtotal + tax amount in Rs
+    var dp=document.getElementById('q-disc-pct');
+    if(dp) dp.textContent=(sub>0&&disc>0)?'('+((disc/sub)*100).toFixed(1).replace(/\.0$/,'')+'%)':'';
+    var ta=document.getElementById('q-tax-amt');
+    if(ta) ta.textContent=(taxAmt>0)?'(Rs '+fmtRs(taxAmt)+')':'';
     setVal('q-amount',total);
   },
   pickFromRateList: function() {
@@ -3930,10 +3989,9 @@ var Followups = {
 
   // ── BULK GREETING (v4.0.4): send a message to every customer at once ──
   openGreetAll: function(){
-    var custs = (STORE.get('pk3_customers',[])||[]).filter(function(c){return c.phone;});
+    var custs = (STORE.get('pk3_customers',[])||[]).filter(function(c){return c && c.phone && String(c.phone).replace(/[^0-9]/g,'').length>=7;});
     if(!custs.length){ App.toast('कुनै customer छैन — पहिले add गर्नुस्','warning'); return; }
     var templates = STORE.get('pk3_templates',null) || (typeof DEFAULT_TEMPLATES!=='undefined'?DEFAULT_TEMPLATES:[]) || Followups._defTpl();
-    // Build modal on the fly so we don't bloat HTML
     var existing = document.getElementById('greet-all-modal');
     if(existing) existing.remove();
     var m = document.createElement('div');
@@ -3941,13 +3999,11 @@ var Followups = {
     m.id = 'greet-all-modal';
     var defaultMsg = (templates[0] && (templates[0].text||templates[0].body||templates[0].message)) || 'नमस्ते {name}! PRERAK MULTIPURPOSE PVT LTD बाट तपाईंलाई शुभकामना।';
     m.innerHTML =
-      '<div class="modal" style="max-width:560px;">'
+      '<div class="modal" style="max-width:580px;">'
       +'<div class="modal-head">'
         +'<div>'
           +'<div class="modal-title">🎉 Greet All Customers</div>'
-          +'<div class="modal-sub" style="font-size:0.72rem;color:var(--text-muted);margin-top:2px;">'
-            +custs.length+' customers will receive the greeting via WhatsApp'
-          +'</div>'
+          +'<div class="modal-sub" style="font-size:0.72rem;color:var(--text-muted);margin-top:2px;">तल customer छानेर WhatsApp greeting पठाउनुस्</div>'
         +'</div>'
         +'<button class="modal-close" onclick="document.getElementById(\'greet-all-modal\').remove()">✕</button>'
       +'</div>'
@@ -3955,38 +4011,97 @@ var Followups = {
       +'<div style="margin-bottom:10px;">'
         +'<label style="font-size:0.7rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.4px;">📝 Choose Template</label>'
         +'<select id="ga-tpl" onchange="Followups._gaPickTpl(this.value)" style="width:100%;margin-top:4px;">'
-          + templates.map(function(t,i){
-              var n = (t.name||'Template '+(i+1)).replace(/</g,'&lt;');
-              return '<option value="'+i+'">'+n+'</option>';
-            }).join('')
+          + templates.map(function(t,i){ var n=(t.name||'Template '+(i+1)).replace(/</g,'&lt;'); return '<option value="'+i+'">'+n+'</option>'; }).join('')
         +'</select>'
       +'</div>'
       // Message editor
       +'<div style="margin-bottom:10px;">'
         +'<label style="font-size:0.7rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.4px;">💬 Message (use {name}, {phone}, {service}, {company})</label>'
-        +'<textarea id="ga-msg" rows="6" oninput="Followups._gaPreview()" style="width:100%;margin-top:4px;font-size:0.85rem;">'+defaultMsg.replace(/</g,'&lt;')+'</textarea>'
+        +'<textarea id="ga-msg" rows="4" oninput="Followups._gaPreview()" style="width:100%;margin-top:4px;font-size:0.85rem;">'+defaultMsg.replace(/</g,'&lt;')+'</textarea>'
       +'</div>'
-      // Filter chips
-      +'<div style="margin-bottom:10px;">'
-        +'<label style="font-size:0.7rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.4px;">🎯 Send To</label>'
-        +'<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;" id="ga-filter">'
-          +'<label style="display:inline-flex;align-items:center;gap:5px;font-size:0.78rem;cursor:pointer;text-transform:none;letter-spacing:0;color:var(--text);"><input type="radio" name="ga-f" value="all" checked onchange="Followups._gaPreview()"> All ('+custs.length+')</label>'
-          +'<label style="display:inline-flex;align-items:center;gap:5px;font-size:0.78rem;cursor:pointer;text-transform:none;letter-spacing:0;color:var(--text);"><input type="radio" name="ga-f" value="recent" onchange="Followups._gaPreview()"> Recent 30 days</label>'
-          +'<label style="display:inline-flex;align-items:center;gap:5px;font-size:0.78rem;cursor:pointer;text-transform:none;letter-spacing:0;color:var(--text);"><input type="radio" name="ga-f" value="advance" onchange="Followups._gaPreview()"> With Advance</label>'
+      // Quick filters (bulk-select helpers)
+      +'<div style="margin-bottom:8px;display:flex;gap:6px;flex-wrap:wrap;align-items:center;">'
+        +'<span style="font-size:0.7rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;">Quick select:</span>'
+        +'<button type="button" class="btn btn-xs btn-secondary" onclick="Followups._gaSelect(\'all\')">✅ All</button>'
+        +'<button type="button" class="btn btn-xs btn-secondary" onclick="Followups._gaSelect(\'none\')">⬜ None</button>'
+        +'<button type="button" class="btn btn-xs btn-secondary" onclick="Followups._gaSelect(\'recent\')">🕐 Recent 30d</button>'
+        +'<button type="button" class="btn btn-xs btn-secondary" onclick="Followups._gaSelect(\'advance\')">💰 With Advance</button>'
+      +'</div>'
+      // Individual customer checklist
+      +'<div style="margin-bottom:8px;">'
+        +'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">'
+          +'<label style="font-size:0.7rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.4px;">👥 Select Customers</label>'
+          +'<span id="ga-count" style="font-size:0.72rem;font-weight:700;color:var(--accent);"></span>'
         +'</div>'
+        +'<input type="text" id="ga-search" placeholder="🔍 नाम/नम्बर खोज्नुस्..." oninput="Followups._gaRenderList()" style="width:100%;margin-bottom:6px;font-size:0.8rem;padding:6px 10px;">'
+        +'<div id="ga-cust-list" style="max-height:200px;overflow-y:auto;border:1px solid var(--border);border-radius:8px;padding:4px;background:var(--surface-2);"></div>'
       +'</div>'
-      // Preview area
-      +'<div style="background:var(--surface-2);border-radius:8px;padding:10px 12px;margin-bottom:12px;font-size:0.78rem;color:var(--text-muted);max-height:120px;overflow-y:auto;" id="ga-preview"></div>'
-      // Action buttons
+      // Live preview
+      +'<div style="background:var(--surface-2);border-radius:8px;padding:10px 12px;margin-bottom:12px;font-size:0.78rem;max-height:110px;overflow-y:auto;" id="ga-preview"></div>'
+      // Actions
       +'<div class="form-actions" style="display:flex;gap:8px;flex-wrap:wrap;">'
         +'<button class="btn btn-secondary" onclick="document.getElementById(\'greet-all-modal\').remove()">Cancel</button>'
-        +'<button class="btn btn-primary" onclick="Followups._gaPreview()">👁 Preview</button>'
-        +'<button class="btn btn-wa" onclick="Followups._gaSend()" style="flex:1;">📱 Open WhatsApp Links</button>'
+        +'<button class="btn btn-wa" onclick="Followups._gaSend()" style="flex:1;">📱 Send WhatsApp</button>'
       +'</div>'
       +'</div>';
     document.body.appendChild(m);
     m.classList.add('open');
+    // Selection state — start with ALL selected
+    Followups._gaSelected = {};
+    custs.forEach(function(c){ Followups._gaSelected[c.id||c.phone] = true; });
+    Followups._gaRenderList();
     Followups._gaPreview();
+  },
+  _gaAllCustomers: function(){
+    return (STORE.get('pk3_customers',[])||[]).filter(function(c){return c && c.phone && String(c.phone).replace(/[^0-9]/g,'').length>=7;});
+  },
+  _gaRenderList: function(){
+    var box = document.getElementById('ga-cust-list');
+    if(!box) return;
+    if(!Followups._gaSelected) Followups._gaSelected = {};
+    var q = (getVal('ga-search')||'').toLowerCase();
+    var custs = Followups._gaAllCustomers();
+    if(q) custs = custs.filter(function(c){ return (c.name||'').toLowerCase().indexOf(q)>=0 || String(c.phone).indexOf(q)>=0; });
+    if(!custs.length){ box.innerHTML='<div style="padding:14px;text-align:center;color:var(--text-muted);font-size:0.8rem;">कुनै customer भेटिएन</div>'; return; }
+    box.innerHTML = custs.map(function(c){
+      var key = c.id||c.phone;
+      var checked = Followups._gaSelected[key] ? 'checked' : '';
+      return '<label style="display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:6px;cursor:pointer;font-size:0.82rem;" onmouseover="this.style.background=\'var(--surface)\'" onmouseout="this.style.background=\'\'">'
+        +'<input type="checkbox" '+checked+' onchange="Followups._gaToggle(\''+String(key).replace(/'/g,"\\'")+'\',this.checked)" style="width:16px;height:16px;cursor:pointer;">'
+        +'<div style="flex:1;min-width:0;"><div style="font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+esc(c.name||'(no name)')+'</div>'
+        +'<div style="font-size:0.7rem;color:var(--text-muted);">'+esc(c.phone)+(c.advance>0?' · 💰 Adv':'')+'</div></div>'
+      +'</label>';
+    }).join('');
+    Followups._gaUpdateCount();
+  },
+  _gaToggle: function(key, val){
+    if(!Followups._gaSelected) Followups._gaSelected = {};
+    Followups._gaSelected[key] = val;
+    Followups._gaUpdateCount();
+    Followups._gaPreview();
+  },
+  _gaSelect: function(mode){
+    if(!Followups._gaSelected) Followups._gaSelected = {};
+    var custs = Followups._gaAllCustomers();
+    var cutoff = new Date(); cutoff.setDate(cutoff.getDate()-30);
+    custs.forEach(function(c){
+      var key = c.id||c.phone;
+      if(mode==='all') Followups._gaSelected[key] = true;
+      else if(mode==='none') Followups._gaSelected[key] = false;
+      else if(mode==='recent'){ var d=c.created||c.updated; Followups._gaSelected[key] = d ? (new Date(d)>=cutoff) : false; }
+      else if(mode==='advance') Followups._gaSelected[key] = parseFloat(c.advance||0)>0;
+    });
+    Followups._gaRenderList();
+    Followups._gaPreview();
+  },
+  _gaUpdateCount: function(){
+    var n = Followups._gaGetSelected().length;
+    var el = document.getElementById('ga-count');
+    if(el) el.textContent = n + ' selected';
+  },
+  _gaGetSelected: function(){
+    if(!Followups._gaSelected) return [];
+    return Followups._gaAllCustomers().filter(function(c){ return Followups._gaSelected[c.id||c.phone]; });
   },
   _gaPickTpl: function(idx){
     var templates = STORE.get('pk3_templates',null) || (typeof DEFAULT_TEMPLATES!=='undefined'?DEFAULT_TEMPLATES:[]) || Followups._defTpl();
@@ -3995,63 +4110,38 @@ var Followups = {
     if(ta) ta.value = (t && (t.text||t.body||t.message)) || '';
     Followups._gaPreview();
   },
-  _gaFilteredCustomers: function(){
-    var custs = (STORE.get('pk3_customers',[])||[]).filter(function(c){return c && c.phone && String(c.phone).replace(/[^0-9]/g,'').length>=7;});
-    var sel = document.querySelector('#ga-filter input[name="ga-f"]:checked');
-    var f = sel ? sel.value : 'all';
-    if(f === 'recent'){
-      var cutoff = new Date(); cutoff.setDate(cutoff.getDate() - 30);
-      custs = custs.filter(function(c){
-        var d = c.created || c.updated || c.createdAt;
-        if(!d) return false;
-        var dt = new Date(d);
-        return !isNaN(dt.getTime()) && dt >= cutoff;
-      });
-    } else if(f === 'advance'){
-      custs = custs.filter(function(c){ return parseFloat(c.advance||0) > 0; });
-    }
-    return custs;
-  },
   _gaPreview: function(){
-    var custs = Followups._gaFilteredCustomers();
+    var custs = Followups._gaGetSelected();
     var msg = (document.getElementById('ga-msg')||{}).value || '';
     var box = document.getElementById('ga-preview');
     if(!box) return;
-    var sel = document.querySelector('#ga-filter input[name="ga-f"]:checked');
-    var fname = sel ? sel.value : 'all';
-    var fLabel = fname==='recent' ? 'Recent 30 days' : (fname==='advance' ? 'With Advance' : 'All customers');
     if(!custs.length){
       box.innerHTML = '<div style="text-align:center;padding:8px;color:var(--text-muted);">'
-        + '<div style="font-size:1.4rem;margin-bottom:4px;">📭</div>'
-        + '<div style="font-weight:600;">"'+fLabel+'" filter मा कुनै customer छैन</div>'
-        + (fname!=='all' ? '<div style="font-size:0.72rem;margin-top:4px;">"All" filter छान्नुहोस् वा अरू customer add गर्नुस्</div>' : '<div style="font-size:0.72rem;margin-top:4px;">Phone number भएको customer चाहिन्छ</div>')
+        + '<div style="font-size:1.4rem;margin-bottom:4px;">⬜</div>'
+        + '<div style="font-weight:600;">कुनै customer select गरिएको छैन</div>'
+        + '<div style="font-size:0.72rem;margin-top:4px;">माथि checkbox वा "Quick select" प्रयोग गर्नुस्</div>'
         + '</div>';
       return;
     }
     var first = custs[0];
-    var preview = (typeof fillTemplate === 'function')
-      ? fillTemplate({text:msg}, first)
-      : msg.replace(/\{name\}/g, first.name||'Customer');
+    var preview = (typeof fillTemplate === 'function') ? fillTemplate({text:msg}, first) : msg.replace(/\{name\}/g, first.name||'Customer');
     if(!preview || !preview.trim()) preview = '(message खाली छ — माथि लेख्नुस्)';
-    box.innerHTML = '<div style="font-weight:700;margin-bottom:6px;color:var(--accent);">📋 '+custs.length+' customers — "'+fLabel+'"</div>'
+    box.innerHTML = '<div style="font-weight:700;margin-bottom:6px;color:var(--accent);">📋 '+custs.length+' customers selected</div>'
       + '<div style="font-size:0.72rem;margin-bottom:6px;color:var(--text-muted);">👤 Sample: <strong style="color:var(--text);">'+esc(first.name||'(no name)')+'</strong> · '+esc(first.phone)+'</div>'
-      + '<div style="font-weight:600;font-size:0.7rem;color:var(--text-muted);margin-bottom:3px;">PREVIEW MESSAGE:</div>'
+      + '<div style="font-weight:600;font-size:0.7rem;color:var(--text-muted);margin-bottom:3px;">PREVIEW:</div>'
       + '<div style="background:var(--surface);padding:9px 11px;border-radius:6px;white-space:pre-wrap;font-size:0.8rem;color:var(--text);border-left:3px solid var(--accent);">'+esc(preview)+'</div>';
   },
   _gaSend: function(){
-    var custs = Followups._gaFilteredCustomers();
+    var custs = Followups._gaGetSelected();
     var msg = (document.getElementById('ga-msg')||{}).value || '';
-    if(!custs.length){ App.toast('No customers to greet','warning'); return; }
+    if(!custs.length){ App.toast('कुनै customer select गर्नुस्','warning'); return; }
     if(!msg.trim()){ App.toast('Message खाली छ','error'); return; }
-    // Close the greet picker modal first
     var m=document.getElementById('greet-all-modal'); if(m) m.remove();
-    // Use Wa.bulkSend so each WhatsApp tab opens with a fresh user gesture
-    // (avoids popup blocker that fires when multiple opens are queued in setTimeout)
     Wa.bulkSend(custs, function(c){
       if(typeof fillTemplate === 'function') return fillTemplate({text: msg}, c);
       return msg.replace(/\{name\}/g, c.name||'Customer').replace(/\{phone\}/g, c.phone||'');
-    }, { title: '🎉 Greet All ('+custs.length+' customers)' });
-    try { Audit.log('GREETING','Bulk greeting initiated for '+custs.length+' customers'); } catch(e){}
+    }, { title: '🎉 Greet ('+custs.length+' customers)' });
+    try { Audit.log('GREETING','Bulk greeting sent to '+custs.length+' selected customers'); } catch(e){}
   }
 };
 
@@ -4574,36 +4664,77 @@ var DayBook = {
 var RateList = {
   _pickTarget: null, _pickedItems: [],
   getData: function(){ return STORE.get('pk3_rates',{}); },
+  // ── ACCESS CONTROL (v4.0.9): only Super Admin can modify rates ──
+  _canEdit: function(){ return (typeof Auth!=='undefined' && Auth.isSuperAdmin) ? Auth.isSuperAdmin() : false; },
+  _guard: function(){
+    if(this._canEdit()) return true;
+    App.toast('🔒 Rate Edit/Add/Remove Super Admin ले मात्र गर्न सक्छ','error',3200);
+    return false;
+  },
+  // Category color palette for the beautiful template
+  _catColor: function(cat){
+    var palette = ['#f97316','#8b5cf6','#06b6d4','#22c55e','#eab308','#f43f5e','#3b82f6','#14b8a6','#a855f7','#f59e0b'];
+    var h = 0; for(var i=0;i<cat.length;i++){ h = (h*31 + cat.charCodeAt(i)) >>> 0; }
+    return palette[h % palette.length];
+  },
   render: function(){
     var rates=this.getData();
     if(!rates||Object.keys(rates).length===0){this.resetDefaults(true);rates=this.getData();}
     var q=getVal('rl-search').toLowerCase();
     var cats=Object.keys(rates);
+    var canEdit = this._canEdit();
+    // Toggle page-level admin buttons / view-only badge
+    var adminBtns = document.getElementById('rl-admin-btns');
+    if(adminBtns) adminBtns.style.display = canEdit ? '' : 'none';
+    var voBadge = document.getElementById('rl-viewonly-badge');
+    if(voBadge) voBadge.style.display = canEdit ? 'none' : '';
     var emptyMsg=document.getElementById('rate-list-empty-msg'), cont=document.getElementById('rate-list-container');
     if(!cats.length){emptyMsg.style.display='';cont.innerHTML='';return;} emptyMsg.style.display='none';
     cont.innerHTML=cats.map(function(cat){
       var items=rates[cat];
       if(q) items=items.filter(function(i){return (i.name+cat).toLowerCase().indexOf(q)>=0;});
       if(!items.length&&q) return '';
-      return '<div class="rate-cat-wrap"><div class="rate-cat-head" onclick="this.parentElement.querySelector(\'.rate-cat-body\').style.display=this.parentElement.querySelector(\'.rate-cat-body\').style.display===\'none\'?\'block\':\'none\'">'+
-        '<span class="rate-cat-title">📁 '+cat+'<span class="rate-cat-count">'+items.length+'</span></span>'+
-        '<div class="btn-group"><button onclick="event.stopPropagation();RateList.addItemToCategory(\''+cat+'\')" class="btn btn-xs btn-secondary">+ Add</button>'+
-        '<button onclick="event.stopPropagation();RateList.delCategory(\''+cat+'\')" class="btn btn-xs btn-danger">🗑</button></div></div>'+
-        '<div class="rate-cat-body"><table><thead><tr><th style="width:50px;">📷</th><th>Item</th><th style="text-align:right;">Rate</th><th>Unit</th><th></th></tr></thead><tbody>'+
-        items.map(function(item,i){
-          // ── IMAGE THUMBNAIL (v4.0.4): click to preview full-size ──
-          var imgCell = item.image
-            ? '<img src="'+item.image+'" alt="" onclick="event.stopPropagation();RateList.previewImageFull(this.src)" style="width:42px;height:42px;border-radius:6px;object-fit:cover;cursor:pointer;border:1px solid var(--border);" title="Click to enlarge">'
-            : '<div style="width:42px;height:42px;border-radius:6px;background:var(--surface-3);display:flex;align-items:center;justify-content:center;color:var(--text-dim);font-size:1rem;" title="No image">📷</div>';
-          return '<tr><td>'+imgCell+'</td><td>'+item.name+'</td><td style="text-align:right;font-weight:700;">'+fmtRs(item.rate)+'</td><td style="color:var(--text-muted);">'+item.unit+'</td><td><div class="btn-group"><button onclick="RateList.editItem(\''+cat+'\','+i+')" class="btn btn-xs btn-secondary" title="Edit">✏️</button><button onclick="RateList.delItem(\''+cat+'\','+i+')" class="btn btn-xs btn-danger" title="Delete">🗑</button></div></td></tr>';
-        }).join('')+
-        '</tbody></table></div></div>';
+      var color = RateList._catColor(cat);
+      // Category header buttons — Super Admin only
+      var catBtns = canEdit
+        ? '<div class="btn-group"><button onclick="event.stopPropagation();RateList.addItemToCategory(\''+cat.replace(/'/g,"\\'")+'\')" class="btn btn-xs" style="background:rgba(255,255,255,0.2);color:#fff;border:1px solid rgba(255,255,255,0.35);">+ Add</button>'+
+          '<button onclick="event.stopPropagation();RateList.delCategory(\''+cat.replace(/'/g,"\\'")+'\')" class="btn btn-xs" style="background:rgba(0,0,0,0.25);color:#fff;border:1px solid rgba(255,255,255,0.25);">🗑</button></div>'
+        : '<span style="font-size:0.9rem;opacity:0.85;">▾</span>';
+      return '<div class="rate-cat-wrap" style="border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,0.12);">'
+        +'<div class="rate-cat-head" onclick="var b=this.parentElement.querySelector(\'.rate-cat-body\');b.style.display=b.style.display===\'none\'?\'block\':\'none\';" '
+          +'style="background:linear-gradient(135deg,'+color+','+color+'cc);color:#fff;padding:11px 15px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;">'
+          +'<span class="rate-cat-title" style="font-weight:800;font-size:0.92rem;display:flex;align-items:center;gap:8px;">📁 '+esc(cat)
+            +'<span style="background:rgba(255,255,255,0.25);padding:1px 9px;border-radius:12px;font-size:0.7rem;font-weight:700;">'+items.length+'</span></span>'
+          + catBtns
+        +'</div>'
+        +'<div class="rate-cat-body" style="background:var(--surface);">'
+          +'<table style="width:100%;"><thead><tr style="background:var(--surface-2);">'
+            +'<th style="width:52px;padding:8px;">📷</th><th style="padding:8px;">Item</th><th style="text-align:right;padding:8px;">Rate</th><th style="padding:8px;">Unit</th>'
+            +(canEdit?'<th style="width:80px;"></th>':'')
+          +'</tr></thead><tbody>'
+          + items.map(function(item,i){
+            var imgCell = item.image
+              ? '<img src="'+item.image+'" alt="" onclick="event.stopPropagation();RateList.previewImageFull(this.src)" style="width:44px;height:44px;border-radius:8px;object-fit:cover;cursor:pointer;border:2px solid '+color+'44;" title="Click to enlarge">'
+              : '<div style="width:44px;height:44px;border-radius:8px;background:'+color+'18;display:flex;align-items:center;justify-content:center;color:'+color+';font-size:1.05rem;">📷</div>';
+            var actCell = canEdit
+              ? '<td><div class="btn-group"><button onclick="RateList.editItem(\''+cat.replace(/'/g,"\\'")+'\','+i+')" class="btn btn-xs btn-secondary" title="Edit">✏️</button><button onclick="RateList.delItem(\''+cat.replace(/'/g,"\\'")+'\','+i+')" class="btn btn-xs btn-danger" title="Delete">🗑</button></div></td>'
+              : '';
+            return '<tr style="border-bottom:1px solid var(--border-soft,var(--border));">'
+              +'<td style="padding:7px 8px;">'+imgCell+'</td>'
+              +'<td style="padding:7px 8px;font-weight:600;font-size:0.86rem;">'+esc(item.name)+'</td>'
+              +'<td style="text-align:right;padding:7px 8px;font-weight:800;color:'+color+';font-size:0.9rem;">'+fmtRs(item.rate)+'</td>'
+              +'<td style="padding:7px 8px;color:var(--text-muted);font-size:0.78rem;">'+esc(item.unit||'')+'</td>'
+              + actCell
+            +'</tr>';
+          }).join('')
+        +'</tbody></table></div></div>';
     }).join('');
   },
-  addCategory: function(){ var name=prompt('Category नाम:'); if(!name)return; var r=this.getData(); if(!r[name])r[name]=[]; STORE.set('pk3_rates',r); this.render(); },
-  delCategory: function(cat){ if(!confirm('Delete category "'+cat+'"?'))return; var r=this.getData(); delete r[cat]; STORE.set('pk3_rates',r); this.render(); },
-  cleanEmpty: function(){ var r=this.getData(); Object.keys(r).forEach(function(cat){if(!r[cat].length)delete r[cat];}); STORE.set('pk3_rates',r); this.render(); App.toast('✅ Empty categories cleaned','success'); },
+  addCategory: function(){ if(!this._guard())return; var name=prompt('Category नाम:'); if(!name)return; var r=this.getData(); if(!r[name])r[name]=[]; STORE.set('pk3_rates',r); try{Audit.log('RATES','Category added: '+name);}catch(e){} this.render(); },
+  delCategory: function(cat){ if(!this._guard())return; if(!confirm('Delete category "'+cat+'"?'))return; var r=this.getData(); delete r[cat]; STORE.set('pk3_rates',r); try{Audit.log('RATES','Category deleted: '+cat);}catch(e){} this.render(); },
+  cleanEmpty: function(){ if(!this._guard())return; var r=this.getData(); Object.keys(r).forEach(function(cat){if(!r[cat].length)delete r[cat];}); STORE.set('pk3_rates',r); this.render(); App.toast('✅ Empty categories cleaned','success'); },
   addItem: function(){
+    if(!this._guard())return;
     var rates=this.getData(); var cats=Object.keys(rates);
     var catSel=document.getElementById('rl-item-cat');
     if(catSel) catSel.innerHTML='<option value="">-- Category --</option>'+cats.map(function(c){return '<option value="'+c+'">'+c+'</option>';}).join('');
@@ -4612,8 +4743,9 @@ var RateList = {
     setText('rate-modal-title','💰 Add Rate Item');
     document.getElementById('rate-modal').classList.add('open');
   },
-  addItemToCategory: function(cat){ this.addItem(); setTimeout(function(){setVal('rl-item-cat',cat);},100); },
+  addItemToCategory: function(cat){ if(!this._guard())return; this.addItem(); setTimeout(function(){setVal('rl-item-cat',cat);},100); },
   editItem: function(cat,idx){
+    if(!this._guard())return;
     var rates=this.getData(); var item=rates[cat][idx]; if(!item)return;
     var catSel=document.getElementById('rl-item-cat');
     if(catSel) catSel.innerHTML='<option value="'+cat+'">'+cat+'</option>';
@@ -4681,6 +4813,7 @@ var RateList = {
     if(modal && img){ img.src = src; modal.classList.add('open'); }
   },
   saveItem: function(){
+    if(!this._guard())return;
     var name=getVal('rl-item-name'), rate=parseFloat(getVal('rl-item-rate'))||0, unit=getVal('rl-item-unit')||'sqft', cat=getVal('rl-item-cat');
     var image = getVal('rl-item-image') || '';
     if(!name){App.toast('Item नाम चाहिन्छ!','error');return;}
@@ -4693,8 +4826,11 @@ var RateList = {
     else rates[cat].push(rec);
     STORE.set('pk3_rates',rates); document.getElementById('rate-modal').classList.remove('open'); this.render(); App.toast('✅ Rate saved!','success');
   },
-  delItem: function(cat,idx){ if(!confirm('Delete?'))return; var r=this.getData(); r[cat].splice(idx,1); STORE.set('pk3_rates',r); this.render(); },
+  delItem: function(cat,idx){ if(!this._guard())return; if(!confirm('Delete?'))return; var r=this.getData(); var nm=(r[cat]&&r[cat][idx])?r[cat][idx].name:''; r[cat].splice(idx,1); STORE.set('pk3_rates',r); try{Audit.log('RATES','Item deleted: '+nm);}catch(e){} this.render(); },
   resetDefaults: function(force){
+    // Auto-seed (force=true from app init) is allowed for everyone;
+    // MANUAL reset from the button is Super Admin only.
+    if(!force && !this._guard()) return;
     if(!force && !confirm('Default rates load गर्नुहुन्छ? हाल भएको data रहन्छ, नयाँ categories थपिन्छन्।')) return;
     var r = this.getData() || {};
     var defaults = {
@@ -5104,8 +5240,69 @@ var Backup = {
     App.toast('🗑 All data cleared','info');
     setTimeout(function(){window.location.reload();},1000);
   },
-  sendEmail: function(){ var co=STORE.get('pk3_settings',{}); var email=co.email||'admin@prerak.com'; window.location.href='mailto:'+email+'?subject=PRERAK CRM Backup&body=Please find the backup attached.'; App.toast('📧 Email app opened','info'); }
+  sendEmail: function(){ var co=STORE.get('pk3_settings',{}); var email=co.email||'admin@prerak.com'; window.location.href='mailto:'+email+'?subject=PRERAK CRM Backup&body=Please find the backup attached.'; App.toast('📧 Email app opened','info'); },
+
+  // ═══════════════ AUTO-SAVE SYSTEM (v4.1) ═══════════════
+  // Data already lives in localStorage (survives refresh/close). This adds:
+  //  • A rolling in-browser snapshot for recovery
+  //  • A "download backup on exit" safety reminder
+  //  • Daily auto-backup nudge so the document file कहिल्यै हराउँदैन
+  ALL_KEYS: ['pk3_customers','pk3_quotations','pk3_followups','pk3_daybook','pk3_rates','pk3_walkins','pk3_staff','pk3_stock','pk3_stockHistory','pk3_sales','pk3_templates','pk3_bulkFolders','pk3_users','pk3_audit','pk3_invoices','pk3_ledger','pk3_notif','pk3_activity','pk3_company','pk3_settings','pk3_tracker','pk3_vcard','pk3_estimates','pk3_planner','pk3_qa_order'],
+
+  _snapshot: function(){
+    var data={};
+    Backup.ALL_KEYS.forEach(function(k){ var v=STORE.get(k,null); if(v!==null) data[k]=v; });
+    data._meta={version:'auto',date:new Date().toISOString()};
+    return data;
+  },
+
+  autoSave: function(){
+    // Save a recovery snapshot inside localStorage (separate key)
+    try {
+      var snap=Backup._snapshot();
+      localStorage.setItem('pk3_autosave_snapshot', JSON.stringify(snap));
+      localStorage.setItem('pk3_autosave_time', new Date().toISOString());
+    } catch(e){ /* quota — skip silently, real data still saved */ }
+  },
+
+  initAutoSave: function(){
+    // 1. Snapshot every 45 seconds while working
+    if(Backup._autoTimer) clearInterval(Backup._autoTimer);
+    Backup._autoTimer = setInterval(function(){ Backup.autoSave(); }, 45000);
+    // 2. Snapshot immediately on load
+    Backup.autoSave();
+    // 3. Save on tab close / navigate away (data safety)
+    window.addEventListener('beforeunload', function(){ Backup.autoSave(); });
+    // 4. Daily backup reminder — if no download backup in 24h+, gently nudge
+    Backup._checkDailyBackup();
+  },
+
+  _checkDailyBackup: function(){
+    try {
+      var last = STORE.get('lastBackup', null);
+      if(!last){ return; } // first run — don't nag
+      var diff = Date.now() - new Date(last).getTime();
+      var days = diff / (1000*60*60*24);
+      if(days >= 1){
+        setTimeout(function(){
+          if(window.App && App.toast){
+            App.toast('💾 '+Math.floor(days)+' दिनदेखि backup भएको छैन — Backup page बाट download गर्नुस्','warning',6000);
+          }
+        }, 3000);
+      }
+    } catch(e){}
+  },
+
+  // Recovery: check if a newer snapshot exists than current data (after a crash)
+  hasRecovery: function(){
+    try {
+      var t = localStorage.getItem('pk3_autosave_time');
+      return !!t;
+    } catch(e){ return false; }
+  }
 };
+
+// ═══════════════ END BACKUP + AUTOSAVE ═══════════════
 
 // ─── SETTINGS MODULE ─────────────────────────────────────────
 var Settings = {
@@ -5149,12 +5346,16 @@ var Settings = {
       if(ph)  ph.style.display = '';
       if(del) del.style.display = 'none';
     }
+    // Also refresh the app-wide brand spots (sidebar / topbar / login) — v4.3
+    try { applyBrandLogo(dataUrl); } catch(e){}
   },
   uploadLogo: function(event){
     var file = event.target.files && event.target.files[0];
     if(!file) return;
-    if(!/^image\//.test(file.type)){ App.toast('Image file मात्र छान्नुस्','error'); return; }
-    if(file.size > 2*1024*1024){ App.toast('Logo too large (max 2MB)','error'); return; }
+    if(!/^image\//.test(file.type)){ App.toast('Image file मात्र छान्नुस् (PNG/JPG)','error'); return; }
+    // 10MB limit — phone photos are big; we resize to 400px anyway so final size stays tiny
+    if(file.size > 10*1024*1024){ App.toast('फोटो धेरै ठूलो छ (max 10MB)','error'); return; }
+    App.toast('⏳ Logo upload हुँदैछ...','info',1200);
     var reader = new FileReader();
     var self = this;
     reader.onload = function(e){
@@ -5368,17 +5569,62 @@ var Walkin = {
     var custs=Customers.getData(); var lower=val.toLowerCase();
     var matches=custs.filter(function(c){return (c.name+c.phone).toLowerCase().indexOf(lower)>=0;}).slice(0,5);
     var sugg=document.getElementById('walkin-suggest');
+    var digits = val.replace(/[^0-9]/g,'');
+    var isPhone = digits.length >= 7;
+    // Build "not found" action options (used in both dropdown and result area)
+    var q = val.replace(/'/g,"\\'").replace(/"/g,'&quot;');
+    var notFoundOpts = ''
+      + '<div onclick="Walkin.addNewFromSearch(\''+q+'\')" style="padding:9px 14px;cursor:pointer;font-size:0.84rem;color:var(--accent);font-weight:600;border-top:1px solid var(--border);" onmouseover="this.style.background=\'var(--surface-2)\'" onmouseout="this.style.background=\'\'">➕ नयाँ Customer add गर्नुस् — "'+esc(val)+'"</div>'
+      + (isPhone ? '<div onclick="Walkin.useRawNumber(\''+digits+'\')" style="padding:9px 14px;cursor:pointer;font-size:0.84rem;color:var(--green);font-weight:600;border-top:1px solid var(--border);" onmouseover="this.style.background=\'var(--surface-2)\'" onmouseout="this.style.background=\'\'">📱 यही नम्बरमा greeting पठाउनुस् — '+digits+'</div>' : '');
+    var rowHtml = function(c){return '<div onclick="Walkin.selectCust(\''+c.id+'\')" style="padding:8px 14px;cursor:pointer;font-size:0.85rem;" onmouseover="this.style.background=\'var(--surface-2)\'" onmouseout="this.style.background=\'\'">'+esc(c.name)+' — '+esc(c.phone)+'</div>';};
     if(matches.length&&!force){
       sugg.style.display='';
-      sugg.innerHTML=matches.map(function(c){return '<div onclick="Walkin.selectCust(\''+c.id+'\')" style="padding:8px 14px;cursor:pointer;font-size:0.85rem;" onmouseover="this.style.background=\'var(--surface-2)\'" onmouseout="this.style.background=\'\'">'+c.name+' — '+c.phone+'</div>';}).join('');
+      sugg.innerHTML=matches.map(rowHtml).join('') + notFoundOpts;
+    } else if(!matches.length && !force){
+      // Live typing, nothing found — still show action options
+      sugg.style.display='';
+      sugg.innerHTML='<div style="padding:8px 14px;font-size:0.78rem;color:var(--text-muted);">कुनै customer मिलेन</div>' + notFoundOpts;
     } else {
       sugg.style.display='none';
       if(force){
         if(matches.length===1){this.selectCust(matches[0].id);}
-        else if(matches.length>1){sugg.style.display='';sugg.innerHTML=matches.map(function(c){return '<div onclick="Walkin.selectCust(\''+c.id+'\')" style="padding:8px 14px;cursor:pointer;font-size:0.85rem;" onmouseover="this.style.background=\'var(--surface-2)\'" onmouseout="this.style.background=\'\'">'+c.name+' — '+c.phone+'</div>';}).join('');}
-        else{document.getElementById('wi-result').innerHTML='<div style="padding:12px;background:var(--surface-2);border-radius:10px;text-align:center;color:var(--text-muted);">Customer फेला परेन। <button onclick="App.navigate(\'add-customer\')" class="btn btn-sm btn-primary" style="margin-left:8px;">+ नयाँ Customer</button></div>';}
+        else if(matches.length>1){sugg.style.display='';sugg.innerHTML=matches.map(rowHtml).join('') + notFoundOpts;}
+        else{
+          document.getElementById('wi-result').innerHTML='<div style="padding:14px;background:var(--surface-2);border-radius:10px;text-align:center;">'
+            +'<div style="color:var(--text-muted);margin-bottom:10px;">😕 "'+esc(val)+'" — Customer फेला परेन</div>'
+            +'<div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">'
+            +'<button onclick="Walkin.addNewFromSearch(\''+q+'\')" class="btn btn-sm btn-primary">➕ नयाँ Customer Add</button>'
+            +(isPhone?'<button onclick="Walkin.useRawNumber(\''+digits+'\')" class="btn btn-sm btn-wa">📱 सिधै Greeting पठाउनुस्</button>':'')
+            +'</div></div>';
+        }
       }
     }
+  },
+  // ── ADD FROM SEARCH (v4.0.9): pre-fill searched text into Add Customer form ──
+  addNewFromSearch: function(query){
+    var digits = String(query).replace(/[^0-9]/g,'');
+    var isPhone = digits.length >= 7;
+    Customers._prefillNew = isPhone ? {phone: digits} : {name: query};
+    App.navigate('add-customer');
+  },
+  // ── DIRECT GREETING (v4.0.9): send to any number without saving customer / follow-up ──
+  useRawNumber: function(phone){
+    document.getElementById('walkin-suggest').style.display='none';
+    this._selectedCust = { id:'', name:'ग्राहक', phone: phone };
+    var ph = document.getElementById('wi-phone'); if(ph) ph.value = phone;
+    var res=document.getElementById('wi-result');
+    res.innerHTML='<div class="card card-body" style="margin-top:10px;">'+
+      '<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">'+
+      '<div style="width:48px;height:48px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.3rem;">📱</div>'+
+      '<div><div style="font-size:1.05rem;font-weight:800;">नयाँ नम्बर</div><div style="font-size:0.85rem;color:var(--text-muted);">'+esc(phone)+'</div><div style="font-size:0.72rem;color:var(--green);">Direct greeting — follow-up बिना</div></div></div>'+
+      '<div style="display:flex;gap:8px;flex-wrap:wrap;">'+
+      '<button onclick="Walkin.send(\'wa\')" class="btn btn-sm btn-wa">📱 WhatsApp पठाउनुस्</button>'+
+      '<button onclick="Walkin.addNewFromSearch(\''+phone+'\')" class="btn btn-sm btn-secondary">➕ Customer पनि Add गर्नुस्</button>'+
+      '</div></div>';
+    // Fill greeting template with generic name
+    var _tpls=STORE.get('pk3_templates',null); if(!_tpls||!_tpls.length){_tpls=Followups._defTpl();STORE.set('pk3_templates',_tpls);}
+    var msg=_tpls[0]; if(msg) setVal('wi-msg', fillTemplate(msg, {name:'', phone:phone}));
+    App.toast('✅ Template ready — message check गरेर पठाउनुस्','success',2500);
   },
   selectCust: function(id){
     document.getElementById('walkin-suggest').style.display='none';
@@ -5482,17 +5728,32 @@ var VCard = {
     var vc={name:getVal('vc-name'),title:getVal('vc-title'),company:getVal('vc-company'),phone1:getVal('vc-phone1'),phone2:getVal('vc-phone2'),email:getVal('vc-email'),web:getVal('vc-web'),addr:getVal('vc-addr')};
     var c=this._colors[this._curColor]||this._colors[0];
     var preview=document.getElementById('vc-preview'); if(!preview)return;
-    preview.innerHTML='<div id="vc-card-render" style="width:340px;min-height:190px;border-radius:14px;background:linear-gradient('+this._dir+','+c.c1+','+c.c2+');padding:24px;color:#fff;box-shadow:0 8px 28px rgba(0,0,0,0.4);position:relative;overflow:hidden;">'+
-      '<div style="position:absolute;top:-30px;right:-30px;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,0.1);pointer-events:none;"></div>'+
-      '<div style="font-size:0.5rem;letter-spacing:3px;opacity:0.7;text-transform:uppercase;margin-bottom:8px;">'+(vc.company||'COMPANY')+'</div>'+
-      '<div style="font-size:1.4rem;font-weight:900;margin-bottom:2px;">'+(vc.name||'Your Name')+'</div>'+
-      '<div style="font-size:0.75rem;opacity:0.85;margin-bottom:14px;">'+(vc.title||'Designation')+'</div>'+
-      '<div style="font-size:0.72rem;display:flex;flex-direction:column;gap:4px;">'+
-      (vc.phone1?'<div>📞 '+vc.phone1+(vc.phone2?' | '+vc.phone2:'')+'</div>':'')+
-      (vc.email?'<div>✉️ '+vc.email+'</div>':'')+
-      (vc.web?'<div>🌐 '+vc.web+'</div>':'')+
-      (vc.addr?'<div>📍 '+vc.addr+'</div>':'')+
-      '</div></div>';
+    var co=STORE.get('pk3_settings',{})||{};
+    var logo=co.logo||'';
+    // Professional visiting card — real business-card proportions (3.5" x 2")
+    preview.innerHTML='<div id="vc-card-render" style="width:350px;height:200px;border-radius:16px;background:linear-gradient('+this._dir+','+c.c1+','+c.c2+');padding:0;color:#fff;box-shadow:0 12px 32px rgba(0,0,0,0.45);position:relative;overflow:hidden;font-family:sans-serif;">'
+      // decorative circles
+      +'<div style="position:absolute;top:-40px;right:-40px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,0.12);pointer-events:none;"></div>'
+      +'<div style="position:absolute;bottom:-50px;left:-30px;width:120px;height:120px;border-radius:50%;background:rgba(0,0,0,0.08);pointer-events:none;"></div>'
+      // top band: logo + company
+      +'<div style="display:flex;align-items:center;gap:10px;padding:16px 20px 0;">'
+        +(logo?'<div style="width:42px;height:42px;border-radius:9px;background:#fff;padding:3px;flex-shrink:0;display:flex;align-items:center;justify-content:center;"><img src="'+logo+'" style="max-width:100%;max-height:100%;object-fit:contain;"></div>':'<div style="width:42px;height:42px;border-radius:9px;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;">🏢</div>')
+        +'<div style="min-width:0;flex:1;"><div style="font-size:0.62rem;letter-spacing:2px;opacity:0.85;text-transform:uppercase;font-weight:700;line-height:1.2;">'+esc(vc.company||'COMPANY NAME')+'</div></div>'
+      +'</div>'
+      // name + designation
+      +'<div style="padding:12px 20px 0;position:relative;z-index:1;">'
+        +'<div style="font-size:1.5rem;font-weight:900;line-height:1.1;letter-spacing:0.3px;">'+esc(vc.name||'Your Name')+'</div>'
+        +'<div style="font-size:0.76rem;opacity:0.9;margin-top:2px;font-weight:500;">'+esc(vc.title||'Designation')+'</div>'
+      +'</div>'
+      // contact footer
+      +'<div style="position:absolute;bottom:0;left:0;right:0;padding:10px 20px 14px;background:rgba(0,0,0,0.15);font-size:0.68rem;display:grid;grid-template-columns:1fr 1fr;gap:2px 10px;z-index:1;">'
+        +(vc.phone1?'<div style="display:flex;align-items:center;gap:4px;">📞 '+esc(vc.phone1)+'</div>':'')
+        +(vc.phone2?'<div style="display:flex;align-items:center;gap:4px;">📱 '+esc(vc.phone2)+'</div>':'')
+        +(vc.email?'<div style="display:flex;align-items:center;gap:4px;grid-column:1/-1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">✉️ '+esc(vc.email)+'</div>':'')
+        +(vc.web?'<div style="display:flex;align-items:center;gap:4px;">🌐 '+esc(vc.web)+'</div>':'')
+        +(vc.addr?'<div style="display:flex;align-items:center;gap:4px;'+(vc.web?'':'grid-column:1/-1;')+'overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">📍 '+esc(vc.addr)+'</div>':'')
+      +'</div>'
+    +'</div>';
   },
   setPresetColor: function(i){ this._curColor=i; this.render(); },
   setCustomColor: function(n,v){ var c=this._colors[this._curColor]; if(n===1)c.c1=v;else c.c2=v; this.update(); },
@@ -5508,21 +5769,133 @@ var VCard = {
     var mg = document.getElementById('vc-wa-msg'); if(mg) mg.value = msg;
     var m = document.getElementById('vc-wa-modal'); if(m) m.classList.add('open');
   },
+  // ═══ CANVAS CARD RENDERER (v4.2) — draws the exact card design as an image ═══
+  // No html2canvas needed. Used for WhatsApp image share + PNG download.
+  _drawCard: function(cb){
+    var vc={name:getVal('vc-name'),title:getVal('vc-title'),company:getVal('vc-company'),phone1:getVal('vc-phone1'),phone2:getVal('vc-phone2'),email:getVal('vc-email'),web:getVal('vc-web'),addr:getVal('vc-addr')};
+    var col=this._colors[this._curColor]||this._colors[0];
+    var co=STORE.get('pk3_settings',{})||{};
+    var W=350,H=200,S=3; // 3x scale → sharp 1050×600 image
+    var canvas=document.createElement('canvas'); canvas.width=W*S; canvas.height=H*S;
+    var ctx=canvas.getContext('2d'); ctx.scale(S,S);
+    function rr(x,y,w,h,r){ ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
+    // Card body (rounded, clipped)
+    rr(0,0,W,H,16); ctx.save(); ctx.clip();
+    // Gradient from _dir angle (CSS convention: 0deg=up, clockwise)
+    var ang=(parseFloat(this._dir)||135)*Math.PI/180;
+    var dx=Math.sin(ang), dy=-Math.cos(ang);
+    var L=Math.abs(W*dx)+Math.abs(H*dy);
+    var cx0=W/2-dx*L/2, cy0=H/2-dy*L/2, cx1=W/2+dx*L/2, cy1=H/2+dy*L/2;
+    var g=ctx.createLinearGradient(cx0,cy0,cx1,cy1);
+    g.addColorStop(0,col.c1); g.addColorStop(1,col.c2);
+    ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+    // Decorative circles
+    ctx.fillStyle='rgba(255,255,255,0.12)'; ctx.beginPath(); ctx.arc(320,30,70,0,7); ctx.fill();
+    ctx.fillStyle='rgba(0,0,0,0.08)'; ctx.beginPath(); ctx.arc(30,190,60,0,7); ctx.fill();
+    // ── Footer contact band ──
+    var rows=[];
+    if(vc.phone1||vc.phone2) rows.push([vc.phone1?'📞 '+vc.phone1:'', vc.phone2?'📱 '+vc.phone2:'']);
+    if(vc.email) rows.push(['✉️ '+vc.email, null]); // full-width
+    if(vc.web||vc.addr){ if(vc.web&&vc.addr) rows.push(['🌐 '+vc.web,'📍 '+vc.addr]); else rows.push([(vc.web?'🌐 '+vc.web:'📍 '+vc.addr), null]); }
+    var bandH=rows.length?(rows.length*16+22):0;
+    if(bandH){ ctx.fillStyle='rgba(0,0,0,0.15)'; ctx.fillRect(0,H-bandH,W,bandH); }
+    function fitText(t,maxW){ if(ctx.measureText(t).width<=maxW) return t; while(t.length>1&&ctx.measureText(t+'…').width>maxW) t=t.slice(0,-1); return t+'…'; }
+    ctx.fillStyle='#fff'; ctx.font='11px sans-serif'; ctx.textBaseline='middle';
+    rows.forEach(function(r,i){
+      var y=H-bandH+14+i*16;
+      if(r[1]===null){ ctx.fillText(fitText(r[0],W-40),20,y); }
+      else { if(r[0]) ctx.fillText(fitText(r[0],150),20,y); if(r[1]) ctx.fillText(fitText(r[1],150),185,y); }
+    });
+    // ── Company name (top, next to logo) ──
+    var compX=72, compMaxW=W-compX-18;
+    ctx.font='bold 10px sans-serif';
+    try{ ctx.letterSpacing='2px'; }catch(e){}
+    ctx.fillStyle='rgba(255,255,255,0.92)';
+    var comp=(vc.company||'COMPANY NAME').toUpperCase();
+    // wrap into max 2 lines
+    var words=comp.split(' '), lines=[''],li=0;
+    words.forEach(function(w){ var test=(lines[li]?lines[li]+' ':'')+w; if(ctx.measureText(test).width>compMaxW&&lines[li]){ if(li<1){li++;lines.push(w);} else {lines[li]=fitText(lines[li]+' '+w,compMaxW);} } else lines[li]=test; });
+    var compY=lines.length>1?26:36;
+    lines.slice(0,2).forEach(function(l,i){ ctx.fillText(l,compX,compY+i*13); });
+    try{ ctx.letterSpacing='0px'; }catch(e){}
+    // ── Name + designation ──
+    ctx.fillStyle='#fff'; ctx.textBaseline='alphabetic';
+    var nm=vc.name||'Your Name'; var fs=24;
+    ctx.font='900 '+fs+'px sans-serif';
+    while(ctx.measureText(nm).width>W-40&&fs>14){ fs--; ctx.font='900 '+fs+'px sans-serif'; }
+    ctx.fillText(nm,20,96);
+    ctx.font='500 12px sans-serif'; ctx.fillStyle='rgba(255,255,255,0.9)';
+    ctx.fillText(fitText(vc.title||'Designation',W-40),20,114);
+    ctx.restore();
+    // ── Logo box (drawn over everything, top-left) ──
+    function drawLogoBox(img){
+      ctx.save(); rr(20,14,42,42,9); ctx.clip();
+      if(img){ ctx.fillStyle='#fff'; ctx.fillRect(20,14,42,42);
+        var iw=img.width,ih=img.height,ratio=Math.min(36/iw,36/ih);
+        var w2=iw*ratio,h2=ih*ratio;
+        ctx.drawImage(img,20+(42-w2)/2,14+(42-h2)/2,w2,h2);
+      } else { ctx.fillStyle='rgba(255,255,255,0.2)'; ctx.fillRect(20,14,42,42);
+        ctx.font='20px sans-serif'; ctx.textBaseline='middle'; ctx.textAlign='center';
+        ctx.fillStyle='#fff'; ctx.fillText('🏢',41,36); ctx.textAlign='left';
+      }
+      ctx.restore();
+      cb(canvas);
+    }
+    if(co.logo){ var im=new Image(); im.onload=function(){drawLogoBox(im);}; im.onerror=function(){drawLogoBox(null);}; im.src=co.logo; }
+    else drawLogoBox(null);
+  },
   confirmWA: function(){
     var phone = getVal('vc-wa-phone');
-    var msg = getVal('vc-wa-msg');
-    if(!msg || !msg.trim()){ App.toast('Message खाली छ','error'); return; }
+    var msg = getVal('vc-wa-msg')||'';
     var m = document.getElementById('vc-wa-modal');
-    if(typeof Wa !== 'undefined' && Wa.send){
-      if(Wa.send(phone, msg)){ if(m) m.classList.remove('open'); }
-    } else {
-      var p = (phone||'').replace(/[^0-9]/g,'');
-      window.open('https://wa.me/'+(p?'977'+p:'')+'?text='+encodeURIComponent(msg),'_blank');
-      if(m) m.classList.remove('open');
-    }
+    App.toast('🖼️ Card image बन्दैछ...','info',1500);
+    VCard._drawCard(function(canvas){
+      canvas.toBlob(function(blob){
+        if(!blob){ if(Wa.send(phone,msg)&&m) m.classList.remove('open'); return; }
+        var file=null;
+        try{ file=new File([blob],'prerak-visiting-card.png',{type:'image/png'}); }catch(e){}
+        // MOBILE: native share sheet → WhatsApp मा image सिधै जान्छ
+        if(file && navigator.canShare && navigator.canShare({files:[file]})){
+          navigator.share({files:[file], text:msg}).then(function(){
+            App.toast('✅ Card image share भयो!','success');
+            if(m) m.classList.remove('open');
+          }).catch(function(){ VCard._fallbackImgShare(blob, phone, msg, m); });
+        } else {
+          // DESKTOP: image auto-download + WhatsApp chat खुल्छ
+          VCard._fallbackImgShare(blob, phone, msg, m);
+        }
+      },'image/png');
+    });
   },
-  shareImage: function(){ if(window.html2canvas){html2canvas(document.getElementById('vc-card-render')).then(function(canvas){var link=document.createElement('a');link.download='prerak-card.png';link.href=canvas.toDataURL('image/png');link.click();});} else{App.toast('html2canvas not loaded','error');} },
-  downloadImage: function(){ this.shareImage(); },
+  _fallbackImgShare: function(blob, phone, msg, m){
+    var url=URL.createObjectURL(blob);
+    var a=document.createElement('a'); a.href=url; a.download='prerak-visiting-card.png';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function(){ URL.revokeObjectURL(url); },3000);
+    App.toast('🖼️ Card image download भयो — WhatsApp मा 📎 photo attach गरेर पठाउनुस्','success',6000);
+    if(phone) Wa.send(phone, msg, {quiet:true});
+    if(m) m.classList.remove('open');
+  },
+  shareImage: function(){
+    VCard._drawCard(function(canvas){
+      canvas.toBlob(function(blob){
+        var file=null;
+        try{ file=new File([blob],'prerak-visiting-card.png',{type:'image/png'}); }catch(e){}
+        if(file && navigator.canShare && navigator.canShare({files:[file]})){
+          navigator.share({files:[file]}).catch(function(){});
+        } else {
+          var a=document.createElement('a'); a.download='prerak-card.png'; a.href=canvas.toDataURL('image/png'); a.click();
+          App.toast('🖼️ Card PNG downloaded','success');
+        }
+      },'image/png');
+    });
+  },
+  downloadImage: function(){
+    VCard._drawCard(function(canvas){
+      var a=document.createElement('a'); a.download='prerak-card.png'; a.href=canvas.toDataURL('image/png'); a.click();
+      App.toast('⬇️ Card PNG saved','success');
+    });
+  },
   sendWA: function(){ this.shareWA(); },
   copyText: function(){ var t=getVal('vc-name')+'\n'+getVal('vc-title')+'\n'+getVal('vc-company')+'\n📞 '+getVal('vc-phone1'); if(navigator.clipboard)navigator.clipboard.writeText(t); App.toast('📋 Copied!','success'); }
 };
@@ -5976,7 +6349,22 @@ var Estimate = {
     this._rows=[]; this.renderRows(); this.calc();
     var next='EST-'+String(STORE.get('pk3_estimates',[]).length+1).padStart(3,'0');
     setVal('est-no',next);
-    var custs=Customers.getData(); var dl=document.getElementById('est-cust-datalist'); if(dl) dl.innerHTML=custs.map(function(c){return '<option value="'+c.name+'">';}).join('');
+    // Default tax to 13% VAT
+    var taxEl=document.getElementById('est-tax'); if(taxEl && !taxEl.value) taxEl.value='13';
+    var custs=Customers.getData(); var dl=document.getElementById('est-cust-datalist'); if(dl) dl.innerHTML=custs.map(function(c){return '<option value="'+esc(c.name)+'">';}).join('');
+    // When customer name matches, auto-fill phone/address/title from their record
+    var nameInp=document.getElementById('est-cust-name');
+    if(nameInp && !nameInp._autoBound){
+      nameInp._autoBound = true;
+      nameInp.addEventListener('change', function(){
+        var c=Customers.getData().find(function(x){return x.name===nameInp.value;});
+        if(c){
+          if(!getVal('est-cust-phone')) setVal('est-cust-phone', c.phone||'');
+          if(!getVal('est-cust-address')) setVal('est-cust-address', c.address||'');
+          if(!getVal('est-title') && c.work) setVal('est-title', c.work);
+        }
+      });
+    }
   },
   addRow: function(){ this._rows.push({name:'',qty:1,unit:'sqft',rate:0,amount:0}); this.renderRows(); },
   renderRows: function(){
@@ -5987,28 +6375,40 @@ var Estimate = {
       '<td><input type="number" value="'+(r.qty||1)+'" oninput="Estimate._rows['+i+'].qty=parseFloat(this.value)||0;Estimate.calc();" style="width:60px;text-align:right;"></td>'+
       '<td><input type="text" value="'+(r.unit||'sqft')+'" oninput="Estimate._rows['+i+'].unit=this.value" style="width:55px;text-align:center;"></td>'+
       '<td><input type="number" value="'+(r.rate||0)+'" oninput="Estimate._rows['+i+'].rate=parseFloat(this.value)||0;Estimate.calc();" style="width:85px;text-align:right;"></td>'+
-      '<td style="text-align:right;font-weight:700;">'+fmtRs((r.qty||0)*(r.rate||0))+'</td>'+
+      '<td style="text-align:right;font-weight:700;" id="est-amt-'+i+'">'+fmtRs((r.qty||0)*(r.rate||0))+'</td>'+
       '<td><button onclick="Estimate._rows.splice('+i+',1);Estimate.renderRows();Estimate.calc();" class="btn btn-icon btn-sm btn-danger">✕</button></td></tr>';
     }).join('');
   },
   calc: function(){
     var sub=this._rows.reduce(function(s,r){return s+(r.qty||0)*(r.rate||0);},0);
     var disc=parseFloat(getVal('est-disc'))||0, tax=parseFloat(getVal('est-tax'))||0, adv=parseFloat(getVal('est-advance'))||0;
-    var total=sub-disc+sub*(tax/100);
-    setText('est-sub',fmtRs(sub)); setText('est-total',fmtRs(total)); setText('est-balance',fmtRs(total-adv));
+    var afterDisc = sub - disc;
+    var taxAmt = afterDisc * (tax/100);
+    var total = afterDisc + taxAmt;
+    // Update each row's amount cell live (रकम)
+    this._rows.forEach(function(r,i){ var el=document.getElementById('est-amt-'+i); if(el) el.textContent=fmtRs((r.qty||0)*(r.rate||0)); });
+    setText('est-sub',fmtRs(sub));
+    // Show discount as % of subtotal
+    var discPct=document.getElementById('est-disc-pct');
+    if(discPct) discPct.textContent = (sub>0 && disc>0) ? '('+((disc/sub)*100).toFixed(1).replace(/\.0$/,'')+'%)' : '';
+    // Show tax amount in rupees next to the total area
+    var taxLabel=document.getElementById('est-tax-amt'); if(taxLabel) taxLabel.textContent='(Rs '+fmtRs(taxAmt)+')';
+    setText('est-total',fmtRs(total));
+    setText('est-balance',fmtRs(total-adv));
   },
   loadFromRateList: function(){ RateList._pickTarget='estimate'; RateList._pickedItems=[]; RateList.renderPickModal(''); document.getElementById('rate-pick-modal').classList.add('open'); },
   save: function(){
     var name=getVal('est-cust-name'); if(!name){App.toast('Customer name चाहिन्छ!','error');return;}
     var sub=this._rows.reduce(function(s,r){return s+(r.qty||0)*(r.rate||0);},0);
     var disc=parseFloat(getVal('est-disc'))||0, tax=parseFloat(getVal('est-tax'))||0, adv=parseFloat(getVal('est-advance'))||0;
-    var total=sub-disc+sub*(tax/100);
-    var rec={id:uid(),custName:name,phone:getVal('est-cust-phone'),addr:getVal('est-cust-address'),title:getVal('est-title'),estNo:getVal('est-no'),date:getVal('est-date')||todayISO(),dateBs:getVal('est-date-bs')||todayBs(),validity:getVal('est-validity')||'15 days',items:this._rows,disc:disc,tax:tax,advance:adv,total:total,terms:getVal('est-terms'),status:'Draft',type:'professional'};
+    var afterDisc=sub-disc; var taxAmt=afterDisc*(tax/100); var total=afterDisc+taxAmt;
+    var rec={id:uid(),custName:name,phone:getVal('est-cust-phone'),addr:getVal('est-cust-address'),title:getVal('est-title'),estNo:getVal('est-no'),date:getVal('est-date')||todayISO(),dateBs:getVal('est-date-bs')||todayBs(),validity:getVal('est-validity')||'15 days',items:this._rows,disc:disc,tax:tax,taxAmt:taxAmt,advance:adv,total:total,terms:getVal('est-terms'),status:'Draft',type:'professional'};
     var list=STORE.get('pk3_estimates',[]); list.unshift(rec); STORE.set('pk3_estimates',list);
+    try{ Audit.log('ESTIMATE','Created: '+name+' Rs.'+total); }catch(e){}
     App.toast('✅ Estimate saved!','success'); App.navigate('estimates-list');
   },
   preview: function(){ Bakauta._rows=this._rows; Bakauta.preview(); },
-  clear: function(){ this._rows=[]; this.renderRows(); this.calc(); setVal('est-cust-name',''); setVal('est-cust-phone',''); setVal('est-cust-address',''); setVal('est-title',''); setVal('est-disc','0'); setVal('est-tax','0'); setVal('est-advance','0'); setVal('est-terms',''); },
+  clear: function(){ this._rows=[]; this.renderRows(); this.calc(); setVal('est-cust-name',''); setVal('est-cust-phone',''); setVal('est-cust-address',''); setVal('est-title',''); setVal('est-disc','0'); setVal('est-tax','13'); setVal('est-advance','0'); setVal('est-terms',''); this.calc(); },
   toQuotation: function(){ Bakauta._rows=this._rows; Bakauta.toQuotation(); }
 };
 
@@ -6922,47 +7322,126 @@ var Ledger = {
 };
 
 var Reports = {
+  _filter: 'today',
   init: function(){ this.render(); },
-  render: function(){
-    var from = getVal('report-from');
-    var to = getVal('report-to');
-    var custs = getLS('pk3_customers')||[];
-    var quots = getLS('pk3_quotations')||[];
-    var invs  = getLS('pk3_invoices')||[];
-    var db    = getLS('pk3_daybook')||[];
-    var followups = getLS('pk3_followups')||[];
-    // filter by date if provided
-    function inRange(d){ if(!from&&!to) return true; if(from&&d<from) return false; if(to&&d>to) return false; return true; }
-    var filtQuots = quots.filter(function(q){ return inRange(q.date||q.created||''); });
-    var filtInvs  = invs.filter(function(i){ return inRange(i.date||i.created||''); });
-    var filtDb    = db.filter(function(d){ return inRange(d.date||''); });
-    var filtFu    = followups.filter(function(f){ return inRange(f.date||f.nextDate||''); });
-    var totalQuotVal = filtQuots.reduce(function(s,q){ return s+parseFloat(q.total||q.grandTotal||0); },0);
-    var totalInvVal  = filtInvs.reduce(function(s,i){ return s+parseFloat(i.total||i.grandTotal||0); },0);
-    var totalIncome  = filtDb.filter(function(d){ return d.type==='income'||d.type==='receipt'; }).reduce(function(s,d){ return s+parseFloat(d.amount||0); },0);
-    var totalExpense = filtDb.filter(function(d){ return d.type==='expense'||d.type==='payment'; }).reduce(function(s,d){ return s+parseFloat(d.amount||0); },0);
-    var el = document.getElementById('report-summary');
-    if(el) el.innerHTML = [
-      '<div class="col-6 col-md-3"><div class="card text-center p-3 border-primary"><div class="text-primary fw-bold fs-5">'+custs.length+'</div><small>Total Customers</small></div></div>',
-      '<div class="col-6 col-md-3"><div class="card text-center p-3 border-success"><div class="text-success fw-bold fs-5">'+filtQuots.length+'</div><small>Quotations</small></div></div>',
-      '<div class="col-6 col-md-3"><div class="card text-center p-3 border-info"><div class="text-info fw-bold fs-5">Rs '+fmt(totalQuotVal)+'</div><small>Quot Value</small></div></div>',
-      '<div class="col-6 col-md-3"><div class="card text-center p-3 border-warning"><div class="text-warning fw-bold fs-5">'+filtInvs.length+'</div><small>Invoices</small></div></div>',
-      '<div class="col-6 col-md-3"><div class="card text-center p-3 border-danger"><div class="text-danger fw-bold fs-5">Rs '+fmt(totalInvVal)+'</div><small>Invoice Value</small></div></div>',
-      '<div class="col-6 col-md-3"><div class="card text-center p-3 border-success"><div class="text-success fw-bold fs-5">Rs '+fmt(totalIncome)+'</div><small>Income</small></div></div>',
-      '<div class="col-6 col-md-3"><div class="card text-center p-3 border-danger"><div class="text-danger fw-bold fs-5">Rs '+fmt(totalExpense)+'</div><small>Expense</small></div></div>',
-      '<div class="col-6 col-md-3"><div class="card text-center p-3 '+(totalIncome-totalExpense>=0?'border-success':'border-danger')+'"><div class="fw-bold fs-5 '+(totalIncome-totalExpense>=0?'text-success':'text-danger')+'">Rs '+fmt(Math.abs(totalIncome-totalExpense))+'</div><small>Net '+(totalIncome-totalExpense>=0?'Profit':'Loss')+'</small></div></div>'
-    ].join('');
-    // followups due
-    var el2 = document.getElementById('report-followup-due');
-    if(el2){
-      var today = todayBS();
-      var due = followups.filter(function(f){ return (f.nextDate||f.date||'')<=today && f.status!='done'; });
-      el2.innerHTML = due.length ? '<div class="alert alert-warning mb-0">'+due.length+' follow-up(s) overdue or due today.</div>' : '<div class="alert alert-success mb-0">No overdue follow-ups.</div>';
-    }
+  setFilter: function(f){
+    this._filter = f;
+    ['today','week','month','all'].forEach(function(x){
+      var b=document.getElementById('rpt-f-'+x);
+      if(b) b.className='btn btn-sm btn-'+(x===f?'primary':'secondary');
+    });
+    this.render();
   },
-  exportPDF: function(){
-    window.print();
-  }
+  _range: function(){
+    var now=new Date(); var start=null;
+    if(this._filter==='today'){ start=new Date(now.getFullYear(),now.getMonth(),now.getDate()); }
+    else if(this._filter==='week'){ start=new Date(now); start.setDate(start.getDate()-7); }
+    else if(this._filter==='month'){ start=new Date(now); start.setMonth(start.getMonth()-1); }
+    return start;
+  },
+  _inRange: function(iso){
+    if(this._filter==='all') return true;
+    if(!iso) return false;
+    var d=new Date(iso); if(isNaN(d.getTime())) return false;
+    var start=this._range();
+    return !start || d>=start;
+  },
+  render: function(){
+    var self=this;
+    var custs=STORE.get('pk3_customers',[])||[];
+    var quots=STORE.get('pk3_quotations',[])||[];
+    var invs =STORE.get('pk3_invoices',[])||[];
+    var db   =STORE.get('pk3_daybook',[])||[];
+    var fQuots=quots.filter(function(q){ return self._inRange(q.date||q.created); });
+    var fInvs =invs.filter(function(i){ return self._inRange(i.date||i.created); });
+    var fDb   =db.filter(function(d){ return self._inRange(d.date||d.dateAd); });
+    var fCust =custs.filter(function(c){ return self._inRange(c.created||c.updated); });
+    var income =fDb.filter(function(d){return d.type==='income';}).reduce(function(s,d){return s+parseFloat(d.amount||0);},0);
+    var expense=fDb.filter(function(d){return d.type==='expense';}).reduce(function(s,d){return s+parseFloat(d.amount||0);},0);
+    var quotVal=fQuots.reduce(function(s,q){return s+parseFloat(q.amount||q.total||0);},0);
+    var net=income-expense;
+    // Stats grid
+    var stats=document.getElementById('rpt-stats');
+    if(stats){
+      stats.innerHTML=[
+        ['👥 New Customers',fCust.length,'var(--accent)'],
+        ['📋 Quotations',fQuots.length,'var(--purple)'],
+        ['💵 Quote Value','Rs '+fmtRs(quotVal),'var(--secondary)'],
+        ['🧾 Invoices',fInvs.length,'#f97316'],
+        ['💰 Income','Rs '+fmtRs(income),'var(--green)'],
+        ['💸 Expense','Rs '+fmtRs(expense),'var(--red)'],
+        ['📊 Net '+(net>=0?'Profit':'Loss'),'Rs '+fmtRs(Math.abs(net)),net>=0?'var(--green)':'var(--red)']
+      ].map(function(s){
+        return '<div class="stat-card"><div class="stat-label">'+s[0]+'</div><div class="stat-value" style="color:'+s[2]+';font-size:1.25rem;">'+s[1]+'</div></div>';
+      }).join('');
+    }
+    // Staff/salesperson performance
+    var staffEl=document.getElementById('rpt-staff');
+    if(staffEl){
+      var byStaff={};
+      fCust.forEach(function(c){ var s=(c.sales||'').trim()||'—'; if(!byStaff[s])byStaff[s]={cust:0,adv:0}; byStaff[s].cust++; byStaff[s].adv+=parseFloat(c.advance||0); });
+      var keys=Object.keys(byStaff).filter(function(k){return k!=='—';});
+      if(keys.length){
+        staffEl.innerHTML='<div class="card"><div class="card-head"><span>🧑‍💼 Salesperson Performance</span></div><div class="table-wrap"><table><thead><tr><th>Salesperson</th><th style="text-align:center;">Customers</th><th style="text-align:right;">Advance Collected</th></tr></thead><tbody>'
+          + keys.map(function(k){ return '<tr><td style="font-weight:600;">'+esc(k)+'</td><td style="text-align:center;">'+byStaff[k].cust+'</td><td style="text-align:right;color:var(--green);">Rs '+fmtRs(byStaff[k].adv)+'</td></tr>'; }).join('')
+          + '</tbody></table></div></div>';
+      } else { staffEl.innerHTML=''; }
+    }
+    // Daybook detail table
+    var tbody=document.getElementById('rpt-table');
+    var noRpt=document.getElementById('no-rpt');
+    if(tbody){
+      if(!fDb.length){
+        tbody.innerHTML='';
+        if(noRpt) noRpt.style.display='';
+      } else {
+        if(noRpt) noRpt.style.display='none';
+        fDb.sort(function(a,b){ return (b.date||'').localeCompare(a.date||''); });
+        tbody.innerHTML=fDb.map(function(d){
+          return '<tr><td style="font-size:0.78rem;">'+(d.dateBs?bsStringToDisplay(d.dateBs):fmtDisplayDate(d.date))+'</td>'
+            +'<td><span class="tag '+(d.type==='income'?'tag-green':'tag-red')+'">'+esc(d.type||'')+'</span></td>'
+            +'<td style="font-size:0.82rem;">'+esc(d.desc||'')+'</td>'
+            +'<td style="text-align:right;font-weight:700;color:'+(d.type==='income'?'var(--green)':'var(--red)')+';">'+fmtRs(d.amount||0)+'</td></tr>';
+        }).join('');
+      }
+    }
+    this._lastData={income:income,expense:expense,net:net,quotVal:quotVal,custCount:fCust.length,quotCount:fQuots.length,invCount:fInvs.length};
+  },
+  _filterLabel: function(){
+    return {today:'आज',week:'७ दिन',month:'महिना',all:'सबै'}[this._filter]||this._filter;
+  },
+  print: function(){
+    var co=STORE.get('pk3_settings',{})||{};
+    var d=this._lastData||{};
+    var w=window.open('','_blank','width=800,height=1000');
+    if(!w){ App.toast('Popup blocked','error'); return; }
+    w.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Report</title>'
+      +'<style>body{font-family:Arial,sans-serif;padding:24px;color:#222;}h1{color:#f97316;font-size:1.3rem;margin-bottom:2px;}.sub{color:#666;margin-bottom:16px;}table{width:100%;border-collapse:collapse;}td,th{border:1px solid #ddd;padding:8px 10px;text-align:left;}th{background:#f5f5f5;}.r{text-align:right;}</style>'
+      +'</head><body><h1>'+esc(co.companyName||'PRERAK MULTIPURPOSE PVT LTD')+'</h1>'
+      +'<div class="sub">📊 Report ('+this._filterLabel()+') • '+esc(co.address||'Hetauda-4, Makwanpur')+'</div>'
+      +'<table><tr><th>New Customers</th><td class="r">'+(d.custCount||0)+'</td></tr>'
+      +'<tr><th>Quotations</th><td class="r">'+(d.quotCount||0)+' (Rs '+fmtRs(d.quotVal||0)+')</td></tr>'
+      +'<tr><th>Invoices</th><td class="r">'+(d.invCount||0)+'</td></tr>'
+      +'<tr><th>Income</th><td class="r" style="color:green;">Rs '+fmtRs(d.income||0)+'</td></tr>'
+      +'<tr><th>Expense</th><td class="r" style="color:#d00;">Rs '+fmtRs(d.expense||0)+'</td></tr>'
+      +'<tr><th>Net '+((d.net||0)>=0?'Profit':'Loss')+'</th><td class="r" style="font-weight:700;">Rs '+fmtRs(Math.abs(d.net||0))+'</td></tr></table>'
+      +'<script>setTimeout(function(){window.print();},400);<\/script></body></html>');
+    w.document.close();
+  },
+  shareWA: function(){
+    var co=STORE.get('pk3_settings',{})||{};
+    var d=this._lastData||{};
+    var msg='*📊 '+(co.companyName||'PRERAK')+' Report*\n('+this._filterLabel()+')\n\n'
+      +'👥 New Customers: '+(d.custCount||0)+'\n'
+      +'📋 Quotations: '+(d.quotCount||0)+' (Rs '+fmtRs(d.quotVal||0)+')\n'
+      +'🧾 Invoices: '+(d.invCount||0)+'\n'
+      +'💰 Income: Rs '+fmtRs(d.income||0)+'\n'
+      +'💸 Expense: Rs '+fmtRs(d.expense||0)+'\n'
+      +'📊 Net '+((d.net||0)>=0?'Profit':'Loss')+': Rs '+fmtRs(Math.abs(d.net||0));
+    if(typeof Wa!=='undefined'&&Wa.send){ Wa.send('',msg); }
+    else window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');
+  },
+  exportPDF: function(){ this.print(); }
 };
 
 var DailyReport = {
@@ -7143,6 +7622,9 @@ var Dashboard = {
 
       // ── Daily Planner widget (v4.0.7) ──
       this.plRender();
+
+      // ── Business Overview Round Chart (v4.1) ──
+      try { this.renderRoundChart(); } catch(e){ console.warn('RoundChart error',e); }
 
       // ── Rate list preview ──
       this.renderRateList();
@@ -7343,6 +7825,78 @@ var Dashboard = {
     if(typeof Planner === 'undefined') return;
     Planner.toggleDone(id);
     this.plRender();
+  },
+
+  // ─── BUSINESS OVERVIEW ROUND CHART (v4.1) ──────────────────────
+  // Pure SVG donut — income vs expense vs advance, center shows net profit/loss.
+  // Legend chips show customers / followups / quotations counts.
+  renderRoundChart: function(){
+    var box = document.getElementById('dash-round-chart');
+    if(!box) return;
+    var period = getVal('rc-period') || 'all';
+    var monthStart = new Date(); monthStart.setDate(1); monthStart.setHours(0,0,0,0);
+    var inRange = function(iso){
+      if(period==='all') return true;
+      if(!iso) return false;
+      var d = new Date(iso); return !isNaN(d.getTime()) && d >= monthStart;
+    };
+    var custs = (STORE.get('pk3_customers',[])||[]).filter(function(c){return inRange(c.created||c.updated);});
+    var fus   = (STORE.get('pk3_followups',[])||[]).filter(function(f){return f.status!=='Done';});
+    var quots = (STORE.get('pk3_quotations',[])||[]).filter(function(q){return inRange(q.date||q.created);});
+    var db    = (STORE.get('pk3_daybook',[])||[]).filter(function(d){return inRange(d.date||d.dateAd);});
+    var income  = db.filter(function(d){return d.type==='income';}).reduce(function(s,d){return s+parseFloat(d.amount||0);},0);
+    var expense = db.filter(function(d){return d.type==='expense';}).reduce(function(s,d){return s+parseFloat(d.amount||0);},0);
+    var advance = custs.reduce(function(s,c){return s+parseFloat(c.advance||0);},0);
+    var net = income - expense;
+    var segs = [
+      {label:'💰 Income',  val:income,  color:'#22c55e'},
+      {label:'💸 Expense', val:expense, color:'#ef4444'},
+      {label:'💵 Advance', val:advance, color:'#eab308'}
+    ].filter(function(s){return s.val>0;});
+    var total = segs.reduce(function(s,x){return s+x.val;},0);
+    var svg;
+    if(total <= 0){
+      svg = '<div style="width:190px;height:190px;border-radius:50%;border:14px solid var(--surface-2);display:flex;align-items:center;justify-content:center;flex-direction:column;color:var(--text-muted);">'
+        +'<div style="font-size:1.6rem;">📊</div><div style="font-size:0.68rem;margin-top:4px;">Data छैन</div></div>';
+    } else {
+      // Build SVG donut: r=70, circumference = 2πr
+      var r=70, cx=95, cy=95, circ=2*Math.PI*r, offset=0;
+      var circles = segs.map(function(s){
+        var frac = s.val/total;
+        var len = frac*circ;
+        var el = '<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="none" stroke="'+s.color+'" stroke-width="26" '
+          +'stroke-dasharray="'+len.toFixed(2)+' '+(circ-len).toFixed(2)+'" stroke-dashoffset="'+(-offset).toFixed(2)+'" '
+          +'stroke-linecap="butt" transform="rotate(-90 '+cx+' '+cy+')"><title>'+s.label+': Rs '+fmtRs(s.val)+' ('+Math.round(frac*100)+'%)</title></circle>';
+        offset += len;
+        return el;
+      }).join('');
+      svg = '<svg width="190" height="190" viewBox="0 0 190 190" style="flex-shrink:0;">'
+        + '<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="none" stroke="var(--surface-2)" stroke-width="26"></circle>'
+        + circles
+        + '<text x="'+cx+'" y="'+(cy-8)+'" text-anchor="middle" style="font-size:11px;fill:var(--text-muted);font-weight:600;">Net '+(net>=0?'Profit':'Loss')+'</text>'
+        + '<text x="'+cx+'" y="'+(cy+13)+'" text-anchor="middle" style="font-size:15px;font-weight:800;fill:'+(net>=0?'#22c55e':'#ef4444')+';">Rs '+fmtRs(Math.abs(net))+'</text>'
+        + '</svg>';
+    }
+    // Legend + count chips
+    var legendRows = segs.map(function(s){
+      var pct = total>0 ? Math.round(s.val/total*100) : 0;
+      return '<div style="display:flex;align-items:center;gap:8px;font-size:0.8rem;">'
+        +'<span style="width:12px;height:12px;border-radius:3px;background:'+s.color+';flex-shrink:0;"></span>'
+        +'<span style="flex:1;">'+s.label+'</span>'
+        +'<span style="font-weight:700;">Rs '+fmtRs(s.val)+'</span>'
+        +'<span style="color:var(--text-muted);font-size:0.7rem;min-width:34px;text-align:right;">'+pct+'%</span>'
+      +'</div>';
+    }).join('');
+    var countChips = '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;">'
+      +'<span onclick="App.navigate(\'customers\')" style="cursor:pointer;background:var(--surface-2);border:1px solid var(--border);border-radius:14px;padding:4px 10px;font-size:0.72rem;">👥 Customers: <b>'+custs.length+'</b></span>'
+      +'<span onclick="App.navigate(\'followups\')" style="cursor:pointer;background:var(--surface-2);border:1px solid var(--border);border-radius:14px;padding:4px 10px;font-size:0.72rem;">📅 Follow-ups: <b>'+fus.length+'</b></span>'
+      +'<span onclick="App.navigate(\'quotations\')" style="cursor:pointer;background:var(--surface-2);border:1px solid var(--border);border-radius:14px;padding:4px 10px;font-size:0.72rem;">📋 Quotations: <b>'+quots.length+'</b></span>'
+      +'</div>';
+    box.innerHTML = svg
+      + '<div style="flex:1;min-width:220px;max-width:340px;display:flex;flex-direction:column;gap:7px;">'
+      + (legendRows || '<div style="color:var(--text-muted);font-size:0.8rem;">Income/Expense/Advance data थपेपछि chart देखिन्छ</div>')
+      + countChips
+      + '</div>';
   },
 
   addQuickEntry: function(){
@@ -7910,6 +8464,36 @@ var CRMCalc = {
 
 var Photo = {
   _current: null,
+  // Handle file input change — resize to keep localStorage small, then preview
+  handle: function(event, previewId, labelId){
+    var file = event && event.target && event.target.files ? event.target.files[0] : null;
+    if(!file){ return; }
+    if(file.size > 8*1024*1024){ App.toast('फोटो धेरै ठूलो छ (max 8MB)','error'); return; }
+    var reader = new FileReader();
+    reader.onload = function(ev){
+      var img = new Image();
+      img.onload = function(){
+        // Resize so the longest side is <= 500px (keeps base64 small)
+        var max = 500, w = img.width, h = img.height;
+        if(w > h && w > max){ h = Math.round(h*max/w); w = max; }
+        else if(h >= w && h > max){ w = Math.round(w*max/h); h = max; }
+        var canvas = document.createElement('canvas');
+        canvas.width = w; canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        var dataUrl = canvas.toDataURL('image/jpeg', 0.78);
+        Photo._current = dataUrl;
+        var pv = document.getElementById(previewId);
+        if(pv){ pv.src = dataUrl; pv.style.display = 'block'; }
+        var lb = document.getElementById(labelId);
+        if(lb){ lb.textContent = '✅ Photo added — फेरि click गरेर बदल्नुस्'; }
+        App.toast('📷 Photo added','success',1500);
+      };
+      img.onerror = function(){ App.toast('फोटो load हुन सकेन','error'); };
+      img.src = ev.target.result;
+    };
+    reader.onerror = function(){ App.toast('फोटो पढ्न सकेन','error'); };
+    reader.readAsDataURL(file);
+  },
   capture: function(targetId){
     var input = document.createElement('input');
     input.type='file'; input.accept='image/*'; input.capture='environment';
@@ -8127,6 +8711,9 @@ document.addEventListener('DOMContentLoaded', function(){
   // Start clock
   CRMClock.init();
 
+  // Show uploaded company logo on login/sidebar/topbar (v4.3)
+  try { applyBrandLogo(); } catch(e){}
+
   // Tooltips: Bootstrap was never loaded — using native title attribute instead.
   // (Removed dead bootstrap.Tooltip init.)
 
@@ -8276,6 +8863,86 @@ Auth.requirePerm = function(permission, action) {
 };
 
 // ─── ADMIN DASHBOARD MODULE ───────────────────────────────────────────────
+// ─── QUICK ACTIONS (drag-reorderable dashboard cards) ─────────────
+var QuickActions = {
+  DEFAULT: [
+    {id:'settings', icon:'⚙️', title:'Company Settings', sub:'Name, phone, address', act:"App.navigate('settings')"},
+    {id:'ratelist', icon:'💰', title:'Rate List', sub:'Add/edit/reset rates', act:"App.navigate('ratelist')"},
+    {id:'service',  icon:'🔧', title:'Service Control', sub:'Edit service/sub-service', act:"AdminDash.openServiceEditor()"},
+    {id:'templates',icon:'📝', title:'Templates', sub:'Manage message templates', act:"App.navigate('settings')"},
+    {id:'backup',   icon:'💾', title:'Backup / Restore', sub:'Export & import data', act:"App.navigate('backup')"},
+    {id:'audit',    icon:'📜', title:'Audit Log', sub:'User activity trail', act:"App.navigate('audit')"}
+  ],
+  _dragId: null,
+  _order: function(){
+    var saved = STORE.get('pk3_qa_order', null);
+    if(!saved || !Array.isArray(saved)) return this.DEFAULT.slice();
+    // Rebuild from saved id order, appending any new defaults not in saved
+    var byId = {}; this.DEFAULT.forEach(function(c){ byId[c.id]=c; });
+    var ordered = [];
+    saved.forEach(function(id){ if(byId[id]){ ordered.push(byId[id]); delete byId[id]; } });
+    Object.keys(byId).forEach(function(id){ ordered.push(byId[id]); });
+    return ordered;
+  },
+  render: function(){
+    var grid = document.getElementById('qa-grid');
+    if(!grid) return;
+    var cards = this._order();
+    grid.innerHTML = cards.map(function(c){
+      return '<div class="card card-body qa-card" draggable="true" data-qa-id="'+c.id+'" '
+        +'style="cursor:pointer;text-align:center;position:relative;transition:all 0.15s;" '
+        +'onclick="QuickActions._click(event,\''+c.id+'\')" '
+        +'ondragstart="QuickActions._dragStart(event,\''+c.id+'\')" '
+        +'ondragover="QuickActions._dragOver(event)" '
+        +'ondrop="QuickActions._drop(event,\''+c.id+'\')" '
+        +'ondragend="QuickActions._dragEnd(event)">'
+        +'<div style="position:absolute;top:6px;right:8px;color:var(--text-dim);font-size:0.9rem;cursor:grab;" title="Drag to reorder">⣿</div>'
+        +'<div style="font-size:1.8rem;margin-bottom:6px;">'+c.icon+'</div>'
+        +'<div style="font-weight:700;font-size:0.85rem;">'+esc(c.title)+'</div>'
+        +'<div style="font-size:0.72rem;color:var(--text-muted);">'+esc(c.sub)+'</div>'
+      +'</div>';
+    }).join('');
+  },
+  _click: function(ev, id){
+    // Ignore click if we just finished dragging
+    if(this._justDragged){ this._justDragged=false; return; }
+    var c = this.DEFAULT.find(function(x){return x.id===id;});
+    if(c && c.act){ try { eval(c.act); } catch(e){ console.warn(e); } }
+  },
+  _dragStart: function(ev, id){
+    this._dragId = id;
+    ev.dataTransfer.effectAllowed = 'move';
+    var card = ev.target.closest('.qa-card'); if(card) card.style.opacity='0.4';
+  },
+  _dragOver: function(ev){ ev.preventDefault(); ev.dataTransfer.dropEffect='move';
+    var card = ev.target.closest('.qa-card');
+    if(card) card.style.outline='2px dashed var(--accent)';
+  },
+  _drop: function(ev, targetId){
+    ev.preventDefault();
+    var card = ev.target.closest('.qa-card'); if(card) card.style.outline='';
+    if(!this._dragId || this._dragId===targetId) return;
+    var order = this._order().map(function(c){return c.id;});
+    var from = order.indexOf(this._dragId);
+    var to = order.indexOf(targetId);
+    if(from<0||to<0) return;
+    order.splice(to, 0, order.splice(from,1)[0]);
+    STORE.set('pk3_qa_order', order);
+    this._justDragged = true;
+    this.render();
+  },
+  _dragEnd: function(ev){
+    document.querySelectorAll('.qa-card').forEach(function(c){ c.style.opacity=''; c.style.outline=''; });
+    this._dragId = null;
+  },
+  reset: function(){
+    STORE.set('pk3_qa_order', null);
+    this.render();
+    App.toast('↺ Quick Actions क्रम reset भयो','success',1500);
+  }
+};
+
+
 var AdminDash = {
   render: function() {
     if (!Auth.isAdmin()) { App.toast('\u26d4 Access denied', 'error'); App.navigate('dashboard'); return; }
@@ -8284,6 +8951,7 @@ var AdminDash = {
     this.renderUsers();
     this.renderPermTable();
     this.renderTests();
+    try { QuickActions.render(); } catch(e){ console.warn('QuickActions error',e); }
   },
 
   renderUsers: function() {
