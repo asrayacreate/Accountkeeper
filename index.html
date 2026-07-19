@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#f97316">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<title>PRERAK CRM v4.3 World-Class | प्रेरक मल्टिपर्पोज प्रा.लि.</title>
+<title>PRERAK CRM v4.7 World-Class | प्रेरक मल्टिपर्पोज प्रा.लि.</title>
 <meta name="description" content="PRERAK CRM — Complete business management for Prerak Multipurpose Pvt Ltd, Hetauda-4, Makwanpur. Customers, Quotations, Estimates, Follow-ups, BS Calendar, Daybook & more.">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -614,7 +614,7 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
         <div class="sb-logo-text">
           <div class="name">🇳🇵 PRERAK</div>
           <div class="sub">Multipurpose Pvt Ltd</div>
-          <div class="ver">v4.3 World-Class ⚡</div>
+          <div class="ver">v4.7 World-Class ⚡</div>
         </div>
       </div>
       <div class="sb-actions">
@@ -663,6 +663,7 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
     <div class="nav-item" data-page="bakauta" onclick="App.navigate('bakauta')"><span class="icon">🧾</span>Bakauta (Rough)</div>
     <div class="nav-item" data-page="estimate-new" onclick="App.navigate('estimate-new')"><span class="icon">✨</span>New Estimate (Pro)</div>
     <div class="nav-item" data-page="estimates-list" onclick="App.navigate('estimates-list')"><span class="icon">📂</span>Saved Estimates</div>
+    <div class="nav-item" data-page="vatcalc" onclick="App.navigate('vatcalc')"><span class="icon">🧮</span>VAT Calculator</div>
 
     <div class="nav-section">Reports</div>
     <div class="nav-item" data-page="dailyreport" data-role="admin" onclick="App.navigate('dailyreport')"><span class="icon">📊</span>Daily Report</div>
@@ -1353,6 +1354,55 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
     </div>
   </div>
 
+  <!-- ========================= VAT CALCULATOR PAGE (v4.5) ========================= -->
+  <div class="page" id="page-vatcalc">
+    <div class="section-head">
+      <div>
+        <div class="section-title">🧮 VAT Calculator (Nepal)</div>
+        <div class="section-subtitle">रकम हाल्नुस्, mode छान्नुस् — VAT थप्ने वा भित्रै निकाल्ने</div>
+      </div>
+      <button onclick="VatCalc.clear()" class="btn btn-sm btn-secondary">🧹 Clear</button>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;max-width:900px;">
+      <!-- Input card -->
+      <div class="card card-body">
+        <!-- MODE TABS -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;">
+          <button id="vc2-mode-add" onclick="VatCalc.setMode('add')" class="btn btn-primary" style="padding:12px 8px;font-weight:800;font-size:0.86rem;line-height:1.3;">➕ VAT थप्ने<br><span style="font-weight:500;font-size:0.66rem;opacity:0.85;">रकममा VAT जोडिन्छ</span></button>
+          <button id="vc2-mode-incl" onclick="VatCalc.setMode('incl')" class="btn btn-secondary" style="padding:12px 8px;font-weight:800;font-size:0.86rem;line-height:1.3;">📦 VAT भित्रै<br><span style="font-weight:500;font-size:0.66rem;opacity:0.85;">रकमभित्रैबाट VAT निस्कन्छ</span></button>
+        </div>
+
+        <div class="form-group" style="margin-bottom:12px;">
+          <label id="vc2-amt-label">💵 रकम (VAT बिनाको)</label>
+          <input type="number" id="vc2-amt" placeholder="जस्तै: 5000" oninput="VatCalc.calc()" style="font-size:1.25rem;font-weight:800;text-align:right;padding:12px;">
+        </div>
+
+        <div class="form-group" style="margin-bottom:8px;">
+          <label>VAT दर (%)</label>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <input type="number" id="vc2-rate" value="13" min="0" step="0.5" oninput="VatCalc.calc()" style="width:90px;text-align:right;font-weight:700;">
+            <button onclick="VatCalc.setRate(13)" class="btn btn-xs btn-primary">Nepal 13%</button>
+            <button onclick="VatCalc.setRate(0)" class="btn btn-xs btn-secondary">0%</button>
+          </div>
+        </div>
+
+        <div id="vc2-hint" style="font-size:0.72rem;color:var(--text-muted);margin-top:10px;line-height:1.6;background:var(--surface-2);border-radius:8px;padding:9px 12px;"></div>
+      </div>
+
+      <!-- Result card -->
+      <div class="card card-body" style="display:flex;flex-direction:column;">
+        <div class="section-title" style="font-size:0.9rem;margin-bottom:12px;">📊 Breakdown</div>
+        <div id="vc2-breakdown" style="flex:1;"></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;">
+          <button onclick="VatCalc.copyAll()" class="btn btn-sm btn-secondary" style="flex:1;">📋 Copy</button>
+          <button onclick="VatCalc.shareWA()" class="btn btn-sm btn-wa" style="flex:1;">📱 WhatsApp</button>
+          <button onclick="App.navigate('estimate-new')" class="btn btn-sm btn-primary" style="flex:1;">📄 Estimate →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- ========================= RATE LIST PAGE ========================= -->
   <div class="page" id="page-ratelist">
     <div class="section-head"><div class="search-wrap"><input type="text" id="rl-search" placeholder="Search rate..." oninput="RateList.render()"></div><div class="btn-group" id="rl-admin-btns" style="display:none;"><button onclick="RateList.addCategory()" class="btn btn-sm btn-secondary">📁 + Category</button><button onclick="RateList.cleanEmpty()" class="btn btn-sm btn-secondary" title="Empty categories हटाउनुस्">🧹</button><button onclick="RateList.addItem()" class="btn btn-sm btn-primary">+ Item</button><button onclick="RateList.resetDefaults()" class="btn btn-sm btn-success" title="Default rates load">🔄 Reset</button></div><div id="rl-viewonly-badge" style="display:none;font-size:0.7rem;color:var(--text-muted);background:var(--surface-2);border:1px solid var(--border);padding:5px 12px;border-radius:20px;">🔒 View Only — Rate Edit/Add Super Admin ले मात्र</div></div>
@@ -1778,6 +1828,13 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
         <button onclick="CRMCalc.press('.')" class="btn btn-secondary" style="font-size:1rem;">.</button>
         <button onclick="CRMCalc.press('=')" class="btn btn-primary" style="font-size:1.1rem;">=</button>
       </div>
+      <!-- VAT quick buttons (v4.6) -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;">
+        <button onclick="CRMCalc.vat('add')" class="btn btn-success" style="font-size:0.8rem;font-weight:800;padding:10px 6px;line-height:1.25;">➕ VAT थप्ने<br><span style="font-weight:500;font-size:0.62rem;opacity:0.85;">+13% जोड्ने</span></button>
+        <button onclick="CRMCalc.vat('incl')" class="btn" style="font-size:0.8rem;font-weight:800;padding:10px 6px;line-height:1.25;background:linear-gradient(135deg,#a855f7,#7c3aed);color:#fff;">📦 VAT भित्रै<br><span style="font-weight:500;font-size:0.62rem;opacity:0.85;">भित्रैबाट निकाल्ने</span></button>
+      </div>
+      <div id="calc-vat-result" style="display:none;margin-top:10px;background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:10px 12px;font-size:0.8rem;"></div>
+      <div style="text-align:center;font-size:0.6rem;color:var(--text-dim);margin-top:8px;letter-spacing:0.3px;">⌨️ Keyboard: 0-9 · + − × ÷ · Enter = बराबर · ⌫ मेट्ने · C clear · <b>V</b> = VAT थप्ने · <b>B</b> = VAT भित्रै</div>
     </div>
   </div>
 
@@ -3122,7 +3179,7 @@ var App = {
     var bnEl=document.getElementById('bn-'+bnKey);
     if(bnEl) bnEl.classList.add('active');
     // Render page
-    var renders={'customers':function(){Customers.render();},'quotations':function(){Quotations.render();},'followups':function(){Followups.render();},'planner':function(){Planner.render();},'daybook':function(){DayBook.render();},'ratelist':function(){RateList.render();},'staff':function(){Staff.render();},'stocklist':function(){Stock.render();},'salesteam':function(){SalesTeam.render();},'bulkmsg':function(){BulkMsg.render();},'account-summary':function(){AccountSummary.render();},'backup':function(){Backup.render();},'audit':function(){Audit.render();},'settings':function(){Settings.render();},'add-customer':function(){Customers.initForm();},'add-quotation':function(){Quotations.initForm();},'add-followup':function(){Followups.initForm();},'invoices':function(){Invoices.render();},'ledger':function(){Ledger.render();},'bakauta':function(){Bakauta.render();},'estimates-list':function(){Bakauta.renderList();},'estimate-new':function(){Estimate.init();},'vcard':function(){VCard.render();},'brochures':function(){Brochure.render();},'ai-assistant':function(){AIAssistant.render();},'admin-dashboard':function(){AdminDash.render();},'dailyreport':function(){Reports.render();},'walkin':function(){Walkin.render();},'qrcode':function(){QR.render();},'dashboard':function(){Dashboard.render();}};
+    var renders={'customers':function(){Customers.render();},'quotations':function(){Quotations.render();},'followups':function(){Followups.render();},'planner':function(){Planner.render();},'daybook':function(){DayBook.render();},'ratelist':function(){RateList.render();},'staff':function(){Staff.render();},'stocklist':function(){Stock.render();},'salesteam':function(){SalesTeam.render();},'bulkmsg':function(){BulkMsg.render();},'account-summary':function(){AccountSummary.render();},'backup':function(){Backup.render();},'audit':function(){Audit.render();},'settings':function(){Settings.render();},'add-customer':function(){Customers.initForm();},'add-quotation':function(){Quotations.initForm();},'add-followup':function(){Followups.initForm();},'invoices':function(){Invoices.render();},'ledger':function(){Ledger.render();},'bakauta':function(){Bakauta.render();},'estimates-list':function(){Bakauta.renderList();},'estimate-new':function(){Estimate.init();},'vcard':function(){VCard.render();},'brochures':function(){Brochure.render();},'ai-assistant':function(){AIAssistant.render();},'admin-dashboard':function(){AdminDash.render();},'dailyreport':function(){Reports.render();},'walkin':function(){Walkin.render();},'qrcode':function(){QR.render();},'vatcalc':function(){VatCalc.render();},'dashboard':function(){Dashboard.render();}};
     if(renders[page]) {
       try { renders[page](); }
       catch(e) { console.error('Page render error ['+page+']:', e); App.toast('⚠️ Page load error: '+e.message,'error'); }
@@ -5712,6 +5769,119 @@ var QR = {
   startScan: function(){ App.toast('📷 Scanner — browser camera needed','info'); },
   stopScan: function(){}
 };
+
+
+// ─── VAT CALCULATOR MODULE (v4.5) ─────────────────────────────────
+// Two clear modes:
+//   add  → रकममा VAT थपिन्छ  (5000 → +650 → 5650)
+//   incl → रकमभित्रै VAT छ, निकालिन्छ (5000 भित्रै → शुद्ध 4424.78 + VAT 575.22)
+var VatCalc = {
+  _mode: 'add',
+
+  render: function(){
+    this.setMode(this._mode || 'add');
+  },
+
+  _rate: function(){
+    var r = parseFloat(getVal('vc2-rate'));
+    return (isNaN(r) || r < 0) ? 0 : r;
+  },
+
+  setRate: function(r){
+    setVal('vc2-rate', r);
+    this.calc();
+  },
+
+  setMode: function(mode){
+    this._mode = mode;
+    var addBtn = document.getElementById('vc2-mode-add');
+    var inclBtn = document.getElementById('vc2-mode-incl');
+    if(addBtn)  addBtn.className  = 'btn ' + (mode==='add'  ? 'btn-primary' : 'btn-secondary');
+    if(inclBtn) inclBtn.className = 'btn ' + (mode==='incl' ? 'btn-primary' : 'btn-secondary');
+    // Re-apply the inline padding lost by className swap
+    [addBtn, inclBtn].forEach(function(b){ if(b){ b.style.padding='12px 8px'; b.style.fontWeight='800'; b.style.fontSize='0.86rem'; b.style.lineHeight='1.3'; } });
+    var lbl = document.getElementById('vc2-amt-label');
+    var amt = document.getElementById('vc2-amt');
+    var hint = document.getElementById('vc2-hint');
+    if(mode === 'add'){
+      if(lbl) lbl.textContent = '💵 रकम (VAT बिनाको)';
+      if(amt) amt.placeholder = 'जस्तै: 5000';
+      if(hint) hint.innerHTML = '➕ <b>VAT थप्ने:</b> हजुरको रकम VAT <b>बिनाको</b> हो। जस्तै 5000 हाल्दा → VAT 650 थपिएर जम्मा <b>Rs 5,650</b> हुन्छ।';
+    } else {
+      if(lbl) lbl.textContent = '📦 रकम (VAT भित्रै समावेश)';
+      if(amt) amt.placeholder = 'जस्तै: 5000 (भित्रै VAT)';
+      if(hint) hint.innerHTML = '📦 <b>VAT भित्रै:</b> हजुरको रकम<b>भित्रै VAT समावेश</b> छ। जस्तै 5000 हाल्दा → शुद्ध मूल्य <b>Rs 4,424.78</b> + VAT <b>Rs 575.22</b> = 5000 (बिल बनाउन शुद्ध रकम चाहिन्छ भने यही mode)।';
+    }
+    this.calc();
+  },
+
+  _values: function(){
+    var r = this._rate();
+    var amt = parseFloat(getVal('vc2-amt'));
+    if(isNaN(amt) || amt <= 0) return null;
+    var f = r / 100;
+    var pre, vat, total;
+    if(this._mode === 'incl'){
+      total = amt;
+      pre = f > 0 ? amt / (1 + f) : amt;
+      vat = total - pre;
+    } else {
+      pre = amt;
+      vat = amt * f;
+      total = pre + vat;
+    }
+    return {rate:r, pre:Math.round(pre*100)/100, vat:Math.round(vat*100)/100, total:Math.round(total*100)/100};
+  },
+
+  calc: function(){
+    var box = document.getElementById('vc2-breakdown');
+    if(!box) return;
+    var v = this._values();
+    if(!v){
+      box.innerHTML = '<div style="text-align:center;color:var(--text-muted);padding:26px 10px;"><div style="font-size:2rem;margin-bottom:6px;">🧮</div><div style="font-size:0.82rem;">माथि रकम हाल्नुस्</div></div>';
+      return;
+    }
+    var modeTag = this._mode === 'incl'
+      ? '<span style="font-size:0.66rem;background:rgba(168,85,247,0.15);color:var(--accent);padding:2px 8px;border-radius:10px;font-weight:700;">📦 VAT भित्रै</span>'
+      : '<span style="font-size:0.66rem;background:rgba(34,197,94,0.15);color:var(--green);padding:2px 8px;border-radius:10px;font-weight:700;">➕ VAT थपिएको</span>';
+    box.innerHTML =
+      '<div style="margin-bottom:8px;">'+modeTag+'</div>'
+      + '<div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);font-size:0.88rem;"><span style="color:var(--text-muted);">शुद्ध मूल्य (VAT बिना)</span><b>Rs '+fmtRs(v.pre)+'</b></div>'
+      + '<div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);font-size:0.88rem;"><span style="color:var(--text-muted);">VAT ('+v.rate+'%)</span><b style="color:#eab308;">'+(this._mode==='incl'?'भित्रै ':'+ ')+'Rs '+fmtRs(v.vat)+'</b></div>'
+      + '<div style="display:flex;justify-content:space-between;padding:12px 0;font-size:1.05rem;"><span style="font-weight:700;">जम्मा (VAT सहित)</span><b style="color:var(--green);font-size:1.25rem;">Rs '+fmtRs(v.total)+'</b></div>';
+  },
+
+  clear: function(){
+    setVal('vc2-amt','');
+    setVal('vc2-rate','13');
+    this.setMode('add');
+  },
+
+  _summaryText: function(){
+    var v = this._values();
+    if(!v) return '🧮 VAT Calculator — रकम हालिएको छैन';
+    var modeLine = this._mode === 'incl' ? '(रकमभित्रै VAT समावेश)' : '(रकममा VAT थपिएको)';
+    return '🧮 VAT Calculation (Nepal '+v.rate+'%)\n'
+      + modeLine + '\n'
+      + '━━━━━━━━━━━━━━━\n'
+      + 'शुद्ध मूल्य: Rs '+fmtRs(v.pre)+'\n'
+      + 'VAT ('+v.rate+'%): Rs '+fmtRs(v.vat)+'\n'
+      + 'जम्मा: Rs '+fmtRs(v.total)+'\n'
+      + '— PRERAK MULTIPURPOSE PVT LTD';
+  },
+
+  copyAll: function(){
+    var t = this._summaryText();
+    if(navigator.clipboard) navigator.clipboard.writeText(t);
+    App.toast('📋 Copy भयो','success',1500);
+  },
+
+  shareWA: function(){
+    var t = this._summaryText();
+    if(typeof Wa !== 'undefined' && Wa.send) Wa.send('', t, {silent:true}) || window.open('https://wa.me/?text='+encodeURIComponent(t),'_blank');
+    else window.open('https://wa.me/?text='+encodeURIComponent(t),'_blank');
+  }
+}
 
 // ─── VISITING CARD MODULE ─────────────────────────────────────
 var VCard = {
@@ -8424,7 +8594,11 @@ var CRMCalc = {
   _expr: '',
   _display: function(){
     var el = document.getElementById('calc-display');
-    if(el) el.value = this._expr||'0';
+    if(el){
+      // calc-display is a <div> — use textContent (value only works on inputs)
+      if('value' in el && el.tagName==='INPUT') el.value = this._expr||'0';
+      else el.textContent = this._expr||'0';
+    }
   },
   _safeEval: function(expr){
     // Allow only digits, operators, decimal point, and parentheses
@@ -8439,7 +8613,7 @@ var CRMCalc = {
     return result;
   },
   press: function(v){
-    if(v==='C'){ this._expr=''; }
+    if(v==='C'){ this._expr=''; this._hideVat(); }
     else if(v==='='){
       try { this._expr = String(this._safeEval(this._expr) || 0); }
       catch(e){ this._expr='Error'; }
@@ -8459,8 +8633,74 @@ var CRMCalc = {
     this._display();
   },
   getResult: function(){ try{return this._safeEval(this._expr);}catch(e){return parseFloat(this._expr)||0;} },
-  reset: function(){ this._expr=''; this._display(); }
+  reset: function(){ this._expr=''; this._display(); this._hideVat(); },
+
+  // ─── VAT QUICK CALC (v4.6) — Nepal 13% ───
+  // 'add'  → display value मा VAT थपिन्छ  (5000 → 5650)
+  // 'incl' → display value भित्रैबाट VAT निकालिन्छ (5000 → शुद्ध 4424.78)
+  _hideVat: function(){ var b=document.getElementById('calc-vat-result'); if(b){b.style.display='none';b.innerHTML='';} },
+  vat: function(mode){
+    var v = this.getResult();
+    if(!v || v <= 0 || !isFinite(v)){ App.toast('पहिले रकम type गर्नुस्','warning',1800); return; }
+    var r = 13, f = r/100;
+    var pre, vatAmt, total;
+    if(mode === 'incl'){
+      total = v;
+      pre = v / (1 + f);
+      vatAmt = total - pre;
+      // Display shows the extracted शुद्ध मूल्य
+      this._expr = String(Math.round(pre*100)/100);
+    } else {
+      pre = v;
+      vatAmt = v * f;
+      total = pre + vatAmt;
+      // Display shows the VAT-added total
+      this._expr = String(Math.round(total*100)/100);
+    }
+    this._display();
+    pre = Math.round(pre*100)/100; vatAmt = Math.round(vatAmt*100)/100; total = Math.round(total*100)/100;
+    var box = document.getElementById('calc-vat-result');
+    if(box){
+      var tag = mode==='incl'
+        ? '<span style="font-size:0.62rem;background:rgba(168,85,247,0.18);color:#a855f7;padding:2px 8px;border-radius:10px;font-weight:700;">📦 VAT भित्रै (13%)</span>'
+        : '<span style="font-size:0.62rem;background:rgba(34,197,94,0.18);color:var(--green);padding:2px 8px;border-radius:10px;font-weight:700;">➕ VAT थपियो (13%)</span>';
+      box.innerHTML = '<div style="margin-bottom:6px;">'+tag+'</div>'
+        + '<div style="display:flex;justify-content:space-between;padding:4px 0;"><span style="color:var(--text-muted);">शुद्ध मूल्य</span><b>Rs '+fmtRs(pre)+'</b></div>'
+        + '<div style="display:flex;justify-content:space-between;padding:4px 0;"><span style="color:var(--text-muted);">VAT (13%)</span><b style="color:#eab308;">Rs '+fmtRs(vatAmt)+'</b></div>'
+        + '<div style="display:flex;justify-content:space-between;padding:5px 0;border-top:1px solid var(--border);margin-top:3px;"><b>जम्मा</b><b style="color:var(--green);">Rs '+fmtRs(total)+'</b></div>'
+        + '<div style="text-align:right;margin-top:6px;"><button onclick="App.navigate(\'vatcalc\');document.getElementById(\'calc-modal\').classList.remove(\'open\');" class="btn btn-xs btn-secondary">⛶ Full VAT Calculator</button></div>';
+      box.style.display = '';
+    }
+  }
 };
+
+// ─── CALCULATOR KEYBOARD SUPPORT (v4.7) ──────────────────────────
+// Works ONLY while the calculator modal is open. Laptop/desktop keyboard:
+//   0-9 .        → numbers        |  + - * /  → operators (×÷ auto)
+//   Enter or =   → equals         |  Backspace → ⌫ delete one
+//   Delete or C  → clear          |  %         → percent
+//   V → ➕ VAT थप्ने (+13%)        |  B → 📦 VAT भित्रै (extract)
+document.addEventListener('keydown', function(e){
+  var modal = document.getElementById('calc-modal');
+  if(!modal || !modal.classList.contains('open')) return;
+  // Safety: don't hijack typing if focus is inside an input/textarea/select
+  var tag = (document.activeElement && document.activeElement.tagName) || '';
+  if(tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+  var k = e.key;
+  if(/^[0-9]$/.test(k))            { CRMCalc.press(k);    e.preventDefault(); }
+  else if(k === '.')               { CRMCalc.press('.');  e.preventDefault(); }
+  else if(k === '+')               { CRMCalc.press('+');  e.preventDefault(); }
+  else if(k === '-')               { CRMCalc.press('-');  e.preventDefault(); }
+  else if(k === '*')               { CRMCalc.press('×');  e.preventDefault(); }
+  else if(k === '/')               { CRMCalc.press('÷');  e.preventDefault(); }
+  else if(k === '%')               { CRMCalc.press('%');  e.preventDefault(); }
+  else if(k === 'Enter' || k==='=' ){ CRMCalc.press('=');  e.preventDefault(); }
+  else if(k === 'Backspace')       { CRMCalc.press('⌫');  e.preventDefault(); }
+  else if(k === 'Delete' || k==='c' || k==='C'){ CRMCalc.press('C'); e.preventDefault(); }
+  else if(k === 'v' || k === 'V')  { CRMCalc.vat('add');  e.preventDefault(); }
+  else if(k === 'b' || k === 'B')  { CRMCalc.vat('incl'); e.preventDefault(); }
+});
+
 
 var Photo = {
   _current: null,
