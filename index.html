@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#f97316">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<title>PRERAK CRM v4.7 World-Class | प्रेरक मल्टिपर्पोज प्रा.लि.</title>
+<title>PRERAK CRM v5.1 World-Class | प्रेरक मल्टिपर्पोज प्रा.लि.</title>
 <meta name="description" content="PRERAK CRM — Complete business management for Prerak Multipurpose Pvt Ltd, Hetauda-4, Makwanpur. Customers, Quotations, Estimates, Follow-ups, BS Calendar, Daybook & more.">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -13,7 +13,6 @@
 <meta name="mobile-web-app-capable" content="yes">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z' fill='%23f97316'/%3E%3C/svg%3E">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <!-- ── Inline PWA manifest (data-URL so no separate file is needed) ── -->
 <link rel="manifest" id="pk-manifest">
@@ -459,7 +458,9 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
 .vc-preset{transition:all 0.2s;box-shadow:0 2px 6px rgba(0,0,0,0.25);}
 .vc-preset:hover{transform:scale(1.12)!important;}
 /* ── FAB ── */
-.fab{position:fixed;right:18px;bottom:78px;z-index:55;width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-2));border:none;color:#fff;font-size:1.5rem;cursor:pointer;box-shadow:0 8px 28px var(--accent-glow);transition:var(--trans);}
+.fab{position:fixed;right:18px;bottom:78px;z-index:55;width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-2));border:none;color:#fff;font-size:1.5rem;cursor:grab;box-shadow:0 8px 28px var(--accent-glow);transition:box-shadow 0.2s;touch-action:none;user-select:none;-webkit-user-select:none;}
+.fab:active{cursor:grabbing;box-shadow:0 4px 14px var(--accent-glow);}
+.fab.dragging{transition:none;opacity:0.85;}
 .fab:hover{transform:scale(1.1);box-shadow:0 12px 36px var(--accent-glow);}
 .fab:active{transform:scale(0.95);}
 @media(min-width:900px){.fab{bottom:22px;}}
@@ -522,6 +523,15 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
 .test-status.pass{background:var(--green-soft);color:var(--green);}
 .test-status.fail{background:var(--red-soft);color:var(--red);}
 .test-status.pending{background:var(--surface-3);color:var(--text-muted);}
+</style>
+<style>
+/* ═══ v4.8 additions: global search + clock ═══ */
+@media(max-width:760px){ .gs-wrap{display:none;} #crm-clock{display:none;} }
+.gsr-item{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 12px;cursor:pointer;font-size:0.8rem;border-bottom:1px solid var(--border);}
+.gsr-item:last-child{border-bottom:none;}
+.gsr-item:hover{background:var(--surface-2);}
+.gsr-item b{font-weight:700;}
+.gsr-item span{color:var(--text-muted);font-size:0.72rem;}
 </style>
 </head>
 <body>
@@ -614,7 +624,8 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
         <div class="sb-logo-text">
           <div class="name">🇳🇵 PRERAK</div>
           <div class="sub">Multipurpose Pvt Ltd</div>
-          <div class="ver">v4.7 World-Class ⚡</div>
+          <div class="ver">v5.1 World-Class ⚡</div>
+          <div class="ver" id="sidebar-clock" style="color:var(--text-muted);font-variant-numeric:tabular-nums;">--:--:--</div>
         </div>
       </div>
       <div class="sb-actions">
@@ -703,8 +714,13 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
       <span class="page-title" id="page-title">Dashboard</span>
     </div>
     <div class="topbar-right">
+      <div class="gs-wrap" style="position:relative;">
+        <input type="text" id="global-search" placeholder="🔍 Customer खोज्नुस्... (Ctrl+K)" autocomplete="off" style="width:195px;padding:7px 12px;font-size:0.78rem;background:var(--surface-2);border:1.5px solid var(--border);border-radius:20px;color:var(--text);">
+        <div id="global-search-results" style="display:none;position:absolute;top:calc(100% + 6px);left:0;min-width:250px;background:var(--surface);border:1px solid var(--border);border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,0.45);z-index:600;overflow:hidden;"></div>
+      </div>
       <span class="chip chip-bs" id="tb-bs">बि.सं.</span>
       <span class="chip chip-fy" id="tb-fy">FY 2082/83</span>
+      <span class="chip" id="crm-clock" title="समय">--:--:--</span>
       <button class="icon-btn" onclick="App.cycleTheme()" title="Theme">🎨</button>
       <button class="icon-btn" onclick="Notif.toggle()" id="notif-btn" title="Notifications">
         🔔<span class="notif-badge" id="notif-badge">0</span>
@@ -739,6 +755,7 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
         <button class="hero-quick-btn secondary" onclick="App.navigate('walkin')"><span class="icon">🚶</span>Walk-in</button>
       </div>
     </div>
+    <div id="dash-greet" style="font-size:1.05rem;font-weight:800;margin-bottom:10px;">👋</div>
     <div class="stats-grid">
       <div class="stat-card" onclick="App.navigate('customers')"><div class="stat-label">👥 Customers</div><div class="stat-value text-accent" id="s-cust">0</div><div class="stat-foot">Total registered</div></div>
       <div class="stat-card c-blue" onclick="App.navigate('quotations')"><div class="stat-label">📋 Quotations</div><div class="stat-value text-blue" id="s-quotes">0</div><div class="stat-foot text-yellow">Pending: <span id="s-ongoing">0</span></div></div>
@@ -1528,7 +1545,7 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
       <div><div style="display:flex;align-items:center;gap:6px;margin-bottom:10px;"><div style="font-size:0.76rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;flex:1;font-weight:700;">📁 Template Folders</div><button onclick="BulkMsg.addFolder()" class="btn btn-xs btn-secondary">+ Folder</button></div><div id="bulk-folders"></div></div>
       <div><div style="font-size:0.76rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;font-weight:700;">📋 Templates</div><div id="bulk-templates"></div><div style="display:flex;gap:6px;margin-top:8px;"><button onclick="BulkMsg.addTemplate()" class="btn btn-sm btn-secondary" style="flex:1;">+ Add Template</button><button onclick="BulkMsg.restoreDefaults()" class="btn btn-sm btn-primary" title="Restore defaults">🔄 Restore</button></div></div>
       <div><div style="font-size:0.76rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;font-weight:700;">📢 Send Bulk</div>
-        <div class="card card-body"><div style="margin-bottom:12px;"><label style="display:block;margin-bottom:6px;">Message</label><textarea id="bulk-msg-text" placeholder="Template select गर्नुस् वा लेख्नुस्..." style="min-height:110px;"></textarea></div><div style="margin-bottom:12px;"><label style="display:block;margin-bottom:6px;">Recipients</label><div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px;"><button onclick="BulkMsg.selectAll()" class="btn btn-xs btn-primary">✅ All</button><button onclick="BulkMsg.deselectAll()" class="btn btn-xs btn-secondary">☐ Clear</button><button onclick="BulkMsg.selectByService()" class="btn btn-xs btn-secondary">🔧 By Service</button></div><div style="font-size:0.72rem;color:var(--text-muted);margin-bottom:4px;" id="bulk-count">0 selected</div><div id="bulk-recipients" style="max-height:180px;overflow-y:auto;border:1px solid var(--border);border-radius:10px;padding:8px;" onchange="BulkMsg.updateCount()"></div></div><div style="display:flex;gap:6px;flex-wrap:wrap;"><button onclick="BulkMsg.sendWA()" class="btn btn-wa btn-sm">📱 WhatsApp</button><button onclick="BulkMsg.sendSMS()" class="btn btn-sms btn-sm">💬 SMS</button><button onclick="BulkMsg.copy()" class="btn btn-secondary btn-sm">📋 Copy Nums</button></div></div>
+        <div class="card card-body"><div style="margin-bottom:12px;"><label style="display:block;margin-bottom:6px;">Message</label><textarea id="bulk-msg-text" placeholder="Template select गर्नुस् वा लेख्नुस्..." style="min-height:110px;"></textarea></div><div style="margin-bottom:12px;"><label style="display:block;margin-bottom:6px;">👁 Preview</label><div id="bulk-msg-preview" style="background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:10px 12px;font-size:0.8rem;white-space:pre-wrap;min-height:38px;color:var(--text-muted);">Template select गर्दा preview यहाँ देखिन्छ</div></div><div style="margin-bottom:12px;"><label style="display:block;margin-bottom:6px;">Recipients</label><div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px;"><button onclick="BulkMsg.selectAll()" class="btn btn-xs btn-primary">✅ All</button><button onclick="BulkMsg.deselectAll()" class="btn btn-xs btn-secondary">☐ Clear</button><button onclick="BulkMsg.selectByService()" class="btn btn-xs btn-secondary">🔧 By Service</button></div><div style="font-size:0.72rem;color:var(--text-muted);margin-bottom:4px;" id="bulk-count">0 selected</div><div id="bulk-recipients" style="max-height:180px;overflow-y:auto;border:1px solid var(--border);border-radius:10px;padding:8px;" onchange="BulkMsg.updateCount()"></div></div><div style="display:flex;gap:6px;flex-wrap:wrap;"><button onclick="BulkMsg.sendWA()" class="btn btn-wa btn-sm">📱 WhatsApp</button><button onclick="BulkMsg.sendSMS()" class="btn btn-sms btn-sm">💬 SMS</button><button onclick="BulkMsg.copy()" class="btn btn-secondary btn-sm">📋 Copy Nums</button></div></div>
       </div>
     </div>
   </div>
@@ -2100,6 +2117,7 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
         <button onclick="document.getElementById('fab-modal').classList.remove('open');App.navigate('add-followup')" class="btn btn-secondary btn-block">🔔 Add Follow-up</button>
         <button onclick="document.getElementById('fab-modal').classList.remove('open');DayBook.addModal()" class="btn btn-secondary btn-block">📒 Day Book Entry</button>
         <button onclick="document.getElementById('fab-modal').classList.remove('open');App.showCalc()" class="btn btn-secondary btn-block">🧮 Calculator</button>
+        <button onclick="FabDrag.reset()" class="btn btn-secondary btn-block" style="font-size:0.76rem;opacity:0.8;">📍 यो ⚡ button लाई मूल ठाउँमा फर्काउनुस्</button>
       </div>
     </div>
   </div>
@@ -2160,7 +2178,7 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
   <!-- (Removed duplicate BS Date Picker — primary one is at top of modals section) -->
 
   <!-- FAB Button -->
-  <button class="fab no-print" onclick="document.getElementById('fab-modal').classList.add('open')" title="Quick Actions">⚡</button>
+  <button class="fab no-print" id="fab-btn" title="Quick Actions (drag गरेर सार्न सकिन्छ)">⚡</button>
 
   <!-- Bottom Nav -->
   <nav id="bottom-nav" class="no-print">
@@ -2382,8 +2400,6 @@ function adToBs(ay,am,ad) {
 (function(){
   try {
     var test = adToBs(2026,5,4);
-    console.log('Today BS:', todayBs());
-    console.log('adToBs(2026,5,4) =', test.y+'/'+test.m+'/'+test.d, '(expect 2083/1/21)');
   } catch(e){ console.warn('adToBs self-test error:', e); }
 })();
 function bsToAd(by,bm,bd) {
@@ -4714,7 +4730,29 @@ var DayBook = {
   },
   del: function(id){ if(!confirm('Delete?'))return; STORE.set('pk3_daybook',this.getData().filter(function(x){return x.id!==id;})); this.render(); App.toast('🗑 Deleted','info'); },
   print: function(){ window.print(); },
-  shareWA: function(){ App.toast('Preparing WA share...','info'); }
+  // Real WA share (v5.1): sends the current filter's income/expense/net summary
+  shareWA: function(){
+    var co = STORE.get('pk3_settings',{})||{};
+    var list = STORE.get('pk3_daybook',[])||[];
+    var today = todayISO();
+    var week = new Date(); week.setDate(week.getDate()-7);
+    if(this._filter==='today') list=list.filter(function(e){return e.date===today;});
+    else if(this._filter==='week') list=list.filter(function(e){return e.date>=week.toISOString().slice(0,10);});
+    else if(this._filter==='month') list=list.filter(function(e){return e.date&&e.date.slice(0,7)===today.slice(0,7);});
+    var inc = list.filter(function(e){return e.type==='income';}).reduce(function(s,e){return s+parseFloat(e.amount||0);},0);
+    var exp = list.filter(function(e){return e.type==='expense';}).reduce(function(s,e){return s+parseFloat(e.amount||0);},0);
+    var net = inc-exp;
+    var fl = {today:'आज',week:'७ दिन',month:'यो महिना',all:'सबै'}[this._filter]||this._filter;
+    var msg = '*📒 Day Book — '+fl+'*\n'
+      + (co.companyName||'PRERAK MULTIPURPOSE PVT LTD')+'\n'
+      + '━━━━━━━━━━━━━━━\n'
+      + '💰 Income: Rs '+fmtRs(inc)+'\n'
+      + '💸 Expense: Rs '+fmtRs(exp)+'\n'
+      + '📊 Net '+(net>=0?'Profit':'Loss')+': Rs '+fmtRs(Math.abs(net))+'\n'
+      + '🧾 Entries: '+list.length;
+    if(typeof Wa!=='undefined'&&Wa.send) Wa.send('', msg);
+    else window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');
+  }
 };
 
 // ─── RATE LIST MODULE ─────────────────────────────────────────
@@ -6506,7 +6544,55 @@ var Bakauta = {
     var tb=document.getElementById('est-table'); var ne=document.getElementById('no-est');
     if(!list.length){tb.innerHTML='';ne.style.display='';return;} ne.style.display='none';
     var sc={'Draft':'tag-gray','Approved':'tag-green','Sent':'tag-blue','Rejected':'tag-red'};
-    tb.innerHTML=list.map(function(e){return '<tr><td style="font-weight:600;">'+e.custName+'</td><td style="font-size:0.78rem;">'+(e.dateBs?bsStringToDisplay(e.dateBs):fmtDisplayDate(e.date))+'</td><td style="text-align:right;font-weight:700;">'+fmtRs(e.total)+'</td><td><span class="tag '+(sc[e.status]||'tag-gray')+'">'+e.status+'</span></td><td><div class="btn-group"><button onclick="Bakauta.loadEst(\''+e.id+'\')" class="btn btn-xs btn-secondary">✏️</button><button onclick="Bakauta.delEst(\''+e.id+'\')" class="btn btn-xs btn-danger">🗑</button></div></td></tr>';}).join('');
+    tb.innerHTML=list.map(function(e){return '<tr><td style="font-weight:600;">'+e.custName+'</td><td style="font-size:0.78rem;">'+(e.dateBs?bsStringToDisplay(e.dateBs):fmtDisplayDate(e.date))+'</td><td style="text-align:right;font-weight:700;">'+fmtRs(e.total)+'</td><td><span class="tag '+(sc[e.status]||'tag-gray')+'">'+e.status+'</span></td><td><div class="btn-group"><button onclick="Bakauta.viewEst(\''+e.id+'\')" class="btn btn-xs btn-primary" title="View / Print">👁</button><button onclick="Bakauta.shareEstWA(\''+e.id+'\')" class="btn btn-xs btn-wa" title="WhatsApp">📱</button><button onclick="Bakauta.loadEst(\''+e.id+'\')" class="btn btn-xs btn-secondary" title="Edit">✏️</button><button onclick="Bakauta.delEst(\''+e.id+'\')" class="btn btn-xs btn-danger" title="Delete">🗑</button></div></td></tr>';}).join('');
+  },
+  // View saved estimate in a branded A4 preview (v4.9)
+  viewEst: function(id){
+    var e=STORE.get('pk3_estimates',[]).find(function(x){return x.id===id;}); if(!e)return;
+    var co=STORE.get('pk3_settings',{})||{};
+    var logo=co.logo||'';
+    var items=e.items||[];
+    var sub=items.reduce(function(s,r){return s+(r.qty||0)*(r.rate||0);},0);
+    var disc=parseFloat(e.disc)||0, taxAmt=parseFloat(e.taxAmt)||0, adv=parseFloat(e.advance)||0;
+    var rows=items.map(function(r,i){return '<tr><td style="text-align:center;">'+(i+1)+'</td><td>'+esc(r.name||'')+'</td><td style="text-align:center;">'+(r.qty||0)+' '+esc(r.unit||'')+'</td><td style="text-align:right;">'+fmtRs(r.rate||0)+'</td><td style="text-align:right;font-weight:700;">'+fmtRs((r.qty||0)*(r.rate||0))+'</td></tr>';}).join('');
+    var html='<div style="padding:22px;font-family:sans-serif;max-width:640px;margin:0 auto;color:#222;background:#fff;">'
+      +'<div style="display:flex;align-items:center;gap:12px;border-bottom:3px solid #f97316;padding-bottom:12px;margin-bottom:16px;">'
+        +(logo?'<img src="'+logo+'" style="width:58px;height:58px;object-fit:contain;">':'')
+        +'<div style="flex:1;"><div style="font-size:1.25rem;font-weight:900;color:#f97316;">'+esc(co.companyName||'PRERAK MULTIPURPOSE PVT LTD')+'</div>'
+        +'<div style="font-size:0.76rem;color:#666;">'+esc(co.address||'Hetauda-4, Makwanpur')+' • '+esc(co.phone1||'9855069733')+'</div></div>'
+        +'<div style="text-align:right;"><div style="font-size:1.1rem;font-weight:800;color:#f97316;">ESTIMATE</div><div style="font-size:0.72rem;color:#666;">'+esc(e.estNo||'')+'</div></div>'
+      +'</div>'
+      +'<div style="display:flex;justify-content:space-between;margin-bottom:12px;font-size:0.84rem;"><div><b>To:</b> '+esc(e.custName||'')+(e.phone?'<br><b>Phone:</b> '+esc(e.phone):'')+(e.addr?'<br><b>Address:</b> '+esc(e.addr):'')+'</div><div style="text-align:right;"><b>Date:</b> '+(e.dateBs?bsStringToDisplay(e.dateBs):fmtDisplayDate(e.date))+(e.title?'<br><b>Project:</b> '+esc(e.title):'')+'</div></div>'
+      +'<table style="width:100%;border-collapse:collapse;font-size:0.82rem;margin-bottom:14px;"><thead><tr style="background:#f97316;color:#fff;"><th style="padding:7px;">#</th><th style="padding:7px;text-align:left;">Description</th><th style="padding:7px;">Qty</th><th style="padding:7px;text-align:right;">Rate</th><th style="padding:7px;text-align:right;">Amount</th></tr></thead><tbody>'+rows+'</tbody></table>'
+      +'<div style="margin-left:auto;width:250px;font-size:0.85rem;">'
+        +'<div style="display:flex;justify-content:space-between;padding:4px 0;"><span>Subtotal</span><b>'+fmtRs(sub)+'</b></div>'
+        +(disc?'<div style="display:flex;justify-content:space-between;padding:4px 0;color:#d00;"><span>Discount</span><span>- '+fmtRs(disc)+'</span></div>':'')
+        +(taxAmt?'<div style="display:flex;justify-content:space-between;padding:4px 0;"><span>VAT ('+(e.tax||13)+'%)</span><span>+ '+fmtRs(taxAmt)+'</span></div>':'')
+        +'<div style="display:flex;justify-content:space-between;padding:8px 0;border-top:2px solid #f97316;margin-top:4px;font-size:1.05rem;"><b>Total</b><b style="color:#f97316;">'+fmtRs(e.total)+'</b></div>'
+        +(adv?'<div style="display:flex;justify-content:space-between;padding:4px 0;color:green;"><span>Advance</span><span>'+fmtRs(adv)+'</span></div><div style="display:flex;justify-content:space-between;padding:4px 0;color:#d00;"><b>Balance</b><b>'+fmtRs((e.total||0)-adv)+'</b></div>':'')
+      +'</div>'
+      +(e.terms?'<div style="margin-top:16px;font-size:0.76rem;color:#555;border-top:1px solid #eee;padding-top:8px;"><b>Terms:</b> '+esc(e.terms)+'</div>':'')
+      +'<div style="margin-top:20px;text-align:center;font-size:0.72rem;color:#999;">धन्यवाद! — '+esc(co.companyName||'PRERAK MULTIPURPOSE PVT LTD')+'</div>'
+      +'</div>';
+    setText('view-modal-title','👁 Estimate — '+esc(e.custName||''));
+    var mb=document.getElementById('view-modal-body'); mb.innerHTML=html;
+    var bd=document.createElement('div'); bd.style.cssText='display:flex;gap:8px;padding:12px;flex-wrap:wrap;';
+    var pb=document.createElement('button'); pb.className='btn btn-primary btn-sm'; pb.textContent='🖨️ Print'; pb.onclick=function(){window.print();};
+    var wb=document.createElement('button'); wb.className='btn btn-wa btn-sm'; wb.textContent='📱 WhatsApp'; wb.onclick=function(){Bakauta.shareEstWA(id);};
+    bd.appendChild(pb); bd.appendChild(wb); mb.appendChild(bd);
+    document.getElementById('view-modal').classList.add('open');
+  },
+  shareEstWA: function(id){
+    var e=STORE.get('pk3_estimates',[]).find(function(x){return x.id===id;}); if(!e)return;
+    var co=STORE.get('pk3_settings',{})||{};
+    var msg='*🧾 ESTIMATE '+(e.estNo||'')+'*\n'+(co.companyName||'PRERAK MULTIPURPOSE PVT LTD')+'\n\n'
+      +'Customer: '+(e.custName||'')+'\n'+(e.title?'Project: '+e.title+'\n':'')
+      +'Total: '+fmtRs(e.total)+'\n'
+      +(e.advance>0?'Advance: '+fmtRs(e.advance)+'\nBalance: '+fmtRs((e.total||0)-(e.advance||0))+'\n':'')
+      +'\n'+(co.phone1||'9855069733');
+    var phone=(e.phone||'').replace(/[^0-9]/g,'');
+    if(typeof Wa!=='undefined'&&Wa.send) Wa.send(e.phone||'', msg);
+    else window.open('https://wa.me/'+(phone?'977'+phone:'')+'?text='+encodeURIComponent(msg),'_blank');
   },
   loadEst: function(id){ var e=STORE.get('pk3_estimates',[]).find(function(x){return x.id===id;}); if(!e)return; this._rows=e.items||[]; setVal('bk-name',e.custName||''); setVal('bk-phone',e.phone||''); setVal('bk-addr',e.addr||''); setVal('bk-tax',e.tax||0); setVal('bk-disc',e.disc||0); setVal('bk-advance',e.advance||0); setVal('bk-remarks',e.remarks||''); this.renderRows(); this.calc(); App.navigate('bakauta'); },
   delEst: function(id){ if(!confirm('Delete?'))return; STORE.set('pk3_estimates',STORE.get('pk3_estimates',[]).filter(function(x){return x.id!==id;})); this.renderList(); App.toast('🗑 Deleted','info'); }
@@ -7614,25 +7700,7 @@ var Reports = {
   exportPDF: function(){ this.print(); }
 };
 
-var DailyReport = {
-  init: function(){ this.render(); },
-  render: function(){
-    var date = getVal('daily-report-date') || todayBS();
-    var db = getLS('pk3_daybook')||[];
-    var day = db.filter(function(d){ return d.date===date; });
-    var inc = day.filter(function(d){ return d.type==='income'||d.type==='receipt'; });
-    var exp = day.filter(function(d){ return d.type==='expense'||d.type==='payment'; });
-    var totalInc = inc.reduce(function(s,d){ return s+parseFloat(d.amount||0); },0);
-    var totalExp = exp.reduce(function(s,d){ return s+parseFloat(d.amount||0); },0);
-    var tbody = document.getElementById('daily-report-tbody');
-    if(!tbody) return;
-    tbody.innerHTML = day.map(function(d){
-      return '<tr><td>'+esc(d.date||'')+'</td><td>'+esc(d.type||'')+'</td><td>'+esc(d.narration||d.description||'')+'</td><td class="text-end '+(d.type==='income'||d.type==='receipt'?'text-success':'text-danger')+'">Rs '+fmt(parseFloat(d.amount||0))+'</td></tr>';
-    }).join('');
-    var el = document.getElementById('daily-report-summary');
-    if(el) el.innerHTML = '<span class="text-success me-3">Income: Rs '+fmt(totalInc)+'</span><span class="text-danger me-3">Expense: Rs '+fmt(totalExp)+'</span><strong class="'+(totalInc-totalExp>=0?'text-success':'text-danger')+'">Net: Rs '+fmt(Math.abs(totalInc-totalExp))+'</strong>';
-  }
-};
+// (DailyReport module removed in v4.9 — replaced by the Reports module; had 0 references)
 
 // ============================================================
 // JS PART M: Dashboard, BSCal, CRMClock modules
@@ -7795,6 +7863,9 @@ var Dashboard = {
 
       // ── Business Overview Round Chart (v4.1) ──
       try { this.renderRoundChart(); } catch(e){ console.warn('RoundChart error',e); }
+
+      // ── Greeting line (v4.8) ──
+      try { Greet.render(); } catch(e){}
 
       // ── Rate list preview ──
       this.renderRateList();
@@ -8444,7 +8515,6 @@ var BSPicker = {
     if (ov) { ov.style.display = 'flex'; }
     this._buildSelects();
     this._renderGrid();
-    console.log('BSPicker opened:', targetId);
   },
 
   close: function() {
@@ -8572,7 +8642,6 @@ var BSPicker = {
         }
       } catch(e) {}
     }
-    console.log('BS date selected:', bsDate, '→', this._target);
     App.toast('📅 ' + bsDate, 'success', 1500);
     this.close();
   },
@@ -8702,6 +8771,98 @@ document.addEventListener('keydown', function(e){
 });
 
 
+// ─── DRAGGABLE FAB (v5.0) ─────────────────────────────────────────
+// The ⚡ Quick-Actions button can be dragged anywhere so it never covers
+// content. A short tap (no real movement) still opens the Quick Actions.
+// Position is saved per-device in localStorage.
+var FabDrag = {
+  _moved: false,
+  init: function(){
+    var fab = document.getElementById('fab-btn');
+    if(!fab) return;
+    // Restore saved position
+    this._restore(fab);
+    var startX, startY, origX, origY, dragging=false;
+    var self = this;
+
+    function place(x, y){
+      // Keep within viewport (with 6px margin), 54px button
+      var vw = window.innerWidth, vh = window.innerHeight, sz = 54, mg = 6;
+      x = Math.max(mg, Math.min(x, vw - sz - mg));
+      y = Math.max(mg, Math.min(y, vh - sz - mg));
+      fab.style.left = x + 'px';
+      fab.style.top = y + 'px';
+      fab.style.right = 'auto';
+      fab.style.bottom = 'auto';
+    }
+
+    function pointerStart(cx, cy){
+      dragging = true; self._moved = false;
+      var r = fab.getBoundingClientRect();
+      startX = cx; startY = cy; origX = r.left; origY = r.top;
+      fab.classList.add('dragging');
+    }
+    function pointerMove(cx, cy){
+      if(!dragging) return;
+      var dx = cx - startX, dy = cy - startY;
+      if(Math.abs(dx) > 4 || Math.abs(dy) > 4) self._moved = true;
+      place(origX + dx, origY + dy);
+    }
+    function pointerEnd(){
+      if(!dragging) return;
+      dragging = false;
+      fab.classList.remove('dragging');
+      if(self._moved){
+        // Save new position
+        var r = fab.getBoundingClientRect();
+        try { STORE.set('pk3_fab_pos', {x:r.left, y:r.top}); } catch(e){}
+      } else {
+        // Treated as a tap → open Quick Actions
+        var m = document.getElementById('fab-modal');
+        if(m) m.classList.add('open');
+      }
+    }
+
+    // Mouse
+    fab.addEventListener('mousedown', function(e){ e.preventDefault(); pointerStart(e.clientX, e.clientY); });
+    document.addEventListener('mousemove', function(e){ if(dragging){ e.preventDefault(); pointerMove(e.clientX, e.clientY); } });
+    document.addEventListener('mouseup', function(){ pointerEnd(); });
+    // Touch
+    fab.addEventListener('touchstart', function(e){ var t=e.touches[0]; pointerStart(t.clientX, t.clientY); }, {passive:true});
+    document.addEventListener('touchmove', function(e){ if(dragging){ var t=e.touches[0]; pointerMove(t.clientX, t.clientY); e.preventDefault(); } }, {passive:false});
+    document.addEventListener('touchend', function(){ pointerEnd(); });
+
+    // Re-clamp on window resize/orientation change
+    window.addEventListener('resize', function(){ self._restore(fab); });
+  },
+  _restore: function(fab){
+    var pos = null;
+    try { pos = STORE.get('pk3_fab_pos', null); } catch(e){}
+    if(pos && typeof pos.x === 'number'){
+      var vw = window.innerWidth, vh = window.innerHeight, sz = 54, mg = 6;
+      var x = Math.max(mg, Math.min(pos.x, vw - sz - mg));
+      var y = Math.max(mg, Math.min(pos.y, vh - sz - mg));
+      fab.style.left = x + 'px';
+      fab.style.top = y + 'px';
+      fab.style.right = 'auto';
+      fab.style.bottom = 'auto';
+    }
+    // else: keep default CSS position (right:18px; bottom:78px)
+  },
+  reset: function(){
+    try { STORE.set('pk3_fab_pos', null); } catch(e){}
+    var fab = document.getElementById('fab-btn');
+    if(fab){
+      fab.style.left = ''; fab.style.top = '';
+      fab.style.right = ''; fab.style.bottom = '';
+    }
+    var m = document.getElementById('fab-modal');
+    if(m) m.classList.remove('open');
+    if(window.App && App.toast) App.toast('📍 ⚡ button मूल ठाउँमा फर्कियो','success',1800);
+  }
+};
+
+
 var Photo = {
   _current: null,
   // Handle file input change — resize to keep localStorage small, then preview
@@ -8802,28 +8963,23 @@ var DragWidget = {
   }
 };
 
-var LangToggle = {
-  _lang: 'en',
-  toggle: function(){
-    this._lang = this._lang==='en'?'ne':'en';
-    showToast(this._lang==='en'?'Language: English':'भाषा: नेपाली','info');
-    var el=document.getElementById('lang-toggle-btn');
-    if(el) el.textContent = this._lang==='en'?'NE':'EN';
-  }
-};
+// (LangToggle module removed in v4.9 — had 0 references and no button in the UI)
 
 var Greet = {
   get: function(){
     var h = new Date().getHours();
-    if(h<12) return 'Good Morning';
-    if(h<17) return 'Good Afternoon';
-    return 'Good Evening';
+    if(h<5)  return {t:'शुभ रात्री', e:'🌙'};
+    if(h<12) return {t:'शुभ प्रभात', e:'🌅'};
+    if(h<17) return {t:'नमस्कार', e:'☀️'};
+    if(h<20) return {t:'शुभ सन्ध्या', e:'🌆'};
+    return {t:'शुभ रात्री', e:'🌙'};
   },
   render: function(){
     var el = document.getElementById('dash-greet');
     if(!el) return;
     var user = (typeof currentUser!=='undefined' && currentUser) ? currentUser.name : 'User';
-    el.textContent = this.get()+', '+user+'!';
+    var g = this.get();
+    el.innerHTML = g.e + ' ' + g.t + ', <span style="color:var(--accent);">' + esc(user) + '</span>!';
   },
   checkBirthdays: function(){
     // Check if any customer has birthday today and show toast
@@ -8960,23 +9116,8 @@ document.addEventListener('DOMContentLoaded', function(){
   // Boot auth (handles session check + show login or app)
   Auth.init();
 
-  // Sidebar toggle for mobile
-  var sidebarToggle = document.getElementById('sidebar-toggle');
-  if(sidebarToggle){
-    sidebarToggle.addEventListener('click', function(){
-      var sidebar = document.getElementById('sidebar');
-      if(sidebar) sidebar.classList.toggle('show');
-    });
-  }
-
-  // Close sidebar on overlay click
-  var overlay = document.getElementById('sidebar-overlay');
-  if(overlay){
-    overlay.addEventListener('click', function(){
-      var sidebar = document.getElementById('sidebar');
-      if(sidebar) sidebar.classList.remove('show');
-    });
-  }
+  // (Dead sidebar-toggle/sidebar-overlay listeners removed in v4.9 —
+  //  the working mobile toggle is #hamburger → App.toggleSidebar() with .sb-backdrop)
 
   // ── Global Escape: close any open .modal-overlay (better a11y) ──
   document.addEventListener('keydown', function(e){
@@ -8996,14 +9137,7 @@ document.addEventListener('DOMContentLoaded', function(){
     });
   });
 
-  // FAB menu toggle
-  var fab = document.getElementById('fab-main');
-  if(fab){
-    fab.addEventListener('click', function(){
-      var menu = document.getElementById('fab-menu');
-      if(menu) menu.classList.toggle('d-none');
-    });
-  }
+  // (Dead fab-main/fab-menu listener removed in v4.9 — real FAB uses the ⚡ button → fab-modal)
 
   // Global search shortcut Ctrl+K
   document.addEventListener('keydown', function(e){
@@ -9014,43 +9148,45 @@ document.addEventListener('DOMContentLoaded', function(){
     }
   });
 
-  // Global search input
+  // Global search input (v4.8 — styled results, click → customer detail)
   var globalSearch = document.getElementById('global-search');
   if(globalSearch){
+    var gsHide = function(){ var el=document.getElementById('global-search-results'); if(el){el.style.display='none'; el.innerHTML='';} };
     globalSearch.addEventListener('input', function(){
       var q = this.value.trim().toLowerCase();
-      if(!q) return;
-      var custs = getLS('pk3_customers')||[];
-      var results = custs.filter(function(c){
-        return (c.name||'').toLowerCase().includes(q)||(c.phone||'').includes(q);
-      });
       var el = document.getElementById('global-search-results');
-      if(el){
-        el.innerHTML = results.slice(0,5).map(function(c){
-          return '<a class="dropdown-item" href="#" onclick="App.navigate(\'customers\');return false;">'+esc(c.name)+' - '+esc(c.phone||'')+'</a>';
-        }).join('');
-        el.classList.toggle('show', results.length>0);
+      if(!el) return;
+      if(!q){ gsHide(); return; }
+      var custs = STORE.get('pk3_customers',[])||[];
+      var results = custs.filter(function(c){
+        return (c.name||'').toLowerCase().indexOf(q)>=0 || String(c.phone||'').indexOf(q)>=0;
+      }).slice(0,6);
+      if(!results.length){
+        el.innerHTML = '<div class="gsr-item" style="cursor:default;color:var(--text-muted);">कुनै customer भेटिएन — <span style="color:var(--accent);cursor:pointer;font-weight:700;" onclick="App.navigate(\'add-customer\');document.getElementById(\'global-search\').value=\'\';">+ Add गर्नुस्</span></div>';
+        el.style.display='block';
+        return;
       }
+      el.innerHTML = results.map(function(c){
+        return '<div class="gsr-item" onclick="App.navigate(\'customers\');setTimeout(function(){try{Customers.detail(\''+c.id+'\');}catch(e){}},300);document.getElementById(\'global-search\').value=\'\';var e=document.getElementById(\'global-search-results\');if(e){e.style.display=\'none\';e.innerHTML=\'\';}">'
+          + '<b>'+esc(c.name||'')+'</b><span>'+esc(c.phone||'')+'</span></div>';
+      }).join('');
+      el.style.display='block';
+    });
+    globalSearch.addEventListener('keydown', function(e){
+      if(e.key==='Escape'){ this.value=''; gsHide(); this.blur(); }
+    });
+    document.addEventListener('click', function(e){
+      if(!e.target.closest('.gs-wrap')) gsHide();
     });
   }
 
   // Drag widgets init
   DragWidget.init();
 
-  // PWA install prompt
-  var deferredPrompt;
-  window.addEventListener('beforeinstallprompt', function(e){
-    e.preventDefault();
-    deferredPrompt = e;
-    var btn = document.getElementById('pwa-install-btn');
-    if(btn){
-      btn.classList.remove('d-none');
-      btn.addEventListener('click', function(){
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then(function(){ deferredPrompt=null; btn.classList.add('d-none'); });
-      });
-    }
-  });
+  // Draggable Quick-Actions FAB (v5.0)
+  try { FabDrag.init(); } catch(e){ console.warn('FabDrag error',e); }
+
+  // (PWA install handler removed in v5.1 — meaningless on file://, used Bootstrap d-none)
 });
 
 
@@ -9425,9 +9561,9 @@ var AdminDash = {
 };
 
 // Version check console message
-console.log('%cPRERAK CRM v4.0 World-Class', 'color:#f97316;font-weight:bold;font-size:16px');
+console.log('%cPRERAK CRM v5.1 World-Class — LIVE', 'color:#f97316;font-weight:bold;font-size:16px');
 console.log('Company: PRERAK MULTIPURPOSE PVT LTD, Hetauda-4, Makwanpur');
-console.log('Build: 2083 BS | Role-based access | PWA + offline ready');
+console.log('Build: 2083 BS | Role-based access | Offline single-file');
 
 // ============================================================
 // GLOBAL ERROR BOUNDARY — one module crash won't kill the app
@@ -9501,7 +9637,6 @@ window.addEventListener('unhandledrejection', function(e){
 })();
 
 // ============================================================
-// PWA INSTALL — beforeinstallprompt handled in DOMContentLoaded
 // (kept simple so user can install on Chrome/Edge/Android)
 // ============================================================
 
