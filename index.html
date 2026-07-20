@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#f97316">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<title>PRERAK CRM v5.1 World-Class | प्रेरक मल्टिपर्पोज प्रा.लि.</title>
+<title>PRERAK CRM v5.2 World-Class | प्रेरक मल्टिपर्पोज प्रा.लि.</title>
 <meta name="description" content="PRERAK CRM — Complete business management for Prerak Multipurpose Pvt Ltd, Hetauda-4, Makwanpur. Customers, Quotations, Estimates, Follow-ups, BS Calendar, Daybook & more.">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -565,6 +565,29 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
 </div>
 
 <!-- ========================= LOGIN SCREEN ========================= -->
+<!-- ═══════════ LICENSE ACTIVATION GATE (v5.2) ═══════════ -->
+<div id="license-screen" style="display:none;position:fixed;inset:0;z-index:9998;background:linear-gradient(135deg,#0f172a,#1e293b);align-items:center;justify-content:center;padding:20px;">
+  <div style="background:#1e293b;border:1px solid #334155;border-radius:18px;padding:32px 26px;max-width:400px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.5);text-align:center;">
+    <div style="width:70px;height:70px;margin:0 auto 16px;border-radius:16px;background:linear-gradient(135deg,#f97316,#ea580c);display:flex;align-items:center;justify-content:center;font-size:2.2rem;">🔐</div>
+    <div style="font-size:1.35rem;font-weight:900;color:#f97316;margin-bottom:4px;">PRERAK CRM</div>
+    <div style="font-size:0.82rem;color:#94a3b8;margin-bottom:22px;">Software Activation आवश्यक छ</div>
+    <div id="license-err" style="display:none;background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.3);color:#f87171;font-size:0.8rem;padding:9px 12px;border-radius:10px;margin-bottom:14px;">❌ License Key वा Company Name मिलेन</div>
+    <div style="text-align:left;margin-bottom:12px;">
+      <label style="font-size:0.76rem;font-weight:700;color:#cbd5e1;display:block;margin-bottom:5px;">🏢 Company Name</label>
+      <input type="text" id="license-company" placeholder="तपाईंको कम्पनीको नाम" autocomplete="off" style="width:100%;padding:11px 14px;background:#0f172a;border:1.5px solid #334155;border-radius:10px;color:#e2e8f0;font-size:0.9rem;">
+    </div>
+    <div style="text-align:left;margin-bottom:18px;">
+      <label style="font-size:0.76rem;font-weight:700;color:#cbd5e1;display:block;margin-bottom:5px;">🔑 License Key</label>
+      <input type="text" id="license-key" placeholder="PRERAK-XXXX-XXXX-XXXX" autocomplete="off" style="width:100%;padding:11px 14px;background:#0f172a;border:1.5px solid #334155;border-radius:10px;color:#e2e8f0;font-size:0.9rem;letter-spacing:1px;text-transform:uppercase;" onkeydown="if(event.key==='Enter')License.activate()">
+    </div>
+    <button onclick="License.activate()" style="width:100%;padding:13px;background:linear-gradient(135deg,#f97316,#ea580c);border:none;border-radius:11px;color:#fff;font-size:0.95rem;font-weight:800;cursor:pointer;box-shadow:0 6px 20px rgba(249,115,22,0.35);">✅ Activate गर्नुहोस्</button>
+    <div style="margin-top:18px;padding-top:16px;border-top:1px solid #334155;font-size:0.74rem;color:#64748b;line-height:1.6;">
+      License Key किन्न वा सहायताको लागि सम्पर्क:<br>
+      <b style="color:#f97316;">📞 9855069733</b> — PRERAK MULTIPURPOSE
+    </div>
+  </div>
+</div>
+
 <div id="login-screen">
   <div class="login-card">
     <div class="login-brand">
@@ -624,7 +647,7 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
         <div class="sb-logo-text">
           <div class="name">🇳🇵 PRERAK</div>
           <div class="sub">Multipurpose Pvt Ltd</div>
-          <div class="ver">v5.1 World-Class ⚡</div>
+          <div class="ver">v5.2 World-Class ⚡</div>
           <div class="ver" id="sidebar-clock" style="color:var(--text-muted);font-variant-numeric:tabular-nums;">--:--:--</div>
         </div>
       </div>
@@ -2438,6 +2461,74 @@ function bsStringToDisplay(s) { if(!s)return ''; var p=String(s).split('-'); if(
 
 // ─── AUTH MODULE ──────────────────────────────────────────────
 var currentUser = null;
+// ═══════════════ LICENSE SYSTEM (v5.2) ═══════════════
+// Offline activation: a key is mathematically bound to the customer's company
+// name. Same algorithm generates & validates — no internet needed. Once
+// activated, the flag is stored in localStorage so it's asked only once.
+//
+// ⚠️ SELLER NOTE: use the same _hash() in the Key Generator tool to create
+// keys for each customer. Keys are NOT transferable — a key made for company
+// "A" will not activate on a device where someone types company "B".
+var License = {
+  _SALT: 'PRK-2083-MKWNPR',  // secret salt — keep private; change per your batch if desired
+
+  // Deterministic hash → 12 hex chars, split into 3 groups of 4
+  _hash: function(company){
+    var str = (company||'').trim().toLowerCase().replace(/\s+/g,' ') + '|' + this._SALT;
+    var h1 = 0x811c9dc5, h2 = 0x1000193;
+    for(var i=0;i<str.length;i++){
+      var c = str.charCodeAt(i);
+      h1 = (h1 ^ c) >>> 0; h1 = (h1 * 0x01000193) >>> 0;
+      h2 = (h2 + c * (i+7)) >>> 0; h2 = (h2 ^ (h2 << 5)) >>> 0;
+    }
+    var hex = (('00000000'+h1.toString(16)).slice(-8) + ('0000'+(h2 & 0xffff).toString(16)).slice(-4)).toUpperCase();
+    return 'PRERAK-' + hex.slice(0,4) + '-' + hex.slice(4,8) + '-' + hex.slice(8,12);
+  },
+
+  isActivated: function(){
+    try {
+      var lic = STORE.get('pk3_license', null);
+      if(!lic || !lic.company || !lic.key) return false;
+      // Re-validate: stored key must still match the stored company
+      return this._hash(lic.company) === String(lic.key).toUpperCase().trim();
+    } catch(e){ return false; }
+  },
+
+  activate: function(){
+    var company = (document.getElementById('license-company')||{}).value || '';
+    var key = ((document.getElementById('license-key')||{}).value || '').toUpperCase().trim();
+    var err = document.getElementById('license-err');
+    if(!company.trim() || !key){
+      if(err){ err.textContent='❌ Company Name र License Key दुवै भर्नुस्'; err.style.display='block'; }
+      return;
+    }
+    if(this._hash(company) === key){
+      try { STORE.set('pk3_license', {company:company.trim(), key:key, activatedAt:new Date().toISOString()}); } catch(e){}
+      var ls = document.getElementById('license-screen'); if(ls) ls.style.display='none';
+      // Pre-fill company name into settings if empty
+      try {
+        var s = STORE.get('pk3_settings',{})||{};
+        if(!s.companyName){ s.companyName = company.trim(); STORE.set('pk3_settings', s); }
+      } catch(e){}
+      // Proceed to normal login
+      if(typeof Auth!=='undefined' && Auth.init) Auth.init();
+    } else {
+      if(err){ err.textContent='❌ License Key वा Company Name मिलेन'; err.style.display='block'; }
+    }
+  },
+
+  // Called at boot — shows license screen if not activated, returns true if OK to proceed
+  check: function(){
+    if(this.isActivated()) return true;
+    var ls = document.getElementById('license-screen');
+    var login = document.getElementById('login-screen');
+    if(login) login.style.display='none';
+    if(ls) ls.style.display='flex';
+    return false;
+  }
+};
+
+
 var Auth = {
   init: function() {
     var saved = STORE.get('pk3_session');
@@ -9113,8 +9204,13 @@ document.addEventListener('DOMContentLoaded', function(){
   // Tooltips: Bootstrap was never loaded — using native title attribute instead.
   // (Removed dead bootstrap.Tooltip init.)
 
-  // Boot auth (handles session check + show login or app)
-  Auth.init();
+  // Boot: License gate first (v5.2) — only proceed to login if activated
+  if(typeof License!=='undefined' && !License.check()){
+    // Not activated — license screen is shown; stop here until user activates
+  } else {
+    // Boot auth (handles session check + show login or app)
+    Auth.init();
+  }
 
   // (Dead sidebar-toggle/sidebar-overlay listeners removed in v4.9 —
   //  the working mobile toggle is #hamburger → App.toggleSidebar() with .sb-backdrop)
