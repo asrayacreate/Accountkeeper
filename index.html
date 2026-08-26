@@ -148,7 +148,7 @@ label{font-size:0.72rem;color:var(--text-muted);font-weight:600;letter-spacing:0
 .skip-chk-wrap{margin-top:20px;display:inline-flex;align-items:center;gap:9px;cursor:pointer;font-size:0.73rem;color:rgba(255,153,51,0.55);user-select:none;}
 
 /* ── LOGIN ── */
-#login-screen{position:fixed;inset:0;z-index:9000;display:flex;align-items:center;justify-content:center;background:var(--bg);padding:20px;overflow-y:auto;}
+#login-screen{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:var(--bg);padding:20px;overflow-y:auto;}
 #login-screen.hide{display:none;}
 .login-card{width:100%;max-width:400px;background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:30px 26px;box-shadow:0 24px 80px rgba(0,0,0,0.5),var(--shadow-inset);}
 .login-brand{text-align:center;margin-bottom:24px;}
@@ -537,7 +537,7 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
 <body>
 
 <!-- ========================= WELCOME OVERLAY ========================= -->
-<div id="welcome-overlay">
+<div id="welcome-overlay" onclick="if(event.target.id==='welcome-overlay'||event.target.closest('.w-box'))App.showLogin()" style="cursor:pointer;">
   <div class="star-field" id="star-field"></div>
   <div class="ring"></div><div class="ring"></div><div class="ring"></div><div class="ring"></div><div class="ring"></div>
   <div class="w-box">
@@ -647,7 +647,7 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
         <div class="sb-logo-text">
           <div class="name" id="brand-sidebar-name">Swagatik</div>
           <div class="sub" id="sb-company-sub">स्वागतिक</div>
-          <div class="ver">v6.0.0 — Swagatik ⚡</div>
+          <div class="ver">v6.0.1 — Swagatik ⚡</div>
           <div class="ver" id="sidebar-clock" style="color:var(--text-muted);font-variant-numeric:tabular-nums;">--:--:--</div>
         </div>
       </div>
@@ -1111,4 +1111,4 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
           <div style="display:flex;gap:10px;font-size:0.85rem;align-items:center;"><span style="color:var(--text-muted);">Discount Rs.:</span><input type="number" id="q-discount" value="0" min="0" oninput="Quotations.calc()" style="width:80px;padding:5px 8px;font-size:0.82rem;text-align:right;"><span id="q-disc-pct" style="color:var(--text-muted);font-size:0.72rem;min-width:44px;text-align:right;"></span></div>
           <div style="display:flex;gap:10px;font-size:0.85rem;align-items:center;"><span style="color:var(--text-muted);">Tax % (VAT):</span><input type="number" id="q-tax" value="0" min="0" oninput="Quotations.calc()" style="width:60px;padding:5px 8px;font-size:0.82rem;text-align:right;"><span id="q-tax-amt" style="color:var(--text-muted);font-size:0.72rem;min-width:60px;text-align:right;"></span></div>
           <div style="display:flex;gap:20px;font-size:1.1rem;font-weight:800;color:var(--accent);border-top:2px solid var(--accent);padding-top:8px;margin-top:4px;"><span>Total:</span><span id="q-total" style="min-width:100px;text-align:right;">Rs. 0</span></div>
-          <div style="display:flex;gap:10px;font-size:0.85rem;align-items:center;margin-top:6px;"><span style="color:var(--green);font-weight:600;">💵 Advance Rs.:</span><input type="number" id="q-advance" value="0" min="0" o
+          <div style="display:flex;gap:10px;font-size:0.85rem;align-items:center;margin-top:6px;"><span 
