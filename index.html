@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#f97316">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<title>PRERAK CRM v5.2 World-Class | प्रेरक मल्टिपर्पोज प्रा.लि.</title>
+<title>PRERAK CRM v5.5 World-Class | प्रेरक मल्टिपर्पोज प्रा.लि.</title>
 <meta name="description" content="PRERAK CRM — Complete business management for Prerak Multipurpose Pvt Ltd, Hetauda-4, Makwanpur. Customers, Quotations, Estimates, Follow-ups, BS Calendar, Daybook & more.">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -565,16 +565,19 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
 </div>
 
 <!-- ========================= LOGIN SCREEN ========================= -->
-<!-- ═══════════ LICENSE ACTIVATION GATE (v5.2) ═══════════ -->
-<div id="license-screen" style="display:none;position:fixed;inset:0;z-index:9998;background:linear-gradient(135deg,#0f172a,#1e293b);align-items:center;justify-content:center;padding:20px;">
+<!-- ═══════════ LICENSE ACTIVATION GATE (v5.3 — one-time) ═══════════ -->
+<div id="lic-warn-bar" style="display:none;position:fixed;top:0;left:0;right:0;z-index:9997;background:#78350f;color:#fde68a;font-size:0.74rem;font-weight:700;padding:7px 12px;text-align:center;box-shadow:0 2px 10px rgba(0,0,0,0.3);"></div>
+
+<div id="license-screen" style="display:none;position:fixed;inset:0;z-index:9998;background:linear-gradient(135deg,#0f172a,#1e293b);align-items:center;justify-content:center;padding:20px;overflow:auto;">
   <div style="background:#1e293b;border:1px solid #334155;border-radius:18px;padding:32px 26px;max-width:400px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.5);text-align:center;">
     <div style="width:70px;height:70px;margin:0 auto 16px;border-radius:16px;background:linear-gradient(135deg,#f97316,#ea580c);display:flex;align-items:center;justify-content:center;font-size:2.2rem;">🔐</div>
     <div style="font-size:1.35rem;font-weight:900;color:#f97316;margin-bottom:4px;">PRERAK CRM</div>
-    <div style="font-size:0.82rem;color:#94a3b8;margin-bottom:22px;">Software Activation आवश्यक छ</div>
-    <div id="license-err" style="display:none;background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.3);color:#f87171;font-size:0.8rem;padding:9px 12px;border-radius:10px;margin-bottom:14px;">❌ License Key वा Company Name मिलेन</div>
+    <div style="font-size:0.82rem;color:#94a3b8;margin-bottom:6px;">Software Activation आवश्यक छ</div>
+    <div style="font-size:0.7rem;color:#22c55e;background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.25);border-radius:8px;padding:6px 10px;margin-bottom:18px;">✅ एक पटक मात्र — म्याद नसकिँदासम्म फेरि सोधिँदैन</div>
+    <div id="license-err" style="display:none;background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.3);color:#f87171;font-size:0.8rem;padding:9px 12px;border-radius:10px;margin-bottom:14px;line-height:1.5;">❌ License Key वा Company Name मिलेन</div>
     <div style="text-align:left;margin-bottom:12px;">
       <label style="font-size:0.76rem;font-weight:700;color:#cbd5e1;display:block;margin-bottom:5px;">🏢 Company Name</label>
-      <input type="text" id="license-company" placeholder="तपाईंको कम्पनीको नाम" autocomplete="off" style="width:100%;padding:11px 14px;background:#0f172a;border:1.5px solid #334155;border-radius:10px;color:#e2e8f0;font-size:0.9rem;">
+      <input type="text" id="license-company" placeholder="तपाईंको कम्पनीको नाम" autocomplete="off" style="width:100%;padding:11px 14px;background:#0f172a;border:1.5px solid #334155;border-radius:10px;color:#e2e8f0;font-size:0.9rem;" onkeydown="if(event.key==='Enter')License.activate()">
     </div>
     <div style="text-align:left;margin-bottom:18px;">
       <label style="font-size:0.76rem;font-weight:700;color:#cbd5e1;display:block;margin-bottom:5px;">🔑 License Key</label>
@@ -647,7 +650,7 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
         <div class="sb-logo-text">
           <div class="name">🇳🇵 PRERAK</div>
           <div class="sub">Multipurpose Pvt Ltd</div>
-          <div class="ver">v5.2 World-Class ⚡</div>
+          <div class="ver">v5.5 World-Class ⚡</div>
           <div class="ver" id="sidebar-clock" style="color:var(--text-muted);font-variant-numeric:tabular-nums;">--:--:--</div>
         </div>
       </div>
@@ -915,7 +918,7 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
     </div>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;">
       <div class="card"><div class="card-head"><span>📊 Income vs Expense (7 दिन)</span></div><div class="card-body" id="dash-summary-cash" style="min-height:160px;"></div></div>
-      <div class="card"><div class="card-head"><span>🏷️ Customers by Service</span></div><div class="card-body" id="dash-summary-svc" style="min-height:160px;"></div></div>
+      <div class="card"><div class="card-head"><span>🔧 Services Breakdown</span></div><div class="card-body" id="dash-summary-svc" style="min-height:160px;"></div></div>
       <div class="card"><div class="card-head"><span>📋 Quotation Status</span></div><div class="card-body" id="dash-summary-quot" style="min-height:160px;"></div></div>
       <div class="card"><div class="card-head"><span>🎯 Sales Performance</span></div><div class="card-body" id="dash-sales-perf" style="min-height:160px;"></div></div>
     </div>
@@ -980,138 +983,17 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
           </div>
         </div>
         <div class="form-group full"><label>📍 Address</label><div style="position:relative;"><input type="text" id="c-address" placeholder="City / Area / Tole" autocomplete="off" oninput="Customers.addrSuggest(this.value)" onfocus="Customers.addrSuggest(this.value)" onblur="setTimeout(function(){var d=document.getElementById('addr-dropdown');if(d)d.style.display='none';},200)"><div id="addr-dropdown" style="display:none;position:absolute;left:0;right:0;top:100%;z-index:99999;background:var(--surface);border:1px solid var(--accent);border-radius:0 0 10px 10px;max-height:180px;overflow-y:auto;box-shadow:0 8px 24px rgba(0,0,0,0.35);"></div></div><div style="display:flex;gap:6px;margin-top:6px;"><button type="button" onclick="Customers.addCustomAddr()" class="btn btn-xs btn-secondary" style="font-size:0.7rem;">➕ नयाँ ठेगाना थप्नुस्</button></div></div>
-        <div class="form-group"><label>🔧 Main Service</label><select id="c-work" onchange="Customers.loadSubService();Customers.highlightSub();">
-          <option value="">-- Select Service --</option>
-          <option value="Construction / Civil Work">🏗️ Construction / Civil Work</option>
-          <option value="Interior Design">🛋️ Interior Design</option>
-          <option value="UPVC">🪟 UPVC</option>
-          <option value="Aluminum">🪟 Aluminum</option>
-          <option value="Gypsum / False Ceiling">🏠 Gypsum / False Ceiling</option>
-          <option value="Plumbing">🔧 Plumbing</option>
-          <option value="Electrical">⚡ Electrical</option>
-          <option value="Painting / Finishing">🎨 Painting / Finishing</option>
-          <option value="Tile / Marble / Granite">🪨 Tile / Marble / Granite</option>
-          <option value="Truss / Roofing">🏚️ Truss / Roofing</option>
-          <option value="Solar / Water Heater">☀️ Solar / Water Heater</option>
-          <option value="Prefab / WPC">🏘️ Prefab / WPC</option>
-          <option value="Repair / Renovation">🔨 Repair / Renovation</option>
-        </select></div>
-        <div class="form-group"><label>📌 Sub Service</label><select id="c-subwork" onchange="Customers.showSubItems()">
-          <option value="">-- Select Sub Service --</option>
-          <optgroup label="🏗️ Construction / Civil Work">
-            <option value="House Construction">House Construction</option>
-            <option value="RCC Work">RCC Work</option>
-            <option value="Foundation Work">Foundation Work</option>
-            <option value="Brick Work">Brick Work</option>
-            <option value="Plaster Work">Plaster Work</option>
-            <option value="Slab Casting">Slab Casting</option>
-            <option value="Column / Beam Work">Column / Beam Work</option>
-            <option value="Flooring">Flooring</option>
-            <option value="Renovation">Renovation</option>
-            <option value="Turnkey Project">Turnkey Project</option>
-          </optgroup>
-          <optgroup label="🛋️ Interior Design">
-            <option value="Full Interior Setup">Full Interior Setup</option>
-            <option value="Modular Kitchen">Modular Kitchen</option>
-            <option value="Wardrobe">Wardrobe</option>
-            <option value="TV Unit">TV Unit</option>
-            <option value="Wall Panel">Wall Panel</option>
-            <option value="Partition Work">Partition Work</option>
-            <option value="False Ceiling Design">False Ceiling Design</option>
-            <option value="Lighting Setup">Lighting Setup</option>
-            <option value="Furniture">Furniture</option>
-            <option value="Office Interior">Office Interior</option>
-          </optgroup>
-          <optgroup label="🪟 UPVC">
-            <option value="UPVC Windows">UPVC Windows</option>
-            <option value="UPVC Door">UPVC Door</option>
-            <option value="UPVC Sliding Window">UPVC Sliding Window</option>
-            <option value="UPVC Sliding Door">UPVC Sliding Door</option>
-            <option value="UPVC Partition">UPVC Partition</option>
-            <option value="UPVC Fixed Window">UPVC Fixed Window</option>
-            <option value="Glass Work">Glass Work</option>
-          </optgroup>
-          <optgroup label="🪟 Aluminum">
-            <option value="Aluminum Window">Aluminum Window</option>
-            <option value="Aluminum Door">Aluminum Door</option>
-            <option value="Aluminum Sliding Window">Aluminum Sliding Window</option>
-            <option value="Aluminum Partition">Aluminum Partition</option>
-            <option value="ACP Panel">ACP Panel</option>
-            <option value="Aluminum Railing">Aluminum Railing</option>
-            <option value="Glass Work">Glass Work</option>
-          </optgroup>
-          <optgroup label="🏠 Gypsum / False Ceiling">
-            <option value="False Ceiling">False Ceiling</option>
-            <option value="POP Design">POP Design</option>
-            <option value="Grid Ceiling">Grid Ceiling</option>
-            <option value="Gypsum Partition">Gypsum Partition</option>
-            <option value="Ceiling Light Setup">Ceiling Light Setup</option>
-            <option value="PVC Ceiling">PVC Ceiling</option>
-          </optgroup>
-          <optgroup label="🔧 Plumbing">
-            <option value="Pipe Fitting">Pipe Fitting</option>
-            <option value="Bathroom Setup">Bathroom Setup</option>
-            <option value="Water Tank Installation">Water Tank Installation</option>
-            <option value="Sanitary Work">Sanitary Work</option>
-            <option value="Drainage">Drainage</option>
-            <option value="Water Supply">Water Supply</option>
-          </optgroup>
-          <optgroup label="⚡ Electrical">
-            <option value="Wiring">Wiring</option>
-            <option value="Lighting Setup">Lighting Setup</option>
-            <option value="Switch Board Installation">Switch Board Installation</option>
-            <option value="MCB / DB Setup">MCB / DB Setup</option>
-            <option value="Inverter Wiring">Inverter Wiring</option>
-            <option value="Fan Installation">Fan Installation</option>
-          </optgroup>
-          <optgroup label="🎨 Painting / Finishing">
-            <option value="Interior Painting">Interior Painting</option>
-            <option value="Exterior Painting">Exterior Painting</option>
-            <option value="Texture Work">Texture Work</option>
-            <option value="Putty Work">Putty Work</option>
-            <option value="Polish">Polish</option>
-            <option value="Waterproofing">Waterproofing</option>
-          </optgroup>
-          <optgroup label="🪨 Tile / Marble / Granite">
-            <option value="Floor Tiles">Floor Tiles</option>
-            <option value="Wall Tiles">Wall Tiles</option>
-            <option value="Marble Work">Marble Work</option>
-            <option value="Granite Work">Granite Work</option>
-            <option value="Bathroom Tile">Bathroom Tile</option>
-            <option value="Kitchen Tile">Kitchen Tile</option>
-            <option value="Stair Granite">Stair Granite</option>
-          </optgroup>
-          <optgroup label="🏚️ Truss / Roofing">
-            <option value="Roof Truss">Roof Truss</option>
-            <option value="CG Sheet Roofing">CG Sheet Roofing</option>
-            <option value="Steel Structure">Steel Structure</option>
-            <option value="Polycarbonate Sheet">Polycarbonate Sheet</option>
-            <option value="Shed Work">Shed Work</option>
-          </optgroup>
-          <optgroup label="☀️ Solar / Water Heater">
-            <option value="Solar Panel">Solar Panel</option>
-            <option value="Solar Water Heater">Solar Water Heater</option>
-            <option value="Water Purifier">Water Purifier</option>
-            <option value="Chimney">Chimney</option>
-            <option value="Cooking Stove">Cooking Stove</option>
-          </optgroup>
-          <optgroup label="🏘️ Prefab / WPC">
-            <option value="Prefab House">Prefab House</option>
-            <option value="WPC Door">WPC Door</option>
-            <option value="WPC Panel">WPC Panel</option>
-            <option value="Prefab Wall">Prefab Wall</option>
-          </optgroup>
-          <optgroup label="🔨 Repair / Renovation">
-            <option value="House Renovation">House Renovation</option>
-            <option value="Repair Work">Repair Work</option>
-            <option value="Maintenance">Maintenance</option>
-            <option value="Bathroom Renovation">Bathroom Renovation</option>
-            <option value="Kitchen Renovation">Kitchen Renovation</option>
-            <option value="Leakage Repair">Leakage Repair</option>
-          </optgroup>
-          <option value="custom">✏️ Custom...</option>
-        </select><input class="sub-text-input" type="text" id="c-subwork-text" placeholder="आफ्नै लेख्नुस्..." style="display:none;margin-top:6px;"><button type="button" onclick="Customers.toggleCustomSub()" style="background:none;border:none;color:var(--accent);font-size:0.73rem;cursor:pointer;padding:0;margin-top:4px;text-align:left;">✏️ आफैं लेख्नुस्</button></div>
-        <div id="c-sub-items" style="display:none;grid-column:1/-1;background:rgba(249,115,22,0.05);border:1px solid rgba(249,115,22,0.25);border-radius:10px;padding:12px;"><div style="font-size:0.7rem;color:var(--accent);font-weight:700;margin-bottom:8px;text-transform:uppercase;letter-spacing:1px;">📋 <span id="c-sub-items-title">Related Rate Items</span></div><div id="c-sub-items-list" style="display:flex;flex-wrap:wrap;gap:6px;"></div></div>
+        <!-- ═══ MULTI-SERVICE (v5.4) — एउटा customer लाई धेरै service ═══ -->
+        <div class="form-group full" style="grid-column:1/-1;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;flex-wrap:wrap;gap:6px;">
+            <label style="margin:0;">🔧 Services <span style="font-weight:400;color:var(--text-muted);font-size:0.72rem;">(एक भन्दा बढी थप्न सक्नुहुन्छ)</span></label>
+            <button type="button" onclick="Customers.addServiceRow()" class="btn btn-xs btn-primary">➕ Service थप्नुस्</button>
+          </div>
+          <div id="c-services-list" style="display:grid;gap:10px;"></div>
+          <div id="c-sub-items" style="display:none;margin-top:10px;background:rgba(249,115,22,0.05);border:1px solid rgba(249,115,22,0.25);border-radius:10px;padding:12px;"><div style="font-size:0.7rem;color:var(--accent);font-weight:700;margin-bottom:8px;text-transform:uppercase;letter-spacing:1px;">📋 <span id="c-sub-items-title">Related Rate Items</span></div><div id="c-sub-items-list" style="display:flex;flex-wrap:wrap;gap:6px;"></div></div>
+        </div>
+        <!-- पुरानो code नभाँच्न hidden mirror field हरू (services[0] सँग sync हुन्छन्) -->
+        <input type="hidden" id="c-work"><input type="hidden" id="c-subwork"><input type="hidden" id="c-subwork-text">
         <div class="form-group full"><label>📝 Notes</label><input type="text" id="c-notes" placeholder="Optional notes"></div>
         <div class="form-group"><label>🎤 Voice Note</label><div style="display:flex;gap:6px;"><button type="button" id="c-voice-btn" onclick="Customers.toggleVoiceRecord()" class="btn btn-sm btn-secondary">🎤 Record</button><audio id="c-voice-player" controls style="flex:1;max-width:100%;display:none;height:36px;"></audio></div></div>
         <div class="form-group"><label>👤 Salesperson</label><input type="text" id="c-sales" placeholder="Staff name" list="sales-datalist"><datalist id="sales-datalist"></datalist></div>
@@ -1568,7 +1450,7 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
       <div><div style="display:flex;align-items:center;gap:6px;margin-bottom:10px;"><div style="font-size:0.76rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;flex:1;font-weight:700;">📁 Template Folders</div><button onclick="BulkMsg.addFolder()" class="btn btn-xs btn-secondary">+ Folder</button></div><div id="bulk-folders"></div></div>
       <div><div style="font-size:0.76rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;font-weight:700;">📋 Templates</div><div id="bulk-templates"></div><div style="display:flex;gap:6px;margin-top:8px;"><button onclick="BulkMsg.addTemplate()" class="btn btn-sm btn-secondary" style="flex:1;">+ Add Template</button><button onclick="BulkMsg.restoreDefaults()" class="btn btn-sm btn-primary" title="Restore defaults">🔄 Restore</button></div></div>
       <div><div style="font-size:0.76rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;font-weight:700;">📢 Send Bulk</div>
-        <div class="card card-body"><div style="margin-bottom:12px;"><label style="display:block;margin-bottom:6px;">Message</label><textarea id="bulk-msg-text" placeholder="Template select गर्नुस् वा लेख्नुस्..." style="min-height:110px;"></textarea></div><div style="margin-bottom:12px;"><label style="display:block;margin-bottom:6px;">👁 Preview</label><div id="bulk-msg-preview" style="background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:10px 12px;font-size:0.8rem;white-space:pre-wrap;min-height:38px;color:var(--text-muted);">Template select गर्दा preview यहाँ देखिन्छ</div></div><div style="margin-bottom:12px;"><label style="display:block;margin-bottom:6px;">Recipients</label><div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px;"><button onclick="BulkMsg.selectAll()" class="btn btn-xs btn-primary">✅ All</button><button onclick="BulkMsg.deselectAll()" class="btn btn-xs btn-secondary">☐ Clear</button><button onclick="BulkMsg.selectByService()" class="btn btn-xs btn-secondary">🔧 By Service</button></div><div style="font-size:0.72rem;color:var(--text-muted);margin-bottom:4px;" id="bulk-count">0 selected</div><div id="bulk-recipients" style="max-height:180px;overflow-y:auto;border:1px solid var(--border);border-radius:10px;padding:8px;" onchange="BulkMsg.updateCount()"></div></div><div style="display:flex;gap:6px;flex-wrap:wrap;"><button onclick="BulkMsg.sendWA()" class="btn btn-wa btn-sm">📱 WhatsApp</button><button onclick="BulkMsg.sendSMS()" class="btn btn-sms btn-sm">💬 SMS</button><button onclick="BulkMsg.copy()" class="btn btn-secondary btn-sm">📋 Copy Nums</button></div></div>
+        <div class="card card-body"><div style="margin-bottom:12px;"><label style="display:block;margin-bottom:6px;">Message</label><textarea id="bulk-msg-text" placeholder="Template select गर्नुस् वा लेख्नुस्..." style="min-height:110px;"></textarea></div><div style="margin-bottom:12px;"><label style="display:block;margin-bottom:6px;">👁 Preview</label><div id="bulk-msg-preview" style="background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:10px 12px;font-size:0.8rem;white-space:pre-wrap;min-height:38px;color:var(--text-muted);">Template select गर्दा preview यहाँ देखिन्छ</div></div><div style="margin-bottom:12px;"><label style="display:block;margin-bottom:6px;">Recipients</label><div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px;"><button onclick="BulkMsg.selectAll()" class="btn btn-xs btn-primary">✅ All</button><button onclick="BulkMsg.deselectAll()" class="btn btn-xs btn-secondary">☐ Clear</button><select id="bulk-svc-filter" onchange="BulkMsg.selectByService()" style="font-size:0.72rem;padding:3px 8px;border-radius:6px;background:var(--surface-2);border:1px solid var(--border);color:var(--text);max-width:170px;"><option value="">🔧 By Service...</option></select></div><input type="text" id="bulk-search" placeholder="🔍 नाम वा फोन नम्बरले खोज्नुस्..." autocomplete="off" oninput="BulkMsg.filterRecipients()" style="width:100%;padding:8px 11px;margin-bottom:6px;font-size:0.82rem;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;color:var(--text);"><div style="font-size:0.72rem;color:var(--text-muted);margin-bottom:4px;" id="bulk-count">0 selected</div><div id="bulk-recipients" style="max-height:180px;overflow-y:auto;border:1px solid var(--border);border-radius:10px;padding:8px;" onchange="BulkMsg.updateCount()"></div></div><div style="display:flex;gap:6px;flex-wrap:wrap;"><button onclick="BulkMsg.sendWA()" class="btn btn-wa btn-sm">📱 WhatsApp</button><button onclick="BulkMsg.sendSMS()" class="btn btn-sms btn-sm">💬 SMS</button><button onclick="BulkMsg.copy()" class="btn btn-secondary btn-sm">📋 Copy Nums</button></div></div>
       </div>
     </div>
   </div>
@@ -1720,7 +1602,6 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
           </div>
         </div>
       </div>
-    </div>
 
       <!-- Restore Defaults Card -->
       <div class="card card-body">
@@ -1783,6 +1664,52 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
           <button onclick="AdminDash.runTests()" class="btn btn-primary btn-sm">▶ Run All Tests</button>
         </div>
         <div id="sa-tests" style="display:grid;gap:6px;"></div>
+      </div>
+
+      <!-- ═══════ BS Date Repair (v5.5) ═══════ -->
+      <div class="card card-body" style="margin-bottom:12px;">
+        <div class="section-title" style="margin-bottom:8px;">🗓️ Nepali Date (BS) जाँच</div>
+        <div style="font-size:0.72rem;color:var(--text-muted);margin-bottom:10px;line-height:1.55;">
+          पुरानो version को calendar table मा गल्ती थियो। v5.5 मा त्यो सच्यियो — तर
+          अघि सेभ भएका record मा पुरानो (गलत) BS मिति लेखिएर बसेको छ।
+          तलको button ले <b>AD (अंग्रेजी) मितिबाट</b> BS फेरि गणना गर्छ। AD मिति कहिल्यै बदलिँदैन।
+        </div>
+        <div id="sa-bs-status" style="margin-bottom:10px;"></div>
+        <button onclick="AdminDash.repairBsDates()" class="btn btn-sm btn-warning">🔄 BS मिति जाँचेर सच्याउनुस्</button>
+      </div>
+
+      <!-- ═══════ License & Key Generator (v5.3) ═══════ -->
+      <div class="card card-body" style="margin-bottom:12px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
+          <div class="section-title" style="margin:0;">🔐 License &amp; Key Generator</div>
+          <button onclick="License.deactivate()" class="btn btn-xs btn-secondary" title="यो device बाट license हटाउने">🔓 Deactivate</button>
+        </div>
+
+        <!-- current license status -->
+        <div id="sa-lic-status" style="margin-bottom:14px;"></div>
+
+        <!-- generator -->
+        <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:14px;">
+          <div style="font-size:0.8rem;font-weight:800;margin-bottom:4px;">🏭 नयाँ Customer को Key बनाउनुहोस्</div>
+          <div style="font-size:0.7rem;color:var(--text-muted);margin-bottom:10px;line-height:1.5;">
+            Customer ले जुन company name टाइप गर्छ, ठ्याक्कै त्यही नाम यहाँ हाल्नुस् — key त्यही नामसँग बाँधिन्छ।
+          </div>
+          <div style="display:grid;gap:8px;grid-template-columns:1fr;">
+            <input type="text" id="kg-company" placeholder="🏢 Customer Company Name" autocomplete="off"
+                   style="width:100%;padding:10px 12px;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:0.85rem;"
+                   onkeydown="if(event.key==='Enter')AdminDash.genKey()">
+            <select id="kg-plan" style="width:100%;padding:10px 12px;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:0.85rem;"></select>
+            <button onclick="AdminDash.genKey()" class="btn btn-primary btn-sm">⚡ Key Generate गर्नुहोस्</button>
+          </div>
+          <div id="kg-result" style="display:none;margin-top:12px;"></div>
+        </div>
+
+        <!-- issued keys log -->
+        <div style="display:flex;justify-content:space-between;align-items:center;margin:14px 0 8px;">
+          <div style="font-size:0.78rem;font-weight:800;">📒 जारी गरिएका Key हरू</div>
+          <button onclick="AdminDash.clearKeyLog()" class="btn btn-xs btn-secondary">🗑 Clear</button>
+        </div>
+        <div id="sa-keylog" style="display:grid;gap:6px;max-height:280px;overflow:auto;"></div>
       </div>
 
       <!-- Danger Zone -->
@@ -2327,50 +2254,52 @@ function compareBs(a,b) { if(!a&&!b)return 0; if(!a)return 1; if(!b)return -1; r
 
 // ─── BS/AD CALENDAR DATA & CONVERSION ─────────────────────────
 var BS_MONTHS_DATA = [
-  [0,30,32,31,32,31,30,30,30,29,30,29,31], // 2000
-  [0,31,31,32,31,31,31,30,29,30,29,30,30],[0,31,31,32,32,31,30,30,29,30,29,30,30],
-  [0,31,32,31,32,31,30,30,30,29,29,30,31],[0,30,32,31,32,31,30,30,30,29,30,29,31],
-  [0,31,31,32,31,31,30,30,30,29,30,29,31],[0,31,31,32,31,31,30,30,30,29,30,30,30],
-  [0,31,32,31,32,31,30,30,30,29,30,30,30],[0,31,32,31,32,31,30,30,30,29,30,30,31],
-  [0,31,31,31,32,31,31,29,30,30,29,29,31],[0,31,31,32,31,31,31,30,29,30,29,30,30], // 2010
-  [0,31,31,32,31,32,30,30,29,30,29,30,30],[0,31,32,31,32,31,30,30,29,30,29,30,30],
-  [0,31,32,31,32,31,30,30,30,29,29,30,31],[0,30,32,31,32,31,31,29,30,29,30,29,31],
-  [0,31,31,32,31,31,31,30,29,30,29,30,30],[0,31,31,32,32,31,30,30,29,30,29,30,30],
-  [0,31,32,31,32,31,30,30,30,29,30,29,31],[0,31,32,31,32,31,30,30,30,29,30,30,30],
-  [0,31,31,31,32,31,31,30,29,30,29,30,30],[0,31,31,32,31,31,30,30,30,29,30,29,31], // 2020
-  [0,31,31,32,31,31,30,30,30,29,30,30,30],[0,31,32,31,32,31,30,30,30,29,29,30,30],
-  [0,31,32,31,32,31,30,30,30,29,30,29,31],[0,30,32,31,32,31,30,30,29,30,29,30,30],
-  [0,31,31,32,32,31,30,30,29,30,29,30,30],[0,31,32,31,32,31,30,30,30,29,30,29,31],
-  [0,31,32,31,32,31,30,30,30,29,30,30,31],[0,31,31,32,31,31,31,30,29,30,29,30,30],
-  [0,31,31,31,32,31,31,30,29,30,29,30,30],[0,31,31,32,31,31,30,30,30,29,30,29,31], // 2030
-  [0,31,31,32,31,31,30,30,30,29,30,30,30],[0,31,32,31,32,31,30,30,30,29,29,30,31],
-  [0,30,32,31,32,31,31,29,30,30,29,29,31],[0,31,31,32,31,31,31,30,29,30,29,30,30],
-  [0,31,31,32,32,31,30,30,29,30,29,30,30],[0,31,32,31,32,31,30,30,30,29,30,29,31],
-  [0,31,32,31,32,31,30,30,30,29,30,30,31],[0,31,31,31,32,31,31,29,30,30,29,29,31],
-  [0,31,31,32,31,31,31,30,29,30,29,30,30],[0,31,31,32,31,32,30,30,29,30,29,30,30], // 2040
-  [0,31,32,31,32,31,30,30,30,29,30,29,31],[0,31,32,31,32,31,30,30,30,29,30,30,31],
-  [0,30,32,31,32,31,31,29,30,29,30,29,31],[0,31,31,32,31,31,31,30,29,30,29,30,30],
-  [0,31,31,32,32,31,30,30,29,30,29,30,30],[0,31,32,31,32,31,30,30,30,29,30,29,31],
-  [0,31,32,31,32,31,30,30,30,29,30,29,31],[0,31,31,32,31,31,31,30,29,30,29,30,30], // 2047
-  [0,31,31,32,31,31,30,30,30,29,30,29,31],[0,31,32,31,32,31,30,30,30,29,30,30,30], // 2049
-  [0,31,32,31,32,31,30,30,30,29,30,30,30],[0,31,31,32,31,32,30,30,29,30,29,30,30], // 2050-51
-  [0,31,32,31,32,31,30,30,30,29,30,29,31],[0,31,32,31,32,31,30,30,30,29,30,30,31], // 2052-53
-  [0,30,32,31,32,31,31,29,30,29,30,29,31],[0,31,31,32,31,31,31,30,29,30,29,30,30], // 2054-55
-  [0,31,31,32,32,31,30,29,30,29,30,29,31],[0,31,32,31,32,31,30,30,29,30,29,30,30], // 2056-57
-  [0,31,32,31,32,31,30,30,30,29,29,30,31],[0,30,32,31,32,31,31,29,30,30,29,29,31], // 2058-59
-  [0,31,31,32,31,31,31,30,29,30,29,30,30],[0,31,31,32,31,32,30,30,29,30,29,30,30], // 2060-61
-  [0,31,32,31,32,31,30,30,30,29,30,29,31],[0,31,32,31,32,31,30,30,30,29,30,30,30], // 2062-63
-  [0,31,31,31,32,31,31,30,29,30,29,30,30],[0,31,31,32,31,31,30,30,30,29,30,29,31], // 2064-65
-  [0,31,31,32,31,32,30,29,30,29,30,29,31],[0,31,32,31,32,31,30,30,29,30,29,30,30], // 2066-67
-  [0,31,32,31,32,31,30,30,30,29,29,30,31],[0,30,32,31,32,31,31,29,30,29,30,29,31], // 2068-69
-  [0,31,31,32,31,31,31,30,29,30,29,30,30],[0,31,31,32,32,31,30,30,29,30,29,30,30], // 2070-71
-  [0,31,32,31,32,31,30,30,30,29,30,29,31],[0,31,32,31,32,31,30,30,30,29,30,30,30], // 2072-73
-  [0,31,31,31,32,31,31,30,29,30,29,30,30],[0,31,31,32,31,31,30,30,30,29,30,29,31], // 2074-75
-  [0,31,32,31,32,31,30,30,29,30,29,30,30],[0,31,32,31,32,31,30,30,30,29,29,30,31], // 2076-77
-  [0,30,32,31,32,31,31,29,30,29,30,29,31],[0,31,31,32,31,31,31,30,29,30,29,30,30], // 2078-79
-  [0,31,31,32,31,32,30,30,29,30,29,30,30],[0,31,32,31,32,31,30,30,30,29,30,29,31], // 2080-81
-  [0,31,32,31,32,31,30,30,30,29,30,30,30],[0,31,31,32,31,31,30,30,30,29,30,29,31], // 2082-83
-  [0,31,31,32,32,31,30,29,30,29,30,29,31],[0,31,32,31,32,31,30,30,29,30,29,30,30], // 2084-85
+  [0,30,32,31,32,31,30,30,30,29,30,29,31],[0,31,31,32,31,31,31,30,29,30,29,30,30], // 2000-2001
+  [0,31,31,32,32,31,30,30,29,30,29,30,30],[0,31,32,31,32,31,30,30,30,29,29,30,31], // 2002-2003
+  [0,30,32,31,32,31,30,30,30,29,30,29,31],[0,31,31,32,31,31,31,30,29,30,29,30,30], // 2004-2005
+  [0,31,31,32,32,31,30,30,29,30,29,30,30],[0,31,32,31,32,31,30,30,30,29,29,30,31], // 2006-2007
+  [0,31,31,31,32,31,31,29,30,30,29,29,31],[0,31,31,32,31,31,31,30,29,30,29,30,30], // 2008-2009
+  [0,31,31,32,32,31,30,30,29,30,29,30,30],[0,31,32,31,32,31,30,30,30,29,29,30,31], // 2010-2011
+  [0,31,31,31,32,31,31,29,30,30,29,30,30],[0,31,31,32,31,31,31,30,29,30,29,30,30], // 2012-2013
+  [0,31,31,32,32,31,30,30,29,30,29,30,30],[0,31,32,31,32,31,30,30,30,29,29,30,31], // 2014-2015
+  [0,31,31,31,32,31,31,29,30,30,29,30,30],[0,31,31,32,31,31,31,30,29,30,29,30,30], // 2016-2017
+  [0,31,32,31,32,31,30,30,29,30,29,30,30],[0,31,32,31,32,31,30,30,30,29,30,29,31], // 2018-2019
+  [0,31,31,31,32,31,31,30,29,30,29,30,30],[0,31,31,32,31,31,31,30,29,30,29,30,30], // 2020-2021
+  [0,31,32,31,32,31,30,30,30,29,29,30,30],[0,31,32,31,32,31,30,30,30,29,30,29,31], // 2022-2023
+  [0,31,31,31,32,31,31,30,29,30,29,30,30],[0,31,31,32,31,31,31,30,29,30,29,30,30], // 2024-2025
+  [0,31,32,31,32,31,30,30,30,29,29,30,31],[0,30,32,31,32,31,30,30,30,29,30,29,31], // 2026-2027
+  [0,31,31,32,31,31,31,30,29,30,29,30,30],[0,31,31,32,31,32,30,30,29,30,29,30,30], // 2028-2029
+  [0,31,32,31,32,31,30,30,30,29,29,30,31],[0,30,32,31,32,31,30,30,30,29,30,29,31], // 2030-2031
+  [0,31,31,32,31,31,31,30,29,30,29,30,30],[0,31,31,32,32,31,30,30,29,30,29,30,30], // 2032-2033
+  [0,31,32,31,32,31,30,30,30,29,29,30,31],[0,30,32,31,32,31,31,29,30,30,29,29,31], // 2034-2035
+  [0,31,31,32,31,31,31,30,29,30,29,30,30],[0,31,31,32,32,31,30,30,29,30,29,30,30], // 2036-2037
+  [0,31,32,31,32,31,30,30,30,29,29,30,31],[0,31,31,31,32,31,31,29,30,30,29,30,30], // 2038-2039
+  [0,31,31,32,31,31,31,30,29,30,29,30,30],[0,31,31,32,32,31,30,30,29,30,29,30,30], // 2040-2041
+  [0,31,32,31,32,31,30,30,30,29,29,30,31],[0,31,31,31,32,31,31,29,30,30,29,30,30], // 2042-2043
+  [0,31,31,32,31,31,31,30,29,30,29,30,30],[0,31,32,31,32,31,30,30,29,30,29,30,30], // 2044-2045
+  [0,31,32,31,32,31,30,30,30,29,29,30,31],[0,31,31,31,32,31,31,30,29,30,29,30,30], // 2046-2047
+  [0,31,31,32,31,31,31,30,29,30,29,30,30],[0,31,32,31,32,31,30,30,30,29,29,30,30], // 2048-2049
+  [0,31,32,31,32,31,30,30,30,29,30,29,31],[0,31,31,31,32,31,31,30,29,30,29,30,30], // 2050-2051
+  [0,31,31,32,31,31,31,30,29,30,29,30,30],[0,31,32,31,32,31,30,30,30,29,29,30,30], // 2052-2053
+  [0,31,32,31,32,31,30,30,30,29,30,29,31],[0,31,31,32,31,31,31,30,29,30,29,30,30], // 2054-2055
+  [0,31,31,32,31,32,30,30,29,30,29,30,30],[0,31,32,31,32,31,30,30,30,29,29,30,31], // 2056-2057
+  [0,30,32,31,32,31,30,30,30,29,30,29,31],[0,31,31,32,31,31,31,30,29,30,29,30,30], // 2058-2059
+  [0,31,31,32,32,31,30,30,29,30,29,30,30],[0,31,32,31,32,31,30,30,30,29,29,30,31], // 2060-2061
+  [0,30,32,31,32,31,31,29,30,29,30,29,31],[0,31,31,32,31,31,31,30,29,30,29,30,30], // 2062-2063
+  [0,31,31,32,32,31,30,30,29,30,29,30,30],[0,31,32,31,32,31,30,30,30,29,29,30,31], // 2064-2065
+  [0,31,31,31,32,31,31,29,30,30,29,29,31],[0,31,31,32,31,31,31,30,29,30,29,30,30], // 2066-2067
+  [0,31,31,32,32,31,30,30,29,30,29,30,30],[0,31,32,31,32,31,30,30,30,29,29,30,31], // 2068-2069
+  [0,31,31,31,32,31,31,29,30,30,29,30,30],[0,31,31,32,31,31,31,30,29,30,29,30,30], // 2070-2071
+  [0,31,32,31,32,31,30,30,29,30,29,30,30],[0,31,32,31,32,31,30,30,30,29,29,30,31], // 2072-2073
+  [0,31,31,31,32,31,31,30,29,30,29,30,30],[0,31,31,32,31,31,31,30,29,30,29,30,30], // 2074-2075
+  [0,31,32,31,32,31,30,30,30,29,29,30,30],[0,31,32,31,32,31,30,30,30,29,30,29,31], // 2076-2077
+  [0,31,31,31,32,31,31,30,29,30,29,30,30],[0,31,31,32,31,31,31,30,29,30,29,30,30], // 2078-2079
+  [0,31,32,31,32,31,30,30,30,29,29,30,30],[0,31,32,31,32,31,30,30,30,29,30,29,31], // 2080-2081
+  [0,31,31,32,31,31,31,30,29,30,29,30,30],[0,31,31,32,31,31,31,30,29,30,29,30,30], // 2082-2083
+  [0,31,32,31,32,31,30,30,30,29,29,30,31],[0,30,32,31,32,31,30,30,30,29,30,29,31], // 2084-2085
+  [0,31,31,32,31,31,31,30,29,30,29,30,30],[0,31,31,32,31,31,31,30,30,29,30,30,30], // 2086-2087
+  [0,30,31,32,32,30,31,30,30,29,30,30,30],[0,30,32,31,32,31,30,30,30,29,30,30,30], // 2088-2089
+  [0,30,32,31,32,31,30,30,30,29,30,30,30] // 2090
 ];
 window.BS_MONTHS_DATA = BS_MONTHS_DATA; // global alias
 window.BS_MONTH_DAYS = BS_MONTHS_DATA;  // legacy compat
@@ -2461,72 +2390,327 @@ function bsStringToDisplay(s) { if(!s)return ''; var p=String(s).split('-'); if(
 
 // ─── AUTH MODULE ──────────────────────────────────────────────
 var currentUser = null;
-// ═══════════════ LICENSE SYSTEM (v5.2) ═══════════════
-// Offline activation: a key is mathematically bound to the customer's company
-// name. Same algorithm generates & validates — no internet needed. Once
-// activated, the flag is stored in localStorage so it's asked only once.
-//
-// ⚠️ SELLER NOTE: use the same _hash() in the Key Generator tool to create
-// keys for each customer. Keys are NOT transferable — a key made for company
-// "A" will not activate on a device where someone types company "B".
+// ═══════════════ LICENSE SYSTEM (v5.3) — ONE-TIME ACTIVATION ═══════════════
+// नियम:
+//  • Key एक पटक हाले पछि — expire नभएसम्म फेरि कहिल्यै सोधिँदैन।
+//  • MASTER KEY = 4448  → PRERAK MULTIPURPOSE PVT LTD को lifetime key।
+//    कुनै पनि company name सँग खुल्छ, कहिल्यै expire हुँदैन। (आफ्नै लागि — गोप्य राख्नुस्)
+//  • अरू customer लाई: Super Admin → 🔐 License & Key Generator बाट key बनाउनुस्।
+//    generated key customer को company name + expiry date सँग बाँधिन्छ —
+//    अर्को company मा चल्दैन, expiry बदल्न पनि मिल्दैन (hash भाँचिन्छ)।
 var License = {
-  _SALT: 'PRK-2083-MKWNPR',  // secret salt — keep private; change per your batch if desired
+  // ╔══════════════════════════════════════════════════════════════╗
+  // ║  BUILT-IN ACTIVATION — यी एउटा line मात्र बद्लिन्छ                 ║
+  // ╠══════════════════════════════════════════════════════════════╣
+  // ║  यो file प्रेरक को आफ्नै लागि pre-activated छ — कहिल्यै key       ║
+  // ║  माग्दैन। browser/mobile/PC जे मा खोले पनि सिधै login आउछ।      ║
+  // ║                                                                    ║
+  // ║  ग्राहकलाई बेच्ने copy बनाउँदा — तलको BUILT_IN लाई यस्तो     ║
+  // ║  बनाउनुस्:   BUILT_IN: { company:'', key:'' },                    ║
+  // ║  त्यसपछि ग्राहकले आफ्नो key एक पटक हाल्नुपर्छ।                 ║
+  // ╚══════════════════════════════════════════════════════════════╝
+  BUILT_IN: { company: 'PRERAK MULTIPURPOSE PVT LTD', key: '4448' },
 
-  // Deterministic hash → 12 hex chars, split into 3 groups of 4
-  _hash: function(company){
-    var str = (company||'').trim().toLowerCase().replace(/\s+/g,' ') + '|' + this._SALT;
+  _SALT: 'PRK-2083-MKWNPR',        // गोप्य salt — नबदल्नुस् (बदले पुराना key हरू काम गर्दैनन्)
+  MASTER: '4448',                  // Owner master key
+  MASTER_COMPANY: 'PRERAK MULTIPURPOSE PVT LTD',
+  _STORES: ['pk3_license', 'pk3_lic_backup', 'prerak_activation'],
+  _EPOCH: Date.UTC(2024, 0, 1),
+  _DAY: 86400000,
+  _expiredFlag: false,
+
+  PLANS: [
+    { code: 'T15',  label: '🎁 Trial — 15 दिन', days: 15 },
+    { code: 'D30',  label: '📅 1 महिना',        days: 30 },
+    { code: 'M6',   label: '📅 6 महिना',        days: 182 },
+    { code: 'Y1',   label: '📅 1 वर्ष',          days: 365 },
+    { code: 'Y2',   label: '📅 2 वर्ष',          days: 730 },
+    { code: 'Y3',   label: '📅 3 वर्ष',          days: 1095 },
+    { code: 'LIFE', label: '♾️ Lifetime (कहिल्यै expire हुँदैन)', days: 0 }
+  ],
+
+  // ─── helpers ────────────────────────────────────────────────
+  _norm: function (s) {
+    return String(s || '').trim().toLowerCase().replace(/[.,]/g, '').replace(/\s+/g, ' ');
+  },
+
+  // Deterministic 12-hex signature of (company + expiry-code + salt)
+  _sig: function (company, expCode) {
+    var str = this._norm(company) + '|' + String(expCode || '').toUpperCase() + '|' + this._SALT;
     var h1 = 0x811c9dc5, h2 = 0x1000193;
-    for(var i=0;i<str.length;i++){
+    for (var i = 0; i < str.length; i++) {
       var c = str.charCodeAt(i);
       h1 = (h1 ^ c) >>> 0; h1 = (h1 * 0x01000193) >>> 0;
-      h2 = (h2 + c * (i+7)) >>> 0; h2 = (h2 ^ (h2 << 5)) >>> 0;
+      h2 = (h2 + c * (i + 7)) >>> 0; h2 = (h2 ^ (h2 << 5)) >>> 0;
     }
-    var hex = (('00000000'+h1.toString(16)).slice(-8) + ('0000'+(h2 & 0xffff).toString(16)).slice(-4)).toUpperCase();
-    return 'PRERAK-' + hex.slice(0,4) + '-' + hex.slice(4,8) + '-' + hex.slice(8,12);
+    return (('00000000' + h1.toString(16)).slice(-8) + ('0000' + (h2 & 0xffff).toString(16)).slice(-4)).toUpperCase();
   },
 
-  isActivated: function(){
+  // v5.2 legacy key (company-only, lifetime) — पुराना key हरू पनि चल्छन्
+  _hashLegacy: function (company) {
+    var str = (company || '').trim().toLowerCase().replace(/\s+/g, ' ') + '|' + this._SALT;
+    var h1 = 0x811c9dc5, h2 = 0x1000193;
+    for (var i = 0; i < str.length; i++) {
+      var c = str.charCodeAt(i);
+      h1 = (h1 ^ c) >>> 0; h1 = (h1 * 0x01000193) >>> 0;
+      h2 = (h2 + c * (i + 7)) >>> 0; h2 = (h2 ^ (h2 << 5)) >>> 0;
+    }
+    var hex = (('00000000' + h1.toString(16)).slice(-8) + ('0000' + (h2 & 0xffff).toString(16)).slice(-4)).toUpperCase();
+    return 'PRERAK-' + hex.slice(0, 4) + '-' + hex.slice(4, 8) + '-' + hex.slice(8, 12);
+  },
+
+  // expiry date  ⇄  4-char base36 code (key भित्रै लुकेको हुन्छ)
+  _dateToCode: function (d) {
+    var days = Math.floor((Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) - this._EPOCH) / this._DAY);
+    if (days < 0) days = 0;
+    return ('000' + days.toString(36).toUpperCase()).slice(-4);
+  },
+  _codeToDate: function (code) {
+    if (!code || String(code).toUpperCase() === 'LIFE') return null;
+    var days = parseInt(String(code).toUpperCase(), 36);
+    if (isNaN(days)) return null;
+    return new Date(this._EPOCH + days * this._DAY);
+  },
+
+  _clean: function (k) { return String(k || '').toUpperCase().replace(/\s+/g, '').trim(); },
+
+  // ─── key generation (seller side) ───────────────────────────
+  // generate('Ram Traders', 365)  →  { key:'PRERAK-XXXX-XXXX-XXXX', expiry:Date|null }
+  generate: function (company, days) {
+    var expCode = 'LIFE', expiry = null;
+    if (days && days > 0) {
+      expiry = new Date(Date.now() + days * this._DAY);
+      expCode = this._dateToCode(expiry);
+    }
+    var sig = this._sig(company, expCode);
+    return {
+      company: String(company || '').trim(),
+      key: 'PRERAK-' + expCode + '-' + sig.slice(0, 4) + '-' + sig.slice(4, 8),
+      expCode: expCode,
+      expiry: expiry,
+      days: days || 0
+    };
+  },
+
+  // ─── key validation ─────────────────────────────────────────
+  // returns { ok, plan:'MASTER'|'CUSTOMER'|'LEGACY', expiry:Date|null, reason }
+  validate: function (company, key) {
+    key = this._clean(key);
+    if (!key) return { ok: false, reason: 'empty' };
+
+    // 1) MASTER KEY — कुनै पनि company name सँग, lifetime
+    if (key === this._clean(this.MASTER) ||
+        key === 'PRERAK-MASTER-' + this._clean(this.MASTER) ||
+        key === 'PRERAK-' + this._clean(this.MASTER)) {
+      return { ok: true, plan: 'MASTER', expiry: null };
+    }
+
+    // 2) NEW FORMAT — PRERAK-EEEE-XXXX-XXXX
+    var m = key.match(/^PRERAK-([A-Z0-9]{4})-([A-Z0-9]{4})-([A-Z0-9]{4})$/);
+    if (m) {
+      var expCode = m[1], given = m[2] + m[3];
+      if (this._sig(company, expCode).slice(0, 8) === given) {
+        return { ok: true, plan: 'CUSTOMER', expiry: this._codeToDate(expCode), expCode: expCode };
+      }
+      // 3) LEGACY v5.2 key (whole key is one hash, lifetime)
+      if (this._hashLegacy(company) === key) {
+        return { ok: true, plan: 'LEGACY', expiry: null };
+      }
+    }
+    return { ok: false, reason: 'mismatch' };
+  },
+
+  // ─── storage: 3 ठाउँमा save → एउटा मेटिए पनि license बाँच्छ ──
+  _recSig: function (r) {
+    return this._sig((r.company || '') + '#' + (r.key || '') + '#' + (r.expiry || 'LIFE'), 'REC');
+  },
+  _save: function (rec) {
+    rec.sig = this._recSig(rec);
+    var json = JSON.stringify(rec);
+    this._STORES.forEach(function (k) { try { localStorage.setItem(k, json); } catch (e) {} });
+    try { sessionStorage.setItem('pk3_license', json); } catch (e) {}
+    return rec;
+  },
+  _load: function () {
+    var rec = null, self = this;
+    this._STORES.forEach(function (k) {
+      if (rec) return;
+      try { var v = localStorage.getItem(k); if (v) rec = JSON.parse(v); } catch (e) {}
+    });
+    if (!rec) { try { var s = sessionStorage.getItem('pk3_license'); if (s) rec = JSON.parse(s); } catch (e) {} }
+    if (rec && rec.key) {
+      // self-heal: हराएका copy हरू फेरि लेख्ने
+      try {
+        var json = JSON.stringify(rec);
+        this._STORES.forEach(function (k) { try { if (!localStorage.getItem(k)) localStorage.setItem(k, json); } catch (e) {} });
+      } catch (e) {}
+    }
+    return rec;
+  },
+  _wipe: function () {
+    this._STORES.forEach(function (k) { try { localStorage.removeItem(k); } catch (e) {} });
+    try { sessionStorage.removeItem('pk3_license'); } catch (e) {}
+  },
+
+  // ─── status ─────────────────────────────────────────────────
+  // BUILT_IN सही छ भने storage चाहिँदैन — file आफैं activated हुन्छ।
+  // (file:// मा localStorage मेटिए/block भए पनि key फेरि सोध्दैन)
+  builtIn: function () {
+    var b = this.BUILT_IN;
+    if (!b || !b.key) return null;
+    var v = this.validate(b.company, b.key);
+    if (!v.ok) return null;
+    if (v.expiry && new Date() > new Date(v.expiry)) return null;
+    return { company: b.company || this.MASTER_COMPANY, key: b.key, plan: v.plan, expiry: v.expiry };
+  },
+
+  isActivated: function () {
+    if (this.builtIn()) return true;
     try {
-      var lic = STORE.get('pk3_license', null);
-      if(!lic || !lic.company || !lic.key) return false;
-      // Re-validate: stored key must still match the stored company
-      return this._hash(lic.company) === String(lic.key).toUpperCase().trim();
-    } catch(e){ return false; }
+      var lic = this._load();
+      if (!lic || !lic.key) return false;
+      var v = this.validate(lic.company, lic.key);
+      if (!v.ok) return false;                       // key/company बिग्रियो
+      if (!v.expiry) return true;                    // lifetime / master
+      if (new Date() > new Date(v.expiry)) { this._expiredFlag = true; return false; }
+      return true;
+    } catch (e) { return false; }
   },
 
-  activate: function(){
-    var company = (document.getElementById('license-company')||{}).value || '';
-    var key = ((document.getElementById('license-key')||{}).value || '').toUpperCase().trim();
+  status: function () {
+    var bi = this.builtIn();
+    if (bi) {
+      var bexp = bi.expiry ? new Date(bi.expiry) : null;
+      return {
+        active: true, builtIn: true, company: bi.company, key: bi.key, plan: bi.plan,
+        lifetime: !bexp, expiry: bexp,
+        daysLeft: bexp ? Math.ceil((bexp - new Date()) / this._DAY) : null,
+        activatedAt: null
+      };
+    }
+    var lic = this._load();
+    if (!lic || !lic.key) return { active: false };
+    var v = this.validate(lic.company, lic.key);
+    if (!v.ok) return { active: false, broken: true, company: lic.company };
+    var exp = v.expiry ? new Date(v.expiry) : null;
+    var left = exp ? Math.ceil((exp - new Date()) / this._DAY) : null;
+    return {
+      active: !exp || left > 0,
+      company: lic.company || this.MASTER_COMPANY,
+      key: lic.key,
+      plan: v.plan,
+      lifetime: !exp,
+      expiry: exp,
+      daysLeft: left,
+      activatedAt: lic.activatedAt || null
+    };
+  },
+
+  daysLeft: function () { var s = this.status(); return s.daysLeft; },
+
+  // ─── activate (login screen बाट) ────────────────────────────
+  activate: function () {
+    var company = (document.getElementById('license-company') || {}).value || '';
+    var key = this._clean((document.getElementById('license-key') || {}).value || '');
     var err = document.getElementById('license-err');
-    if(!company.trim() || !key){
-      if(err){ err.textContent='❌ Company Name र License Key दुवै भर्नुस्'; err.style.display='block'; }
+    var isMaster = (key === this._clean(this.MASTER));
+
+    if (isMaster && !company.trim()) company = this.MASTER_COMPANY;
+
+    if (!company.trim() || !key) {
+      if (err) { err.innerHTML = '❌ Company Name र License Key दुवै भर्नुस्'; err.style.display = 'block'; }
       return;
     }
-    if(this._hash(company) === key){
-      try { STORE.set('pk3_license', {company:company.trim(), key:key, activatedAt:new Date().toISOString()}); } catch(e){}
-      var ls = document.getElementById('license-screen'); if(ls) ls.style.display='none';
-      // Pre-fill company name into settings if empty
-      try {
-        var s = STORE.get('pk3_settings',{})||{};
-        if(!s.companyName){ s.companyName = company.trim(); STORE.set('pk3_settings', s); }
-      } catch(e){}
-      // Proceed to normal login
-      if(typeof Auth!=='undefined' && Auth.init) Auth.init();
-    } else {
-      if(err){ err.textContent='❌ License Key वा Company Name मिलेन'; err.style.display='block'; }
+
+    var v = this.validate(company, key);
+    if (!v.ok) {
+      if (err) { err.innerHTML = '❌ License Key वा Company Name मिलेन।<br><span style="opacity:.8;font-size:.72rem;">Key किन्न / renew गर्न 📞 9855069733</span>'; err.style.display = 'block'; }
+      return;
     }
+    if (v.expiry && new Date() > new Date(v.expiry)) {
+      if (err) { err.innerHTML = '⏰ यो key को म्याद सकियो। नयाँ key लिन 📞 9855069733'; err.style.display = 'block'; }
+      return;
+    }
+
+    this._save({
+      company: company.trim(),
+      key: key,
+      plan: v.plan,
+      expiry: v.expiry ? new Date(v.expiry).toISOString() : null,
+      activatedAt: new Date().toISOString(),
+      device: (navigator.userAgent || '').slice(0, 80)
+    });
+
+    var ls = document.getElementById('license-screen'); if (ls) ls.style.display = 'none';
+
+    // Company name settings मा खाली भए भर्ने
+    try {
+      var s = STORE.get('pk3_settings', {}) || {};
+      if (!s.companyName) { s.companyName = company.trim(); STORE.set('pk3_settings', s); }
+    } catch (e) {}
+
+    var msg = v.expiry
+      ? '✅ Activate भयो — म्याद: ' + new Date(v.expiry).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })
+      : '✅ Activate भयो — Lifetime License 🎉';
+    try { if (window.App && App.toast) setTimeout(function () { App.toast(msg, 'success', 5000); }, 600); } catch (e) {}
+
+    if (typeof Auth !== 'undefined' && Auth.init) Auth.init();
   },
 
-  // Called at boot — shows license screen if not activated, returns true if OK to proceed
-  check: function(){
-    if(this.isActivated()) return true;
+  // ─── boot gate ──────────────────────────────────────────────
+  // Activated भए true फर्काउँछ र screen देखाउँदैन — त्यसैले हरेक पटक key सोध्दैन।
+  check: function () {
+    if (this.isActivated()) { this._maybeWarn(); return true; }
     var ls = document.getElementById('license-screen');
     var login = document.getElementById('login-screen');
-    if(login) login.style.display='none';
-    if(ls) ls.style.display='flex';
+    var err = document.getElementById('license-err');
+    if (this._expiredFlag && err) {
+      err.innerHTML = '⏰ License को म्याद सकियो। Renew गर्न 📞 9855069733';
+      err.style.display = 'block';
+    }
+    if (login) login.style.display = 'none';
+    if (ls) ls.style.display = 'flex';
+    var ci = document.getElementById('license-company');
+    var prev = this._load();
+    if (ci && prev && prev.company) ci.value = prev.company;
+    setTimeout(function () { var k = document.getElementById('license-key'); if (k) k.focus(); }, 200);
     return false;
-  }
+  },
+
+  // म्याद सकिन ३० दिन बाँकी हुँदा माथि पहेँलो पट्टी — तर काम रोक्दैन
+  _maybeWarn: function () {
+    var s = this.status();
+    if (!s.active || s.lifetime || s.daysLeft === null) return;
+    if (s.daysLeft > 30) return;
+    var bar = document.getElementById('lic-warn-bar');
+    if (!bar) return;
+    var urgent = s.daysLeft <= 7;
+    bar.style.background = urgent ? '#7f1d1d' : '#78350f';
+    bar.innerHTML = (urgent ? '🚨 ' : '⏳ ') + 'License म्याद ' + s.daysLeft + ' दिन बाँकी (' +
+      s.expiry.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) +
+      ') — Renew: 📞 9855069733' +
+      '<span onclick="this.parentNode.style.display=\'none\'" style="float:right;cursor:pointer;padding:0 6px;">✕</span>';
+    bar.style.display = 'block';
+  },
+
+  // ─── super admin: license हटाउने (नयाँ key हाल्न) ────────────
+  deactivate: function () {
+    if (this.builtIn()) {
+      alert('ℹ️ यो file मा BUILT-IN activation अन छ — त्यसैले key सोध्दैन।\n\n' +
+            'ग्राहक copy बनाउन HTML file मा यो line खोजेर खाली बनाउनुस्:\n\n' +
+            "BUILT_IN: { company: '', key: '' },");
+      return;
+    }
+    if (!confirm('⚠️ License हटाउने? अर्को पटक app खोल्दा फेरि key माग्नेछ।')) return;
+    this._wipe();
+    try { if (window.App && App.toast) App.toast('🔓 License हटाइयो — reload हुँदैछ...', 'info'); } catch (e) {}
+    setTimeout(function () { window.location.reload(); }, 900);
+  },
+
+  info: function () { var s = this.status(); console.table(s); return s; }
 };
+// Console helper (seller): PRERAK_KEY('Ram Traders', 365)
+window.PRERAK_KEY = function (company, days) { return License.generate(company, days); };
 
 
 var Auth = {
@@ -2811,7 +2995,7 @@ function fillTemplate(template, customer) {
   var vars = {
     '{name}':    safeName,
     '{phone}':   c.phone || '',
-    '{service}': c.work || c.service || 'तपाईंको काम',
+    '{service}': (function(){ try { var a = Customers.getServices(c).map(function(x){return x.work;}).filter(Boolean); return a.length ? a.join(', ') : (c.work || c.service || 'तपाईंको काम'); } catch(e){ return c.work || c.service || 'तपाईंको काम'; } })(),
     '{address}': c.address || '',
     '{company}': co.companyName || 'PRERAK MULTIPURPOSE PVT LTD',
     '{phone1}':  co.phone1 || '9855069733',
@@ -3352,6 +3536,309 @@ var Customers = {
   _edit: null,
   _dupId: null,
   getData: function() { return STORE.get('pk3_customers',[])||[]; },
+  // ═══════════ MULTI-SERVICE ENGINE (v5.4) ═══════════
+  // Data model: c.services = [{work:'UPVC', subwork:'UPVC Windows'}, ...]
+  // पुरानो c.work / c.subwork पनि services[0] सँग sync भइरहन्छ — त्यसैले
+  // पुराना सबै code (quotation, export, AI, dashboard) भाँचिँदैनन्।
+
+  // कुनै पनि customer record बाट services array निकाल्ने — एउटै पढ्ने बाटो
+  getServices: function (c) {
+    if (!c) return [];
+    if (Array.isArray(c.services) && c.services.length) {
+      return c.services.filter(function (s) { return s && (s.work || s.subwork); });
+    }
+    if (c.work || c.subwork) return [{ work: c.work || '', subwork: c.subwork || '' }];
+    return [];
+  },
+
+
+  // ─── Customer list मा service chip हरू (२ वटा + "+N") ───
+  serviceChips: function (c) {
+    var arr = this.getServices(c);
+    if (!arr.length) return '<div style="font-size:0.82rem;color:var(--text-muted);">—</div>';
+    var shown = arr.slice(0, 2), extra = arr.length - shown.length;
+    var html = '<div style="display:flex;flex-wrap:wrap;gap:3px;align-items:center;">';
+    shown.forEach(function (x) {
+      var label = x.work || x.subwork;
+      html += '<span title="' + esc((x.work || '') + (x.subwork ? ' / ' + x.subwork : '')) + '" '
+           +  'style="display:inline-block;font-size:0.68rem;background:rgba(249,115,22,0.12);'
+           +  'border:1px solid rgba(249,115,22,0.3);color:var(--accent);border-radius:20px;'
+           +  'padding:1px 8px;white-space:nowrap;max-width:130px;overflow:hidden;text-overflow:ellipsis;">'
+           +  esc(label) + '</span>';
+    });
+    if (extra > 0) {
+      html += '<span style="font-size:0.68rem;color:var(--text-muted);font-weight:700;">+' + extra + '</span>';
+    }
+    html += '</div>';
+    if (shown.length === 1 && shown[0].subwork) {
+      html += '<div style="font-size:0.68rem;color:var(--text-muted);">' + esc(shown[0].subwork) + '</div>';
+    }
+    return html;
+  },
+
+  // ─── Detail modal मा एउटा line मा सबै service ───
+  serviceLine: function (c) {
+    var arr = this.getServices(c);
+    if (!arr.length) return '—';
+    return arr.map(function (x) {
+      return esc(x.work || '') + (x.subwork ? ' <span style="color:var(--text-muted);">/ ' + esc(x.subwork) + '</span>' : '');
+    }).join('<br>');
+  },
+
+  // ─── Quotation/Estimate लाई service छान्ने popup ───
+  // एउटा मात्र service भए popup नआई सिधै callback चल्छ
+  pickService: function (c, cb) {
+    var arr = this.getServices(c);
+    if (!arr.length) { cb({ work: '', subwork: '' }); return; }
+    if (arr.length === 1) { cb(arr[0]); return; }
+
+    var ov = document.getElementById('svc-pick-modal');
+    if (!ov) {
+      ov = document.createElement('div');
+      ov.id = 'svc-pick-modal';
+      ov.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:10000;'
+                       + 'display:flex;align-items:center;justify-content:center;padding:20px;';
+      document.body.appendChild(ov);
+    }
+    ov.innerHTML = '';
+    var card = document.createElement('div');
+    card.style.cssText = 'background:var(--surface);border:1px solid var(--border);border-radius:14px;'
+                       + 'padding:20px;max-width:380px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.4);';
+    var head = document.createElement('div');
+    head.innerHTML = '<div style="font-size:0.95rem;font-weight:800;margin-bottom:2px;">🔧 कुन service को हो?</div>'
+                   + '<div style="font-size:0.74rem;color:var(--text-muted);margin-bottom:14px;">'
+                   + esc(c.name || '') + ' सँग ' + arr.length + ' वटा service छन्</div>';
+    card.appendChild(head);
+
+    arr.forEach(function (x) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.style.cssText = 'display:block;width:100%;text-align:left;margin-bottom:7px;padding:11px 13px;'
+                      + 'background:var(--surface-2);border:1px solid var(--border);border-radius:10px;'
+                      + 'color:var(--text);cursor:pointer;font-size:0.85rem;';
+      b.innerHTML = '<b>' + esc(x.work || '—') + '</b>'
+                  + (x.subwork ? '<div style="font-size:0.72rem;color:var(--text-muted);margin-top:2px;">' + esc(x.subwork) + '</div>' : '');
+      b.onmouseover = function () { b.style.borderColor = 'var(--accent)'; };
+      b.onmouseout = function () { b.style.borderColor = 'var(--border)'; };
+      b.onclick = function () { ov.remove(); cb(x); };
+      card.appendChild(b);
+    });
+
+    var cancel = document.createElement('button');
+    cancel.type = 'button';
+    cancel.className = 'btn btn-sm btn-secondary';
+    cancel.style.cssText = 'width:100%;margin-top:6px;';
+    cancel.textContent = '✕ रद्द';
+    cancel.onclick = function () { ov.remove(); };
+    card.appendChild(cancel);
+
+    ov.appendChild(card);
+  },
+
+  // Service हरूलाई खोज/तुलनाको लागि एउटै string मा
+  serviceText: function (c) {
+    return this.getServices(c).map(function (s) {
+      return (s.work || '') + ' ' + (s.subwork || '');
+    }).join(' ');
+  },
+
+  // customer सँग दिइएको service छ कि छैन
+  hasService: function (c, term) {
+    if (!term) return false;
+    return this.serviceText(c).toLowerCase().indexOf(String(term).toLowerCase()) >= 0;
+  },
+
+  // ─── Boot मा एक पटक मात्र migration ───────────────────────
+  migrateServices: function () {
+    try {
+      if (STORE.get('pk3_services_migrated', false) === true) return;
+      var list = this.getData(), changed = 0;
+      list.forEach(function (c) {
+        if (!c) return;
+        if (!Array.isArray(c.services) || !c.services.length) {
+          if (c.work || c.subwork) {
+            c.services = [{ work: c.work || '', subwork: c.subwork || '' }];
+            changed++;
+          } else {
+            c.services = [];
+          }
+        }
+      });
+      STORE.set('pk3_customers', list);
+      STORE.set('pk3_services_migrated', true);
+      console.log('[Migration] services[] बनाइयो — ' + changed + ' customer');
+    } catch (e) { console.warn('service migration failed', e); }
+  },
+
+  // ─── UI: service row हरू ──────────────────────────────────
+  _rowSeq: 0,
+
+  renderServiceRows: function (services) {
+    var box = document.getElementById('c-services-list');
+    if (!box) return;
+    box.innerHTML = '';
+    this._rowSeq = 0;
+    var arr = (services && services.length) ? services : [{ work: '', subwork: '' }];
+    var self = this;
+    arr.forEach(function (s) { self.addServiceRow(s.work, s.subwork, true); });
+    this.syncLegacyFields();
+  },
+
+  addServiceRow: function (work, subwork, silent) {
+    var box = document.getElementById('c-services-list');
+    if (!box) return;
+    var n = this._rowSeq++;
+    var row = document.createElement('div');
+    row.className = 'svc-row';
+    row.setAttribute('data-row', n);
+    row.style.cssText = 'display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:end;background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:10px;';
+
+    // Main Service
+    var d1 = document.createElement('div');
+    d1.innerHTML = '<label style="font-size:0.7rem;color:var(--text-muted);display:block;margin-bottom:4px;">🔧 Main Service</label>';
+    var selW = document.createElement('select');
+    selW.className = 'svc-work';
+    selW.style.cssText = 'width:100%;';
+    selW.appendChild(new Option('-- Select Service --', ''));
+    SERVICES_DATA.forEach(function (s) { selW.appendChild(new Option(s.name, s.name)); });
+    // पुरानो record मा भएको तर list मा नभएको service भए थप्ने
+    if (work && !SERVICES_MAP[work]) selW.appendChild(new Option(work + ' (पुरानो)', work));
+    selW.value = work || '';
+    d1.appendChild(selW);
+
+    // Sub Service
+    var d2 = document.createElement('div');
+    d2.innerHTML = '<label style="font-size:0.7rem;color:var(--text-muted);display:block;margin-bottom:4px;">📌 Sub Service</label>';
+    var selS = document.createElement('select');
+    selS.className = 'svc-sub';
+    selS.style.cssText = 'width:100%;';
+    d2.appendChild(selS);
+    var txtS = document.createElement('input');
+    txtS.type = 'text'; txtS.className = 'svc-sub-text';
+    txtS.placeholder = 'आफ्नै लेख्नुस्...';
+    txtS.style.cssText = 'width:100%;margin-top:6px;display:none;';
+    d2.appendChild(txtS);
+
+    // Remove button
+    var d3 = document.createElement('div');
+    var rm = document.createElement('button');
+    rm.type = 'button'; rm.className = 'btn btn-xs btn-danger';
+    rm.textContent = '✕'; rm.title = 'यो service हटाउने';
+    rm.onclick = function () { Customers.removeServiceRow(row); };
+    d3.appendChild(rm);
+
+    row.appendChild(d1); row.appendChild(d2); row.appendChild(d3);
+    box.appendChild(row);
+
+    // wire events
+    selW.addEventListener('change', function () {
+      Customers.fillSubOptions(row);
+      Customers.syncLegacyFields();
+    });
+    selS.addEventListener('change', function () {
+      txtS.style.display = (selS.value === '__custom__') ? '' : 'none';
+      Customers.showSubItems(row);
+      Customers.syncLegacyFields();
+    });
+    txtS.addEventListener('input', function () { Customers.syncLegacyFields(); });
+
+    this.fillSubOptions(row, subwork);
+    this.updateRemoveButtons();
+    if (!silent) this.syncLegacyFields();
+    return row;
+  },
+
+  removeServiceRow: function (row) {
+    var box = document.getElementById('c-services-list');
+    if (!box) return;
+    if (box.querySelectorAll('.svc-row').length <= 1) {
+      // अन्तिम row हटाउने होइन — खाली मात्र गर्ने
+      var w = row.querySelector('.svc-work'), s = row.querySelector('.svc-sub'), t = row.querySelector('.svc-sub-text');
+      if (w) w.value = ''; if (t) { t.value = ''; t.style.display = 'none'; }
+      this.fillSubOptions(row);
+      this.syncLegacyFields();
+      return;
+    }
+    row.remove();
+    this.updateRemoveButtons();
+    this.syncLegacyFields();
+  },
+
+  updateRemoveButtons: function () {
+    var box = document.getElementById('c-services-list'); if (!box) return;
+    var rows = box.querySelectorAll('.svc-row');
+    rows.forEach(function (r) {
+      var b = r.querySelector('button');
+      if (b) b.style.opacity = rows.length <= 1 ? '0.4' : '1';
+    });
+  },
+
+  // एउटा row को Sub Service dropdown भर्ने (पुरानो loadSubService को row version)
+  fillSubOptions: function (row, preselect) {
+    var selW = row.querySelector('.svc-work');
+    var selS = row.querySelector('.svc-sub');
+    var txtS = row.querySelector('.svc-sub-text');
+    if (!selW || !selS) return;
+    var work = selW.value;
+    selS.innerHTML = '';
+    selS.appendChild(new Option('-- Select Sub Service --', ''));
+
+    if (!work) {
+      // Main नछानेसम्म सबै sub group देखाउने
+      SERVICES_DATA.forEach(function (s) {
+        var g = document.createElement('optgroup'); g.label = s.name;
+        s.subs.forEach(function (x) { g.appendChild(new Option(x, x)); });
+        selS.appendChild(g);
+      });
+    } else {
+      (SERVICES_MAP[work] || []).forEach(function (x) { selS.appendChild(new Option(x, x)); });
+    }
+    selS.appendChild(new Option('✏️ आफै लेख्नुस् (Custom)', '__custom__'));
+
+    if (preselect) {
+      var found = false;
+      for (var i = 0; i < selS.options.length; i++) {
+        if (selS.options[i].value === preselect) { found = true; break; }
+      }
+      if (found) {
+        selS.value = preselect;
+        if (txtS) txtS.style.display = 'none';
+      } else {
+        // custom / पुरानो sub — text box मा राख्ने
+        selS.value = '__custom__';
+        if (txtS) { txtS.value = preselect; txtS.style.display = ''; }
+      }
+    }
+    this.showSubItems(row);
+  },
+
+  // Form बाट services array पढ्ने
+  collectServices: function () {
+    var box = document.getElementById('c-services-list');
+    if (!box) return [];
+    var out = [];
+    box.querySelectorAll('.svc-row').forEach(function (r) {
+      var w = (r.querySelector('.svc-work') || {}).value || '';
+      var s = (r.querySelector('.svc-sub') || {}).value || '';
+      var t = (r.querySelector('.svc-sub-text') || {}).value || '';
+      if (s === '__custom__') s = t.trim();
+      w = w.trim(); s = (s || '').trim();
+      if (!w && !s) return;
+      // duplicate जोडी नराख्ने
+      var dup = out.some(function (o) { return o.work === w && o.subwork === s; });
+      if (!dup) out.push({ work: w, subwork: s });
+    });
+    return out;
+  },
+
+  // hidden c-work / c-subwork लाई services[0] सँग मिलाउने
+  syncLegacyFields: function () {
+    var arr = this.collectServices();
+    setVal('c-work', arr.length ? arr[0].work : '');
+    setVal('c-subwork', arr.length ? arr[0].subwork : '');
+    setVal('c-subwork-text', '');
+  },
+
   save: function() {
     var name=getVal('c-name'), phone=getVal('c-phone');
     if(!name){ App.toast('नाम अनिवार्य छ!','error'); var ne=document.getElementById('c-name'); if(ne){ne.focus();ne.style.borderColor='var(--red)';setTimeout(function(){ne.style.borderColor='';},2000);} return; }
@@ -3362,7 +3849,10 @@ var Customers = {
     // Safe photo read — element may not exist
     var photoEl=document.getElementById('c-photo-preview');
     var photo = (photoEl && photoEl.src && photoEl.src.indexOf('data:')===0) ? photoEl.src : (photoEl ? (photoEl.getAttribute('src')||'') : '');
-    var rec={id:id,name:name,phone:phone,address:getVal('c-address'),work:getVal('c-work'),subwork:getVal('c-subwork')||getVal('c-subwork-text'),notes:getVal('c-notes'),sales:getVal('c-sales'),salesRole:getVal('c-sales-role'),advance:adv,total:parseFloat(getVal('c-total'))||0,issueDate:getVal('c-issue'),issueDateBs:getVal('c-issue-bs'),fuDate:getVal('c-fu'),fuDateBs:getVal('c-fu-bs'),birthday:getVal('c-bday'),birthdayBs:getVal('c-bday-bs'),anniv:getVal('c-anniv'),annivBs:getVal('c-anniv-bs'),photo:photo,created:isEdit?(list.find(function(x){return x.id===id;})||{}).created||todayISO():todayISO(),updated:todayISO()};
+    var _svcs = this.collectServices();
+    var _w0 = _svcs.length ? _svcs[0].work : '';
+    var _s0 = _svcs.length ? _svcs[0].subwork : '';
+    var rec={id:id,name:name,phone:phone,address:getVal('c-address'),services:_svcs,work:_w0,subwork:_s0,notes:getVal('c-notes'),sales:getVal('c-sales'),salesRole:getVal('c-sales-role'),advance:adv,total:parseFloat(getVal('c-total'))||0,issueDate:getVal('c-issue'),issueDateBs:getVal('c-issue-bs'),fuDate:getVal('c-fu'),fuDateBs:getVal('c-fu-bs'),birthday:getVal('c-bday'),birthdayBs:getVal('c-bday-bs'),anniv:getVal('c-anniv'),annivBs:getVal('c-anniv-bs'),photo:photo,created:isEdit?(list.find(function(x){return x.id===id;})||{}).created||todayISO():todayISO(),updated:todayISO()};
     if(isEdit) { var idx=list.findIndex(function(x){return x.id===id;}); if(idx>=0)list[idx]=rec; else list.unshift(rec); }
     else { list.unshift(rec); }
     STORE.set('pk3_customers',list);
@@ -3379,7 +3869,7 @@ var Customers = {
   },
   initForm: function() {
     if(!this._edit) {
-      setVal('c-edit-id',''); setVal('c-name',''); setVal('c-phone',''); setVal('c-address',''); setVal('c-work',''); setVal('c-subwork',''); setVal('c-subwork-text',''); setVal('c-notes',''); setVal('c-sales',''); setVal('c-sales-role',''); setVal('c-advance',''); setVal('c-total','');
+      setVal('c-edit-id',''); setVal('c-name',''); setVal('c-phone',''); setVal('c-address',''); setVal('c-work',''); setVal('c-subwork',''); setVal('c-subwork-text',''); this.renderServiceRows([]); setVal('c-notes',''); setVal('c-sales',''); setVal('c-sales-role',''); setVal('c-advance',''); setVal('c-total','');
       setVal('c-issue',''); setText('c-issue-text','📅 Issue मिति छान्नुस्...');
       setVal('c-fu',''); setText('c-fu-text','📅 Follow-up मिति...');
       setVal('c-bday',''); setText('c-bday-text','📅 Birthday...');
@@ -3397,99 +3887,63 @@ var Customers = {
       }
     } else {
       var c=this._edit; this._edit=null;
-      // Legacy compat: if saved work value no longer exists as an option, add it dynamically
-      var workSel=document.getElementById('c-work');
-      if(workSel && c.work){
-        var has=false;
-        for(var wi=0;wi<workSel.options.length;wi++){ if(workSel.options[wi].value===c.work){has=true;break;} }
-        if(!has){ var op=document.createElement('option'); op.value=c.work; op.textContent=c.work+' (पुरानो)'; workSel.appendChild(op); }
-      }
+      // v5.4: पुरानो single-service record पनि getServices() ले सम्हाल्छ
+      this.renderServiceRows(this.getServices(c));
       setVal('c-edit-id',c.id); setVal('c-name',c.name); setVal('c-phone',c.phone); setVal('c-address',c.address||''); setVal('c-work',c.work||''); setVal('c-notes',c.notes||''); setVal('c-sales',c.sales||''); setVal('c-sales-role',c.salesRole||''); setVal('c-advance',c.advance||''); setVal('c-total',c.total||'');
       if(c.issueDate){setVal('c-issue',c.issueDate);if(c.issueDateBs){setVal('c-issue-bs',c.issueDateBs);setText('c-issue-text',bsStringToDisplay(c.issueDateBs));}}
       if(c.fuDate){setVal('c-fu',c.fuDate);if(c.fuDateBs){setVal('c-fu-bs',c.fuDateBs);setText('c-fu-text',bsStringToDisplay(c.fuDateBs));}}
       if(c.birthday){setVal('c-bday',c.birthday);if(c.birthdayBs){setVal('c-bday-bs',c.birthdayBs);setText('c-bday-text',bsStringToDisplay(c.birthdayBs));}}
       if(c.photo){var pp=document.getElementById('c-photo-preview');if(pp){pp.src=c.photo;pp.style.display='block';}}
       setText('add-cust-title','✏️ Edit Customer');
-      Customers.loadSubService();
-      setTimeout(function(){setVal('c-subwork',c.subwork||'');},100);
     }
     this.loadServices(); this.loadSalesDatalist();
-    // Ensure sub-service dropdown is always wired
-    var cWorkEl = document.getElementById('c-work');
-    if (cWorkEl && !cWorkEl._subWired) {
-      cWorkEl._subWired = true;
-      cWorkEl.addEventListener('change', function(){ Customers.loadSubService(); });
-    }
+    // v5.4: service row आफैं wire हुन्छन् — पुरानो c-work wiring चाहिँदैन
   },
+  // v5.4: quotation को Main Service dropdown मात्र भर्ने (customer form अब row-based)
   loadServices: function() {
-    // Use dedicated service list (pk3_services); fallback to SERVICES_DATA constant
     var svcs = STORE.get('pk3_services', null);
     if (!svcs || !Array.isArray(svcs) || svcs.length === 0) svcs = SERVICES_DATA || [];
-    var sel = document.getElementById('c-work'); if(!sel) return;
-    var cur = sel.value;
-    // Only rebuild if dropdown is empty (preserve hard-coded HTML options)
-    if (sel.options.length <= 1) {
+    var qs = document.getElementById('q-work');
+    if (qs && qs.options.length <= 1) {
       svcs.forEach(function(s){
         var name = (typeof s === 'string') ? s : (s.name || '');
         if (!name) return;
         var opt = document.createElement('option');
         opt.value = name; opt.textContent = name;
-        sel.appendChild(opt);
+        qs.appendChild(opt);
       });
     }
-    if (cur) sel.value = cur;
-    // Mirror to quotation work dropdown
-    var qs = document.getElementById('q-work');
-    if (qs && qs.options.length <= 1) { qs.innerHTML = sel.innerHTML; }
-    // Wire change event to load sub-services (safe to call multiple times)
-    var _sel = document.getElementById('c-work');
-    if (_sel && !_sel._subWired2) {
-      _sel._subWired2 = true;
-      _sel.addEventListener('change', function(){ Customers.loadSubService(); });
-    }
-    // If a service was pre-selected, load its sub-services immediately
-    if (cur) this.loadSubService();
   },
-  loadSubService: function() {
-    var work = document.getElementById('c-work');
-    var sub  = document.getElementById('c-subwork');
-    if (!sub || !work) return;
-    var val = work.value;
-    // ── FIX (v4.0.1): Don't wipe the static optgroup list when no service picked ──
-    // Save the original full optgroup HTML the first time so we can restore it later.
-    if (!sub._originalHTML) sub._originalHTML = sub.innerHTML;
-    if (!val) {
-      // Main Service cleared → restore the full grouped list
-      sub.innerHTML = sub._originalHTML;
-      return;
-    }
-    // User picked a Main Service → narrow to that category's subs only
-    sub.innerHTML = '<option value="">-- Select Sub Service --</option>';
-    var subs = SERVICES_MAP[val] || [];
-    subs.forEach(function(x) {
-      var o = document.createElement('option');
-      o.value = x; o.textContent = x;
-      sub.appendChild(o);
-    });
-    var o = document.createElement('option');
-    o.value = '__custom__'; o.textContent = '✏️ आफै लेख्नुस् (Custom)';
-    sub.appendChild(o);
-  },
+  // पुरानो API — अरू code ले बोलाए पनि नभाँचोस् भनेर राखिएको
+  loadSubService: function() { /* v5.4: हरेक row आफ्नै fillSubOptions() चलाउँछ */ },
   highlightSub: function() {},
-  showSubItems: function() {
-    var work=getVal('c-work'),sub=getVal('c-subwork'),rates=STORE.get('pk3_rates',{});
-    var wrap=document.getElementById('c-sub-items');
-    if(sub==='__custom__'){document.getElementById('c-subwork-text').style.display='';wrap.style.display='none';return;}
-    if(!sub||!work||!rates[work]){wrap.style.display='none';return;}
-    var items=rates[work].filter(function(i){return i.name.toLowerCase().indexOf(sub.toLowerCase())>=0;});
-    if(!items.length){wrap.style.display='none';return;}
-    wrap.style.display='';
-    setText('c-sub-items-title',sub+' — Related Items');
-    document.getElementById('c-sub-items-list').innerHTML=items.map(function(i){return '<span class="chip-item">'+i.name+' — Rs.'+i.rate+'/'+i.unit+'</span>';}).join('');
-  },
-  toggleCustomSub: function() {
-    var inp=document.getElementById('c-subwork-text');
-    inp.style.display=inp.style.display==='none'?'':'none';
+  toggleCustomSub: function() {},
+
+  // कुन row मा click भयो, त्यसै row को rate item हरू तल देखाउने
+  showSubItems: function(row) {
+    var wrap = document.getElementById('c-sub-items');
+    if (!wrap) return;
+    var work = '', sub = '';
+    if (row && row.querySelector) {
+      work = (row.querySelector('.svc-work') || {}).value || '';
+      sub  = (row.querySelector('.svc-sub')  || {}).value || '';
+      if (sub === '__custom__') sub = (row.querySelector('.svc-sub-text') || {}).value || '';
+    } else {
+      var first = document.querySelector('#c-services-list .svc-row');
+      if (first) return this.showSubItems(first);
+    }
+    var rates = STORE.get('pk3_rates', {}) || {};
+    if (!sub || !work || !rates[work]) { wrap.style.display = 'none'; return; }
+    var items = rates[work].filter(function(i){
+      return i && i.name && i.name.toLowerCase().indexOf(sub.toLowerCase()) >= 0;
+    });
+    if (!items.length) { wrap.style.display = 'none'; return; }
+    wrap.style.display = '';
+    setText('c-sub-items-title', sub + ' — Related Items');
+    var listEl = document.getElementById('c-sub-items-list');
+    if (listEl) listEl.innerHTML = items.map(function(i){
+      return '<span class="chip-item">' + esc(i.name) + ' — Rs.' + i.rate + '/' + esc(i.unit || '') + '</span>';
+    }).join('');
   },
   loadSalesDatalist: function() {
     var dl=document.getElementById('sales-datalist'); if(!dl)return;
@@ -3538,7 +3992,7 @@ var Customers = {
   toggleVoiceRecord: function() { App.toast('🎤 Voice recording — browser permissions needed','info'); },
   render: function() {
     var list=this.getData(), q=getVal('cust-search').toLowerCase(), sort=getVal('cust-sort')||'recent';
-    if(q) list=list.filter(function(c){return (c.name+c.phone+(c.address||'')+(c.work||'')).toLowerCase().indexOf(q)>=0;});
+    if(q) list=list.filter(function(c){return (c.name+c.phone+(c.address||'')+' '+Customers.serviceText(c)).toLowerCase().indexOf(q)>=0;});
     if(sort==='name') list=list.slice().sort(function(a,b){return a.name.localeCompare(b.name);});
     else if(sort==='advance') list=list.slice().sort(function(a,b){return (b.advance||0)-(a.advance||0);});
     var tb=document.getElementById('cust-table'); var ne=document.getElementById('no-custs');
@@ -3550,7 +4004,7 @@ var Customers = {
       // Whole row clickable to expand details — buttons use stopPropagation
       return '<tr id="cr-'+c.id+'" onclick="Customers.detail(\''+c.id+'\')" style="cursor:pointer;" onmouseover="this.style.background=\'var(--surface-2)\'" onmouseout="this.style.background=\'\'"><td><div style="display:flex;align-items:center;gap:8px;">'+(c.photo?'<img src="'+c.photo+'" class="photo-thumb sm">':'<div style="width:36px;height:36px;border-radius:7px;background:var(--accent);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:0.9rem;">'+c.name.charAt(0)+'</div>')+
       '<div><div style="font-weight:700;font-size:0.88rem;">'+c.name+'</div><div style="font-size:0.72rem;color:var(--text-muted);">'+c.phone+'</div></div></div></td>'+
-      '<td><div style="font-size:0.82rem;">'+( c.work||'—')+'</div>'+(c.subwork?'<div style="font-size:0.7rem;color:var(--text-muted);">'+c.subwork+'</div>':'')+
+      '<td>'+Customers.serviceChips(c)+
       (c.advance?'<div style="font-size:0.7rem;color:var(--green);">💰 '+fmtRs(c.advance)+'</div>':'')+'</td>'+
       '<td><div style="font-size:0.78rem;"'+fuClass+'>'+(c.issueDateBs?bsStringToDisplay(c.issueDateBs):'—')+'</div>'+
       (c.fuDateBs?'<div style="font-size:0.7rem;"'+fuClass+'> 🔔 '+bsStringToDisplay(c.fuDateBs)+'</div>':'')+'</td>'+
@@ -3573,7 +4027,7 @@ var Customers = {
     var phoneClean = (c.phone||'').replace(/[^0-9]/g,'');
     body.innerHTML='<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;font-size:0.82rem;margin-bottom:10px;">'+
       '<div><b>📍 Address:</b> '+(c.address||'—')+'</div>'+
-      '<div><b>💼 Service:</b> '+(c.work||'—')+(c.subwork?' / '+c.subwork:'')+'</div>'+
+      '<div><b>💼 Service:</b> '+Customers.serviceLine(c)+'</div>'+
       '<div><b>📝 Notes:</b> '+(c.notes||'—')+'</div>'+
       '<div><b>👤 Sales:</b> '+(c.sales||'—')+'</div>'+
       '<div><b>💰 Advance:</b> '+fmtRs(c.advance||0)+'</div>'+
@@ -3646,15 +4100,23 @@ var Quotations = {
     var custs=Customers.getData();
     var sel=document.getElementById('q-cust'); if(!sel)return;
     var cur=sel.value;
-    sel.innerHTML='<option value="">-- Customer --</option>'+custs.map(function(c){return '<option value="'+c.id+'">'+c.name+' ('+c.phone+')</option>';}).join('');
+    sel.innerHTML='<option value="">-- Customer --</option>'+custs.map(function(c){
+      var sv=Customers.getServices(c).map(function(x){return x.work;}).filter(Boolean);
+      var tag=sv.length?(' — '+sv.slice(0,2).join(', ')+(sv.length>2?' +'+(sv.length-2):'')):'';
+      return '<option value="'+esc(c.id)+'">'+esc(c.name)+' ('+esc(c.phone)+')'+esc(tag)+'</option>';
+    }).join('');
     if(cur)sel.value=cur;
   },
   autoFillService: function() {
     var id=getVal('q-cust'), custs=Customers.getData();
     var c=custs.find(function(x){return x.id===id;}); if(!c) return;
-    setVal('q-work',c.work||'');
-    this.loadSubService();
-    setTimeout(function(){setVal('q-subwork',c.subwork||'');},100);
+    var self=this;
+    // v5.4: धेरै service भए कुन हो भनेर सोध्छ, एउटा मात्र भए सिधै भर्छ
+    Customers.pickService(c, function(svc){
+      setVal('q-work', svc.work||'');
+      self.loadSubService();
+      setTimeout(function(){ setVal('q-subwork', svc.subwork||''); },100);
+    });
   },
   loadSubService: function() {
     var work = document.getElementById('q-work');
@@ -5302,26 +5764,115 @@ var BulkMsg = {
       });
     }
     // Recipients
-    var custs=Customers.getData(); var recip=document.getElementById('bulk-recipients');
-    if(recip) recip.innerHTML=custs.map(function(c){return '<label class="bulk-rec"><input type="checkbox" value="'+c.phone+'" name="bulk_recip" style="accent-color:var(--accent);"> '+c.name+' <span style="color:var(--text-muted);font-size:0.72rem;">('+c.phone+')</span></label>';}).join('');
+    // v5.4: id-based checkbox + esc() + search support
+    var custs = Customers.getData();
+    var recip = document.getElementById('bulk-recipients');
+    if (recip) {
+      recip.innerHTML = '';
+      custs.forEach(function (c) {
+        var lab = document.createElement('label');
+        lab.className = 'bulk-rec';
+        lab.setAttribute('data-search', ((c.name || '') + ' ' + (c.phone || '')).toLowerCase());
+        var cb = document.createElement('input');
+        cb.type = 'checkbox';
+        cb.name = 'bulk_recip';
+        cb.value = c.id;                 // फोन होइन, id — डुप्लिकेट फोन भए पनि सही चल्छ
+        cb.setAttribute('data-phone', c.phone || '');
+        cb.style.accentColor = 'var(--accent)';
+        lab.appendChild(cb);
+        lab.appendChild(document.createTextNode(' ' + (c.name || '')));
+        var sp = document.createElement('span');
+        sp.style.cssText = 'color:var(--text-muted);font-size:0.72rem;';
+        sp.textContent = ' (' + (c.phone || '') + ')';
+        lab.appendChild(sp);
+        recip.appendChild(lab);
+      });
+    }
+    // Service filter dropdown भर्ने
+    var sf = document.getElementById('bulk-svc-filter');
+    if (sf) {
+      var seen = {};
+      custs.forEach(function (c) {
+        Customers.getServices(c).forEach(function (x) { if (x.work) seen[x.work] = (seen[x.work] || 0) + 1; });
+      });
+      var keys = Object.keys(seen).sort();
+      sf.innerHTML = '<option value="">🔧 By Service...</option>' + keys.map(function (k) {
+        return '<option value="' + esc(k) + '">' + esc(k) + ' (' + seen[k] + ')</option>';
+      }).join('');
+    }
+    this.filterRecipients();
     this.updateCount();
   },
-  updateCount: function(){ var checked=document.querySelectorAll('input[name="bulk_recip"]:checked'); setText('bulk-count',checked.length+' selected'); },
-  selectAll: function(){ document.querySelectorAll('input[name="bulk_recip"]').forEach(function(c){c.checked=true;}); this.updateCount(); },
-  deselectAll: function(){ document.querySelectorAll('input[name="bulk_recip"]').forEach(function(c){c.checked=false;}); this.updateCount(); },
-  selectByService: function(){ var svc=prompt('Service name (e.g. UPVC):'); if(!svc)return; var custs=Customers.getData(); custs.forEach(function(c){ var inp=document.querySelector('input[name="bulk_recip"][value="'+c.phone+'"]'); if(inp)inp.checked=c.work&&c.work.toLowerCase().indexOf(svc.toLowerCase())>=0; }); this.updateCount(); },
+  // ─── v5.4: search-aware recipient selection ───
+  _rows: function () { return Array.prototype.slice.call(document.querySelectorAll('#bulk-recipients .bulk-rec')); },
+  _visibleBoxes: function () {
+    return this._rows().filter(function (r) { return r.style.display !== 'none'; })
+                       .map(function (r) { return r.querySelector('input[name="bulk_recip"]'); })
+                       .filter(Boolean);
+  },
+  _allBoxes: function () {
+    return Array.prototype.slice.call(document.querySelectorAll('input[name="bulk_recip"]'));
+  },
+  _isFiltered: function () { return !!(getVal('bulk-search') || '').trim(); },
+
+  // नाम / फोन ले live filter — check गरिसकेको छान्ने मिट्दैन
+  filterRecipients: function () {
+    var q = (getVal('bulk-search') || '').trim().toLowerCase();
+    this._rows().forEach(function (r) {
+      var hay = r.getAttribute('data-search') || r.textContent.toLowerCase();
+      r.style.display = (!q || hay.indexOf(q) >= 0) ? '' : 'none';
+    });
+    this.updateCount();
+  },
+
+  updateCount: function () {
+    var checked = document.querySelectorAll('input[name="bulk_recip"]:checked').length;
+    var txt = checked + ' selected';
+    if (this._isFiltered()) txt += ' (' + this._visibleBoxes().length + ' shown)';
+    setText('bulk-count', txt);
+  },
+
+  // search चालू छ भने देखिएका मात्र — नत्र सबै
+  selectAll: function () {
+    var boxes = this._isFiltered() ? this._visibleBoxes() : this._allBoxes();
+    boxes.forEach(function (c) { c.checked = true; });
+    this.updateCount();
+    if (this._isFiltered()) App.toast('✅ ' + boxes.length + ' जना थपिए', 'success');
+  },
+
+  deselectAll: function () {
+    this._allBoxes().forEach(function (c) { c.checked = false; });
+    var sf = document.getElementById('bulk-svc-filter'); if (sf) sf.value = '';
+    this.updateCount();
+  },
+
+  // dropdown बाट service छान्दा — services[] भित्र खोज्छ (prompt हटाइयो)
+  selectByService: function () {
+    var sf = document.getElementById('bulk-svc-filter');
+    var svc = sf ? sf.value : '';
+    if (!svc) return;
+    var custs = Customers.getData(), n = 0;
+    var byId = {}; custs.forEach(function (c) { byId[c.id] = c; });
+    this._allBoxes().forEach(function (inp) {
+      var c = byId[inp.value];
+      if (c && Customers.hasService(c, svc)) { inp.checked = true; n++; }
+    });
+    this.updateCount();
+    App.toast(n ? ('✅ ' + svc + ' — ' + n + ' जना छानिए') : ('ℹ️ ' + svc + ' को customer भेटिएन'), n ? 'success' : 'info');
+  },
   sendWA: function(){
     var msg=getVal('bulk-msg-text');
     if(!msg){App.toast('Message लेख्नुस्!','error');return;}
     var checked = Array.from(document.querySelectorAll('input[name="bulk_recip"]:checked'));
     if(!checked.length){App.toast('Recipients छान्नुस्!','error');return;}
-    // Map to {phone, name} objects so the bulk-send modal can show names
+    // v5.4: checkbox को value अब customer id हो (डुप्लिकेट फोन safe)
     var custs = Customers.getData();
-    var recipients = checked.map(function(c){
-      var ph = c.value;
-      var cust = custs.find(function(x){return x.phone === ph;});
+    var recipients = checked.map(function(el){
+      var cust = custs.find(function(x){ return x.id === el.value; });
+      var ph = cust ? cust.phone : (el.getAttribute('data-phone') || el.value);
       return { phone: ph, name: cust ? cust.name : ph, cust: cust };
-    });
+    }).filter(function(r){ return r.phone; });
+    if(!recipients.length){ App.toast('❗ छानिएका customer को फोन नम्बर छैन','error'); return; }
     // Personalize message per recipient if it has placeholders
     Wa.bulkSend(recipients, function(r){
       if(typeof fillTemplate === 'function' && r.cust){
@@ -5332,7 +5883,7 @@ var BulkMsg = {
     try { Audit.log('BULK','Bulk WA initiated for '+recipients.length+' recipients'); } catch(e){}
   },
   sendSMS: function(){ App.toast('SMS: contacts copied — use your SMS app','info'); this.copy(); },
-  copy: function(){ var phones=Array.from(document.querySelectorAll('input[name="bulk_recip"]:checked')).map(function(c){return c.value;}).join(','); if(navigator.clipboard)navigator.clipboard.writeText(phones); App.toast('📋 '+phones.split(',').length+' numbers copied!','success'); },
+  copy: function(){ var phones=Array.from(document.querySelectorAll('input[name="bulk_recip"]:checked')).map(function(c){return c.getAttribute('data-phone')||c.value;}).filter(Boolean).join(','); if(navigator.clipboard)navigator.clipboard.writeText(phones); App.toast('📋 '+phones.split(',').length+' numbers copied!','success'); },
   addFolder: function(){ var n=prompt('Folder name:'); if(!n)return; var f=STORE.get('pk3_bulkFolders',[]); f.push({id:uid(),name:n}); STORE.set('pk3_bulkFolders',f); this.render(); },
   delFolder: function(id){ STORE.set('pk3_bulkFolders',STORE.get('pk3_bulkFolders',[]).filter(function(f){return f.id!==id;})); this.render(); },
   addTemplate: function(){ var n=prompt('Template name:'); if(!n)return; var t=prompt('Template text:'); if(!t)return; var list=STORE.get('pk3_templates',Followups._defTpl()); list.push({name:n,text:t}); STORE.set('pk3_templates',list); this.render(); },
@@ -5393,7 +5944,7 @@ var Backup = {
   exportCSV: function(){
     var custs=Customers.getData();
     var header='Name,Phone,Address,Service,Sub-Service,Advance,Salesperson,Issue Date,FU Date,Created\n';
-    var rows=custs.map(function(c){return [c.name,c.phone,(c.address||'').replace(/,/g,';'),(c.work||''),(c.subwork||''),c.advance||0,c.sales||'',c.issueDateBs||'',c.fuDateBs||'',c.created||''].join(',');}).join('\n');
+    var rows=custs.map(function(c){return [c.name,c.phone,(c.address||'').replace(/,/g,';'),'"'+Customers.getServices(c).map(function(x){return x.work;}).filter(Boolean).join('; ')+'"','"'+Customers.getServices(c).map(function(x){return x.subwork;}).filter(Boolean).join('; ')+'"',c.advance||0,c.sales||'',c.issueDateBs||'',c.fuDateBs||'',c.created||''].join(',');}).join('\n');
     downloadCSV('prerak-customers-'+todayISO()+'.csv',header+rows);
     App.toast('✅ CSV downloaded!','success');
   },
@@ -5409,7 +5960,9 @@ var Backup = {
         var missing=requiredKeys.filter(function(k){return !(k in data);});
         if(missing.length){App.toast('❌ Invalid backup: missing '+missing.join(', '),'error');return;}
         if(!confirm('Restore backup? Current data will be replaced.\nExported: '+(data._meta?data._meta.date:'unknown')))return;
-        Object.keys(data).forEach(function(k){if(k!=='_meta')STORE.set(k,data[k]);});
+        var _licSafe = License._load();
+        Object.keys(data).forEach(function(k){if(k!=='_meta' && License._STORES.indexOf(k)===-1)STORE.set(k,data[k]);});
+        if(_licSafe) License._save(_licSafe);   // restore पछि पनि license बाँच्छ
         STORE.set('lastBackup',new Date().toISOString());
         Audit.log('RESTORE','Backup restored from '+file.name);
         App.toast('✅ Data restored!','success');
@@ -5821,7 +6374,7 @@ var Walkin = {
     var res=document.getElementById('wi-result');
     res.innerHTML='<div class="card card-body" style="margin-top:10px;">'+
       '<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">'+(c.photo?'<img src="'+c.photo+'" class="photo-thumb">':'<div style="width:48px;height:48px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.3rem;font-weight:700;">'+c.name.charAt(0)+'</div>')+
-      '<div><div style="font-size:1.1rem;font-weight:800;">'+c.name+'</div><div style="font-size:0.8rem;color:var(--text-muted);">'+c.phone+'</div><div style="font-size:0.78rem;color:var(--accent);">'+(c.work||'')+'</div></div></div>'+
+      '<div><div style="font-size:1.1rem;font-weight:800;">'+c.name+'</div><div style="font-size:0.8rem;color:var(--text-muted);">'+c.phone+'</div><div style="font-size:0.78rem;color:var(--accent);">'+esc(Customers.getServices(c).map(function(x){return x.work;}).filter(Boolean).join(' · '))+'</div></div></div>'+
       '<div style="display:flex;gap:8px;flex-wrap:wrap;">'+
       '<button onclick="Walkin.send(\'wa\')" class="btn btn-sm btn-wa">📱 WhatsApp</button>'+
       '<button onclick="App.navigate(\'add-quotation\');setTimeout(function(){setVal(\'q-cust\',\''+c.id+'\');},200);" class="btn btn-sm btn-primary">📋 Quote</button>'+
@@ -6708,7 +7261,11 @@ var Estimate = {
         if(c){
           if(!getVal('est-cust-phone')) setVal('est-cust-phone', c.phone||'');
           if(!getVal('est-cust-address')) setVal('est-cust-address', c.address||'');
-          if(!getVal('est-title') && c.work) setVal('est-title', c.work);
+          if(!getVal('est-title')){
+            Customers.pickService(c, function(svc){
+              if(svc && svc.work && !getVal('est-title')) setVal('est-title', svc.work);
+            });
+          }
         }
       });
     }
@@ -7877,8 +8434,9 @@ var Dashboard = {
             var sub = document.createElement('div');
             sub.style.cssText = 'font-size:0.7rem;color:var(--text-muted);display:flex;gap:6px;flex-wrap:wrap;';
             var phoneSpan = document.createElement('span'); phoneSpan.textContent = c.phone || '—';
-            var serviceSpan = document.createElement('span'); serviceSpan.style.color='var(--accent)'; serviceSpan.textContent = c.work || c.service || '';
-            sub.appendChild(phoneSpan); if(c.work||c.service) sub.appendChild(serviceSpan);
+            var _svcTxt = Customers.getServices(c).map(function(x){return x.work;}).filter(Boolean).join(' · ') || c.service || '';
+            var serviceSpan = document.createElement('span'); serviceSpan.style.color='var(--accent)'; serviceSpan.textContent = _svcTxt;
+            sub.appendChild(phoneSpan); if(_svcTxt) sub.appendChild(serviceSpan);
             info.appendChild(nm); info.appendChild(sub);
             // Action buttons
             var actions = document.createElement('div');
@@ -8276,11 +8834,16 @@ var Dashboard = {
     var svcEl = document.getElementById('dash-summary-svc');
     if(svcEl){
       var svcMap = {};
-      custs.forEach(function(c){var s=c.work||c.service||'Other'; svcMap[s]=(svcMap[s]||0)+1;});
+      var _svcTotal = 0;
+      custs.forEach(function(c){
+        var arr = Customers.getServices(c).map(function(x){return x.work;}).filter(Boolean);
+        if(!arr.length) arr = [c.service || 'Other'];
+        arr.forEach(function(s){ svcMap[s]=(svcMap[s]||0)+1; _svcTotal++; });
+      });
       var svcKeys = Object.keys(svcMap).sort(function(a,b){return svcMap[b]-svcMap[a];}).slice(0,5);
       var total = custs.length||1;
       svcEl.innerHTML = svcKeys.length ? svcKeys.map(function(k){
-        var pct = Math.round((svcMap[k]/total)*100);
+        var pct = Math.round((svcMap[k]/(_svcTotal||total||1))*100);
         return '<div style="margin-bottom:6px;">'
           +'<div style="display:flex;justify-content:space-between;font-size:0.74rem;margin-bottom:2px;"><span>'+esc(k)+'</span><span>'+svcMap[k]+' ('+pct+'%)</span></div>'
           +'<div style="background:var(--surface-2);border-radius:4px;height:6px;"><div style="background:var(--accent);border-radius:4px;height:100%;width:'+pct+'%;"></div></div>'
@@ -9195,6 +9758,9 @@ document.addEventListener('DOMContentLoaded', function(){
     }
   } catch(e) {}
 
+  // v5.4: पुराना customer लाई services[] मा सार्ने (एक पटक मात्र)
+  try { Customers.migrateServices(); } catch(e){ console.warn('migrate', e); }
+
   // Start clock
   CRMClock.init();
 
@@ -9204,7 +9770,7 @@ document.addEventListener('DOMContentLoaded', function(){
   // Tooltips: Bootstrap was never loaded — using native title attribute instead.
   // (Removed dead bootstrap.Tooltip init.)
 
-  // Boot: License gate first (v5.2) — only proceed to login if activated
+  // Boot: License gate first (v5.3) — activated भए फेरि key सोध्दैन
   if(typeof License!=='undefined' && !License.check()){
     // Not activated — license screen is shown; stop here until user activates
   } else {
@@ -9423,7 +9989,281 @@ var AdminDash = {
     this.renderUsers();
     this.renderPermTable();
     this.renderTests();
+    try { this.renderLicense(); } catch(e){ console.warn('License panel error', e); }
+    try { this.renderBsStatus(); } catch(e){ console.warn('BS panel error', e); }
     try { QuickActions.render(); } catch(e){ console.warn('QuickActions error',e); }
+  },
+
+  // ═══════════ BS DATE REPAIR (v5.5) ═══════════
+  // पुराना record मा साविकको गलत calendar table ले लेखेको BS मिति
+  // AD मिति बाट फेरि गणना गरेर सच्याउने — एक पटक चलाए पुग्छ।
+  // AD मिति नै असली स्रोत हो; BS केवल देखाउनको लागि हो।
+  _BS_FIELDS: [
+    { store: 'pk3_customers',  pairs: [['issueDate','issueDateBs'],['fuDate','fuDateBs'],['birthday','birthdayBs'],['anniv','annivBs']] },
+    { store: 'pk3_quotations', pairs: [['date','dateBs']] },
+    { store: 'pk3_invoices',   pairs: [['date','dateBs']] },
+    { store: 'pk3_followups',  pairs: [['date','dateBs'],['nextDate','nextDateBs']] },
+    { store: 'pk3_daybook',    pairs: [['date','dateBs']] },
+    { store: 'pk3_estimates',  pairs: [['date','dateBs']] },
+    { store: 'pk3_walkins',    pairs: [['date','dateBs']] },
+    { store: 'pk3_ledger',     pairs: [['date','dateBs']] },
+    { store: 'pk3_staff',      pairs: [['joinDate','joinDateBs']] }
+  ],
+
+  _bsFromAd: function (adStr) {
+    if (!adStr) return null;
+    var m = String(adStr).slice(0, 10).match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    if (!m) return null;
+    try {
+      var b = adToBs(parseInt(m[1], 10), parseInt(m[2], 10), parseInt(m[3], 10));
+      if (!b || !b.y) return null;
+      return b.y + '-' + String(b.m).padStart(2, '0') + '-' + String(b.d).padStart(2, '0');
+    } catch (e) { return null; }
+  },
+
+  // dryRun=true भए केवल गन्छ, केही बदल्दैन
+  scanBsDates: function (dryRun) {
+    var self = this, total = 0, wrong = 0, fixed = 0, details = [];
+    this._BS_FIELDS.forEach(function (grp) {
+      var list = STORE.get(grp.store, []) || [];
+      if (!Array.isArray(list) || !list.length) return;
+      var grpWrong = 0;
+      list.forEach(function (rec) {
+        if (!rec) return;
+        grp.pairs.forEach(function (pr) {
+          var ad = rec[pr[0]], bsOld = rec[pr[1]];
+          if (!ad || !bsOld) return;
+          total++;
+          var bsNew = self._bsFromAd(ad);
+          if (!bsNew || bsNew === bsOld) return;
+          wrong++; grpWrong++;
+          if (!dryRun) { rec[pr[1]] = bsNew; fixed++; }
+        });
+      });
+      if (grpWrong) details.push({ store: grp.store, n: grpWrong });
+      if (!dryRun && grpWrong) STORE.set(grp.store, list);
+    });
+    return { total: total, wrong: wrong, fixed: fixed, details: details };
+  },
+
+  repairBsDates: function () {
+    if (!Auth.isAdmin || !Auth.isAdmin()) { App.toast('⛔ Admin मात्र', 'error'); return; }
+    var scan = this.scanBsDates(true);
+
+    if (!scan.total) { alert('ℹ️ जाँच्नुपर्ने कुनै BS मिति भेटिएन।'); return; }
+    if (!scan.wrong) {
+      alert('✅ सबै ठीक छ!\n\nजाँचिएका मिति: ' + scan.total + '\nसच्याउनुपर्ने: ० वटा');
+      return;
+    }
+
+    var names = { pk3_customers: 'Customer', pk3_quotations: 'Quotation', pk3_invoices: 'Invoice',
+                  pk3_followups: 'Follow-up', pk3_daybook: 'Day Book', pk3_estimates: 'Estimate',
+                  pk3_walkins: 'Walk-in', pk3_ledger: 'Ledger', pk3_staff: 'Staff' };
+    var lines = scan.details.map(function (d) { return '   • ' + (names[d.store] || d.store) + ': ' + d.n + ' वटा'; }).join('\n');
+
+    if (!confirm('🗓️ BS मिति सच्याउने\n\n' +
+        'जाँचिएका मिति: ' + scan.total + '\n' +
+        'गलत भेटिएका: ' + scan.wrong + ' वटा\n\n' + lines + '\n\n' +
+        '⚠️ अघि बढ्नु अघि Backup → Export गरिसक्नुभयो?\n' +
+        'AD (अंग्रेजी) मिति बदलिँदैन — BS मात्र फेरि गणना हुन्छ।\n\n' +
+        'सच्याउने?')) { App.toast('रद्द गरियो — केही बदलिएन', 'info'); return; }
+
+    var res = this.scanBsDates(false);
+    try { Audit.log('REPAIR', 'BS dates recalculated: ' + res.fixed + ' fields'); } catch (e) {}
+    try { STORE.set('pk3_bsRepaired', new Date().toISOString()); } catch (e) {}
+    alert('✅ सकियो!\n\n' + res.fixed + ' वटा BS मिति सच्याइयो।\n\nअब page reload हुन्छ।');
+    setTimeout(function () { window.location.reload(); }, 600);
+  },
+
+  renderBsStatus: function () {
+    var el = document.getElementById('sa-bs-status'); if (!el) return;
+    var scan;
+    try { scan = this.scanBsDates(true); } catch (e) { el.innerHTML = ''; return; }
+    var done = STORE.get('pk3_bsRepaired', null);
+    var ok = scan.wrong === 0;
+    el.innerHTML =
+      '<div style="background:var(--surface-2);border:1px solid ' + (ok ? 'var(--green)' : 'var(--red)') + ';border-radius:10px;padding:12px;font-size:0.8rem;">'
+      + '<div style="font-weight:700;margin-bottom:4px;">' + (ok ? '✅ सबै BS मिति ठीक छन्' : '⚠️ ' + scan.wrong + ' वटा BS मिति गलत छन्') + '</div>'
+      + '<div style="color:var(--text-muted);font-size:0.73rem;line-height:1.5;">जाँचिएका: ' + scan.total + ' मिति'
+      + (done ? '<br>पछिल्लो पटक सच्याइएको: ' + new Date(done).toLocaleString('en-IN') : '')
+      + (ok ? '' : '<br>तलको button थिचेर AD मिति बाट फेरि गणना गर्नुहोस्।') + '</div></div>';
+  },
+
+  // ═══════════ LICENSE & KEY GENERATOR (v5.3) ═══════════
+  renderLicense: function () {
+    // plan dropdown
+    var sel = document.getElementById('kg-plan');
+    if (sel && !sel.options.length) {
+      License.PLANS.forEach(function (pl) {
+        var o = document.createElement('option');
+        o.value = pl.days; o.textContent = pl.label;
+        if (pl.code === 'Y1') o.selected = true;
+        sel.appendChild(o);
+      });
+    }
+
+    // current license status
+    var el = document.getElementById('sa-lic-status');
+    if (el) {
+      var s = License.status();
+      if (!s.active && !s.company) {
+        el.innerHTML = '<div style="background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:12px;font-size:0.8rem;color:var(--text-muted);">कुनै license save भएको छैन।</div>';
+      } else {
+        var planTxt = s.plan === 'MASTER' ? '👑 MASTER (Owner)' : (s.lifetime ? '♾️ Lifetime' : '📅 Time-limited');
+        var expTxt = s.lifetime ? 'कहिल्यै expire हुँदैन'
+          : (s.expiry ? s.expiry.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) + ' (' + s.daysLeft + ' दिन बाँकी)' : '—');
+        var colr = s.lifetime ? 'var(--green)' : (s.daysLeft > 30 ? 'var(--green)' : (s.daysLeft > 7 ? '#f59e0b' : 'var(--red)'));
+        el.innerHTML =
+          '<div style="background:linear-gradient(135deg,rgba(34,197,94,0.08),rgba(249,115,22,0.06));border:1px solid ' + colr + ';border-radius:10px;padding:14px;">' +
+          '<div style="font-size:0.72rem;color:var(--text-muted);margin-bottom:2px;">सक्रिय License</div>' +
+          '<div style="font-size:0.95rem;font-weight:800;margin-bottom:8px;">' + esc(s.company || '—') + '</div>' +
+          '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;font-size:0.76rem;">' +
+          '<div><span style="color:var(--text-muted);">Plan:</span> <b>' + planTxt + '</b></div>' +
+          '<div><span style="color:var(--text-muted);">म्याद:</span> <b style="color:' + colr + ';">' + expTxt + '</b></div>' +
+          '<div style="grid-column:1/-1;"><span style="color:var(--text-muted);">Key:</span> <code style="font-size:0.72rem;">' + esc(s.key || '') + '</code></div>' +
+          (s.activatedAt ? '<div style="grid-column:1/-1;color:var(--text-muted);font-size:0.7rem;">Activated: ' + new Date(s.activatedAt).toLocaleString('en-IN') + '</div>' : '') +
+          '</div>' +
+          (s.builtIn
+            ? '<div style="margin-top:10px;padding-top:9px;border-top:1px dashed var(--border);font-size:0.72rem;color:#22c55e;line-height:1.55;">'
+              + '\u2705 <b>BUILT-IN activation \u0905\u0928 \u091b</b> \u2014 \u092f\u094b file \u0915\u0939\u093f\u0932\u094d\u092f\u0948 key \u0938\u094b\u0927\u094d\u0926\u0948\u0928\u0964<br>'
+              + '<span style="color:var(--text-muted);">\u092e\u094b\u092c\u093e\u0907\u0932/PC/\u0928\u092f\u093e\u0901 browser \u2014 \u091c\u0939\u093e\u0901 \u0916\u094b\u0932\u0947 \u092a\u0928\u093f \u0938\u093f\u0927\u0948 login \u0906\u0909\u091b\u0964</span>'
+              + '<div style="margin-top:8px;"><button onclick="AdminDash.customerCopyGuide()" class="btn btn-xs btn-secondary">\ud83d\udcc4 \u0917\u094d\u0930\u093e\u0939\u0915 copy \u0915\u0938\u0930\u0940 \u092c\u0928\u093e\u0909\u0928\u0947?</button></div></div>'
+            : '') +
+          '</div>';
+      }
+    }
+    // Generator \u2014 Super Admin \u0932\u093e\u0908 \u092e\u093e\u0924\u094d\u0930
+    try {
+      var isSA = (typeof Auth !== 'undefined' && Auth.isSuperAdmin && Auth.isSuperAdmin());
+      var gen = document.getElementById('kg-company');
+      if (gen && gen.parentNode && gen.parentNode.parentNode) {
+        gen.parentNode.parentNode.style.display = isSA ? '' : 'none';
+      }
+    } catch (e) {}
+    this.renderKeyLog();
+  },
+
+  customerCopyGuide: function () {
+    alert('\ud83d\udcc4 \u0917\u094d\u0930\u093e\u0939\u0915\u0932\u093e\u0908 \u092c\u0947\u091a\u094d\u0928\u0947 copy \u092c\u0928\u093e\u0909\u0928\u0947 \u0924\u0930\u093f\u0915\u093e\n\n' +
+      '1\ufe0f\u20e3  \u092f\u0938 HTML file \u0915\u094b \u090f\u0909\u091f\u093e copy \u092c\u0928\u093e\u0909\u0928\u0941\u0938\u094d\n' +
+      '2\ufe0f\u20e3  Notepad \u092e\u093e \u0916\u094b\u0932\u0947\u0930  BUILT_IN  \u0916\u094b\u091c\u094d\u0928\u0941\u0938\u094d (Ctrl+F)\n' +
+      '3\ufe0f\u20e3  \u0924\u094d\u092f\u094b line \u0932\u093e\u0908 \u092f\u0938\u094d\u0924\u094b \u092c\u0928\u093e\u0909\u0928\u0941\u0938\u094d \u2014\n\n' +
+      "     BUILT_IN: { company: '', key: '' },\n\n" +
+      '4\ufe0f\u20e3  Save \u0917\u0930\u0947\u0930 \u0917\u094d\u0930\u093e\u0939\u0915\u0932\u093e\u0908 \u092a\u0920\u093e\u0909\u0928\u0941\u0938\u094d\n' +
+      '5\ufe0f\u20e3  \u092e\u093e\u0925\u093f\u0915\u094b Generator \u092c\u093e\u091f \u0909\u0938\u0915\u094b key \u092c\u0928\u093e\u090f\u0930 WhatsApp \u092e\u093e \u092a\u0920\u093e\u0909\u0928\u0941\u0938\u094d\n\n' +
+      '\u26a0\ufe0f  \u092f\u094b step \u0928\u0917\u0930\u0947 \u0917\u094d\u0930\u093e\u0939\u0915\u0932\u093e\u0908 \u092b\u094d\u0930\u0940 \u092e\u093e \u091a\u0932\u094d\u091b \u2014 \u092a\u0915\u094d\u0915\u093e \u0917\u0930\u094d\u0928\u0941\u0938\u094d!');
+  },
+
+  genKey: function () {
+    if (!Auth.isSuperAdmin || !Auth.isSuperAdmin()) { App.toast('⛔ Super Admin मात्र', 'error'); return; }
+    var company = (document.getElementById('kg-company') || {}).value || '';
+    var days = parseInt(((document.getElementById('kg-plan') || {}).value) || '0', 10) || 0;
+    if (!company.trim()) { App.toast('❌ Company name हाल्नुस्', 'error'); return; }
+
+    var g = License.generate(company, days);
+    var expTxt = g.expiry ? g.expiry.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : 'Lifetime — कहिल्यै expire हुँदैन';
+
+    var box = document.getElementById('kg-result');
+    if (box) {
+      box.style.display = 'block';
+      box.innerHTML =
+        '<div style="background:var(--surface);border:1.5px dashed var(--accent);border-radius:10px;padding:14px;text-align:center;">' +
+        '<div style="font-size:0.7rem;color:var(--text-muted);margin-bottom:4px;">' + esc(g.company) + '</div>' +
+        '<div id="kg-key-text" style="font-size:1.02rem;font-weight:900;letter-spacing:1.5px;color:var(--accent);word-break:break-all;margin-bottom:6px;">' + esc(g.key) + '</div>' +
+        '<div style="font-size:0.74rem;color:var(--text-muted);margin-bottom:12px;">⏳ म्याद: <b>' + esc(expTxt) + '</b></div>' +
+        '<div style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap;">' +
+        '<button onclick="AdminDash.copyKey()" class="btn btn-xs btn-primary">📋 Copy</button>' +
+        '<button onclick="AdminDash.shareKey()" class="btn btn-xs btn-success">💬 WhatsApp</button>' +
+        '</div>' +
+        '<div style="font-size:0.68rem;color:var(--text-muted);margin-top:10px;line-height:1.5;">Customer ले Company Name ठ्याक्कै <b>' + esc(g.company) + '</b> नै टाइप गर्नुपर्छ।</div>' +
+        '</div>';
+    }
+
+    // log it
+    try {
+      var log = STORE.get('pk3_keylog', []) || [];
+      log.unshift({
+        company: g.company, key: g.key,
+        expiry: g.expiry ? g.expiry.toISOString() : null,
+        days: days, issued: new Date().toISOString()
+      });
+      if (log.length > 200) log = log.slice(0, 200);
+      STORE.set('pk3_keylog', log);
+    } catch (e) {}
+
+    this._lastKey = g;
+    this.renderKeyLog();
+    try { Audit.log('LICENSE', 'Key generated for ' + g.company + ' (' + (days ? days + ' days' : 'lifetime') + ')'); } catch (e) {}
+    App.toast('✅ Key बन्यो', 'success');
+  },
+
+  copyKey: function (k) {
+    var txt = k || (this._lastKey ? this._lastKey.key : '');
+    if (!txt) return;
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(txt).then(function () { App.toast('📋 Copy भयो', 'success'); });
+      } else {
+        var ta = document.createElement('textarea'); ta.value = txt; document.body.appendChild(ta);
+        ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+        App.toast('📋 Copy भयो', 'success');
+      }
+    } catch (e) { App.toast('❌ Copy भएन', 'error'); }
+  },
+
+  shareKey: function (idx) {
+    var g = this._lastKey;
+    if (typeof idx === 'number') {
+      var log = STORE.get('pk3_keylog', []) || [];
+      var r = log[idx]; if (!r) return;
+      g = { company: r.company, key: r.key, expiry: r.expiry ? new Date(r.expiry) : null };
+    }
+    if (!g) return;
+    var expTxt = g.expiry ? g.expiry.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : 'Lifetime';
+    var msg = '🔐 *PRERAK CRM — License Key*\n\n' +
+      '🏢 Company: *' + g.company + '*\n' +
+      '🔑 Key: *' + g.key + '*\n' +
+      '⏳ म्याद: *' + expTxt + '*\n\n' +
+      'App खोल्दा Company Name ठ्याक्कै माथिको जस्तै टाइप गरी Key हाल्नुहोस्।\n' +
+      'एक पटक हाले पछि फेरि सोध्दैन। ✅\n\n' +
+      '— PRERAK MULTIPURPOSE PVT LTD 📞 9855069733';
+    window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank');
+  },
+
+  renderKeyLog: function () {
+    var el = document.getElementById('sa-keylog'); if (!el) return;
+    var log = STORE.get('pk3_keylog', []) || [];
+    if (!log.length) {
+      el.innerHTML = '<div style="font-size:0.75rem;color:var(--text-muted);padding:8px;">अहिलेसम्म कुनै key जारी गरिएको छैन।</div>';
+      return;
+    }
+    el.innerHTML = '';
+    log.forEach(function (r, i) {
+      var exp = r.expiry ? new Date(r.expiry) : null;
+      var left = exp ? Math.ceil((exp - new Date()) / 86400000) : null;
+      var badge = !exp ? '<span style="color:var(--green);">♾️ Lifetime</span>'
+        : (left > 0 ? '<span style="color:' + (left > 30 ? 'var(--green)' : '#f59e0b') + ';">' + left + ' दिन बाँकी</span>'
+                    : '<span style="color:var(--red);">⏰ Expired</span>');
+      var row = document.createElement('div');
+      row.style.cssText = 'background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:9px 11px;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;';
+      row.innerHTML =
+        '<div style="min-width:0;flex:1;">' +
+        '<div style="font-size:0.8rem;font-weight:700;">' + esc(r.company) + '</div>' +
+        '<div style="font-size:0.7rem;color:var(--text-muted);"><code>' + esc(r.key) + '</code> · ' + badge + '</div>' +
+        '</div>' +
+        '<div style="display:flex;gap:5px;flex-shrink:0;">' +
+        '<button class="btn btn-xs btn-secondary" onclick="AdminDash.copyKey(\'' + esc(r.key) + '\')">📋</button>' +
+        '<button class="btn btn-xs btn-success" onclick="AdminDash.shareKey(' + i + ')">💬</button>' +
+        '</div>';
+      el.appendChild(row);
+    });
+  },
+
+  clearKeyLog: function () {
+    if (!confirm('जारी गरिएका key को record मेटाउने? (Customer का key हरू चलिरहन्छन्)')) return;
+    STORE.set('pk3_keylog', []);
+    this.renderKeyLog();
+    App.toast('🗑 Key log खाली भयो', 'info');
   },
 
   renderUsers: function() {
@@ -9657,9 +10497,10 @@ var AdminDash = {
 };
 
 // Version check console message
-console.log('%cPRERAK CRM v5.1 World-Class — LIVE', 'color:#f97316;font-weight:bold;font-size:16px');
+console.log('%cPRERAK CRM v5.5 World-Class — LIVE', 'color:#f97316;font-weight:bold;font-size:16px');
 console.log('Company: PRERAK MULTIPURPOSE PVT LTD, Hetauda-4, Makwanpur');
 console.log('Build: 2083 BS | Role-based access | Offline single-file');
+try { var _ls = License.status(); console.log('License:', _ls.active ? (_ls.company + ' — ' + (_ls.lifetime ? 'Lifetime' : _ls.daysLeft + ' days left')) : 'not activated'); } catch(e){}
 
 // ============================================================
 // GLOBAL ERROR BOUNDARY — one module crash won't kill the app
