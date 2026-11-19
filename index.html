@@ -684,7 +684,7 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
         <div class="sb-logo-text">
           <div class="name" id="brand-sidebar-name">Swagatik</div>
           <div class="sub" id="sb-company-sub">स्वागतिक</div>
-          <div class="ver">v6.3.9 — Swagatik ⚡</div>
+          <div class="ver">v6.5.0 — Swagatik ⚡</div>
           <div class="ver" id="sidebar-clock" style="color:var(--text-muted);font-variant-numeric:tabular-nums;">--:--:--</div>
         </div>
       </div>
@@ -1357,7 +1357,7 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
 
   <!-- ========================= RATE LIST PAGE ========================= -->
   <div class="page" id="page-ratelist">
-    <div class="section-head"><div class="search-wrap"><input type="text" id="rl-search" placeholder="Search rate..." oninput="RateList.render()"></div><div class="btn-group" id="rl-admin-btns" style="display:none;"><button onclick="RateList.addCategory()" class="btn btn-sm btn-secondary">📁 + Category</button><button onclick="RateList.cleanEmpty()" class="btn btn-sm btn-secondary" title="Empty categories हटाउनुस्">🧹</button><button onclick="RateList.addItem()" class="btn btn-sm btn-primary">+ Item</button><button onclick="RateList.resetDefaults()" class="btn btn-sm btn-success" title="Default rates load">🔄 Reset</button></div><div id="rl-viewonly-badge" style="display:none;font-size:0.7rem;color:var(--text-muted);background:var(--surface-2);border:1px solid var(--border);padding:5px 12px;border-radius:20px;">🔒 View Only — Rate Edit/Add Super Admin ले मात्र</div></div>
+    <div class="section-head"><div class="search-wrap"><input type="text" id="rl-search" placeholder="Search rate..." oninput="RateList.render()"></div><div class="btn-group" id="rl-admin-btns" style="display:none;"><button onclick="RateList.addCategory()" class="btn btn-sm btn-secondary">📁 + Category</button><button onclick="RateList.cleanEmpty()" class="btn btn-sm btn-secondary" title="Empty categories हटाउनुस्">🧹</button><button onclick="RateList.addItem()" class="btn btn-sm btn-primary">+ Item</button><button onclick="RateList.resetDefaults()" class="btn btn-sm btn-success" title="Default rates load">🔄 Reset</button><button onclick="RateList.exitManager()" class="btn btn-sm btn-primary" title="Edit mode बन्द">✅ Done</button></div><div id="rl-viewonly-badge" style="display:none;font-size:0.7rem;color:var(--text-muted);background:var(--surface-2);border:1px solid var(--border);padding:5px 12px;border-radius:20px;">👁️ View Only — Edit गर्न: Settings → Rate List Edit</div></div>
     <div id="rate-list-empty-msg" style="display:none;text-align:center;padding:40px 20px;border:2px dashed var(--border);border-radius:14px;margin-top:10px;"><div style="font-size:2.8rem;margin-bottom:10px;">📋</div><div style="font-weight:700;font-size:1.05rem;margin-bottom:6px;">Rate List खाली छ</div><button onclick="RateList.resetDefaults()" class="btn btn-primary btn-lg">🔄 Default Rates Load</button></div>
     <div id="rate-list-container"></div>
   </div>
@@ -1545,6 +1545,23 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
   <!-- ========================= SETTINGS ========================= -->
   <div class="page" id="page-settings">
     <div style="max-width:640px;display:grid;gap:14px;">
+      <div class="card card-body" id="set-dbx-card">
+        <div class="section-title">☁️ Dropbox Auto-Sync</div>
+        <div style="font-size:0.72rem;color:var(--text-muted);margin:6px 0 10px;">एकपटक जोडेपछि सबै data आफैं Dropbox मा सेभ हुन्छ। App हटाएर फेरि install गर्दा वा अर्को device मा यहीँबाट Connect गर्दा data आफैं फर्किन्छ।</div>
+        <div id="dbx-status" style="font-size:0.82rem;margin-bottom:10px;">○ जोडिएको छैन</div>
+        <div id="dbx-warn" style="display:none;font-size:0.76rem;color:var(--red);background:var(--red-soft);border-radius:8px;padding:8px 10px;margin-bottom:10px;"></div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          <button type="button" id="dbx-btn-connect" onclick="DBX.connect()" class="btn btn-sm btn-primary">🔗 Connect Dropbox</button>
+          <button type="button" id="dbx-btn-sync" onclick="DBX.syncNow()" class="btn btn-sm btn-success" style="display:none;">🔄 Sync Now</button>
+          <button type="button" id="dbx-btn-restore" onclick="DBX.restoreNow()" class="btn btn-sm btn-secondary" style="display:none;">⬇️ Dropbox बाट Restore</button>
+          <button type="button" id="dbx-btn-disc" onclick="DBX.disconnect()" class="btn btn-sm btn-danger" style="display:none;">⛔ Disconnect</button>
+        </div>
+      </div>
+      <div class="card card-body" id="set-manage-card">
+        <div class="section-title">✏️ Data Edit (Add / Edit / Delete)</div>
+        <div style="font-size:0.72rem;color:var(--text-muted);margin:6px 0 10px;">दैनिक कामको मेनुमा सबै View-Only छ। Rate जस्ता master data यहीँबाट मात्र बदल्न मिल्छ।</div>
+        <button type="button" onclick="RateList.openManager()" class="btn btn-sm btn-primary">💰 Rate List Edit गर्नुहोस्</button>
+      </div>
       <div class="card card-body">
         <div class="section-title">🏢 Company Information</div>
         <!-- ── COMPANY LOGO (v4.0.4): edit / add / delete ── -->
@@ -2321,7 +2338,7 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
       </div>
       <div style="display:flex;flex-direction:column;line-height:1.4;"><span style="font-size:0.82rem;"><b style="color:#f97316;font-weight:800;">Swagatik</b> <span style="opacity:0.7;color:var(--text-muted);">स्वागतिक</span></span><span style="font-size:0.66rem;color:var(--text-muted);opacity:0.85;">by Prerak Multipurpose Pvt Ltd</span></div>
     </div>
-    <div style="font-size:0.64rem;color:var(--text-muted);margin-top:5px;opacity:0.7;">Smart Business CRM • v6.3.9</div>
+    <div style="font-size:0.64rem;color:var(--text-muted);margin-top:5px;opacity:0.7;">Smart Business CRM • v6.5.0</div>
   </footer>
 
 </main>
@@ -4113,6 +4130,7 @@ var App = {
     if(currentUser && currentUser.role!=='admin' && currentUser.role!=='superadmin' && STAFF_PAGES.indexOf(page)===-1) {
       App.toast('🔒 Admin access only','error'); return;
     }
+    if(page!=='ratelist' && typeof RateList!=='undefined') RateList._editMode=false;
     if(this.currentPage!==page) this.pageHistory.push(this.currentPage);
     if(this.pageHistory.length>20) this.pageHistory.shift();
     // Deactivate all pages
@@ -4149,7 +4167,7 @@ var App = {
     var bnEl=document.getElementById('bn-'+bnKey);
     if(bnEl) bnEl.classList.add('active');
     // Render page
-    var renders={'expenses':function(){Expenses.render();},'cashbook':function(){CashBook.render();},'returns':function(){SalesReturns.render();},'customers':function(){Customers.render();},'quotations':function(){Quotations.render();},'followups':function(){Followups.render();},'planner':function(){Planner.render();},'daybook':function(){DayBook.render();},'ratelist':function(){RateList.render();},'staff':function(){Staff.render();},'stocklist':function(){Stock.render();},'salesteam':function(){SalesTeam.render();},'bulkmsg':function(){BulkMsg.render();},'account-summary':function(){AccountSummary.render();},'backup':function(){Backup.render();},'audit':function(){Audit.render();},'settings':function(){Settings.render();},'add-customer':function(){Customers.initForm();},'add-quotation':function(){Quotations.initForm();},'add-followup':function(){Followups.initForm();},'invoices':function(){Invoices.render();},'ledger':function(){Ledger.render();},'bakauta':function(){Bakauta.render();},'estimates-list':function(){Bakauta.renderList();},'estimate-new':function(){Estimate.init();},'vcard':function(){VCard.render();},'brochures':function(){Brochure.render();},'ai-assistant':function(){AIAssistant.render();},'admin-dashboard':function(){AdminDash.render();},'dailyreport':function(){Reports.render();},'walkin':function(){Walkin.render();},'qrcode':function(){QR.render();},'vatcalc':function(){VatCalc.render();},'dashboard':function(){Dashboard.render();}};
+    var renders={'expenses':function(){Expenses.render();},'cashbook':function(){CashBook.render();},'returns':function(){SalesReturns.render();},'customers':function(){Customers.render();},'quotations':function(){Quotations.render();},'followups':function(){Followups.render();},'planner':function(){Planner.render();},'daybook':function(){DayBook.render();},'ratelist':function(){RateList.render();},'staff':function(){Staff.render();},'stocklist':function(){Stock.render();},'salesteam':function(){SalesTeam.render();},'bulkmsg':function(){BulkMsg.render();},'account-summary':function(){AccountSummary.render();},'backup':function(){Backup.render();},'audit':function(){Audit.render();},'settings':function(){Settings.render();try{DBX.render();}catch(e){}},'add-customer':function(){Customers.initForm();},'add-quotation':function(){Quotations.initForm();},'add-followup':function(){Followups.initForm();},'invoices':function(){Invoices.render();},'ledger':function(){Ledger.render();},'bakauta':function(){Bakauta.render();},'estimates-list':function(){Bakauta.renderList();},'estimate-new':function(){Estimate.init();},'vcard':function(){VCard.render();},'brochures':function(){Brochure.render();},'ai-assistant':function(){AIAssistant.render();},'admin-dashboard':function(){AdminDash.render();},'dailyreport':function(){Reports.render();},'walkin':function(){Walkin.render();},'qrcode':function(){QR.render();},'vatcalc':function(){VatCalc.render();},'dashboard':function(){Dashboard.render();}};
     if(renders[page]) {
       try { renders[page](); }
       catch(e) { console.error('Page render error ['+page+']:', e); App.toast('⚠️ Page load error: '+e.message,'error'); }
@@ -6604,13 +6622,18 @@ var Expenses = {
 
 // ─── RATE LIST MODULE ─────────────────────────────────────────
 var RateList = {
-  _pickTarget: null, _pickedItems: [],
+  _pickTarget: null, _pickedItems: [], _editMode: false,
   getData: function(){ return STORE.get('pk3_rates',{}); },
+  openManager: function(){
+    if(!(typeof Auth!=='undefined' && Auth.isSuperAdmin && Auth.isSuperAdmin())){ App.toast('\ud83d\udd12 Super Admin \u0932\u0947 \u092e\u093e\u0924\u094d\u0930','error',3000); return; }
+    this._editMode=true; App.navigate('ratelist'); this.render();
+  },
+  exitManager: function(){ this._editMode=false; this.render(); App.toast('\u2705 Edit mode \u092c\u0928\u094d\u0926','success',1800); },
   // ── ACCESS CONTROL (v4.0.9): only Super Admin can modify rates ──
-  _canEdit: function(){ return (typeof Auth!=='undefined' && Auth.isSuperAdmin) ? Auth.isSuperAdmin() : false; },
+  _canEdit: function(){ return this._editMode && ((typeof Auth!=='undefined' && Auth.isSuperAdmin) ? Auth.isSuperAdmin() : false); },
   _guard: function(){
     if(this._canEdit()) return true;
-    App.toast('🔒 Rate Edit/Add/Remove Super Admin ले मात्र गर्न सक्छ','error',3200);
+    App.toast('🔒 Rate Edit गर्न: Settings → Rate List Edit (Super Admin)','error',3200);
     return false;
   },
   // Category color palette for the beautiful template
@@ -12337,7 +12360,7 @@ var AdminDash = {
 };
 
 // Version check console message
-console.log('%cSwagatik v6.3.9 — LIVE', 'color:#f97316;font-weight:bold;font-size:16px');
+console.log('%cSwagatik v6.5.0 — LIVE', 'color:#f97316;font-weight:bold;font-size:16px');
 console.log('Company: PRERAK MULTIPURPOSE PVT LTD, Hetauda-2, Makwanpur');
 console.log('Build: 2083 BS | Role-based access | Offline single-file');
 try { var _ls = License.status(); console.log('License:', _ls.active ? (_ls.company + ' — ' + (_ls.lifetime ? 'Lifetime' : _ls.daysLeft + ' days left')) : 'not activated'); } catch(e){}
@@ -12420,6 +12443,243 @@ window.addEventListener('unhandledrejection', function(e){
 </script>
 <script>/* qrcodejs 1.0.0 (davidshimjs) — inlined for full offline capability */
 var QRCode;!function(){function a(a){this.mode=c.MODE_8BIT_BYTE,this.data=a,this.parsedData=[];for(var b=[],d=0,e=this.data.length;e>d;d++){var f=this.data.charCodeAt(d);f>65536?(b[0]=240|(1835008&f)>>>18,b[1]=128|(258048&f)>>>12,b[2]=128|(4032&f)>>>6,b[3]=128|63&f):f>2048?(b[0]=224|(61440&f)>>>12,b[1]=128|(4032&f)>>>6,b[2]=128|63&f):f>128?(b[0]=192|(1984&f)>>>6,b[1]=128|63&f):b[0]=f,this.parsedData=this.parsedData.concat(b)}this.parsedData.length!=this.data.length&&(this.parsedData.unshift(191),this.parsedData.unshift(187),this.parsedData.unshift(239))}function b(a,b){this.typeNumber=a,this.errorCorrectLevel=b,this.modules=null,this.moduleCount=0,this.dataCache=null,this.dataList=[]}function i(a,b){if(void 0==a.length)throw new Error(a.length+"/"+b);for(var c=0;c<a.length&&0==a[c];)c++;this.num=new Array(a.length-c+b);for(var d=0;d<a.length-c;d++)this.num[d]=a[d+c]}function j(a,b){this.totalCount=a,this.dataCount=b}function k(){this.buffer=[],this.length=0}function m(){return"undefined"!=typeof CanvasRenderingContext2D}function n(){var a=!1,b=navigator.userAgent;return/android/i.test(b)&&(a=!0,aMat=b.toString().match(/android ([0-9]\.[0-9])/i),aMat&&aMat[1]&&(a=parseFloat(aMat[1]))),a}function r(a,b){for(var c=1,e=s(a),f=0,g=l.length;g>=f;f++){var h=0;switch(b){case d.L:h=l[f][0];break;case d.M:h=l[f][1];break;case d.Q:h=l[f][2];break;case d.H:h=l[f][3]}if(h>=e)break;c++}if(c>l.length)throw new Error("Too long data");return c}function s(a){var b=encodeURI(a).toString().replace(/\%[0-9a-fA-F]{2}/g,"a");return b.length+(b.length!=a?3:0)}a.prototype={getLength:function(){return this.parsedData.length},write:function(a){for(var b=0,c=this.parsedData.length;c>b;b++)a.put(this.parsedData[b],8)}},b.prototype={addData:function(b){var c=new a(b);this.dataList.push(c),this.dataCache=null},isDark:function(a,b){if(0>a||this.moduleCount<=a||0>b||this.moduleCount<=b)throw new Error(a+","+b);return this.modules[a][b]},getModuleCount:function(){return this.moduleCount},make:function(){this.makeImpl(!1,this.getBestMaskPattern())},makeImpl:function(a,c){this.moduleCount=4*this.typeNumber+17,this.modules=new Array(this.moduleCount);for(var d=0;d<this.moduleCount;d++){this.modules[d]=new Array(this.moduleCount);for(var e=0;e<this.moduleCount;e++)this.modules[d][e]=null}this.setupPositionProbePattern(0,0),this.setupPositionProbePattern(this.moduleCount-7,0),this.setupPositionProbePattern(0,this.moduleCount-7),this.setupPositionAdjustPattern(),this.setupTimingPattern(),this.setupTypeInfo(a,c),this.typeNumber>=7&&this.setupTypeNumber(a),null==this.dataCache&&(this.dataCache=b.createData(this.typeNumber,this.errorCorrectLevel,this.dataList)),this.mapData(this.dataCache,c)},setupPositionProbePattern:function(a,b){for(var c=-1;7>=c;c++)if(!(-1>=a+c||this.moduleCount<=a+c))for(var d=-1;7>=d;d++)-1>=b+d||this.moduleCount<=b+d||(this.modules[a+c][b+d]=c>=0&&6>=c&&(0==d||6==d)||d>=0&&6>=d&&(0==c||6==c)||c>=2&&4>=c&&d>=2&&4>=d?!0:!1)},getBestMaskPattern:function(){for(var a=0,b=0,c=0;8>c;c++){this.makeImpl(!0,c);var d=f.getLostPoint(this);(0==c||a>d)&&(a=d,b=c)}return b},createMovieClip:function(a,b,c){var d=a.createEmptyMovieClip(b,c),e=1;this.make();for(var f=0;f<this.modules.length;f++)for(var g=f*e,h=0;h<this.modules[f].length;h++){var i=h*e,j=this.modules[f][h];j&&(d.beginFill(0,100),d.moveTo(i,g),d.lineTo(i+e,g),d.lineTo(i+e,g+e),d.lineTo(i,g+e),d.endFill())}return d},setupTimingPattern:function(){for(var a=8;a<this.moduleCount-8;a++)null==this.modules[a][6]&&(this.modules[a][6]=0==a%2);for(var b=8;b<this.moduleCount-8;b++)null==this.modules[6][b]&&(this.modules[6][b]=0==b%2)},setupPositionAdjustPattern:function(){for(var a=f.getPatternPosition(this.typeNumber),b=0;b<a.length;b++)for(var c=0;c<a.length;c++){var d=a[b],e=a[c];if(null==this.modules[d][e])for(var g=-2;2>=g;g++)for(var h=-2;2>=h;h++)this.modules[d+g][e+h]=-2==g||2==g||-2==h||2==h||0==g&&0==h?!0:!1}},setupTypeNumber:function(a){for(var b=f.getBCHTypeNumber(this.typeNumber),c=0;18>c;c++){var d=!a&&1==(1&b>>c);this.modules[Math.floor(c/3)][c%3+this.moduleCount-8-3]=d}for(var c=0;18>c;c++){var d=!a&&1==(1&b>>c);this.modules[c%3+this.moduleCount-8-3][Math.floor(c/3)]=d}},setupTypeInfo:function(a,b){for(var c=this.errorCorrectLevel<<3|b,d=f.getBCHTypeInfo(c),e=0;15>e;e++){var g=!a&&1==(1&d>>e);6>e?this.modules[e][8]=g:8>e?this.modules[e+1][8]=g:this.modules[this.moduleCount-15+e][8]=g}for(var e=0;15>e;e++){var g=!a&&1==(1&d>>e);8>e?this.modules[8][this.moduleCount-e-1]=g:9>e?this.modules[8][15-e-1+1]=g:this.modules[8][15-e-1]=g}this.modules[this.moduleCount-8][8]=!a},mapData:function(a,b){for(var c=-1,d=this.moduleCount-1,e=7,g=0,h=this.moduleCount-1;h>0;h-=2)for(6==h&&h--;;){for(var i=0;2>i;i++)if(null==this.modules[d][h-i]){var j=!1;g<a.length&&(j=1==(1&a[g]>>>e));var k=f.getMask(b,d,h-i);k&&(j=!j),this.modules[d][h-i]=j,e--,-1==e&&(g++,e=7)}if(d+=c,0>d||this.moduleCount<=d){d-=c,c=-c;break}}}},b.PAD0=236,b.PAD1=17,b.createData=function(a,c,d){for(var e=j.getRSBlocks(a,c),g=new k,h=0;h<d.length;h++){var i=d[h];g.put(i.mode,4),g.put(i.getLength(),f.getLengthInBits(i.mode,a)),i.write(g)}for(var l=0,h=0;h<e.length;h++)l+=e[h].dataCount;if(g.getLengthInBits()>8*l)throw new Error("code length overflow. ("+g.getLengthInBits()+">"+8*l+")");for(g.getLengthInBits()+4<=8*l&&g.put(0,4);0!=g.getLengthInBits()%8;)g.putBit(!1);for(;;){if(g.getLengthInBits()>=8*l)break;if(g.put(b.PAD0,8),g.getLengthInBits()>=8*l)break;g.put(b.PAD1,8)}return b.createBytes(g,e)},b.createBytes=function(a,b){for(var c=0,d=0,e=0,g=new Array(b.length),h=new Array(b.length),j=0;j<b.length;j++){var k=b[j].dataCount,l=b[j].totalCount-k;d=Math.max(d,k),e=Math.max(e,l),g[j]=new Array(k);for(var m=0;m<g[j].length;m++)g[j][m]=255&a.buffer[m+c];c+=k;var n=f.getErrorCorrectPolynomial(l),o=new i(g[j],n.getLength()-1),p=o.mod(n);h[j]=new Array(n.getLength()-1);for(var m=0;m<h[j].length;m++){var q=m+p.getLength()-h[j].length;h[j][m]=q>=0?p.get(q):0}}for(var r=0,m=0;m<b.length;m++)r+=b[m].totalCount;for(var s=new Array(r),t=0,m=0;d>m;m++)for(var j=0;j<b.length;j++)m<g[j].length&&(s[t++]=g[j][m]);for(var m=0;e>m;m++)for(var j=0;j<b.length;j++)m<h[j].length&&(s[t++]=h[j][m]);return s};for(var c={MODE_NUMBER:1,MODE_ALPHA_NUM:2,MODE_8BIT_BYTE:4,MODE_KANJI:8},d={L:1,M:0,Q:3,H:2},e={PATTERN000:0,PATTERN001:1,PATTERN010:2,PATTERN011:3,PATTERN100:4,PATTERN101:5,PATTERN110:6,PATTERN111:7},f={PATTERN_POSITION_TABLE:[[],[6,18],[6,22],[6,26],[6,30],[6,34],[6,22,38],[6,24,42],[6,26,46],[6,28,50],[6,30,54],[6,32,58],[6,34,62],[6,26,46,66],[6,26,48,70],[6,26,50,74],[6,30,54,78],[6,30,56,82],[6,30,58,86],[6,34,62,90],[6,28,50,72,94],[6,26,50,74,98],[6,30,54,78,102],[6,28,54,80,106],[6,32,58,84,110],[6,30,58,86,114],[6,34,62,90,118],[6,26,50,74,98,122],[6,30,54,78,102,126],[6,26,52,78,104,130],[6,30,56,82,108,134],[6,34,60,86,112,138],[6,30,58,86,114,142],[6,34,62,90,118,146],[6,30,54,78,102,126,150],[6,24,50,76,102,128,154],[6,28,54,80,106,132,158],[6,32,58,84,110,136,162],[6,26,54,82,110,138,166],[6,30,58,86,114,142,170]],G15:1335,G18:7973,G15_MASK:21522,getBCHTypeInfo:function(a){for(var b=a<<10;f.getBCHDigit(b)-f.getBCHDigit(f.G15)>=0;)b^=f.G15<<f.getBCHDigit(b)-f.getBCHDigit(f.G15);return(a<<10|b)^f.G15_MASK},getBCHTypeNumber:function(a){for(var b=a<<12;f.getBCHDigit(b)-f.getBCHDigit(f.G18)>=0;)b^=f.G18<<f.getBCHDigit(b)-f.getBCHDigit(f.G18);return a<<12|b},getBCHDigit:function(a){for(var b=0;0!=a;)b++,a>>>=1;return b},getPatternPosition:function(a){return f.PATTERN_POSITION_TABLE[a-1]},getMask:function(a,b,c){switch(a){case e.PATTERN000:return 0==(b+c)%2;case e.PATTERN001:return 0==b%2;case e.PATTERN010:return 0==c%3;case e.PATTERN011:return 0==(b+c)%3;case e.PATTERN100:return 0==(Math.floor(b/2)+Math.floor(c/3))%2;case e.PATTERN101:return 0==b*c%2+b*c%3;case e.PATTERN110:return 0==(b*c%2+b*c%3)%2;case e.PATTERN111:return 0==(b*c%3+(b+c)%2)%2;default:throw new Error("bad maskPattern:"+a)}},getErrorCorrectPolynomial:function(a){for(var b=new i([1],0),c=0;a>c;c++)b=b.multiply(new i([1,g.gexp(c)],0));return b},getLengthInBits:function(a,b){if(b>=1&&10>b)switch(a){case c.MODE_NUMBER:return 10;case c.MODE_ALPHA_NUM:return 9;case c.MODE_8BIT_BYTE:return 8;case c.MODE_KANJI:return 8;default:throw new Error("mode:"+a)}else if(27>b)switch(a){case c.MODE_NUMBER:return 12;case c.MODE_ALPHA_NUM:return 11;case c.MODE_8BIT_BYTE:return 16;case c.MODE_KANJI:return 10;default:throw new Error("mode:"+a)}else{if(!(41>b))throw new Error("type:"+b);switch(a){case c.MODE_NUMBER:return 14;case c.MODE_ALPHA_NUM:return 13;case c.MODE_8BIT_BYTE:return 16;case c.MODE_KANJI:return 12;default:throw new Error("mode:"+a)}}},getLostPoint:function(a){for(var b=a.getModuleCount(),c=0,d=0;b>d;d++)for(var e=0;b>e;e++){for(var f=0,g=a.isDark(d,e),h=-1;1>=h;h++)if(!(0>d+h||d+h>=b))for(var i=-1;1>=i;i++)0>e+i||e+i>=b||(0!=h||0!=i)&&g==a.isDark(d+h,e+i)&&f++;f>5&&(c+=3+f-5)}for(var d=0;b-1>d;d++)for(var e=0;b-1>e;e++){var j=0;a.isDark(d,e)&&j++,a.isDark(d+1,e)&&j++,a.isDark(d,e+1)&&j++,a.isDark(d+1,e+1)&&j++,(0==j||4==j)&&(c+=3)}for(var d=0;b>d;d++)for(var e=0;b-6>e;e++)a.isDark(d,e)&&!a.isDark(d,e+1)&&a.isDark(d,e+2)&&a.isDark(d,e+3)&&a.isDark(d,e+4)&&!a.isDark(d,e+5)&&a.isDark(d,e+6)&&(c+=40);for(var e=0;b>e;e++)for(var d=0;b-6>d;d++)a.isDark(d,e)&&!a.isDark(d+1,e)&&a.isDark(d+2,e)&&a.isDark(d+3,e)&&a.isDark(d+4,e)&&!a.isDark(d+5,e)&&a.isDark(d+6,e)&&(c+=40);for(var k=0,e=0;b>e;e++)for(var d=0;b>d;d++)a.isDark(d,e)&&k++;var l=Math.abs(100*k/b/b-50)/5;return c+=10*l}},g={glog:function(a){if(1>a)throw new Error("glog("+a+")");return g.LOG_TABLE[a]},gexp:function(a){for(;0>a;)a+=255;for(;a>=256;)a-=255;return g.EXP_TABLE[a]},EXP_TABLE:new Array(256),LOG_TABLE:new Array(256)},h=0;8>h;h++)g.EXP_TABLE[h]=1<<h;for(var h=8;256>h;h++)g.EXP_TABLE[h]=g.EXP_TABLE[h-4]^g.EXP_TABLE[h-5]^g.EXP_TABLE[h-6]^g.EXP_TABLE[h-8];for(var h=0;255>h;h++)g.LOG_TABLE[g.EXP_TABLE[h]]=h;i.prototype={get:function(a){return this.num[a]},getLength:function(){return this.num.length},multiply:function(a){for(var b=new Array(this.getLength()+a.getLength()-1),c=0;c<this.getLength();c++)for(var d=0;d<a.getLength();d++)b[c+d]^=g.gexp(g.glog(this.get(c))+g.glog(a.get(d)));return new i(b,0)},mod:function(a){if(this.getLength()-a.getLength()<0)return this;for(var b=g.glog(this.get(0))-g.glog(a.get(0)),c=new Array(this.getLength()),d=0;d<this.getLength();d++)c[d]=this.get(d);for(var d=0;d<a.getLength();d++)c[d]^=g.gexp(g.glog(a.get(d))+b);return new i(c,0).mod(a)}},j.RS_BLOCK_TABLE=[[1,26,19],[1,26,16],[1,26,13],[1,26,9],[1,44,34],[1,44,28],[1,44,22],[1,44,16],[1,70,55],[1,70,44],[2,35,17],[2,35,13],[1,100,80],[2,50,32],[2,50,24],[4,25,9],[1,134,108],[2,67,43],[2,33,15,2,34,16],[2,33,11,2,34,12],[2,86,68],[4,43,27],[4,43,19],[4,43,15],[2,98,78],[4,49,31],[2,32,14,4,33,15],[4,39,13,1,40,14],[2,121,97],[2,60,38,2,61,39],[4,40,18,2,41,19],[4,40,14,2,41,15],[2,146,116],[3,58,36,2,59,37],[4,36,16,4,37,17],[4,36,12,4,37,13],[2,86,68,2,87,69],[4,69,43,1,70,44],[6,43,19,2,44,20],[6,43,15,2,44,16],[4,101,81],[1,80,50,4,81,51],[4,50,22,4,51,23],[3,36,12,8,37,13],[2,116,92,2,117,93],[6,58,36,2,59,37],[4,46,20,6,47,21],[7,42,14,4,43,15],[4,133,107],[8,59,37,1,60,38],[8,44,20,4,45,21],[12,33,11,4,34,12],[3,145,115,1,146,116],[4,64,40,5,65,41],[11,36,16,5,37,17],[11,36,12,5,37,13],[5,109,87,1,110,88],[5,65,41,5,66,42],[5,54,24,7,55,25],[11,36,12],[5,122,98,1,123,99],[7,73,45,3,74,46],[15,43,19,2,44,20],[3,45,15,13,46,16],[1,135,107,5,136,108],[10,74,46,1,75,47],[1,50,22,15,51,23],[2,42,14,17,43,15],[5,150,120,1,151,121],[9,69,43,4,70,44],[17,50,22,1,51,23],[2,42,14,19,43,15],[3,141,113,4,142,114],[3,70,44,11,71,45],[17,47,21,4,48,22],[9,39,13,16,40,14],[3,135,107,5,136,108],[3,67,41,13,68,42],[15,54,24,5,55,25],[15,43,15,10,44,16],[4,144,116,4,145,117],[17,68,42],[17,50,22,6,51,23],[19,46,16,6,47,17],[2,139,111,7,140,112],[17,74,46],[7,54,24,16,55,25],[34,37,13],[4,151,121,5,152,122],[4,75,47,14,76,48],[11,54,24,14,55,25],[16,45,15,14,46,16],[6,147,117,4,148,118],[6,73,45,14,74,46],[11,54,24,16,55,25],[30,46,16,2,47,17],[8,132,106,4,133,107],[8,75,47,13,76,48],[7,54,24,22,55,25],[22,45,15,13,46,16],[10,142,114,2,143,115],[19,74,46,4,75,47],[28,50,22,6,51,23],[33,46,16,4,47,17],[8,152,122,4,153,123],[22,73,45,3,74,46],[8,53,23,26,54,24],[12,45,15,28,46,16],[3,147,117,10,148,118],[3,73,45,23,74,46],[4,54,24,31,55,25],[11,45,15,31,46,16],[7,146,116,7,147,117],[21,73,45,7,74,46],[1,53,23,37,54,24],[19,45,15,26,46,16],[5,145,115,10,146,116],[19,75,47,10,76,48],[15,54,24,25,55,25],[23,45,15,25,46,16],[13,145,115,3,146,116],[2,74,46,29,75,47],[42,54,24,1,55,25],[23,45,15,28,46,16],[17,145,115],[10,74,46,23,75,47],[10,54,24,35,55,25],[19,45,15,35,46,16],[17,145,115,1,146,116],[14,74,46,21,75,47],[29,54,24,19,55,25],[11,45,15,46,46,16],[13,145,115,6,146,116],[14,74,46,23,75,47],[44,54,24,7,55,25],[59,46,16,1,47,17],[12,151,121,7,152,122],[12,75,47,26,76,48],[39,54,24,14,55,25],[22,45,15,41,46,16],[6,151,121,14,152,122],[6,75,47,34,76,48],[46,54,24,10,55,25],[2,45,15,64,46,16],[17,152,122,4,153,123],[29,74,46,14,75,47],[49,54,24,10,55,25],[24,45,15,46,46,16],[4,152,122,18,153,123],[13,74,46,32,75,47],[48,54,24,14,55,25],[42,45,15,32,46,16],[20,147,117,4,148,118],[40,75,47,7,76,48],[43,54,24,22,55,25],[10,45,15,67,46,16],[19,148,118,6,149,119],[18,75,47,31,76,48],[34,54,24,34,55,25],[20,45,15,61,46,16]],j.getRSBlocks=function(a,b){var c=j.getRsBlockTable(a,b);if(void 0==c)throw new Error("bad rs block @ typeNumber:"+a+"/errorCorrectLevel:"+b);for(var d=c.length/3,e=[],f=0;d>f;f++)for(var g=c[3*f+0],h=c[3*f+1],i=c[3*f+2],k=0;g>k;k++)e.push(new j(h,i));return e},j.getRsBlockTable=function(a,b){switch(b){case d.L:return j.RS_BLOCK_TABLE[4*(a-1)+0];case d.M:return j.RS_BLOCK_TABLE[4*(a-1)+1];case d.Q:return j.RS_BLOCK_TABLE[4*(a-1)+2];case d.H:return j.RS_BLOCK_TABLE[4*(a-1)+3];default:return void 0}},k.prototype={get:function(a){var b=Math.floor(a/8);return 1==(1&this.buffer[b]>>>7-a%8)},put:function(a,b){for(var c=0;b>c;c++)this.putBit(1==(1&a>>>b-c-1))},getLengthInBits:function(){return this.length},putBit:function(a){var b=Math.floor(this.length/8);this.buffer.length<=b&&this.buffer.push(0),a&&(this.buffer[b]|=128>>>this.length%8),this.length++}};var l=[[17,14,11,7],[32,26,20,14],[53,42,32,24],[78,62,46,34],[106,84,60,44],[134,106,74,58],[154,122,86,64],[192,152,108,84],[230,180,130,98],[271,213,151,119],[321,251,177,137],[367,287,203,155],[425,331,241,177],[458,362,258,194],[520,412,292,220],[586,450,322,250],[644,504,364,280],[718,560,394,310],[792,624,442,338],[858,666,482,382],[929,711,509,403],[1003,779,565,439],[1091,857,611,461],[1171,911,661,511],[1273,997,715,535],[1367,1059,751,593],[1465,1125,805,625],[1528,1190,868,658],[1628,1264,908,698],[1732,1370,982,742],[1840,1452,1030,790],[1952,1538,1112,842],[2068,1628,1168,898],[2188,1722,1228,958],[2303,1809,1283,983],[2431,1911,1351,1051],[2563,1989,1423,1093],[2699,2099,1499,1139],[2809,2213,1579,1219],[2953,2331,1663,1273]],o=function(){var a=function(a,b){this._el=a,this._htOption=b};return a.prototype.draw=function(a){function g(a,b){var c=document.createElementNS("http://www.w3.org/2000/svg",a);for(var d in b)b.hasOwnProperty(d)&&c.setAttribute(d,b[d]);return c}var b=this._htOption,c=this._el,d=a.getModuleCount();Math.floor(b.width/d),Math.floor(b.height/d),this.clear();var h=g("svg",{viewBox:"0 0 "+String(d)+" "+String(d),width:"100%",height:"100%",fill:b.colorLight});h.setAttributeNS("http://www.w3.org/2000/xmlns/","xmlns:xlink","http://www.w3.org/1999/xlink"),c.appendChild(h),h.appendChild(g("rect",{fill:b.colorDark,width:"1",height:"1",id:"template"}));for(var i=0;d>i;i++)for(var j=0;d>j;j++)if(a.isDark(i,j)){var k=g("use",{x:String(i),y:String(j)});k.setAttributeNS("http://www.w3.org/1999/xlink","href","#template"),h.appendChild(k)}},a.prototype.clear=function(){for(;this._el.hasChildNodes();)this._el.removeChild(this._el.lastChild)},a}(),p="svg"===document.documentElement.tagName.toLowerCase(),q=p?o:m()?function(){function a(){this._elImage.src=this._elCanvas.toDataURL("image/png"),this._elImage.style.display="block",this._elCanvas.style.display="none"}function d(a,b){var c=this;if(c._fFail=b,c._fSuccess=a,null===c._bSupportDataURI){var d=document.createElement("img"),e=function(){c._bSupportDataURI=!1,c._fFail&&_fFail.call(c)},f=function(){c._bSupportDataURI=!0,c._fSuccess&&c._fSuccess.call(c)};return d.onabort=e,d.onerror=e,d.onload=f,d.src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==",void 0}c._bSupportDataURI===!0&&c._fSuccess?c._fSuccess.call(c):c._bSupportDataURI===!1&&c._fFail&&c._fFail.call(c)}if(this._android&&this._android<=2.1){var b=1/window.devicePixelRatio,c=CanvasRenderingContext2D.prototype.drawImage;CanvasRenderingContext2D.prototype.drawImage=function(a,d,e,f,g,h,i,j){if("nodeName"in a&&/img/i.test(a.nodeName))for(var l=arguments.length-1;l>=1;l--)arguments[l]=arguments[l]*b;else"undefined"==typeof j&&(arguments[1]*=b,arguments[2]*=b,arguments[3]*=b,arguments[4]*=b);c.apply(this,arguments)}}var e=function(a,b){this._bIsPainted=!1,this._android=n(),this._htOption=b,this._elCanvas=document.createElement("canvas"),this._elCanvas.width=b.width,this._elCanvas.height=b.height,a.appendChild(this._elCanvas),this._el=a,this._oContext=this._elCanvas.getContext("2d"),this._bIsPainted=!1,this._elImage=document.createElement("img"),this._elImage.style.display="none",this._el.appendChild(this._elImage),this._bSupportDataURI=null};return e.prototype.draw=function(a){var b=this._elImage,c=this._oContext,d=this._htOption,e=a.getModuleCount(),f=d.width/e,g=d.height/e,h=Math.round(f),i=Math.round(g);b.style.display="none",this.clear();for(var j=0;e>j;j++)for(var k=0;e>k;k++){var l=a.isDark(j,k),m=k*f,n=j*g;c.strokeStyle=l?d.colorDark:d.colorLight,c.lineWidth=1,c.fillStyle=l?d.colorDark:d.colorLight,c.fillRect(m,n,f,g),c.strokeRect(Math.floor(m)+.5,Math.floor(n)+.5,h,i),c.strokeRect(Math.ceil(m)-.5,Math.ceil(n)-.5,h,i)}this._bIsPainted=!0},e.prototype.makeImage=function(){this._bIsPainted&&d.call(this,a)},e.prototype.isPainted=function(){return this._bIsPainted},e.prototype.clear=function(){this._oContext.clearRect(0,0,this._elCanvas.width,this._elCanvas.height),this._bIsPainted=!1},e.prototype.round=function(a){return a?Math.floor(1e3*a)/1e3:a},e}():function(){var a=function(a,b){this._el=a,this._htOption=b};return a.prototype.draw=function(a){for(var b=this._htOption,c=this._el,d=a.getModuleCount(),e=Math.floor(b.width/d),f=Math.floor(b.height/d),g=['<table style="border:0;border-collapse:collapse;">'],h=0;d>h;h++){g.push("<tr>");for(var i=0;d>i;i++)g.push('<td style="border:0;border-collapse:collapse;padding:0;margin:0;width:'+e+"px;height:"+f+"px;background-color:"+(a.isDark(h,i)?b.colorDark:b.colorLight)+';"></td>');g.push("</tr>")}g.push("</table>"),c.innerHTML=g.join("");var j=c.childNodes[0],k=(b.width-j.offsetWidth)/2,l=(b.height-j.offsetHeight)/2;k>0&&l>0&&(j.style.margin=l+"px "+k+"px")},a.prototype.clear=function(){this._el.innerHTML=""},a}();QRCode=function(a,b){if(this._htOption={width:256,height:256,typeNumber:4,colorDark:"#000000",colorLight:"#ffffff",correctLevel:d.H},"string"==typeof b&&(b={text:b}),b)for(var c in b)this._htOption[c]=b[c];"string"==typeof a&&(a=document.getElementById(a)),this._android=n(),this._el=a,this._oQRCode=null,this._oDrawing=new q(this._el,this._htOption),this._htOption.text&&this.makeCode(this._htOption.text)},QRCode.prototype.makeCode=function(a){this._oQRCode=new b(r(a,this._htOption.correctLevel),this._htOption.correctLevel),this._oQRCode.addData(a),this._oQRCode.make(),this._el.title=a,this._oDrawing.draw(this._oQRCode),this.makeImage()},QRCode.prototype.makeImage=function(){"function"==typeof this._oDrawing.makeImage&&(!this._android||this._android>=3)&&this._oDrawing.makeImage()},QRCode.prototype.clear=function(){this._oDrawing.clear()},QRCode.CorrectLevel=d}();
+</script>
+<script>
+// ═══════════════ DROPBOX SYNC (v6.5.0) — OAuth2 PKCE, no server ═══════════════
+var DBX = {
+  KEY: 'okopfgpojy47x4o',
+  FILE: '/swagatik-backup.json',
+  SKIP: /^(pk3_dbx_|pk3_session$|pk3_ai_key$|pk3_oai_key$|pk3_autosave_|pk3_lic_backup$|pk3_tracker$|pk3_fab_pos$|pk3_data_version$)/,
+  _busy: false, _timer: null, _warn: '',
+  _reload: function(){ location.reload(); },
+  redirect: function(){ return location.origin + location.pathname.replace(/index\.html$/, ''); },
+  _get: function(k){ try { return JSON.parse(localStorage.getItem(k) || 'null'); } catch(e){ return null; } },
+  _put: function(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} },
+  auth: function(){ return this._get('pk3_dbx_auth'); },
+  meta: function(){ return this._get('pk3_dbx_meta') || {}; },
+  setMeta: function(patch){ var m = this.meta(); for (var k in patch) m[k] = patch[k]; this._put('pk3_dbx_meta', m); },
+  connected: function(){ var a = this.auth(); return !!(a && a.refresh); },
+  toast: function(m, t){ try { App.toast(m, t || 'success', 3500); } catch(e){ console.log(m); } },
+  _b64url: function(buf){ var s = ''; var b = new Uint8Array(buf); for (var i = 0; i < b.length; i++) s += String.fromCharCode(b[i]); return btoa(s).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); },
+  _rand: function(n){ var a = new Uint8Array(n); crypto.getRandomValues(a); return this._b64url(a.buffer); },
+
+  // ── 1. CONNECT ──
+  connect: async function(){
+    try {
+      if (!(window.crypto && crypto.subtle)) { this.toast('❌ यो browser मा Dropbox चल्दैन (https चाहिन्छ)', 'error'); return; }
+      var v = this._rand(48);
+      localStorage.setItem('pk3_dbx_verifier', v);
+      var ch = this._b64url(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(v)));
+      var url = 'https://www.dropbox.com/oauth2/authorize?client_id=' + this.KEY
+        + '&response_type=code&token_access_type=offline&code_challenge_method=S256&code_challenge=' + ch
+        + '&redirect_uri=' + encodeURIComponent(this.redirect());
+      location.href = url;
+    } catch(e){ this.toast('❌ Connect भएन: ' + e.message, 'error'); }
+  },
+  _tokenPost: async function(params){
+    var r = await fetch('https://api.dropboxapi.com/oauth2/token', {
+      method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams(params).toString() });
+    var j = await r.json();
+    if (!r.ok) throw new Error(j.error_description || j.error || ('HTTP ' + r.status));
+    return j;
+  },
+  handleRedirect: async function(){
+    var q = new URLSearchParams(location.search);
+    if (!q.get('code') && !q.get('error')) return false;
+    var code = q.get('code'), err = q.get('error');
+    try { history.replaceState(null, '', this.redirect()); } catch(e){}
+    if (err || !code) { this.toast('❌ Dropbox connect रद्द भयो', 'error'); return true; }
+    try {
+      var j = await this._tokenPost({ code: code, grant_type: 'authorization_code', client_id: this.KEY,
+        code_verifier: localStorage.getItem('pk3_dbx_verifier') || '', redirect_uri: this.redirect() });
+      this._put('pk3_dbx_auth', { access: j.access_token, refresh: j.refresh_token, exp: Date.now() + (j.expires_in || 14400) * 1000 });
+      localStorage.removeItem('pk3_dbx_verifier');
+      this.toast('✅ Dropbox जोडियो');
+      await this.afterConnect();
+    } catch(e){ this.toast('❌ Dropbox login असफल: ' + e.message, 'error'); }
+    return true;
+  },
+  token: async function(){
+    var a = this.auth(); if (!a || !a.refresh) throw new Error('Dropbox जोडिएको छैन');
+    if (a.access && a.exp > Date.now() + 60000) return a.access;
+    var j = await this._tokenPost({ grant_type: 'refresh_token', refresh_token: a.refresh, client_id: this.KEY });
+    a.access = j.access_token; a.exp = Date.now() + (j.expires_in || 14400) * 1000; this._put('pk3_dbx_auth', a);
+    return a.access;
+  },
+
+  // ── 2. DROPBOX API ──
+  _meta: async function(path){
+    var t = await this.token();
+    var r = await fetch('https://api.dropboxapi.com/2/files/get_metadata', { method: 'POST',
+      headers: { 'Authorization': 'Bearer ' + t, 'Content-Type': 'application/json' }, body: JSON.stringify({ path: path }) });
+    if (r.status === 409) return null;
+    if (!r.ok) throw new Error('Dropbox HTTP ' + r.status);
+    return await r.json();
+  },
+  _download: async function(path){
+    var t = await this.token();
+    var r = await fetch('https://content.dropboxapi.com/2/files/download', { method: 'POST',
+      headers: { 'Authorization': 'Bearer ' + t, 'Dropbox-API-Arg': JSON.stringify({ path: path }) } });
+    if (r.status === 409) return null;
+    if (!r.ok) throw new Error('Dropbox HTTP ' + r.status);
+    return await r.text();
+  },
+  _upload: async function(path, text){
+    var t = await this.token();
+    var r = await fetch('https://content.dropboxapi.com/2/files/upload', { method: 'POST',
+      headers: { 'Authorization': 'Bearer ' + t, 'Content-Type': 'application/octet-stream',
+        'Dropbox-API-Arg': JSON.stringify({ path: path, mode: 'overwrite', mute: true }) }, body: text });
+    if (!r.ok) throw new Error('Upload HTTP ' + r.status);
+    return await r.json();
+  },
+
+  // ── 3. DATA ──
+  collect: function(){
+    var d = {};
+    for (var i = 0; i < localStorage.length; i++) {
+      var k = localStorage.key(i);
+      if (k && k.indexOf('pk3_') === 0 && !this.SKIP.test(k)) d[k] = localStorage.getItem(k);
+    }
+    return d;
+  },
+  _hash: function(d){
+    var keys = Object.keys(d).sort(), h = 2166136261;
+    for (var i = 0; i < keys.length; i++) {
+      var s = keys[i] + '\u0001' + d[keys[i]] + '\u0002';
+      for (var j = 0; j < s.length; j++) { h ^= s.charCodeAt(j); h = Math.imul(h, 16777619) >>> 0; }
+    }
+    return h.toString(36) + ':' + keys.length;
+  },
+  hasLocalData: function(){
+    var ks = ['pk3_customers','pk3_quotations','pk3_invoices','pk3_daybook','pk3_estimates','pk3_followups','pk3_returns','pk3_ledger','pk3_stock','pk3_walkins'];
+    for (var i = 0; i < ks.length; i++) {
+      try { var v = JSON.parse(localStorage.getItem(ks[i]) || 'null');
+        if (v && (Array.isArray(v) ? v.length : Object.keys(v).length)) return true; } catch(e){}
+    }
+    return false;
+  },
+
+  // ── 4. PUSH / PULL ──
+  push: async function(force){
+    if (this._busy) return false; this._busy = true;
+    try {
+      var d = this.collect(), h = this._hash(d), m = this.meta();
+      var remote = await this._meta(this.FILE);
+      if (remote && m.rev && remote.rev !== m.rev && !force) {
+        this._warn = '⚠️ दोस्रो device मा data बदलिएको छ — पहिले "Dropbox बाट Restore" वा Sync Now गर्नुहोस्';
+        this.render(); return false;
+      }
+      if (remote && !m.rev && !force) { this._warn = '⚠️ Dropbox मा अर्को data छ'; this.render(); return false; }
+      var payload = JSON.stringify({ app: 'swagatik', v: 1, at: new Date().toISOString(), data: d });
+      var res = await this._upload(this.FILE, payload);
+      var today = new Date().toISOString().slice(0, 10);
+      var patch = { rev: res.rev, hash: h, last: Date.now(), hadData: this.hasLocalData() };
+      if (m.daily !== today) {
+        try { await this._upload('/history/swagatik-' + today + '.json', payload); patch.daily = today; } catch(e){}
+      }
+      this.setMeta(patch); this._warn = ''; this.render(); return true;
+    } catch(e){ this._warn = '⚠️ Sync असफल: ' + e.message; this.render(); return false; }
+    finally { this._busy = false; }
+  },
+  pull: async function(){
+    if (this._busy) return false; this._busy = true;
+    try {
+      var remote = await this._meta(this.FILE);
+      if (!remote) { this.toast('Dropbox मा backup भेटिएन', 'error'); return false; }
+      var txt = await this._download(this.FILE);
+      var obj = JSON.parse(txt);
+      if (!obj || obj.app !== 'swagatik' || !obj.data) throw new Error('Backup फाइल मिलेन');
+      var cur = this.collect(), k;
+      for (k in cur) if (!(k in obj.data)) localStorage.removeItem(k);
+      for (k in obj.data) if (!this.SKIP.test(k)) localStorage.setItem(k, obj.data[k]);
+      this.setMeta({ rev: remote.rev, hash: this._hash(this.collect()), last: Date.now(), hadData: true });
+      this._warn = '';
+      this.toast('✅ Dropbox बाट data फर्कियो — पुनः लोड हुँदैछ…');
+      var self2 = this; setTimeout(function(){ self2._reload(); }, 1200);
+      return true;
+    } catch(e){ this._warn = '⚠️ Restore असफल: ' + e.message; this.render(); this.toast('❌ ' + e.message, 'error'); return false; }
+    finally { this._busy = false; }
+  },
+  afterConnect: async function(){
+    try {
+      var remote = await this._meta(this.FILE);
+      if (!remote) { this.setMeta({ rev: '', hash: '' }); await this.push(true); this.toast('✅ पहिलो backup Dropbox मा सेभ भयो'); return; }
+      if (!this.hasLocalData()) { await this.pull(); return; }
+      if (confirm('Dropbox मा पहिल्यै backup छ।\n\nOK = Dropbox बाट Restore (यहाँको अहिलेको data बदलिन्छ)\nCancel = अर्को विकल्प')) { await this.pull(); return; }
+      if (confirm('यहाँको अहिलेको data ले Dropbox को पुरानो backup Overwrite गर्ने?\n\n(पुरानो backup /history फोल्डरमा दैनिक copy मा बाँकी हुन्छ)\n\nOK = Overwrite    Cancel = Dropbox जोड्ने काम रद्द')) {
+        this.setMeta({ rev: remote.rev }); await this.push(true); return;
+      }
+      this.disconnect(true);
+    } catch(e){ this.toast('❌ ' + e.message, 'error'); }
+    this.render();
+  },
+  syncNow: async function(){
+    if (!this.connected()) return this.toast('पहिले Dropbox जोड्नुहोस्', 'error');
+    if (!navigator.onLine) return this.toast('Internet छैन — जोडिएपछि आफैं sync हुन्छ', 'error');
+    var remote = await this._meta(this.FILE).catch(function(){ return null; });
+    var m = this.meta(), d = this.collect();
+    if (remote && m.rev && remote.rev !== m.rev) {
+      if (this._hash(d) === m.hash) { return this.pull(); }
+      if (confirm('दुवै ठाउँमा data बदलिएको छ।\nOK = Dropbox को data राख्ने (यहाँको बदलिन्छ)\nCancel = यहाँको data राख्ने (Dropbox मा overwrite)')) return this.pull();
+      var ok = await this.push(true); if (ok) this.toast('✅ Dropbox मा सेभ भयो'); return;
+    }
+    var ok2 = await this.push(false); if (ok2) this.toast('✅ Dropbox मा सेभ भयो');
+  },
+  restoreNow: async function(){
+    if (!this.connected()) return this.toast('पहिले Dropbox जोड्नुहोस्', 'error');
+    if (!confirm('Dropbox को backup बाट Restore गर्ने?\nयहाँको अहिलेको data बदलिन्छ।')) return;
+    await this.pull();
+  },
+  disconnect: function(silent){
+    if (!silent && !confirm('Dropbox disconnect गर्ने? (data मेटिँदैन, Auto-sync मात्र बन्द हुन्छ)')) return;
+    var a = this.auth();
+    try { if (a && a.access) fetch('https://api.dropboxapi.com/2/auth/token/revoke', { method: 'POST', headers: { 'Authorization': 'Bearer ' + a.access } }); } catch(e){}
+    localStorage.removeItem('pk3_dbx_auth'); localStorage.removeItem('pk3_dbx_meta'); this._warn = '';
+    this.render(); if (!silent) this.toast('Dropbox disconnect भयो');
+  },
+
+  // ── 5. AUTO-SYNC ──
+  tick: async function(){
+    if (!this.connected() || this._busy || !navigator.onLine) return;
+    try {
+      var m = this.meta(), d = this.collect(), h = this._hash(d), changed = (h !== m.hash);
+      var remote = await this._meta(this.FILE);
+      if (remote && m.rev && remote.rev !== m.rev) {
+        if (!changed) { await this.pull(); return; }
+        this._warn = '⚠️ दोस्रो device मा पनि data बदलिएको छ — Sync Now थिचेर छान्नुहोस्'; this.render(); return;
+      }
+      if (!changed) return;
+      if (!this.hasLocalData() && m.hadData) { this._warn = '⚠️ यहाँको data खाली देखियो — Auto-sync रोकिएको छ। "Dropbox बाट Restore" थिच्नुहोस्'; this.render(); return; }
+      await this.push(false);
+    } catch(e){ /* offline / transient — retry next tick */ }
+  },
+  start: function(){
+    var self = this;
+    this.handleRedirect().then(function(){
+      self.render();
+      if (self.connected()) setTimeout(function(){ self.tick(); }, 2500);
+    });
+    if (this._timer) clearInterval(this._timer);
+    this._timer = setInterval(function(){ self.tick(); }, 30000);
+    window.addEventListener('online', function(){ setTimeout(function(){ self.tick(); }, 1500); });
+    document.addEventListener('visibilitychange', function(){ if (document.visibilityState === 'hidden') self.tick(); });
+  },
+
+  // ── 6. UI ──
+  render: function(){
+    var el = document.getElementById('dbx-status'); if (!el) return;
+    var on = this.connected(), m = this.meta();
+    var last = m.last ? new Date(m.last).toLocaleString() : '—';
+    el.innerHTML = on
+      ? '<span style="color:var(--green);font-weight:700;">● जोडिएको</span> — Auto-Sync चालु<br><span style="color:var(--text-muted);font-size:0.72rem;">पछिल्लो sync: ' + last + '</span>'
+      : '<span style="color:var(--text-muted);">○ जोडिएको छैन</span>';
+    var w = document.getElementById('dbx-warn'); if (w) { w.style.display = this._warn ? '' : 'none'; w.textContent = this._warn; }
+    var show = function(id, v){ var e = document.getElementById(id); if (e) e.style.display = v ? '' : 'none'; };
+    show('dbx-btn-connect', !on); show('dbx-btn-sync', on); show('dbx-btn-restore', on); show('dbx-btn-disc', on);
+  }
+};
+window.addEventListener('load', function(){ try { DBX.start(); } catch(e){ console.warn('DBX', e); } });
 </script>
 <script>
 /* PWA service worker — registers only when hosted over http(s) (not file://).
