@@ -275,6 +275,8 @@ var APP_VERSION = '7.1.0';
       </div>
     </div>
     <div id="dash-greet" style="font-size:1.05rem;font-weight:800;margin-bottom:10px;">👋</div>
+    <!-- v7.2.0 Low Stock warning (Stock.renderDashAlert) -->
+    <div id="dash-lowstock" data-module="stock" style="display:none;"></div>
     <!-- ═══ आजको Snapshot — Daily P&L + due tracking (v5.9) ═══ -->
     <div class="card" style="margin-bottom:14px;background:linear-gradient(135deg,rgba(249,115,22,0.06),rgba(34,197,94,0.04));border:1px solid var(--border);">
       <div style="padding:12px 14px 8px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;">
@@ -983,6 +985,7 @@ var APP_VERSION = '7.1.0';
   <!-- ========================= STOCK PAGE ========================= -->
   <div class="page" id="page-stocklist">
     <div class="section-head"><div class="search-wrap"><input type="text" id="stk-search" placeholder="Search stock..." oninput="Stock.render()"></div><div class="btn-group"><button onclick="Stock.scanBarcode()" class="btn btn-sm btn-secondary">📷 Scan</button><button onclick="Stock.addModal()" class="btn btn-sm btn-primary">+ Add</button></div></div>
+    <div style="font-size:0.72rem;color:var(--text-muted);margin-bottom:8px;">ℹ️ Invoice (बिक्री) सेभ गर्दा मिल्ने नामको सामान stock बाट स्वतः घट्छ; Supplier बिलमा "Stock मा थप्ने" सामान राखे स्वतः बढ्छ। रातो = Low Stock (सीमा भन्दा कम)।</div>
     <div id="stk-alert-bar" style="display:none;background:var(--red-soft);border:1px solid rgba(248,113,113,0.3);border-radius:10px;padding:10px 14px;font-size:0.82rem;color:var(--red);margin-bottom:10px;"></div>
     <div class="card"><div class="table-wrap"><table><thead><tr><th>Photo</th><th>Item Name</th><th>Category</th><th style="text-align:right;">Stock</th><th style="text-align:right;">Purchase</th><th style="text-align:right;">Selling</th><th style="text-align:right;">Margin</th><th></th></tr></thead><tbody id="stk-table"></tbody></table></div><div id="no-stk" class="empty-state" style="display:none;"><div class="icon">📦</div><div class="title">Stock छैन</div><button onclick="Stock.addModal()" class="btn btn-primary">+ Add Item</button></div></div>
   </div>
