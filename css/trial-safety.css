@@ -1,0 +1,14 @@
+/* v7.2.0 — Backup alert (Dashboard) + Error Log (Settings) */
+.backup-alert{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;
+  margin:0 0 12px;padding:12px 14px;border-radius:12px;border:1px solid #f59e0b;
+  background:rgba(245,158,11,0.12);color:var(--text,#111);}
+.backup-alert-text{display:flex;flex-direction:column;gap:3px;font-size:0.82rem;line-height:1.5;min-width:0;flex:1 1 220px;}
+.backup-alert-text b{color:#b45309;font-size:0.88rem;}
+.backup-alert-btns{display:flex;gap:6px;flex-wrap:wrap;}
+.errlog-list{margin-top:10px;max-height:320px;overflow-y:auto;display:grid;gap:6px;}
+.errlog-item{border:1px solid var(--border,#ddd);border-left:3px solid #dc2626;border-radius:8px;padding:7px 9px;background:var(--surface-2,rgba(0,0,0,0.03));}
+.errlog-meta{font-size:0.68rem;color:var(--text-muted,#666);}
+.errlog-type{text-transform:uppercase;font-weight:800;color:#dc2626;}
+.errlog-msg{font-size:0.78rem;font-family:ui-monospace,Menlo,Consolas,monospace;word-break:break-word;margin-top:2px;}
+.errlog-src{font-size:0.68rem;color:var(--text-muted,#666);font-family:ui-monospace,Menlo,Consolas,monospace;word-break:break-all;}
+.errlog-empty{font-size:0.8rem;color:var(--text-muted,#666);padding:6px 0;}

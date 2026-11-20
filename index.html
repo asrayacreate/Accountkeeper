@@ -25,9 +25,11 @@
 // ── RELEASE VERSION — एकै ठाउँ। `npm run release` ले यो, sw.js, package.json र तलका सबै ?v= सँगै बदल्छ। ──
 var APP_VERSION = '7.1.0';
 </script>
+<script src="js/core/error-log.js?v=7.1.0"></script>
 <script src="js/core/manifest.js?v=7.1.0"></script>
 <link rel="stylesheet" href="css/app.css?v=7.1.0">
 <link rel="stylesheet" href="css/extra.css?v=7.1.0">
+<link rel="stylesheet" href="css/trial-safety.css?v=7.1.0">
 <link rel="stylesheet" href="css/v7.css?v=7.1.0">
 <link rel="stylesheet" href="css/insights.css?v=7.1.0">
 </head>
@@ -254,6 +256,7 @@ var APP_VERSION = '7.1.0';
 
   <!-- ========================= DASHBOARD PAGE ========================= -->
   <div class="page active" id="page-dashboard">
+    <div id="backup-alert-dash" style="display:none;"></div>
     <div id="smart-rem-dash"></div>
     <div class="hero-card">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;flex-wrap:wrap;">
@@ -1223,6 +1226,17 @@ var APP_VERSION = '7.1.0';
         </div>
         <div style="font-size:0.73rem;color:var(--text-muted);margin-top:8px;">Auto-save: हरेक action मा स्वतः save हुन्छ।</div>
       </div>
+      <div class="card card-body" id="set-errlog-card">
+        <div class="section-title">🐞 Error Log (ट्रायल / समस्या रिपोर्ट)</div>
+        <div style="font-size:0.75rem;color:var(--text-muted);margin:6px 0 4px;line-height:1.6;">एप चलाउँदा कुनै bug वा error आए यहाँ आफैं रेकर्ड हुन्छ। "Copy" थिचेर WhatsApp / Email मा पठाउन सकिन्छ। यो यही device मा मात्र रहन्छ — sync वा backup फाइलमा जाँदैन।</div>
+        <div style="font-size:0.8rem;font-weight:700;margin-bottom:8px;" id="errlog-count">—</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          <button type="button" id="errlog-view-btn" class="btn btn-sm btn-secondary" onclick="ErrorLogView.toggle()">👁 Error Log हेर्नुहोस्</button>
+          <button type="button" id="errlog-copy-btn" class="btn btn-sm btn-primary" onclick="ErrorLogView.copy()">📋 Copy</button>
+          <button type="button" id="errlog-clear-btn" class="btn btn-sm btn-danger" onclick="ErrorLogView.clear()">🗑 खाली गर्नुहोस्</button>
+        </div>
+        <div id="errlog-list" class="errlog-list" style="display:none;"></div>
+      </div>
 
       <!-- ========================= TESTING CHECKLIST ========================= -->
       <div class="card card-body">
@@ -1937,6 +1951,8 @@ var APP_VERSION = '7.1.0';
 <script src="js/modules/bulk-message.js?v=7.1.0"></script>
 <script src="js/modules/account-summary.js?v=7.1.0"></script>
 <script src="js/modules/backup.js?v=7.1.0"></script>
+<script src="js/modules/backup-alert.js?v=7.1.0"></script>
+<script src="js/modules/error-log-view.js?v=7.1.0"></script>
 <script src="js/modules/settings.js?v=7.1.0"></script>
 <script src="js/modules/audit-notif.js?v=7.1.0"></script>
 <script src="js/modules/smart-reminders.js?v=7.1.0"></script>

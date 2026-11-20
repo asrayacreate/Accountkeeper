@@ -44,30 +44,8 @@ window.addEventListener('unhandledrejection', function(e){
   else update();
 })();
 
-// ============================================================
-// AUTO-BACKUP REMINDER — every 7 days nudge user to export
-// ============================================================
-(function(){
-  function checkBackup(){
-    try {
-      var last = parseInt(localStorage.getItem('pk3_lastBackupNudge')||'0');
-      var now  = Date.now();
-      var SEVEN_DAYS = 7*24*60*60*1000;
-      // Show nudge only if logged in, has data, and 7+ days passed
-      if(typeof currentUser==='undefined' || !currentUser) return;
-      var custCount = (STORE.get('pk3_customers',[])||[]).length;
-      if(custCount < 5) return; // skip for empty / new installs
-      if(now - last < SEVEN_DAYS) return;
-      // Show toast nudge
-      if(window.App && App.toast){
-        App.toast('💾 साप्ताहिक backup गर्ने समय भयो — Settings → Backup','info',6000);
-      }
-      localStorage.setItem('pk3_lastBackupNudge', String(now));
-    } catch(e){}
-  }
-  // Run 4 seconds after load (so login finishes)
-  setTimeout(checkBackup, 4000);
-})();
+// AUTO-BACKUP REMINDER — v7.2.0 देखि js/modules/backup-alert.js (BackupAlert) ले गर्छ।
+// (पुरानो pk3_lastBackupNudge toast ले वास्तविक backup मिति हेर्दैनथ्यो, त्यसैले हटाइयो।)
 
 // ============================================================
 // (kept simple so user can install on Chrome/Edge/Android)
