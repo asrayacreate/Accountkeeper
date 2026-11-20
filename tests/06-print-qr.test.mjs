@@ -20,6 +20,8 @@ test('Settings: upload Payment QR image, it is saved and previewed; Terms saved'
   const { page, errors, ctx } = await loggedIn({ base, browser, storage });
   await page.evaluate(() => App.navigate('settings'));
   await page.setInputFiles('#set-payqr-file', { name: 'qr.png', mimeType: 'image/png', buffer: Buffer.from(PNG, 'base64') });
+  await page.waitForSelector('#set-payqr-save', { state: 'visible' });
+  await page.click('#set-payqr-save');
   await page.waitForFunction(() => (STORE.get('pk3_pay_qr', '') || '').startsWith('data:image/png'));
   assert.equal(await page.isVisible('#set-payqr-img'), true);
   assert.equal(await page.isVisible('#set-payqr-del'), true);

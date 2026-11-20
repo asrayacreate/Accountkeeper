@@ -154,7 +154,7 @@ test('📸 photos are compressed (≤800px, small), stored outside localStorage 
   assert.ok(r.same);
   assert.equal(r.proj[0].kind, 'before');
   assert.ok(r.inBackup, 'photo inside backup .json');
-  assert.equal(r.meta.version, '7.0.0');
+  assert.equal(r.meta.version, JSON.parse(fs.readFileSync(new URL('../package.json', import.meta.url))).version);
   assert.ok(r.lsSize < 60000, 'photo not stored in localStorage');
   // the project view shows the thumbnail
   await page.evaluate(() => Projects.view('pj1'));

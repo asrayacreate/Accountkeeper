@@ -23,13 +23,13 @@
 <meta name="mobile-web-app-capable" content="yes">
 <script>
 // ── RELEASE VERSION — एकै ठाउँ। `npm run release` ले यो, sw.js, package.json र तलका सबै ?v= सँगै बदल्छ। ──
-var APP_VERSION = '7.0.0';
+var APP_VERSION = '7.1.0';
 </script>
-<script src="js/core/manifest.js?v=7.0.0"></script>
-<link rel="stylesheet" href="css/app.css?v=7.0.0">
-<link rel="stylesheet" href="css/extra.css?v=7.0.0">
-<link rel="stylesheet" href="css/v7.css?v=7.0.0">
-<link rel="stylesheet" href="css/insights.css?v=7.0.0">
+<script src="js/core/manifest.js?v=7.1.0"></script>
+<link rel="stylesheet" href="css/app.css?v=7.1.0">
+<link rel="stylesheet" href="css/extra.css?v=7.1.0">
+<link rel="stylesheet" href="css/v7.css?v=7.1.0">
+<link rel="stylesheet" href="css/insights.css?v=7.1.0">
 </head>
 <body>
 
@@ -137,7 +137,7 @@ var APP_VERSION = '7.0.0';
         <div class="sb-logo-text">
           <div class="name" id="brand-sidebar-name">Swagatik</div>
           <div class="sub" id="sb-company-sub">स्वागतिक</div>
-          <div class="ver"><span data-app-version>v7.0.0</span> — Swagatik ⚡</div>
+          <div class="ver"><span data-app-version>v7.1.0</span> — Swagatik ⚡</div>
           <div class="ver" id="sidebar-clock" style="color:var(--text-muted);font-variant-numeric:tabular-nums;">--:--:--</div>
         </div>
       </div>
@@ -1125,20 +1125,6 @@ var APP_VERSION = '7.0.0';
           <div class="form-group"><label>Account Number</label><input type="text" id="set-bank-acc" oninput="Settings.save()"></div>
           <div class="form-group"><label>eSewa ID</label><input type="tel" id="set-esewa" oninput="Settings.save()"></div>
           <div class="form-group"><label>Khalti ID</label><input type="tel" id="set-khalti" oninput="Settings.save()"></div>
-          <div class="form-group full"><label>📲 Payment QR (eSewa / Fonepay / Bank QR)</label>
-            <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
-              <div style="width:110px;height:110px;border-radius:10px;border:2px dashed var(--border);background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;">
-                <span id="set-payqr-ph" style="font-size:2rem;color:#9ca3af;">▦</span>
-                <img id="set-payqr-img" alt="Payment QR" style="display:none;width:100%;height:100%;object-fit:contain;">
-              </div>
-              <div style="display:flex;flex-direction:column;gap:6px;min-width:0;flex:1;">
-                <input type="file" id="set-payqr-file" accept="image/*" onchange="PayQR.upload(event)" style="display:none;">
-                <button type="button" class="btn btn-sm btn-primary" onclick="document.getElementById('set-payqr-file').click()">📤 QR Upload</button>
-                <button type="button" id="set-payqr-del" class="btn btn-sm btn-danger" onclick="PayQR.remove()" style="display:none;">🗑️ हटाउनुहोस्</button>
-                <div style="font-size:0.7rem;color:var(--text-muted);line-height:1.5;">Quotation / Invoice / Estimate print र PDF को तल यो QR देखिन्छ।</div>
-              </div>
-            </div>
-          </div>
           <div class="form-group full"><label>📜 Default Terms &amp; Conditions (Print / PDF)</label><textarea id="set-doc-terms" rows="3" oninput="PayQR.saveTerms()" placeholder="जस्तै: १) ५०% अग्रिम, बाँकी काम सकिएपछि। २) Quotation १५ दिनसम्म मान्य। ३) VAT सहित।"></textarea></div>
         </div>
         <div style="margin-top:14px;display:flex;justify-content:flex-end;">
@@ -1151,6 +1137,24 @@ var APP_VERSION = '7.0.0';
           <div class="form-group full"><label>Quotation / Invoice / Estimate को Print साइज</label>
             <select id="set-print-size" onchange="PrintFmt.set(this.value)"></select>
             <div style="font-size:0.7rem;color:var(--text-muted);line-height:1.5;margin-top:6px;">A4 = निर्माण/इन्टेरियरका लागि पूरा प्रोफेसनल बिल · A5 = आधा पेज · 58mm / 80mm = हार्डवेयर, किराना, रिटेल पसलको Thermal POS प्रिन्टरमा छोटो बिल। Preview मा पनि एक पटकका लागि साइज बदल्न मिल्छ।</div>
+          </div>
+          <div class="form-group full" id="set-payqr-box"><label>📲 Payment QR (eSewa / Fonepay / Bank QR) — Print र PNG बिलमा</label>
+            <div style="display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap;">
+              <div id="set-payqr-frame" style="position:relative;width:150px;height:150px;border-radius:12px;border:2px dashed var(--border);background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;cursor:pointer;" onclick="document.getElementById('set-payqr-file').click()" title="QR छान्नुहोस्">
+                <span id="set-payqr-ph" style="font-size:0.75rem;color:#6b7280;text-align:center;line-height:1.4;padding:8px;">▦<br>QR फोटो<br>छान्नुहोस्</span>
+                <img id="set-payqr-img" alt="Payment QR" style="display:none;width:100%;height:100%;object-fit:contain;">
+                <span id="set-payqr-badge" style="display:none;position:absolute;left:0;right:0;bottom:0;background:#f59e0b;color:#111;font-size:0.65rem;font-weight:800;text-align:center;padding:3px 2px;">सेभ हुन बाँकी</span>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:8px;min-width:0;flex:1;">
+                <input type="file" id="set-payqr-file" accept="image/png,image/jpeg,image/webp,image/*" onchange="PayQR.upload(event)" style="display:none;">
+                <button type="button" id="set-payqr-pick" class="btn btn-sm btn-secondary" onclick="document.getElementById('set-payqr-file').click()">📤 QR फोटो छान्नुहोस्</button>
+                <button type="button" id="set-payqr-save" class="btn btn-success" onclick="PayQR.save()" style="display:none;font-weight:800;background:#16a34a;color:#fff;border-color:#16a34a;">💾 QR सेभ गर्नुहोस्</button>
+                <button type="button" id="set-payqr-cancel" class="btn btn-sm btn-secondary" onclick="PayQR.cancel()" style="display:none;">✖ रद्द गर्नुहोस्</button>
+                <button type="button" id="set-payqr-del" class="btn btn-sm btn-danger" onclick="PayQR.remove()" style="display:none;">🗑️ QR हटाउनुहोस्</button>
+                <div id="set-payqr-status" role="status" aria-live="polite" style="font-size:0.75rem;font-weight:700;line-height:1.5;"></div>
+                <div style="font-size:0.7rem;color:var(--text-muted);line-height:1.5;">फोटो छान्नेबित्तिकै प्रिभ्यू देखिन्छ (ठूलो फोटो आफैं सानो हुन्छ)। "QR सेभ गर्नुहोस्" थिचेपछि Quotation / Invoice / Estimate को Print, PDF र PNG फोटोमा यो QR आउँछ।</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -1223,7 +1227,7 @@ var APP_VERSION = '7.0.0';
       <!-- ========================= TESTING CHECKLIST ========================= -->
       <div class="card card-body">
         <div class="section-title">🧪 System Test Checklist</div>
-        <div style="font-size:0.78rem;color:var(--text-muted);margin-bottom:12px;">Swagatik <span data-app-version>v7.0.0</span> — सबै features test गरी confirm गर्नुस्</div>
+        <div style="font-size:0.78rem;color:var(--text-muted);margin-bottom:12px;">Swagatik <span data-app-version>v7.1.0</span> — सबै features test गरी confirm गर्नुस्</div>
         <div id="test-checklist-results">
           <div class="card" style="overflow:hidden;">
             <div class="card-head" style="font-size:0.8rem;">🧪 Quick Tests — Run गर्न button थिच्नुस्</div>
@@ -1896,78 +1900,78 @@ var APP_VERSION = '7.0.0';
       </div>
       <div style="display:flex;flex-direction:column;line-height:1.4;"><span style="font-size:0.82rem;"><b style="color:#f97316;font-weight:800;">Swagatik</b> <span style="opacity:0.7;color:var(--text-muted);">स्वागतिक</span></span><span style="font-size:0.66rem;color:var(--text-muted);opacity:0.85;" data-company-name></span></div>
     </div>
-    <div style="font-size:0.64rem;color:var(--text-muted);margin-top:5px;opacity:0.7;">Smart Business CRM • <span data-app-version>v7.0.0</span></div>
+    <div style="font-size:0.64rem;color:var(--text-muted);margin-top:5px;opacity:0.7;">Smart Business CRM • <span data-app-version>v7.1.0</span></div>
   </footer>
 
 </main>
 <!-- ── App scripts (classic scripts, loaded in order — no build step). Order matters. ── -->
-<script src="js/core/security.js?v=7.0.0"></script>
-<script src="js/core/store.js?v=7.0.0"></script>
-<script src="js/core/company.js?v=7.0.0"></script>
-<script src="js/core/media.js?v=7.0.0"></script>
-<script src="js/core/date-bs.js?v=7.0.0"></script>
-<script src="js/ui/brand.js?v=7.0.0"></script>
-<script src="js/core/license.js?v=7.0.0"></script>
-<script src="js/core/license-cloud.js?v=7.0.0"></script>
-<script src="js/core/auth.js?v=7.0.0"></script>
-<script src="js/core/data-init.js?v=7.0.0"></script>
-<script src="js/core/business-profiles.js?v=7.0.0"></script>
-<script src="js/core/modules.js?v=7.0.0"></script>
-<script src="js/core/sync.js?v=7.0.0"></script>
-<script src="js/core/migrations.js?v=7.0.0"></script>
-<script src="js/ui/brand-logo.js?v=7.0.0"></script>
-<script src="js/ui/whatsapp.js?v=7.0.0"></script>
-<script src="js/core/app.js?v=7.0.0"></script>
-<script src="js/modules/customers.js?v=7.0.0"></script>
-<script src="js/modules/quotations.js?v=7.0.0"></script>
-<script src="js/modules/measure.js?v=7.0.0"></script>
-<script src="js/modules/invoices.js?v=7.0.0"></script>
-<script src="js/modules/followups.js?v=7.0.0"></script>
-<script src="js/modules/planner.js?v=7.0.0"></script>
-<script src="js/modules/daybook.js?v=7.0.0"></script>
-<script src="js/modules/expenses.js?v=7.0.0"></script>
-<script src="js/modules/ratelist.js?v=7.0.0"></script>
-<script src="js/modules/staff.js?v=7.0.0"></script>
-<script src="js/modules/stock.js?v=7.0.0"></script>
-<script src="js/modules/sales-team.js?v=7.0.0"></script>
-<script src="js/modules/bulk-message.js?v=7.0.0"></script>
-<script src="js/modules/account-summary.js?v=7.0.0"></script>
-<script src="js/modules/backup.js?v=7.0.0"></script>
-<script src="js/modules/settings.js?v=7.0.0"></script>
-<script src="js/modules/audit-notif.js?v=7.0.0"></script>
-<script src="js/modules/smart-reminders.js?v=7.0.0"></script>
-<script src="js/modules/walkin.js?v=7.0.0"></script>
-<script src="js/modules/qr-vat.js?v=7.0.0"></script>
-<script src="js/modules/visiting-card.js?v=7.0.0"></script>
-<script src="js/modules/ai-assistant.js?v=7.0.0"></script>
-<script src="js/modules/bakauta.js?v=7.0.0"></script>
-<script src="js/modules/estimate.js?v=7.0.0"></script>
-<script src="js/modules/brochure.js?v=7.0.0"></script>
-<script src="js/modules/ledger.js?v=7.0.0"></script>
-<script src="js/modules/reports.js?v=7.0.0"></script>
-<script src="js/ui/dashboard.js?v=7.0.0"></script>
-<script src="js/ui/widgets.js?v=7.0.0"></script>
-<script src="js/ui/dash-charts.js?v=7.0.0"></script>
-<script src="js/ui/quick-add.js?v=7.0.0"></script>
-<script src="js/modules/system-tests.js?v=7.0.0"></script>
-<script src="js/core/init.js?v=7.0.0"></script>
-<script src="js/core/permissions.js?v=7.0.0"></script>
-<script src="js/ui/quick-actions.js?v=7.0.0"></script>
-<script src="js/modules/cashbook-returns.js?v=7.0.0"></script>
-<script src="js/modules/sample-data.js?v=7.0.0"></script>
-<script src="js/ui/admin-dashboard.js?v=7.0.0"></script>
-<script src="js/ui/setup-wizard.js?v=7.0.0"></script>
-<script src="js/core/runtime.js?v=7.0.0"></script>
-<script src="js/vendor/qrcode.min.js?v=7.0.0"></script>
-<script src="js/modules/sync-dropbox.js?v=7.0.0"></script>
-<script src="js/modules/sync-gdrive.js?v=7.0.0"></script>
-<script src="js/modules/sync-supabase.js?v=7.0.0"></script>
-<script src="js/modules/pay-qr.js?v=7.0.0"></script>
-<script src="js/modules/doc-print.js?v=7.0.0"></script>
-<script src="js/modules/quote-convert.js?v=7.0.0"></script>
-<script src="js/modules/projects.js?v=7.0.0"></script>
-<script src="js/modules/payables.js?v=7.0.0"></script>
-<script src="js/modules/ca-export.js?v=7.0.0"></script>
-<script src="js/core/sw-register.js?v=7.0.0"></script>
+<script src="js/core/security.js?v=7.1.0"></script>
+<script src="js/core/store.js?v=7.1.0"></script>
+<script src="js/core/company.js?v=7.1.0"></script>
+<script src="js/core/media.js?v=7.1.0"></script>
+<script src="js/core/date-bs.js?v=7.1.0"></script>
+<script src="js/ui/brand.js?v=7.1.0"></script>
+<script src="js/core/license.js?v=7.1.0"></script>
+<script src="js/core/license-cloud.js?v=7.1.0"></script>
+<script src="js/core/auth.js?v=7.1.0"></script>
+<script src="js/core/data-init.js?v=7.1.0"></script>
+<script src="js/core/business-profiles.js?v=7.1.0"></script>
+<script src="js/core/modules.js?v=7.1.0"></script>
+<script src="js/core/sync.js?v=7.1.0"></script>
+<script src="js/core/migrations.js?v=7.1.0"></script>
+<script src="js/ui/brand-logo.js?v=7.1.0"></script>
+<script src="js/ui/whatsapp.js?v=7.1.0"></script>
+<script src="js/core/app.js?v=7.1.0"></script>
+<script src="js/modules/customers.js?v=7.1.0"></script>
+<script src="js/modules/quotations.js?v=7.1.0"></script>
+<script src="js/modules/measure.js?v=7.1.0"></script>
+<script src="js/modules/invoices.js?v=7.1.0"></script>
+<script src="js/modules/followups.js?v=7.1.0"></script>
+<script src="js/modules/planner.js?v=7.1.0"></script>
+<script src="js/modules/daybook.js?v=7.1.0"></script>
+<script src="js/modules/expenses.js?v=7.1.0"></script>
+<script src="js/modules/ratelist.js?v=7.1.0"></script>
+<script src="js/modules/staff.js?v=7.1.0"></script>
+<script src="js/modules/stock.js?v=7.1.0"></script>
+<script src="js/modules/sales-team.js?v=7.1.0"></script>
+<script src="js/modules/bulk-message.js?v=7.1.0"></script>
+<script src="js/modules/account-summary.js?v=7.1.0"></script>
+<script src="js/modules/backup.js?v=7.1.0"></script>
+<script src="js/modules/settings.js?v=7.1.0"></script>
+<script src="js/modules/audit-notif.js?v=7.1.0"></script>
+<script src="js/modules/smart-reminders.js?v=7.1.0"></script>
+<script src="js/modules/walkin.js?v=7.1.0"></script>
+<script src="js/modules/qr-vat.js?v=7.1.0"></script>
+<script src="js/modules/visiting-card.js?v=7.1.0"></script>
+<script src="js/modules/ai-assistant.js?v=7.1.0"></script>
+<script src="js/modules/bakauta.js?v=7.1.0"></script>
+<script src="js/modules/estimate.js?v=7.1.0"></script>
+<script src="js/modules/brochure.js?v=7.1.0"></script>
+<script src="js/modules/ledger.js?v=7.1.0"></script>
+<script src="js/modules/reports.js?v=7.1.0"></script>
+<script src="js/ui/dashboard.js?v=7.1.0"></script>
+<script src="js/ui/widgets.js?v=7.1.0"></script>
+<script src="js/ui/dash-charts.js?v=7.1.0"></script>
+<script src="js/ui/quick-add.js?v=7.1.0"></script>
+<script src="js/modules/system-tests.js?v=7.1.0"></script>
+<script src="js/core/init.js?v=7.1.0"></script>
+<script src="js/core/permissions.js?v=7.1.0"></script>
+<script src="js/ui/quick-actions.js?v=7.1.0"></script>
+<script src="js/modules/cashbook-returns.js?v=7.1.0"></script>
+<script src="js/modules/sample-data.js?v=7.1.0"></script>
+<script src="js/ui/admin-dashboard.js?v=7.1.0"></script>
+<script src="js/ui/setup-wizard.js?v=7.1.0"></script>
+<script src="js/core/runtime.js?v=7.1.0"></script>
+<script src="js/vendor/qrcode.min.js?v=7.1.0"></script>
+<script src="js/modules/sync-dropbox.js?v=7.1.0"></script>
+<script src="js/modules/sync-gdrive.js?v=7.1.0"></script>
+<script src="js/modules/sync-supabase.js?v=7.1.0"></script>
+<script src="js/modules/pay-qr.js?v=7.1.0"></script>
+<script src="js/modules/doc-print.js?v=7.1.0"></script>
+<script src="js/modules/quote-convert.js?v=7.1.0"></script>
+<script src="js/modules/projects.js?v=7.1.0"></script>
+<script src="js/modules/payables.js?v=7.1.0"></script>
+<script src="js/modules/ca-export.js?v=7.1.0"></script>
+<script src="js/core/sw-register.js?v=7.1.0"></script>
 </body>
 </html>
