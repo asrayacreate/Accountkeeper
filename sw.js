@@ -5,8 +5,8 @@
    • Do NOT edit the two version lines by hand — run `npm run release`
      (scripts/release.mjs) which updates index.html, sw.js and package.json together.
 */
-var APP_VERSION = '6.8.1';
-var CACHE_VERSION = 'swagatik-cache-v14';
+var APP_VERSION = '6.9.0';
+var CACHE_VERSION = 'swagatik-cache-v15';
 var CORE_ASSETS = [
   './',
   './index.html',
