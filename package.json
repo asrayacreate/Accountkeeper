@@ -1,0 +1,14 @@
+{
+  "name": "swagatik-crm",
+  "version": "6.9.0",
+  "private": true,
+  "description": "Swagatik — Smart Business CRM (single-file PWA). This package.json is for development only: tests and release scripts. The app itself needs no build.",
+  "scripts": {
+    "test": "node --test --test-concurrency=1 tests/*.test.mjs",
+    "release": "node scripts/release.mjs",
+    "hash-secret": "node scripts/hash-secret.mjs"
+  },
+  "devDependencies": {
+    "playwright": "^1.49.0"
+  }
+}

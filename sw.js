@@ -1,8 +1,12 @@
 /* Swagatik — Service Worker
-   Cache-first with network fallback. Bump CACHE_VERSION on every release so
-   updated files replace the old cached copy (otherwise the old version keeps showing).
+   • App page (index.html / navigations): NETWORK-FIRST → online users always get the
+     newest version; offline falls back to the cached copy.
+   • Other files (icons, manifest): cache-first.
+   • Do NOT edit the two version lines by hand — run `npm run release`
+     (scripts/release.mjs) which updates index.html, sw.js and package.json together.
 */
-var CACHE_VERSION = 'swagatik-cache-v14';
+var APP_VERSION = '6.9.0';
+var CACHE_VERSION = 'swagatik-cache-v15';
 var CORE_ASSETS = [
   './',
   './index.html',
@@ -28,30 +32,47 @@ self.addEventListener('activate', function (event) {
       return Promise.all(keys.map(function (k) {
         if (k !== CACHE_VERSION) return caches.delete(k);
       }));
-    })
+    }).then(function () { return self.clients.claim(); })
   );
-  self.clients.claim();
 });
 
-// Fetch: cache-first, fall back to network, then cache the response
+function isAppPage(req) {
+  if (req.mode === 'navigate') return true;
+  var u = new URL(req.url);
+  return u.origin === self.location.origin && /\/(index\.html)?$/.test(u.pathname);
+}
+
+function putInCache(req, resp) {
+  try {
+    if (resp && resp.status === 200 && resp.type === 'basic') {
+      var copy = resp.clone();
+      caches.open(CACHE_VERSION).then(function (cache) { cache.put(req, copy); });
+    }
+  } catch (e) {}
+  return resp;
+}
+
 self.addEventListener('fetch', function (event) {
-  if (event.request.method !== 'GET') return;
+  var req = event.request;
+  if (req.method !== 'GET') return;
+  if (new URL(req.url).origin !== self.location.origin) return; // APIs (Dropbox, AI) go straight to network
+
+  if (isAppPage(req)) {
+    // Network-first for the app itself (with 'no-cache' so the HTTP cache revalidates)
+    event.respondWith(
+      fetch(req, { cache: 'no-cache' }).then(function (resp) { return putInCache(req, resp); })
+        .catch(function () {
+          return caches.match(req).then(function (c) { return c || caches.match('./index.html'); });
+        })
+    );
+    return;
+  }
+
+  // Cache-first for static assets
   event.respondWith(
-    caches.match(event.request).then(function (cached) {
+    caches.match(req).then(function (cached) {
       if (cached) return cached;
-      return fetch(event.request).then(function (resp) {
-        // only cache same-origin successful responses
-        try {
-          if (resp && resp.status === 200 && resp.type === 'basic') {
-            var copy = resp.clone();
-            caches.open(CACHE_VERSION).then(function (cache) { cache.put(event.request, copy); });
-          }
-        } catch (e) {}
-        return resp;
-      }).catch(function () {
-        // offline and not cached: for navigations, serve the app shell
-        if (event.request.mode === 'navigate') return caches.match('./index.html');
-      });
+      return fetch(req).then(function (resp) { return putInCache(req, resp); });
     })
   );
 });
