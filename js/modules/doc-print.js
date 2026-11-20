@@ -461,7 +461,9 @@ var DocShare = {
     var fy = y, sigW = 300;
     if(qr || pay.length){
       var qs = qr ? 230 : 0, bx = P, pw = W - 2*P - sigW - 30, px = bx + 18 + (qs ? qs + 22 : 0), py = fy + 22;
-      if(qr) ctx.drawImage(qr, bx + 18, fy + 18, qs, qs);
+      if(qr){ var qw = qr.naturalWidth || qr.width || qs, qh = qr.naturalHeight || qr.height || qs, qk = Math.min(qs/qw, qs/qh), dw = qw*qk, dh = qh*qk;
+        ctx.fillStyle = '#ffffff'; ctx.fillRect(bx + 18, fy + 18, qs, qs);
+        ctx.drawImage(qr, bx + 18 + (qs - dw)/2, fy + 18 + (qs - dh)/2, dw, dh); }
       text('💳 Scan to Pay / भुक्तानी', px, py, 24, 800, DARK_OR); py += 40;
       pay.forEach(function(p){ py += para(p, px, py, pw - (px - bx) - 18, 22, 400, '#1f2937', 32); });
       var ph = Math.max(qs + 36, py - fy + 16);

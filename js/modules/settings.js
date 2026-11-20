@@ -122,6 +122,7 @@ var Settings = {
   },
   saveManual: function(which){
     this.save();
+    try { if(PayQR.hasPending()) PayQR.save(); } catch(e){}
     try { Audit.log('SETTINGS', (which==='payment'?'Payment details':'Company info')+' saved'); } catch(e){}
     var label = which==='payment' ? 'Payment details' : 'Company information';
     App.toast('✅ '+label+' saved!','success',2200);

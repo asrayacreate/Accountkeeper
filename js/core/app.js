@@ -29,6 +29,8 @@ var App = {
     setTimeout(function(){ try { SetupWizard.maybeAutoOpen(); } catch(e){} }, 600);
   },
   navigate: function(page) {
+    // v7.1.0: a picked-but-unsaved Payment QR is saved, not lost, when leaving Settings
+    try { if(page !== 'settings' && typeof PayQR !== 'undefined' && PayQR.hasPending()) PayQR.save(); } catch(e){}
     // ═══════ SUPER ADMIN GATE (v4.0) — block direct access ═══════
     if(page === 'admin-dashboard'){
       // Must be admin or superadmin
