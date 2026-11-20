@@ -2,7 +2,7 @@
    Cache-first with network fallback. Bump CACHE_VERSION on every release so
    updated files replace the old cached copy (otherwise the old version keeps showing).
 */
-var CACHE_VERSION = 'swagatik-cache-v10';
+var CACHE_VERSION = 'swagatik-cache-v11';
 var CORE_ASSETS = [
   './',
   './index.html',
