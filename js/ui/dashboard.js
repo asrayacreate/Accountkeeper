@@ -5,6 +5,7 @@
 var Dashboard = {
   _metric: 'income',
   render: function(){
+    try{ BackupAlert.render(); }catch(e){}
     try{ SmartRem.render(); }catch(e){}
     try{
       var custs    = SampleData.real(STORE.get('pk3_customers',[])||[]);
@@ -59,8 +60,9 @@ var Dashboard = {
         this._snapCache = {income:_tIncome, expense:_tExpense, net:_tNet, fuToday:fuToday, fuOverdue:fuOverdue, plToday:_plToday, plOver:_plOver};
       } catch(e){ console.warn('snapshot', e); }
       setText('s-staff', staff.length);
-      var lowStock = stock.filter(function(s){return parseFloat(s.qty||0)<=parseFloat(s.minQty||1);}).length;
+      var lowStock = (typeof Stock!=='undefined' && Stock.isLow) ? stock.filter(function(s){return Stock.isLow(s);}).length : 0;
       setText('s-lowstock', lowStock);
+      try{ Stock.renderDashAlert(); }catch(e){}
 
       // ── Dash username ──
       if(currentUser) setText('dash-username', currentUser.name||'User');

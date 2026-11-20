@@ -47,8 +47,10 @@ var QuoteConvert = {
     STORE.set('pk3_ledger', led);
   },
   _finish: function(inv, label){
+    inv.stockTracked = true;   // v7.2.0: sale moves stock
     var list = Invoices.getData(); list.unshift(inv); STORE.set('pk3_invoices', list);
     this._postLedger(inv);
+    try { Stock.warnLow(Stock.syncInvoice(inv)); } catch(e){}
     try { Audit.log('INVOICE','Converted '+label+' → '+inv.invNum+' '+inv.custName+' '+fmtRs(inv.amount)); } catch(e){}
     try { Activity.add('🧾 '+label+' → Invoice '+inv.invNum+' — '+inv.custName); } catch(e){}
     App.toast('✅ Invoice '+inv.invNum+' बन्यो र Customer Ledger मा पोस्ट भयो','success',3500);
