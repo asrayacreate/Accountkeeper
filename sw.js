@@ -92,6 +92,8 @@ var CORE_ASSETS = [
   './js/modules/projects.js',
   './js/modules/payables.js',
   './js/modules/ca-export.js',
+  './js/modules/tax-invoice.js',
+  './js/modules/purchase.js',
   './js/core/sw-register.js'
 ];
 // </assets>

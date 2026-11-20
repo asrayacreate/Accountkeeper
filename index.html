@@ -182,6 +182,7 @@ var APP_VERSION = '7.1.0';
     <div class="nav-section">Business</div>
     <div class="nav-item" data-page="projects" data-module="projects" data-role="admin" onclick="App.navigate('projects')"><span class="icon">🏗️</span>Projects / Sites</div>
     <div class="nav-item" data-page="payables" data-module="payables" data-role="admin" onclick="App.navigate('payables')"><span class="icon">👷</span>Supplier / मिस्त्री खाता</div>
+    <div class="nav-item" data-page="purchases" data-role="admin" onclick="App.navigate('purchases')"><span class="icon">🛒</span>Purchase / खरिद बिल</div>
     <div class="nav-item" data-page="ratelist" onclick="App.navigate('ratelist')"><span class="icon">💰</span>Rate List</div>
     <div class="nav-item" data-page="vcard" onclick="App.navigate('vcard')"><span class="icon">💼</span>Visiting Card</div>
     <div class="nav-item" data-page="brochures" onclick="App.navigate('brochures')"><span class="icon">📄</span>Brochures</div>
@@ -656,6 +657,16 @@ var APP_VERSION = '7.1.0';
       <input type="search" id="pay-search" placeholder="🔍 खोज्नुहोस्" oninput="Payables._q=this.value;Payables.render()" style="flex:1;min-width:140px;">
     </div>
     <div id="pay-list" class="proj-list"></div>
+  </div>
+
+  <div class="page" id="page-purchases">
+    <div class="section-head">
+      <div><div class="section-title">🛒 Purchase / खरिद बिल</div><div class="section-subtitle">Supplier को बिल, Input VAT र TDS कट्टी — Purchase Book CA लाई Reports बाट</div></div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;"><button onclick="App.navigate('dailyreport')" class="btn btn-sm btn-secondary">📒 VAT Books</button><button onclick="Purchases.open()" class="btn btn-sm btn-primary" id="pur-new">➕ नयाँ खरिद बिल</button></div>
+    </div>
+    <div class="proj-summary" id="pur-summary"></div>
+    <input type="search" id="pur-search" placeholder="🔍 Supplier / बिल नं. / PAN" oninput="Purchases._q=this.value;Purchases.render()" style="width:100%;margin-bottom:12px;">
+    <div id="pur-list"></div>
   </div>
 
   <div class="page" id="page-followups">
@@ -1991,6 +2002,8 @@ var APP_VERSION = '7.1.0';
 <script src="js/modules/projects.js?v=7.1.0"></script>
 <script src="js/modules/payables.js?v=7.1.0"></script>
 <script src="js/modules/ca-export.js?v=7.1.0"></script>
+<script src="js/modules/tax-invoice.js?v=7.1.0"></script>
+<script src="js/modules/purchase.js?v=7.1.0"></script>
 <script src="js/core/sw-register.js?v=7.1.0"></script>
 </body>
 </html>

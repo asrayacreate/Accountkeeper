@@ -28,8 +28,9 @@ var DocPrint = {
     var total = parseFloat(inv.amount)||sub, paid = parseFloat(inv.paid)||0;
     var bal = inv.balance!=null ? parseFloat(inv.balance)||0 : total-paid;
     var cust = Customers.getData().find(function(c){ return c.id===inv.custId; }) || {};
-    return { kind: (parseFloat(inv.taxP)||0) > 0 ? 'TAX INVOICE' : 'INVOICE', kindNe:'बिल', no: inv.invNum||'', dateAd: inv.date || todayISO(), dateBs: inv.dateBs || _bsFromAd(inv.date),
-      dueDate: inv.dueDate || '', cust:{ name:inv.custName||'', phone:inv.custPhone||'', address:cust.address||'' },
+    var _k = (typeof TaxInvoice!=='undefined') ? TaxInvoice.kindOf(inv) : { en: (parseFloat(inv.taxP)||0) > 0 ? 'TAX INVOICE' : 'INVOICE', ne:'बिल' };   // v7.2.0
+    return { kind: _k.en, kindNe: _k.ne, billType: inv.billType||'', taxable: (parseFloat(inv.taxAmt)||0) > 0 ? sub-(parseFloat(inv.discAmt)||0) : 0, no: inv.invNum||'', dateAd: inv.date || todayISO(), dateBs: inv.dateBs || _bsFromAd(inv.date),
+      dueDate: inv.dueDate || '', cust:{ name:inv.custName||'', phone:inv.custPhone||'', address:cust.address||'', pan: inv.custPan || cust.pan || '' },
       items: items, sub: sub, disc: parseFloat(inv.discAmt)||0, discP: parseFloat(inv.discP)||0, taxP: parseFloat(inv.taxP)||0, taxAmt: parseFloat(inv.taxAmt)||0,
       total: total, paidLabel:'Paid / भुक्तानी', paid: paid, balance: bal, terms: inv.terms||'', status: inv.status||'Pending',
       ref: inv.fromQuote ? (inv.fromQuote.type==='estimate' ? 'Estimate ' : 'Quotation ') + (inv.fromQuote.no||'') : '',
@@ -102,6 +103,7 @@ var DocPrint = {
         + '<div class="box"><div class="lbl">'+(d.kind==='QUOTATION'||d.kind==='ESTIMATE' ? 'To / ग्राहक' : 'Bill To / ग्राहक')+'</div>'
           + '<div style="font-weight:800;font-size:14px;">'+esc(d.cust.name)+'</div>'
           + (d.cust.phone ? '<div>📞 '+esc(d.cust.phone)+'</div>' : '') + (d.cust.address ? '<div>📍 '+esc(d.cust.address)+'</div>' : '')
+          + (d.cust.pan ? '<div data-buyer-pan><b>PAN / VAT No:</b> '+esc(d.cust.pan)+'</div>' : '')
           + (d.subject ? '<div style="margin-top:3px;"><b>Subject / काम:</b> '+esc(d.subject)+'</div>' : '')
         + '</div>'
         + '<div class="box" style="max-width:300px;"><div><span class="lbl">No.</span> <b>'+esc(d.no||'—')+'</b></div>'
@@ -114,10 +116,12 @@ var DocPrint = {
       + '</div>'
       + '<table class="it"><thead><tr><th class="c" style="width:34px;">#</th><th>Particulars / विवरण</th><th class="c" style="width:56px;">Qty</th><th class="c" style="width:56px;">Unit</th><th class="r" style="width:92px;">Rate</th><th class="r" style="width:108px;">Amount</th></tr></thead>'
       + '<tbody>'+(rows || '<tr><td colspan="6" class="c" style="color:#9ca3af;">—</td></tr>')+'</tbody></table>'
-      + '<div class="tot"><div class="words">In words: <b>'+((typeof numToWords==='function') ? esc(numToWords(d.total)) : '')+'</b></div>'
+      + '<div class="tot"><div class="words">In words: <b>'+((typeof numToWordsEn==='function') ? esc(numToWordsEn(d.total)) : (typeof numToWords==='function') ? esc(numToWords(d.total)) : '')+'</b>'
+        + ((typeof numToWordsNe==='function') ? '<div data-words-ne style="margin-top:3px;font-style:normal;">अक्षरमा: <b>'+esc(numToWordsNe(d.total))+'</b></div>' : '')+'</div>'
         + '<table class="sum">'
           + '<tr><td>Subtotal</td><td class="r">'+fmtRs(d.sub)+'</td></tr>'
           + (d.disc ? '<tr><td>Discount'+(d.discP ? ' ('+(Math.round(d.discP*100)/100)+'%)' : '')+'</td><td class="r" style="color:#b91c1c;">- '+fmtRs(d.disc)+'</td></tr>' : '')
+          + (d.taxable ? '<tr data-taxable><td>Taxable Amount / करयोग्य</td><td class="r">'+fmtRs(d.taxable)+'</td></tr>' : '')
           + (d.taxAmt ? '<tr><td>VAT ('+d.taxP+'%)</td><td class="r">+ '+fmtRs(d.taxAmt)+'</td></tr>' : '')
           + '<tr class="g"><td>Grand Total</td><td class="r">'+fmtRs(d.total)+'</td></tr>'
           + (d.paid ? '<tr><td style="color:#15803d;">'+esc(d.paidLabel)+'</td><td class="r" style="color:#15803d;">'+fmtRs(d.paid)+'</td></tr>' : '')
@@ -186,11 +190,14 @@ var DocPrint = {
       + row('No: <b>'+esc(d.no||'—')+'</b>', esc(bs || ad))
       + (bs && ad ? row('', esc(ad)) : '')
       + (d.cust.name ? '<div>ग्राहक: <b>'+esc(d.cust.name)+'</b>'+(d.cust.phone ? ' '+esc(d.cust.phone) : '')+'</div>' : '')
+      + (d.cust.pan ? '<div>Buyer PAN: '+esc(d.cust.pan)+'</div>' : '')
       + '<div class="hr"></div>' + (items || '<div class="c">—</div>') + '<div class="hr"></div>'
       + row('Subtotal', fmtRs(d.sub))
       + (d.disc ? row('Discount', '- '+fmtRs(d.disc)) : '')
+      + (d.taxable ? row('Taxable', fmtRs(d.taxable)) : '')
       + (d.taxAmt ? row('VAT ('+d.taxP+'%)', '+ '+fmtRs(d.taxAmt)) : '')
       + row('TOTAL', fmtRs(d.total), 'g')
+      + ((d.billType && typeof numToWordsNe==='function') ? '<div class="s" data-words-ne>'+esc(numToWordsNe(d.total))+'</div>' : '')
       + (d.paid ? row(esc(d.paidLabel), fmtRs(d.paid)) : '')
       + (d.paid || d.kind.indexOf('INVOICE')>=0 ? row('<b>Balance / बाँकी</b>', '<b>'+fmtRs(d.balance)+'</b>') : '')
       + (qr ? '<img class="qr" src="'+qr+'" alt="Payment QR" data-pay-qr>' : '')
@@ -366,8 +373,9 @@ var DocShare = {
     // ── Header: logo + company | document title
     var lx = P, top = y;
     if(logo){ var ls = 120, r = Math.min(ls/logo.width, ls/logo.height); ctx.drawImage(logo, P, y, logo.width*r, logo.height*r); lx = P + ls + 22; }
-    var titleW = 320;
-    text(d.kind, W-P, y, 42, 900, '#111827', 'right');
+    var ksz = d.kind.length > 14 ? 30 : 42; font(ksz, 900);   // v7.2.0: "ABBREVIATED TAX INVOICE" fits
+    var titleW = Math.max(320, Math.ceil(ctx.measureText(d.kind).width) + 16);
+    text(d.kind, W-P, y, ksz, 900, '#111827', 'right');
     if(d.kindNe) text(d.kindNe, W-P, y+52, 24, 400, '#6b7280', 'right');
     var cw = W - P - titleW - lx - 16;
     y += para(co.name, lx, y, cw, 40, 900, DARK_OR, 48);
@@ -387,6 +395,7 @@ var DocShare = {
     ly += para(d.cust.name || '—', P + pad, ly, lw - 2*pad, 30, 800, '#111827', 38);
     if(d.cust.phone) ly += para('📞 ' + d.cust.phone, P + pad, ly, lw - 2*pad, 23, 400, '#1f2937', 32);
     if(d.cust.address) ly += para('📍 ' + d.cust.address, P + pad, ly, lw - 2*pad, 23, 400, '#1f2937', 32);
+    if(d.cust.pan) ly += para('PAN / VAT No: ' + d.cust.pan, P + pad, ly, lw - 2*pad, 23, 700, '#1f2937', 32);
     if(d.subject) ly += para('काम: ' + d.subject, P + pad, ly + 4, lw - 2*pad, 23, 600, '#1f2937', 32) + 4;
     var rx = P + lw + gap, ry = bt + pad;
     var bs = d.dateBs ? bsStringToDisplay(d.dateBs) : '';
@@ -431,13 +440,15 @@ var DocShare = {
     };
     sumRow('Subtotal', fmtRs(d.sub));
     if(d.disc) sumRow('Discount' + (d.discP ? ' (' + (Math.round(d.discP*100)/100) + '%)' : ''), '- ' + fmtRs(d.disc), { col:'#b91c1c' });
+    if(d.taxable) sumRow('Taxable Amount', fmtRs(d.taxable));
     if(d.taxAmt) sumRow('VAT (' + d.taxP + '%)', '+ ' + fmtRs(d.taxAmt));
     sumRow('Grand Total', fmtRs(d.total), { line:true, sz:32, wt:900, col:DARK_OR, h:60 });
     if(d.paid) sumRow(d.paidLabel, fmtRs(d.paid), { col:'#15803d' });
     if(d.paid || d.kind.indexOf('INVOICE') >= 0) sumRow('Balance / बाँकी', fmtRs(d.balance), { bg:'#fef2f2', col:'#b91c1c', wt:800 });
-    var words = (typeof numToWords === 'function') ? numToWords(d.total) : '';
+    var words = (typeof numToWordsEn === 'function') ? numToWordsEn(d.total) : (typeof numToWords === 'function') ? numToWords(d.total) : '';
     var wy = y + 8;
     if(words){ text('In words:', P, wy, 21, 400, GREY, 'left', true); wy += 30; wy += para(words, P, wy, tx - P - 28, 22, 700, '#374151', 30, 'left', true); }
+    if(typeof numToWordsNe === 'function'){ wy += 6; wy += para(numToWordsNe(d.total), P, wy, tx - P - 28, 22, 700, '#374151', 30); }
     y = Math.max(ty, wy) + 22;
 
     // ── Details / Terms
