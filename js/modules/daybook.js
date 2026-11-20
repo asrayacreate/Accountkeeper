@@ -33,6 +33,7 @@ var DayBook = {
     setVal('db-type','income'); setVal('db-amount',''); setVal('db-desc',''); setVal('db-cat',''); setVal('db-notes',''); setVal('db-vendor',''); setVal('db-bill',''); setVal('db-pay','Cash');
     setVal('db-date-inp',''); setText('db-date-inp-text','📅 मिति...');
     setText('db-modal-title','📒 Add Entry');
+    this._photos = []; this._renderPhotos();
     try { Projects.fillSelect(''); } catch(e){}
     document.getElementById('db-modal').classList.add('open');
     setTimeout(function(){var a=document.getElementById('db-amount');if(a)a.focus();},200);
@@ -45,7 +46,9 @@ var DayBook = {
     if(dateInp){try{var p=dateInp.split('-');var ad=bsToAd(parseInt(p[0]),parseInt(p[1]),parseInt(p[2]));dateAd=ad.toISOString().slice(0,10);}catch(e){}}
     var rec={id:id,type:getVal('db-type'),amount:amount,desc:desc,cat:getVal('db-cat'),vendor:getVal('db-vendor'),bill:getVal('db-bill'),pay:getVal('db-pay'),notes:getVal('db-notes'),date:dateAd,dateBs:dateInp||todayBs(),user:currentUser?currentUser.name:''};
     var _pj=getVal('db-project'); if(_pj) rec.projectId=_pj;
+    if(this._photos && this._photos.length) rec.photoIds=this._photos.slice();   // v7.0.0 bill receipt photos
     var list=this.getData();
+    if(isEdit){ var _old=list.find(function(x){return x.id===id;}); if(_old && _old._payable) rec._payable=_old._payable; }
     if(isEdit){ var _o=list.find(function(x){return x.id===id;}); rec.voucherNo=(_o&&_o.voucherNo)||DayBook.nextVoucherNo(rec.type,rec.dateBs,list); }
     else { rec.voucherNo=DayBook.nextVoucherNo(rec.type,rec.dateBs,list); }
     if(isEdit){var idx=list.findIndex(function(x){return x.id===id;});if(idx>=0)list[idx]=rec;else list.unshift(rec);}
@@ -77,10 +80,16 @@ var DayBook = {
     tb.innerHTML=list.map(function(e){return '<tr><td style="font-size:0.78rem;">'+(e.dateBs?bsStringToDisplay(e.dateBs):fmtDisplayDate(e.date))+'</td><td><span class="tag '+(e.type==='income'?'tag-green':'tag-red')+'">'+e.type+'</span></td><td style="font-size:0.78rem;">'+(e.cat||'—')+'</td><td style="font-size:0.82rem;">'+e.desc+'</td><td style="text-align:right;font-weight:700;color:'+(e.type==='income'?'var(--green)':'var(--red)')+';">'+fmtRs(e.amount)+'</td><td><div class="btn-group"><button onclick="DayBook.del(\''+e.id+'\')" class="btn btn-xs btn-danger">🗑</button></div></td></tr>';}).join('');
   },
   del: function(id){ if(!confirm('Delete?'))return; STORE.set('pk3_daybook',this.getData().filter(function(x){return x.id!==id;})); this.render(); App.toast('🗑 Deleted','info'); },
+  // ── v7.0.0: bill / receipt photo (compressed) ──
+  _photos: [],
+  _renderPhotos: function(){ var b=document.getElementById('db-photos'); if(b){ b.innerHTML=Media.thumbs(this._photos,'DayBook._delPhoto'); Media.hydrate(b); } },
+  addPhoto: function(){ var self=this; Media.pick({kind:'receipt',label:'Expense bill'},true).then(function(r){ r.forEach(function(x){ self._photos.push(x.id); }); self._renderPhotos(); }); },
+  _delPhoto: function(id){ this._photos=this._photos.filter(function(x){ return x!==id; }); this._renderPhotos(); },
   edit: function(id){
     var e=this.getData().find(function(x){return x.id===id;});
     if(!e){ App.toast('Entry भेटिएन','error'); return; }
     setVal('db-edit-id',id);
+    this._photos = (e.photoIds||[]).slice(); this._renderPhotos();
     setVal('db-type',e.type||'expense');
     setVal('db-amount',e.amount||'');
     setVal('db-desc',e.desc||'');

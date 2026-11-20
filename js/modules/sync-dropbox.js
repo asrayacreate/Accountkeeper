@@ -2,7 +2,7 @@
 var DBX = {
   KEY: 'okopfgpojy47x4o',
   FILE: '/swagatik-backup.json',
-  SKIP: /^(pk3_dbx_|pk3_session$|pk3_ai_key$|pk3_oai_key$|pk3_gem_key$|pk3_gem_key2$|pk3_autosave_|pk3_lic_backup$|pk3_tracker$|pk3_fab_pos$|pk3_data_version$)/,
+  SKIP: /^(pk3_dbx_|pk3_gdrive_|pk3_supa_|pk3_session$|pk3_ai_key$|pk3_oai_key$|pk3_gem_key$|pk3_gem_key2$|pk3_autosave_|pk3_lic_backup$|pk3_tracker$|pk3_fab_pos$|pk3_data_version$)/,
   _busy: false, _timer: null, _warn: '',
   _reload: function(){ location.reload(); },
   _errText: async function(r, label){
@@ -48,6 +48,7 @@ var DBX = {
   handleRedirect: async function(){
     var q = new URLSearchParams(location.search);
     if (!q.get('code') && !q.get('error')) return false;
+    if (q.get('state') === 'gdrive') return false;   // v7.0.0: Google Drive redirect is handled by GDrive
     var code = q.get('code'), err = q.get('error');
     try { history.replaceState(null, '', this.redirect()); } catch(e){}
     if (err || !code) { this.toast('❌ Dropbox connect रद्द भयो', 'error'); return true; }
@@ -250,3 +251,7 @@ var DBX = {
   }
 };
 window.addEventListener('load', function(){ try { DBX.start(); } catch(e){ console.warn('DBX', e); } });
+// v7.0.0: Dropbox is the first provider in the sync adapter registry (js/core/sync.js)
+SyncHub.register({ id: 'dropbox', label: 'Dropbox', engine: DBX,
+  isConnected: function(){ return DBX.connected(); }, syncNow: function(){ return DBX.syncNow(); },
+  restoreNow: function(){ return DBX.restoreNow(); }, disconnect: function(s){ return DBX.disconnect(s); } });

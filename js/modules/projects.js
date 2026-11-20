@@ -17,11 +17,16 @@ var Projects = {
   stats: function(p){
     var db = (STORE.get('pk3_daybook', []) || []).filter(function(e){ return e && e.projectId===p.id; });
     var received = db.filter(function(e){ return e.type==='income'; }).reduce(function(s,e){ return s+(parseFloat(e.amount)||0); }, 0);
-    var expense  = db.filter(function(e){ return e.type==='expense'; }).reduce(function(s,e){ return s+(parseFloat(e.amount)||0); }, 0);
+    // v7.0.0: supplier/मिस्त्री bills linked to the project are real cost (even if unpaid). Their
+    // payments posted to Day Book carry _payable and are skipped here so nothing is counted twice.
+    var dbExpense = db.filter(function(e){ return e.type==='expense' && !e._payable; }).reduce(function(s,e){ return s+(parseFloat(e.amount)||0); }, 0);
+    var payBills = 0; try { payBills = Payables.projectCost(p.id); } catch(e){}
+    var expense  = dbExpense + payBills;
     var budget = parseFloat(p.budget)||0;
     return { budget: budget, received: received, expense: expense,
       profit: budget - expense,          // अनुमानित नाफा/घाटा = कुल बजेट − साइट खर्च
       cash: received - expense,          // हातमा: प्राप्त − खर्च
+      supplierBills: payBills,
       due: Math.max(0, budget - received), // लिन बाँकी
       entries: db };
   },
@@ -152,11 +157,47 @@ var Projects = {
       + '</div>'
       + (rows ? '<div class="table-wrap" style="overflow-x:auto;"><table style="width:100%;"><thead><tr><th>मिति</th><th>विवरण</th><th style="text-align:right;">रकम</th></tr></thead><tbody>'+rows+'</tbody></table></div>'
               : '<div style="font-size:0.8rem;color:var(--text-muted);padding:10px 0;">अहिलेसम्म कुनै खर्च / भुक्तानी entry छैन।</div>')
+      + (s.supplierBills ? '<div style="font-size:0.74rem;margin-top:8px;">👷 Supplier / मिस्त्री बिल (खर्चमा समावेश): <b>'+fmtRs(s.supplierBills)+'</b></div>' : '')
       + (p.notes ? '<div style="margin-top:10px;font-size:0.78rem;"><b>Notes:</b> '+esc(p.notes)+'</div>' : '')
+      + this._photosHtml(p)
       + '</div>';
     setText('view-modal-title', '🏗️ '+p.name);
     document.getElementById('view-modal-body').innerHTML = html;
     document.getElementById('view-modal').classList.add('open');
+    try { Media.hydrate(document.getElementById('view-modal-body')); } catch(e){}
+  },
+  // ── v7.0.0: Before / Progress / After site photos (compressed, IndexedDB) ──
+  PHOTO_KINDS: [['before','📷 Before'],['progress','🚧 Progress'],['after','✅ After']],
+  _photosHtml: function(p){
+    var ph = p.photos || [];
+    return '<div class="proj-photos" style="margin-top:14px;"><div style="font-weight:800;font-size:0.86rem;margin-bottom:6px;">📸 साइटका फोटो</div>'
+      + this.PHOTO_KINDS.map(function(k){
+        var ids = ph.filter(function(x){ return x.kind===k[0]; }).map(function(x){ return x.id; });
+        return '<div style="margin-bottom:8px;"><div style="display:flex;justify-content:space-between;align-items:center;font-size:0.76rem;font-weight:700;">'+k[1]+' ('+ids.length+')'
+          + '<button type="button" class="btn btn-xs btn-secondary" data-photo-add="'+k[0]+'" onclick="Projects.addPhoto(\''+esc(p.id)+'\',\''+k[0]+'\')">➕ फोटो</button></div>'
+          + '<div class="media-row">'+Media.thumbs(ids, 'Projects._delPhoto')+'</div></div>';
+      }).join('') + '</div>';
+  },
+  attachPhotos: function(id, kind, recs){
+    var list = this.getData(), p = list.find(function(x){ return x.id===id; }); if(!p) return;
+    p.photos = (p.photos||[]).concat(recs.map(function(r){ return { id:r.id, kind:kind, at:r.at }; }));
+    this.setData(list);
+  },
+  addPhoto: function(id, kind){
+    var self = this;
+    Media.pick({ kind:'site-'+kind, owner:id }, true).then(function(recs){
+      if(!recs.length) return;
+      self.attachPhotos(id, kind, recs);
+      self.view(id);
+      App.toast('📸 '+recs.length+' फोटो सेभ भयो','success');
+    });
+  },
+  _delPhoto: function(photoId){
+    if(!confirm('यो फोटो हटाउने?')) return;
+    var list = this.getData(), owner = null;
+    list.forEach(function(p){ var n = (p.photos||[]).filter(function(x){ return x.id!==photoId; }); if(p.photos && n.length!==p.photos.length){ p.photos = n; owner = p.id; } });
+    this.setData(list); Media.del(photoId);
+    if(owner) this.view(owner);
   },
   // Quick site expense / payment → real Day Book entry tagged with the project
   addEntry: function(id, type, amount, desc, cat){

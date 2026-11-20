@@ -8,11 +8,16 @@ var Backup = {
   },
   exportJSON: function(){
     var data={};
-    ['pk3_customers','pk3_quotations','pk3_followups','pk3_daybook','pk3_rates','pk3_walkins','pk3_staff','pk3_stock','pk3_stockHistory','pk3_sales','pk3_templates','pk3_bulkFolders','pk3_users','pk3_audit','pk3_invoices','pk3_ledger','pk3_notif','pk3_activity','pk3_company','pk3_settings','pk3_tracker','pk3_vcard','pk3_estimates','pk3_planner','pk3_brochures','pk3_qa_order','pk3_returns','pk3_cashbook_opening','pk3_projects','pk3_pay_qr','pk3_doc_terms'].forEach(function(k){data[k]=STORE.get(k,null);});
-    data._meta={version:'v3.9 Final',date:todayISO(),exportedBy:currentUser?currentUser.name:'unknown'};
+    // v7.0.0: one list (ALL_KEYS) + every other pk3_ data key, so new modules are never left out
+    var keys = Backup.ALL_KEYS.slice();
+    try { for (var _i=0; _i<localStorage.length; _i++){ var _k=localStorage.key(_i); if(_k && _k.indexOf('pk3_')===0 && keys.indexOf(_k)===-1 && !/^(pk3_session|pk3_dbx_|pk3_gdrive_|pk3_autosave_|pk3_ai_key|pk3_oai_key|pk3_gem_key|pk3_license|pk3_lic_backup)/.test(_k)) keys.push(_k); } } catch(e){}
+    keys.forEach(function(k){ var v=STORE.get(k,null); if(v!==null) data[k]=v; });
+    data._meta={version:APP_VERSION,date:todayISO(),exportedBy:currentUser?currentUser.name:'unknown',company:Company.name('')};
     var dateStr=new Date().toISOString().slice(0,10);
     var filename='swagatik-backup-'+dateStr+'.json';
-    downloadFile(filename,JSON.stringify(data,null,2));
+    // v7.0.0: site / bill photos (IndexedDB) travel inside the same backup file
+    var done=function(){ downloadFile(filename,JSON.stringify(data,null,2)); };
+    try { Media.exportAll().then(function(m){ if(m && Object.keys(m).length) data._media=m; done(); }).catch(done); } catch(e){ done(); }
     var now=new Date().toISOString();
     STORE.set('lastBackup',now);
     this.render();
@@ -39,7 +44,10 @@ var Backup = {
         if(missing.length){App.toast('❌ Invalid backup: missing '+missing.join(', '),'error');return;}
         if(!confirm('Restore backup? Current data will be replaced.\nExported: '+(data._meta?data._meta.date:'unknown')))return;
         var _licSafe = License._load();
-        Object.keys(data).forEach(function(k){if(k!=='_meta' && License._STORES.indexOf(k)===-1)STORE.set(k,data[k]);});
+        Object.keys(data).forEach(function(k){if(k!=='_meta' && k!=='_media' && License._STORES.indexOf(k)===-1)STORE.set(k,data[k]);});
+        if(data._media){ try { Media.importAll(data._media); } catch(e){} }
+        // v7.0.0: a v6 backup (no pk3_business) is migrated again on reload, like an old device
+        if(!('pk3_business' in data)){ localStorage.removeItem('pk3_business'); localStorage.removeItem('pk3_v7_migrated'); }
         if(_licSafe) License._save(_licSafe);   // restore पछि पनि license बाँच्छ
         STORE.set('lastBackup',new Date().toISOString());
         Audit.log('RESTORE','Backup restored from '+file.name);
@@ -64,7 +72,7 @@ var Backup = {
   //  • A rolling in-browser snapshot for recovery
   //  • A "download backup on exit" safety reminder
   //  • Daily auto-backup nudge so the document file कहिल्यै हराउँदैन
-  ALL_KEYS: ['pk3_customers','pk3_quotations','pk3_followups','pk3_daybook','pk3_rates','pk3_walkins','pk3_staff','pk3_stock','pk3_stockHistory','pk3_sales','pk3_templates','pk3_bulkFolders','pk3_users','pk3_audit','pk3_invoices','pk3_ledger','pk3_notif','pk3_activity','pk3_company','pk3_settings','pk3_tracker','pk3_vcard','pk3_estimates','pk3_planner','pk3_qa_order','pk3_brochures','pk3_returns','pk3_cashbook_opening','pk3_projects','pk3_pay_qr','pk3_doc_terms'],
+  ALL_KEYS: ['pk3_customers','pk3_quotations','pk3_followups','pk3_daybook','pk3_rates','pk3_walkins','pk3_staff','pk3_stock','pk3_stockHistory','pk3_sales','pk3_templates','pk3_bulkFolders','pk3_users','pk3_audit','pk3_invoices','pk3_ledger','pk3_notif','pk3_activity','pk3_company','pk3_settings','pk3_tracker','pk3_vcard','pk3_estimates','pk3_planner','pk3_qa_order','pk3_brochures','pk3_returns','pk3_cashbook_opening','pk3_projects','pk3_pay_qr','pk3_doc_terms','pk3_business','pk3_modules','pk3_payables','pk3_payable_txns'],
 
   _snapshot: function(){
     var data={};

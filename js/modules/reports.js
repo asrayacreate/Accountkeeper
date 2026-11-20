@@ -24,6 +24,7 @@ var Reports = {
     return !start || d>=start;
   },
   render: function(){
+    try { CAExport.renderCard(); } catch(e) { console.warn('CAExport', e); }
     var self=this;
     var custs=STORE.get('pk3_customers',[])||[];
     var quots=STORE.get('pk3_quotations',[])||[];

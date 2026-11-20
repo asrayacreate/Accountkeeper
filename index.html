@@ -178,6 +178,7 @@ var APP_VERSION = '7.0.0';
 
     <div class="nav-section">Business</div>
     <div class="nav-item" data-page="projects" data-module="projects" data-role="admin" onclick="App.navigate('projects')"><span class="icon">🏗️</span>Projects / Sites</div>
+    <div class="nav-item" data-page="payables" data-module="payables" data-role="admin" onclick="App.navigate('payables')"><span class="icon">👷</span>Supplier / मिस्त्री खाता</div>
     <div class="nav-item" data-page="ratelist" onclick="App.navigate('ratelist')"><span class="icon">💰</span>Rate List</div>
     <div class="nav-item" data-page="vcard" onclick="App.navigate('vcard')"><span class="icon">💼</span>Visiting Card</div>
     <div class="nav-item" data-page="brochures" onclick="App.navigate('brochures')"><span class="icon">📄</span>Brochures</div>
@@ -593,7 +594,7 @@ var APP_VERSION = '7.0.0';
         </div>
       </div>
       <div class="card card-body" style="margin-bottom:12px;">
-        <div class="section-head" style="margin-bottom:10px;"><div class="section-subtitle" style="text-transform:uppercase;letter-spacing:1px;font-weight:700;">📦 Items</div><div class="btn-group"><button onclick="Quotations.addRow()" class="btn btn-sm btn-secondary">+ Row</button><button onclick="Quotations.pickFromRateList()" class="btn btn-sm btn-secondary">📋 Rate List</button></div></div>
+        <div class="section-head" style="margin-bottom:10px;"><div class="section-subtitle" style="text-transform:uppercase;letter-spacing:1px;font-weight:700;">📦 Items</div><div class="btn-group"><button onclick="Quotations.addRow()" class="btn btn-sm btn-secondary">+ Row</button><button onclick="Measure.open()" data-module="measurement" id="q-measure-btn" class="btn btn-sm btn-secondary">📏 नाप (Sq.ft) जोड्नुहोस्</button><button onclick="Quotations.pickFromRateList()" class="btn btn-sm btn-secondary">📋 Rate List</button></div></div>
         <div class="table-wrap"><table style="font-size:0.85rem;"><thead><tr><th>Item</th><th style="text-align:right;width:60px;">Qty</th><th style="text-align:center;width:65px;">Unit</th><th style="text-align:right;width:90px;">Rate</th><th style="text-align:right;width:95px;">Amount</th><th style="width:28px;"></th></tr></thead><tbody id="q-rows"></tbody></table></div>
         <div style="margin-top:14px;display:flex;flex-direction:column;gap:6px;align-items:flex-end;padding-right:4px;">
           <div style="display:flex;gap:20px;font-size:0.85rem;"><span style="color:var(--text-muted);">Subtotal:</span><span id="q-subtotal" style="min-width:100px;text-align:right;font-weight:600;">Rs. 0</span></div>
@@ -630,6 +631,24 @@ var APP_VERSION = '7.0.0';
   </div>
 
   <!-- ========================= FOLLOW-UPS PAGE ========================= -->
+  <div class="page" id="page-payables">
+    <div class="section-head">
+      <div><div class="section-title">👷 Supplier र मिस्त्री खाता</div><div class="section-subtitle">तिर्नुपर्ने हिसाब (Payables) — बिल, एड्भान्स/भुक्तानी र बाँकी</div></div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;"><button onclick="Payables.exportCSV()" class="btn btn-sm btn-secondary">⬇️ CSV</button><button onclick="Payables.openParty()" class="btn btn-sm btn-primary">➕ नयाँ</button></div>
+    </div>
+    <div class="proj-summary" id="pay-summary"></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px;">
+      <div class="btn-group">
+        <button class="btn btn-sm btn-primary" id="pay-f-all" onclick="Payables.setFilter('all')">सबै</button>
+        <button class="btn btn-sm btn-secondary" id="pay-f-supplier" onclick="Payables.setFilter('supplier')">🏪 Supplier</button>
+        <button class="btn btn-sm btn-secondary" id="pay-f-mistri" onclick="Payables.setFilter('mistri')">👷 मिस्त्री</button>
+        <button class="btn btn-sm btn-secondary" id="pay-f-due" onclick="Payables.setFilter('due')">⏳ बाँकी भएका</button>
+      </div>
+      <input type="search" id="pay-search" placeholder="🔍 खोज्नुहोस्" oninput="Payables._q=this.value;Payables.render()" style="flex:1;min-width:140px;">
+    </div>
+    <div id="pay-list" class="proj-list"></div>
+  </div>
+
   <div class="page" id="page-followups">
     <div class="section-head">
       <div class="btn-group"><button class="btn btn-sm btn-primary" id="fu-f-all" onclick="Followups.filter('all')">सबै</button><button class="btn btn-sm btn-secondary" id="fu-f-today" onclick="Followups.filter('today')">आज 🔴</button><button class="btn btn-sm btn-secondary" id="fu-f-upcoming" onclick="Followups.filter('upcoming')">Upcoming 🔵</button><button class="btn btn-sm btn-secondary" id="fu-f-overdue" onclick="Followups.filter('overdue')">Overdue ⚠️</button><button class="btn btn-sm btn-secondary" id="fu-f-done" onclick="Followups.filter('done')">Done ✅</button></div>
@@ -909,6 +928,7 @@ var APP_VERSION = '7.0.0';
     <div class="section-head"><div class="btn-group"><button class="btn btn-sm btn-primary" id="rpt-f-today" onclick="Reports.setFilter('today')">आज</button><button class="btn btn-sm btn-secondary" id="rpt-f-week" onclick="Reports.setFilter('week')">७ दिन</button><button class="btn btn-sm btn-secondary" id="rpt-f-month" onclick="Reports.setFilter('month')">महिना</button><button class="btn btn-sm btn-secondary" id="rpt-f-all" onclick="Reports.setFilter('all')">सबै</button></div><div class="btn-group"><button onclick="Reports.print()" class="btn btn-sm btn-primary">🖨️ Print</button><button onclick="Reports.shareWA()" class="btn btn-sm btn-wa">📱 WA</button></div></div>
     <div class="stats-grid" id="rpt-stats"></div>
     <div id="rpt-staff" style="margin-bottom:12px;"></div>
+    <div class="card card-body" id="ca-export-card" style="margin-bottom:12px;"></div>
     <div class="card"><div class="card-head"><span>📊 Details</span></div><div class="table-wrap"><table><thead><tr><th>मिति</th><th>Type</th><th>Description</th><th style="text-align:right;">Amount</th></tr></thead><tbody id="rpt-table"></tbody></table></div><div id="no-rpt" class="empty-state" style="display:none;"><div class="icon">📊</div><div class="title">कुनै data छैन</div></div></div>
   </div>
 
@@ -1027,6 +1047,23 @@ var APP_VERSION = '7.0.0';
           <button type="button" id="dbx-btn-sync" onclick="DBX.syncNow()" class="btn btn-sm btn-success" style="display:none;">🔄 Sync Now</button>
           <button type="button" id="dbx-btn-restore" onclick="DBX.restoreNow()" class="btn btn-sm btn-secondary" style="display:none;">⬇️ Dropbox बाट Restore</button>
           <button type="button" id="dbx-btn-disc" onclick="DBX.disconnect()" class="btn btn-sm btn-danger" style="display:none;">⛔ Disconnect</button>
+        </div>
+      </div>
+      <div class="card card-body" id="set-gdrive-card">
+        <div class="section-title">🟢 Google Drive Sync</div>
+        <div style="font-size:0.72rem;color:var(--text-muted);margin:6px 0 10px;line-height:1.6;">आफ्नै Google account को लुकेको app folder मा auto-backup (Dropbox जस्तै)। पहिलो पटक: Google Cloud Console मा OAuth Client ID बनाउनुहोस् — Redirect URI: <b id="gdrive-redirect"></b> (गाइड: COMMERCIAL_LAUNCH.md)।</div>
+        <div class="form-grid">
+          <div class="form-group full"><label>OAuth Client ID</label><input type="text" id="gdrive-client-id" placeholder="xxxxxxxx.apps.googleusercontent.com" autocomplete="off"></div>
+          <div class="form-group full"><label>Client Secret (Web client भए मात्र — यो device मा मात्र रहन्छ)</label><input type="password" id="gdrive-client-secret" autocomplete="off"></div>
+        </div>
+        <div id="gdrive-status" style="font-size:0.82rem;margin:8px 0;">○ जोडिएको छैन</div>
+        <div id="gdrive-warn" style="display:none;font-size:0.76rem;color:var(--red);background:var(--red-soft);border-radius:8px;padding:8px 10px;margin-bottom:10px;"></div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          <button type="button" onclick="GDrive.saveConfig()" class="btn btn-sm btn-secondary">💾 Client ID सेभ</button>
+          <button type="button" id="gdrive-btn-connect" onclick="GDrive.connect()" class="btn btn-sm btn-primary" style="display:none;">🔗 Connect Google Drive</button>
+          <button type="button" id="gdrive-btn-sync" onclick="GDrive.syncNow()" class="btn btn-sm btn-success" style="display:none;">🔄 Sync Now</button>
+          <button type="button" id="gdrive-btn-restore" onclick="GDrive.restoreNow()" class="btn btn-sm btn-secondary" style="display:none;">⬇️ Drive बाट Restore</button>
+          <button type="button" id="gdrive-btn-disc" onclick="GDrive.disconnect()" class="btn btn-sm btn-danger" style="display:none;">⛔ Disconnect</button>
         </div>
       </div>
       <div class="card card-body" id="set-manage-card">
@@ -1586,6 +1623,7 @@ var APP_VERSION = '7.0.0';
         <div class="form-group" id="db-pay-grp"><label>💳 भुक्तानी</label><select id="db-pay"><option value="Cash">💵 Cash</option><option value="Bank">🏦 Bank</option><option value="Online">📱 Online</option><option value="Cheque">📄 Cheque</option></select></div>
         <div class="form-group"><label>Date (BS)</label><div class="bs-picker-display" onclick="BSPicker.open('db-date-inp','📅 Date')"><span id="db-date-inp-text">📅 मिति...</span><span style="color:var(--text-muted);font-size:0.8rem;">▼</span></div><input type="hidden" id="db-date-inp"><input type="hidden" id="db-date-inp-bs"></div>
         <div class="form-group full"><label>Notes</label><input type="text" id="db-notes" placeholder="Optional..."></div>
+        <div class="form-group full"><button type="button" class="btn btn-sm btn-secondary" onclick="DayBook.addPhoto()">📸 बिल / रसिदको फोटो</button><div class="media-row" id="db-photos"></div></div>
         <div class="form-group full" id="db-project-grp" style="display:none;"><label>🏗️ Project / Site (optional)</label><select id="db-project"></select></div>
       </div>
       <div class="form-actions"><button class="btn btn-secondary" onclick="document.getElementById('db-modal').classList.remove('open')">Cancel</button><button class="btn btn-primary" onclick="DayBook.save()">💾 Save</button></div>
@@ -1856,19 +1894,23 @@ var APP_VERSION = '7.0.0';
 <script src="js/core/security.js?v=7.0.0"></script>
 <script src="js/core/store.js?v=7.0.0"></script>
 <script src="js/core/company.js?v=7.0.0"></script>
+<script src="js/core/media.js?v=7.0.0"></script>
 <script src="js/core/date-bs.js?v=7.0.0"></script>
 <script src="js/ui/brand.js?v=7.0.0"></script>
 <script src="js/core/license.js?v=7.0.0"></script>
+<script src="js/core/license-cloud.js?v=7.0.0"></script>
 <script src="js/core/auth.js?v=7.0.0"></script>
 <script src="js/core/data-init.js?v=7.0.0"></script>
 <script src="js/core/business-profiles.js?v=7.0.0"></script>
 <script src="js/core/modules.js?v=7.0.0"></script>
+<script src="js/core/sync.js?v=7.0.0"></script>
 <script src="js/core/migrations.js?v=7.0.0"></script>
 <script src="js/ui/brand-logo.js?v=7.0.0"></script>
 <script src="js/ui/whatsapp.js?v=7.0.0"></script>
 <script src="js/core/app.js?v=7.0.0"></script>
 <script src="js/modules/customers.js?v=7.0.0"></script>
 <script src="js/modules/quotations.js?v=7.0.0"></script>
+<script src="js/modules/measure.js?v=7.0.0"></script>
 <script src="js/modules/invoices.js?v=7.0.0"></script>
 <script src="js/modules/followups.js?v=7.0.0"></script>
 <script src="js/modules/planner.js?v=7.0.0"></script>
@@ -1906,10 +1948,14 @@ var APP_VERSION = '7.0.0';
 <script src="js/core/runtime.js?v=7.0.0"></script>
 <script src="js/vendor/qrcode.min.js?v=7.0.0"></script>
 <script src="js/modules/sync-dropbox.js?v=7.0.0"></script>
+<script src="js/modules/sync-gdrive.js?v=7.0.0"></script>
+<script src="js/modules/sync-supabase.js?v=7.0.0"></script>
 <script src="js/modules/pay-qr.js?v=7.0.0"></script>
 <script src="js/modules/doc-print.js?v=7.0.0"></script>
 <script src="js/modules/quote-convert.js?v=7.0.0"></script>
 <script src="js/modules/projects.js?v=7.0.0"></script>
+<script src="js/modules/payables.js?v=7.0.0"></script>
+<script src="js/modules/ca-export.js?v=7.0.0"></script>
 <script src="js/core/sw-register.js?v=7.0.0"></script>
 </body>
 </html>

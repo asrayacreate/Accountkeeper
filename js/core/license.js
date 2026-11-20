@@ -129,6 +129,15 @@ var License = {
     return { ok: false, reason: 'mismatch' };
   },
 
+  // v7.0.0: a stored record activated by the license server (LicenseCloud) is trusted when its
+  // device signature is intact; expiry/plan come from the server and are re-checked daily.
+  _validateRec: function (lic) {
+    if (lic && lic.cloud && typeof LicenseCloud !== 'undefined' && LicenseCloud.enabled() && lic.sig === this._recSig(lic)) {
+      return { ok: true, plan: lic.plan || 'CLOUD', expiry: lic.expiry || null, cloud: true };
+    }
+    return this.validate(lic.company, lic.key);
+  },
+
   // ─── storage: 3 ठाउँमा save → एउटा मेटिए पनि license बाँच्छ ──
   _recSig: function (r) {
     return this._sig((r.company || '') + '#' + (r.key || '') + '#' + (r.expiry || 'LIFE'), 'REC');
@@ -178,7 +187,7 @@ var License = {
     try {
       var lic = this._load();
       if (!lic || !lic.key) return false;
-      var v = this.validate(lic.company, lic.key);
+      var v = this._validateRec(lic);
       if (!v.ok) return false;                       // key/company बिग्रियो
       if (!v.expiry) return true;                    // lifetime / master
       if (new Date() > new Date(v.expiry)) { this._expiredFlag = true; return false; }
@@ -199,7 +208,7 @@ var License = {
     }
     var lic = this._load();
     if (!lic || !lic.key) return { active: false };
-    var v = this.validate(lic.company, lic.key);
+    var v = this._validateRec(lic);
     if (!v.ok) return { active: false, broken: true, company: lic.company };
     var exp = v.expiry ? new Date(v.expiry) : null;
     var left = exp ? Math.ceil((exp - new Date()) / this._DAY) : null;
@@ -232,6 +241,10 @@ var License = {
     }
 
     var v = this.validate(company, key);
+    if (!v.ok && typeof LicenseCloud !== 'undefined' && LicenseCloud.enabled()) {   // v7.0.0: commercial keys
+      LicenseCloud.activateFromScreen(company, key, err);
+      return;
+    }
     if (!v.ok) {
       if (err) { err.innerHTML = '❌ License Key वा Company Name मिलेन।<br><span style="opacity:.8;font-size:.72rem;">Key किन्न / renew गर्न 📞 ' + SWAGATIK_VENDOR.supportPhone + '</span>'; err.style.display = 'block'; }
       return;
@@ -253,6 +266,11 @@ var License = {
     // Self-disable the founder bootstrap key once a REAL (non-bootstrap) key is stored on this device.
     if (!v.bootstrap) { try { localStorage.setItem('pk3_bootstrap_used', '1'); } catch (e) {} }
 
+    this._afterActivate(company, v.expiry);
+  },
+
+  // Shared by offline keys and LicenseCloud keys
+  _afterActivate: function (company, expiry) {
     var ls = document.getElementById('license-screen'); if (ls) ls.style.display = 'none';
 
     // Company name settings मा खाली भए भर्ने
@@ -261,8 +279,8 @@ var License = {
       if (!s.companyName) { s.companyName = company.trim(); STORE.set('pk3_settings', s); }
     } catch (e) {}
 
-    var msg = v.expiry
-      ? '✅ Activate भयो — म्याद: ' + new Date(v.expiry).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })
+    var msg = expiry
+      ? '✅ Activate भयो — म्याद: ' + new Date(expiry).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })
       : '✅ Activate भयो — Lifetime License 🎉';
     try { if (window.App && App.toast) setTimeout(function () { App.toast(msg, 'success', 5000); }, 600); } catch (e) {}
 
