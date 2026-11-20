@@ -84,6 +84,7 @@ var CORE_ASSETS = [
   './js/modules/sync-supabase.js',
   './js/modules/pay-qr.js',
   './js/modules/doc-print.js',
+  './js/modules/receivables.js',
   './js/modules/quote-convert.js',
   './js/modules/projects.js',
   './js/modules/payables.js',

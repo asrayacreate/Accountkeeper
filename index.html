@@ -615,7 +615,7 @@ var APP_VERSION = '7.1.0';
 
   <!-- ========================= INVOICES PAGE ========================= -->
   <div class="page" id="page-invoices">
-    <div class="section-head"><div class="search-wrap"><input type="text" id="inv-search" placeholder="Search invoice..." oninput="Invoices.render()"></div><button onclick="Invoices.create()" class="btn btn-sm btn-primary">+ New Invoice</button></div>
+    <div class="section-head"><div class="search-wrap"><input type="text" id="inv-search" placeholder="Search invoice..." oninput="Invoices.render()"></div><button onclick="Receivables.open()" id="inv-rcv-btn" class="btn btn-sm btn-secondary">💰 बाँकी रकम</button><button onclick="Invoices.create()" class="btn btn-sm btn-primary">+ New Invoice</button></div>
     <div class="card"><div class="table-wrap"><table><thead><tr><th style="width:90px;">Invoice #</th><th>Customer</th><th>Service</th><th style="text-align:right;">Amount</th><th style="text-align:right;">Paid</th><th style="text-align:right;">Balance</th><th>Status</th><th style="width:80px;">मिति</th><th style="width:70px;"></th></tr></thead><tbody id="inv-table"></tbody></table></div><div id="no-inv" class="empty-state" style="display:none;"><div class="icon">🧾</div><div class="title">कुनै Invoice छैन</div><button onclick="Invoices.create()" class="btn btn-primary">+ Create Invoice</button></div></div>
   </div>
 
@@ -1968,6 +1968,7 @@ var APP_VERSION = '7.1.0';
 <script src="js/modules/sync-supabase.js?v=7.1.0"></script>
 <script src="js/modules/pay-qr.js?v=7.1.0"></script>
 <script src="js/modules/doc-print.js?v=7.1.0"></script>
+<script src="js/modules/receivables.js?v=7.1.0"></script>
 <script src="js/modules/quote-convert.js?v=7.1.0"></script>
 <script src="js/modules/projects.js?v=7.1.0"></script>
 <script src="js/modules/payables.js?v=7.1.0"></script>

@@ -49,7 +49,7 @@ var DocPrint = {
 
   build: function(d){
     var co = this._co(), qr = PayQR.get();
-    var terms = (d.terms && String(d.terms).trim()) ? d.terms : PayQR.terms();
+    var terms = d.receipt ? '' : (d.terms && String(d.terms).trim()) ? d.terms : PayQR.terms();   // v7.2.0: a payment receipt has no T&C
     var adStr = d.dateAd ? String(d.dateAd).slice(0,10) : '';
     var bsStr = d.dateBs ? bsStringToDisplay(d.dateBs) + ' (' + d.dateBs + ')' : '';
     var rows = d.items.map(function(r, i){
@@ -60,6 +60,7 @@ var DocPrint = {
     if(co.bank) pay.push('🏦 '+esc(co.bank)+(co.acc?' — A/C '+esc(co.acc):''));
     if(co.esewa) pay.push('📱 eSewa: '+esc(co.esewa));
     if(co.khalti) pay.push('💜 Khalti: '+esc(co.khalti));
+    if(d.noPay){ qr = ''; pay = []; }   // v7.2.0: fully-paid receipt → no "Scan to Pay"
     var css = '.swg-doc{font-family:"Segoe UI","Noto Sans Devanagari",Arial,sans-serif;color:#1f2937;background:#fff;max-width:760px;margin:0 auto;padding:22px 24px;box-sizing:border-box;font-size:13px;line-height:1.45;}'
       + '.swg-doc *{box-sizing:border-box;}'
       + '.swg-doc .hd{display:flex;gap:14px;align-items:center;border-bottom:3px solid #f97316;padding-bottom:12px;margin-bottom:14px;}'
@@ -99,7 +100,7 @@ var DocPrint = {
       + '</div>'
       + (d.cancelled ? '<div class="cxl-stamp" style="border:2px solid #dc2626;color:#dc2626;background:#fef2f2;border-radius:8px;padding:8px 12px;margin-bottom:12px;font-weight:800;letter-spacing:1px;">❌ CANCELLED / रद्द'+(d.cancelled.reason?'<div style="font-weight:600;letter-spacing:0;font-size:12px;margin-top:2px;">कारण: '+esc(d.cancelled.reason)+(d.cancelled.at?' • '+esc(String(d.cancelled.at).slice(0,10)):'')+'</div>':'')+'</div>' : '')
       + '<div class="meta">'
-        + '<div class="box"><div class="lbl">'+(d.kind==='QUOTATION'||d.kind==='ESTIMATE' ? 'To / ग्राहक' : 'Bill To / ग्राहक')+'</div>'
+        + '<div class="box"><div class="lbl">'+(d.toLabel ? esc(d.toLabel) : d.kind==='QUOTATION'||d.kind==='ESTIMATE' ? 'To / ग्राहक' : 'Bill To / ग्राहक')+'</div>'
           + '<div style="font-weight:800;font-size:14px;">'+esc(d.cust.name)+'</div>'
           + (d.cust.phone ? '<div>📞 '+esc(d.cust.phone)+'</div>' : '') + (d.cust.address ? '<div>📍 '+esc(d.cust.address)+'</div>' : '')
           + (d.subject ? '<div style="margin-top:3px;"><b>Subject / काम:</b> '+esc(d.subject)+'</div>' : '')
@@ -116,10 +117,11 @@ var DocPrint = {
       + '<tbody>'+(rows || '<tr><td colspan="6" class="c" style="color:#9ca3af;">—</td></tr>')+'</tbody></table>'
       + '<div class="tot"><div class="words">In words: <b>'+((typeof numToWords==='function') ? esc(numToWords(d.total)) : '')+'</b></div>'
         + '<table class="sum">'
-          + '<tr><td>Subtotal</td><td class="r">'+fmtRs(d.sub)+'</td></tr>'
+          + (d.receipt ? '' : '<tr><td>Subtotal</td><td class="r">'+fmtRs(d.sub)+'</td></tr>')
           + (d.disc ? '<tr><td>Discount'+(d.discP ? ' ('+(Math.round(d.discP*100)/100)+'%)' : '')+'</td><td class="r" style="color:#b91c1c;">- '+fmtRs(d.disc)+'</td></tr>' : '')
           + (d.taxAmt ? '<tr><td>VAT ('+d.taxP+'%)</td><td class="r">+ '+fmtRs(d.taxAmt)+'</td></tr>' : '')
-          + '<tr class="g"><td>Grand Total</td><td class="r">'+fmtRs(d.total)+'</td></tr>'
+          + '<tr class="g"><td>'+esc(d.totalLabel || 'Grand Total')+'</td><td class="r">'+fmtRs(d.total)+'</td></tr>'
+          + (d.after || []).map(function(r){ return '<tr'+(r.cls ? ' class="'+r.cls+'"' : '')+'><td>'+esc(r.label)+'</td><td class="r">'+fmtRs(r.value)+'</td></tr>'; }).join('')   // v7.2.0: extra summary rows (payment receipt)
           + (d.paid ? '<tr><td style="color:#15803d;">'+esc(d.paidLabel)+'</td><td class="r" style="color:#15803d;">'+fmtRs(d.paid)+'</td></tr>' : '')
           + (d.paid || d.kind.indexOf('INVOICE')>=0 ? '<tr class="bal"><td>Balance / बाँकी</td><td class="r">'+fmtRs(d.balance)+'</td></tr>' : '')
         + '</table></div>'
@@ -175,6 +177,7 @@ var DocPrint = {
     if(co.esewa) pay.push('eSewa: '+esc(co.esewa));
     if(co.khalti) pay.push('Khalti: '+esc(co.khalti));
     if(co.bank) pay.push(esc(co.bank)+(co.acc?' '+esc(co.acc):''));
+    if(d.noPay){ qr = ''; pay = []; }
     return '<style>'+css+'</style><div class="swg-rcpt" data-doc-kind="'+esc(d.kind)+'" data-receipt="'+mm+'">'
       + (co.logo ? '<img class="logo" src="'+co.logo+'" alt="">' : '')
       + '<div class="c n">'+esc(co.name)+'</div>'
@@ -187,15 +190,16 @@ var DocPrint = {
       + (bs && ad ? row('', esc(ad)) : '')
       + (d.cust.name ? '<div>ग्राहक: <b>'+esc(d.cust.name)+'</b>'+(d.cust.phone ? ' '+esc(d.cust.phone) : '')+'</div>' : '')
       + '<div class="hr"></div>' + (items || '<div class="c">—</div>') + '<div class="hr"></div>'
-      + row('Subtotal', fmtRs(d.sub))
+      + (d.receipt ? '' : row('Subtotal', fmtRs(d.sub)))
       + (d.disc ? row('Discount', '- '+fmtRs(d.disc)) : '')
       + (d.taxAmt ? row('VAT ('+d.taxP+'%)', '+ '+fmtRs(d.taxAmt)) : '')
-      + row('TOTAL', fmtRs(d.total), 'g')
+      + row(esc(d.totalLabel || 'TOTAL'), fmtRs(d.total), 'g')
+      + (d.after || []).map(function(r){ return r.cls === 'bal' ? row('<b>'+esc(r.label)+'</b>', '<b>'+fmtRs(r.value)+'</b>') : row(esc(r.label), fmtRs(r.value)); }).join('')
       + (d.paid ? row(esc(d.paidLabel), fmtRs(d.paid)) : '')
       + (d.paid || d.kind.indexOf('INVOICE')>=0 ? row('<b>Balance / बाँकी</b>', '<b>'+fmtRs(d.balance)+'</b>') : '')
       + (qr ? '<img class="qr" src="'+qr+'" alt="Payment QR" data-pay-qr>' : '')
       + (pay.length ? '<div class="c s">'+pay.join('<br>')+'</div>' : '')
-      + (mm === 80 && (d.terms || PayQR.terms()) ? '<div class="hr"></div><div class="t">'+esc(d.terms || PayQR.terms())+'</div>' : '')
+      + (mm === 80 && !d.receipt && (d.terms || PayQR.terms()) ? '<div class="hr"></div><div class="t">'+esc(d.terms || PayQR.terms())+'</div>' : '')
       + '<div class="hr"></div><div class="c s">धन्यवाद! — '+esc(co.name)+'</div>'
       + '</div>';
   },
@@ -383,7 +387,7 @@ var DocShare = {
     // ── Customer box | number & dates box
     var gap = 24, rw = 380, lw = W - 2*P - rw - gap, bt = y, pad = 18;
     var ly = bt + pad;
-    text(d.kind === 'QUOTATION' || d.kind === 'ESTIMATE' ? 'TO / ग्राहक' : 'BILL TO / ग्राहक', P + pad, ly, 19, 700, MUTED); ly += 30;
+    text(d.toLabel ? d.toLabel.toUpperCase() : d.kind === 'QUOTATION' || d.kind === 'ESTIMATE' ? 'TO / ग्राहक' : 'BILL TO / ग्राहक', P + pad, ly, 19, 700, MUTED); ly += 30;
     ly += para(d.cust.name || '—', P + pad, ly, lw - 2*pad, 30, 800, '#111827', 38);
     if(d.cust.phone) ly += para('📞 ' + d.cust.phone, P + pad, ly, lw - 2*pad, 23, 400, '#1f2937', 32);
     if(d.cust.address) ly += para('📍 ' + d.cust.address, P + pad, ly, lw - 2*pad, 23, 400, '#1f2937', 32);
@@ -429,10 +433,11 @@ var DocShare = {
       text(val, tx + tw - 14, ty + (o.line ? 12 : 9), o.sz || 23, o.wt || 600, o.col || '#1f2937', 'right');
       ty += (o.h || 44);
     };
-    sumRow('Subtotal', fmtRs(d.sub));
+    if(!d.receipt) sumRow('Subtotal', fmtRs(d.sub));
     if(d.disc) sumRow('Discount' + (d.discP ? ' (' + (Math.round(d.discP*100)/100) + '%)' : ''), '- ' + fmtRs(d.disc), { col:'#b91c1c' });
     if(d.taxAmt) sumRow('VAT (' + d.taxP + '%)', '+ ' + fmtRs(d.taxAmt));
-    sumRow('Grand Total', fmtRs(d.total), { line:true, sz:32, wt:900, col:DARK_OR, h:60 });
+    sumRow(d.totalLabel || 'Grand Total', fmtRs(d.total), { line:true, sz:32, wt:900, col:DARK_OR, h:60 });
+    (d.after || []).forEach(function(r){ sumRow(r.label, fmtRs(r.value), r.cls === 'bal' ? { bg:'#fef2f2', col:'#b91c1c', wt:800 } : (r.cls === 'ok' ? { col:'#15803d' } : null)); });
     if(d.paid) sumRow(d.paidLabel, fmtRs(d.paid), { col:'#15803d' });
     if(d.paid || d.kind.indexOf('INVOICE') >= 0) sumRow('Balance / बाँकी', fmtRs(d.balance), { bg:'#fef2f2', col:'#b91c1c', wt:800 });
     var words = (typeof numToWords === 'function') ? numToWords(d.total) : '';
@@ -441,7 +446,7 @@ var DocShare = {
     y = Math.max(ty, wy) + 22;
 
     // ── Details / Terms
-    var terms = (d.terms && String(d.terms).trim()) ? d.terms : PayQR.terms();
+    var terms = d.receipt ? '' : (d.terms && String(d.terms).trim()) ? d.terms : PayQR.terms();
     var note = function(title, body, bar){
       var L = wrap(body, W - 2*P - 44, 22, 400), h = 24 + 34 + L.length*30 + 16;
       rect(P, y, W - 2*P, h, '#f9fafb'); rect(P, y, 6, h, bar);
@@ -457,6 +462,7 @@ var DocShare = {
     if(co.bank) pay.push('🏦 ' + co.bank + (co.acc ? ' — A/C ' + co.acc : ''));
     if(co.esewa) pay.push('📱 eSewa: ' + co.esewa);
     if(co.khalti) pay.push('💜 Khalti: ' + co.khalti);
+    if(d.noPay){ qr = null; pay = []; }
     y += 8;
     var fy = y, sigW = 300;
     if(qr || pay.length){
