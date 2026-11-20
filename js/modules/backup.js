@@ -3,8 +3,12 @@ var Backup = {
   render: function(){
     var lastBk=STORE.get('lastBackup');
     var disp=lastBk?fmtDisplayDate(lastBk):'Never';
+    // v7.2.0: Dropbox / Google Drive sync पनि ब्याकअप हो — जुन पछिल्लो हो त्यही देखाउने
+    try { var lb=BackupAlert.last(); if(lb.at) disp=fmtDisplayDate(new Date(lb.at).toISOString())+' · '+lb.label; } catch(e){}
     setText('last-backup-time',disp);
     setText('settings-last-backup',disp);
+    try { BackupAlert.render(); } catch(e){}
+    try { ErrorLogView.render(); } catch(e){}
   },
   exportJSON: function(){
     var data={};
@@ -103,19 +107,9 @@ var Backup = {
   },
 
   _checkDailyBackup: function(){
-    try {
-      var last = STORE.get('lastBackup', null);
-      if(!last){ return; } // first run — don't nag
-      var diff = Date.now() - new Date(last).getTime();
-      var days = diff / (1000*60*60*24);
-      if(days >= 1){
-        setTimeout(function(){
-          if(window.App && App.toast){
-            App.toast('💾 '+Math.floor(days)+' दिनदेखि backup भएको छैन — Backup page बाट download गर्नुस्','warning',6000);
-          }
-        }, 3000);
-      }
-    } catch(e){}
+    // v7.2.0: पुरानो "हरेक दिन" toast हटाइयो — अब ७ दिनसम्म कुनै ब्याकअप (फाइल वा Dropbox/Drive sync) नभए मात्र
+    // सम्झाइन्छ: Dashboard मा banner, अरू page मा एक पटक toast (js/modules/backup-alert.js)।
+    try { if(window.BackupAlert) BackupAlert.toastIfDue(); } catch(e){}
   },
 
   // Recovery: check if a newer snapshot exists than current data (after a crash)

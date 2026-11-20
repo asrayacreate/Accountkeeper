@@ -5,6 +5,7 @@
 var Dashboard = {
   _metric: 'income',
   render: function(){
+    try{ BackupAlert.render(); }catch(e){}
     try{ SmartRem.render(); }catch(e){}
     try{
       var custs    = SampleData.real(STORE.get('pk3_customers',[])||[]);
