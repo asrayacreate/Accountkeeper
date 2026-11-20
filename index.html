@@ -2381,31 +2381,71 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
 //   ✅ Better keyboard a11y (Esc closes modals, focus trap)
 // ============================================================
 
-// ─── SECURITY WARNING ────────────────────────────────────────
-// ⚠️ IMPORTANT: Login credentials below are base64-ENCODED, not encrypted.
-// Anyone who opens this HTML file can decode them with one line of JS.
-// This is a CLIENT-SIDE-ONLY CRM with no server, so true security is
-// not possible without a backend. For production multi-user deployments,
-// migrate to a real auth system (e.g. Firebase Auth, Supabase, or your
-// own Node/PHP backend with bcrypt-hashed passwords).
+// ─── SHA-256 (v6.9.0) — synchronous, pure JS, works on file:// too ──────────
+// Used so that passwords and the license master key are stored only as
+// one-way hashes. Output = lowercase hex, identical to Node's
+// crypto.createHash('sha256') (see scripts/hash-secret.mjs).
+function _sha256(str){
+  var bytes = unescape(encodeURIComponent(String(str)));
+  var K = [0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2];
+  var H = [0x6a09e667,0xbb67ae85,0x3c6ef372,0xa54ff53a,0x510e527f,0x9b05688c,0x1f83d9ab,0x5be0cd19];
+  var l = bytes.length, words = [], i;
+  for (i = 0; i < l; i++) words[i >> 2] |= (bytes.charCodeAt(i) & 0xff) << (24 - (i % 4) * 8);
+  words[l >> 2] |= 0x80 << (24 - (l % 4) * 8);
+  var nBlocks = (((l + 8) >> 6) + 1) * 16;
+  words[nBlocks - 1] = l * 8;
+  for (i = 0; i < nBlocks; i++) words[i] = words[i] | 0;
+  var w = new Array(64);
+  for (var b = 0; b < nBlocks; b += 16) {
+    var a = H[0], bb = H[1], c = H[2], d = H[3], e = H[4], f = H[5], g = H[6], h = H[7];
+    for (var t = 0; t < 64; t++) {
+      if (t < 16) w[t] = words[b + t];
+      else {
+        var x = w[t - 15], y = w[t - 2];
+        var s0 = ((x >>> 7) | (x << 25)) ^ ((x >>> 18) | (x << 14)) ^ (x >>> 3);
+        var s1 = ((y >>> 17) | (y << 15)) ^ ((y >>> 19) | (y << 13)) ^ (y >>> 10);
+        w[t] = (w[t - 16] + s0 + w[t - 7] + s1) | 0;
+      }
+      var S1 = ((e >>> 6) | (e << 26)) ^ ((e >>> 11) | (e << 21)) ^ ((e >>> 25) | (e << 7));
+      var ch = (e & f) ^ (~e & g);
+      var t1 = (h + S1 + ch + K[t] + w[t]) | 0;
+      var S0 = ((a >>> 2) | (a << 30)) ^ ((a >>> 13) | (a << 19)) ^ ((a >>> 22) | (a << 10));
+      var maj = (a & bb) ^ (a & c) ^ (bb & c);
+      var t2 = (S0 + maj) | 0;
+      h = g; g = f; f = e; e = (d + t1) | 0; d = c; c = bb; bb = a; a = (t1 + t2) | 0;
+    }
+    H[0] = (H[0] + a) | 0; H[1] = (H[1] + bb) | 0; H[2] = (H[2] + c) | 0; H[3] = (H[3] + d) | 0;
+    H[4] = (H[4] + e) | 0; H[5] = (H[5] + f) | 0; H[6] = (H[6] + g) | 0; H[7] = (H[7] + h) | 0;
+  }
+  var out = '';
+  for (i = 0; i < 8; i++) out += ('00000000' + (H[i] >>> 0).toString(16)).slice(-8);
+  return out;
+}
+
+// ─── SECURITY NOTE (v6.9.0) ──────────────────────────────────
+// Passwords are stored ONLY as salted SHA-256 hashes — the real password is
+// no longer written anywhere in this file. This hides it from casual viewers
+// of the public source. Limits of a server-less app: a determined person can
+// still guess short/common passwords offline against the hash, or edit the JS
+// copy they downloaded. Use a long password (12+ chars) for the Super Admin.
 //
-// To change/add users: encode "password" with btoa('password') in console.
+// To set a new password hash:  npm run hash-secret -- password "NewPass"
+// (or in the browser console:  _encodePw('NewPass')) and paste it below.
 // ─────────────────────────────────────────────────────────────
 
-// ─── USERS CONFIG (base64-encoded passwords) ─────────────────
+// ─── USERS CONFIG (SHA-256 password hashes) ──────────────────
 var _RAW_USERS = [
-  // user, base64(password), display name, role
+  // user, sha256('SWG-PW-v1|' + password), display name, role
   // SINGLE USER MODE (pre-public): only the superadmin login is active.
   // admin / staff logins are intentionally disabled for now — add back later.
-  ['punya', 'cHVueWFAMTIz',       'Punya Gautam',  'superadmin']  // punya@123
+  ['punya', '002351efdb4518ab820439efbae7246d329b3388a70e3a186230f1e6efb608e7', 'Punya Gautam', 'superadmin']
 ];
 var USERS_CONFIG = _RAW_USERS.map(function(r){
-  var pw = '';
-  try { pw = atob(r[1]); } catch(e) { pw = r[1]; }
-  return {user:r[0], pass:pw, name:r[2], role:r[3]};
+  return {user:r[0], passHash:r[1], name:r[2], role:r[3]};
 });
-// Helper for super-admin to add an encoded password later
-window._encodePw = function(p){ return btoa(p); };
+function _pwHash(p){ return _sha256('SWG-PW-v1|' + String(p == null ? '' : p)); }
+// Helper for super-admin to create a password hash later
+window._encodePw = function(p){ return _pwHash(p); };
 
 // Staff-accessible pages (role='staff' can access these)
 var STAFF_PAGES = ['dashboard','customers','add-customer','followups','add-followup',
@@ -2425,7 +2465,7 @@ var STORE = {
 
 // ─── HELPER FUNCTIONS ─────────────────────────────────────────
 function uid() { return Date.now().toString(36)+Math.random().toString(36).slice(2,6); }
-function fmtRs(n) { n=parseFloat(n)||0; return 'Rs.'+n.toLocaleString('en-IN',{minimumFractionDigits:0,maximumFractionDigits:2}); }
+function fmtRs(n) { n=parseFloat(n)||0; return 'Rs. '+n.toLocaleString('en-IN',{minimumFractionDigits:0,maximumFractionDigits:2}); }
 // Amount in words — Indian/Nepali numbering (lakh, crore). Returns e.g. "One Lakh Twenty Three Thousand Rupees Only"
 function numToWords(num){
   num = Math.round(parseFloat(num)||0);
@@ -3087,7 +3127,7 @@ var Brand = {
 // ═══════════════ LICENSE SYSTEM (v5.3) — ONE-TIME ACTIVATION ═══════════════
 // नियम:
 //  • Key एक पटक हाले पछि — expire नभएसम्म फेरि कहिल्यै सोधिँदैन।
-//  • MASTER KEY = 4448  → PRERAK MULTIPURPOSE PVT LTD को lifetime key।
+//  • MASTER KEY (source मा hash मात्र) → PRERAK MULTIPURPOSE PVT LTD को lifetime key।
 //    कुनै पनि company name सँग खुल्छ, कहिल्यै expire हुँदैन। (आफ्नै लागि — गोप्य राख्नुस्)
 //  • अरू customer लाई: Super Admin → 🔐 License & Key Generator बाट key बनाउनुस्।
 //    generated key customer को company name + expiry date सँग बाँधिन्छ —
@@ -3105,12 +3145,11 @@ var License = {
   // ╚══════════════════════════════════════════════════════════════╝
   BUILT_IN: { company: '', key: '' },   // blank — everyone (incl. Prerak) activates via key; founder-bootstrap available for first run
 
-  _SALT: 'PRK-2083-MKWNPR',        // गोप्य salt — नबदल्नुस् (बदले पुराना key हरू काम गर्दैनन्)
-  MASTER: '4448',                  // Owner master key
+  _SALT: 'PRK-2083-MKWNPR',        // salt — नबदल्नुस् (बदले पुराना key हरू काम गर्दैनन्)
+  // v6.9.0: Owner master key अब source मा लेखिँदैन — यसको SHA-256 hash मात्र राखिन्छ।
+  // नयाँ master key राख्न:  npm run hash-secret -- master "NEW-KEY"  → आएको hash यहाँ टाँस्नुहोस्।
+  MASTER_HASH: '4d735e0460407c6adfa847fed6f59df53b128a68e43acd4d6f7b4f5949fa3222',
   MASTER_COMPANY: 'PRERAK MULTIPURPOSE PVT LTD',
-  // Founder bootstrap key — for Prerak's FIRST activation on a blank-BUILT_IN file only.
-  // Distinct from MASTER (4448). Self-disables once a real key is stored on this device.
-  FOUNDER: 'SWAGATIK-FOUNDER-2083',
   _STORES: ['pk3_license', 'pk3_lic_backup', 'prerak_activation'],
   _EPOCH: Date.UTC(2024, 0, 1),
   _DAY: 86400000,
@@ -3171,6 +3210,19 @@ var License = {
 
   _clean: function (k) { return String(k || '').toUpperCase().replace(/\s+/g, '').trim(); },
 
+  // v6.9.0: master key check by hash. Accepts 'KEY', 'PRERAK-KEY', 'PRERAK-MASTER-KEY'.
+  _isMaster: function (key) {
+    key = this._clean(key);
+    if (!key) return false;
+    var cands = [key];
+    if (key.indexOf('PRERAK-MASTER-') === 0) cands.push(key.slice(14));
+    else if (key.indexOf('PRERAK-') === 0) cands.push(key.slice(7));
+    for (var i = 0; i < cands.length; i++) {
+      if (cands[i] && _sha256(this._SALT + '|MASTER|' + cands[i]) === this.MASTER_HASH) return true;
+    }
+    return false;
+  },
+
   // ─── key generation (seller side) ───────────────────────────
   // generate('Ram Traders', 365)  →  { key:'PRERAK-XXXX-XXXX-XXXX', expiry:Date|null }
   generate: function (company, days) {
@@ -3197,9 +3249,7 @@ var License = {
 
     // SINGLE KEY MODE (pre-public): only the MASTER key activates, any company name, lifetime.
     // FOUNDER / CUSTOMER / LEGACY key paths are intentionally disabled for now — add back later.
-    if (key === this._clean(this.MASTER) ||
-        key === 'PRERAK-MASTER-' + this._clean(this.MASTER) ||
-        key === 'PRERAK-' + this._clean(this.MASTER)) {
+    if (this._isMaster(key)) {
       return { ok: true, plan: 'MASTER', expiry: null };
     }
     return { ok: false, reason: 'mismatch' };
@@ -3298,7 +3348,7 @@ var License = {
     var company = (document.getElementById('license-company') || {}).value || '';
     var key = this._clean((document.getElementById('license-key') || {}).value || '');
     var err = document.getElementById('license-err');
-    var isMaster = (key === this._clean(this.MASTER));
+    var isMaster = this._isMaster(key);
 
     if (isMaster && !company.trim()) company = this.MASTER_COMPANY;
 
@@ -3404,8 +3454,13 @@ var Auth = {
   init: function() {
     var saved = STORE.get('pk3_session');
     if(saved && saved.user) {
-      var found = USERS_CONFIG.find(function(u){return u.user===saved.user&&u.pass===saved.pass;});
-      if(found) { currentUser=found; this._showApp(); return; }
+      // v6.9.0: session keeps only the hash. Old sessions ({user, pass}) are upgraded once.
+      var ph = saved.ph || (saved.pass != null ? _pwHash(saved.pass) : '');
+      var found = USERS_CONFIG.find(function(u){return u.user===saved.user&&u.passHash===ph;});
+      if(found) {
+        if(saved.pass != null) STORE.set('pk3_session',{user:found.user,ph:found.passHash});
+        currentUser=found; this._showApp(); return;
+      }
     }
     // Welcome (ॐ नमः शिवाय) screen is now OPT-IN — default OFF, go straight to login.
     var showWelcome = STORE.get('pk3_showWelcome', false);
@@ -3417,12 +3472,13 @@ var Auth = {
   },
   login: function() {
     var u=getVal('login-user'), p=getVal('login-pass');
-    var found=USERS_CONFIG.find(function(x){return x.user===u&&x.pass===p;});
+    var ph=_pwHash(p);
+    var found=USERS_CONFIG.find(function(x){return x.user===u&&x.passHash===ph;});
     var err=document.getElementById('login-err');
     if(!found) { err.classList.add('show'); return; }
     err.classList.remove('show');
     currentUser=found;
-    if(document.getElementById('remember-me').checked) STORE.set('pk3_session',{user:found.user,pass:found.pass});
+    if(document.getElementById('remember-me').checked) STORE.set('pk3_session',{user:found.user,ph:found.passHash});
     this._showApp();
     Audit.log('LOGIN','User logged in: '+found.name+' ('+found.role+')');
   },
@@ -3556,9 +3612,9 @@ var Auth = {
 
   verifySuperAdminPassword: function() {
     var input = (document.getElementById('superadmin-pass')||{}).value || '';
-    var correct = currentUser ? currentUser.pass : null;
+    var correct = currentUser ? currentUser.passHash : null;
     var err = document.getElementById('superadmin-gate-err');
-    if(input && correct && input === correct){
+    if(input && correct && _pwHash(input) === correct){
       Auth.superAdminUnlocked = true;
       var m = document.getElementById('superadmin-gate-modal');
       if(m) m.style.display = 'none';
@@ -4890,7 +4946,7 @@ var Quotations = {
     var dp=document.getElementById('q-disc-pct');
     if(dp) dp.textContent=(sub>0&&disc>0)?'('+((disc/sub)*100).toFixed(1).replace(/\.0$/,'')+'%)':'';
     var ta=document.getElementById('q-tax-amt');
-    if(ta) ta.textContent=(taxAmt>0)?'(Rs '+fmtRs(taxAmt)+')':'';
+    if(ta) ta.textContent=(taxAmt>0)?'('+fmtRs(taxAmt)+')':'';
     setVal('q-amount',total);
   },
   pickFromRateList: function() {
@@ -6518,7 +6574,7 @@ var DayBook = {
       +   (e.bill?'<div class="v-row"><span class="v-label">Bill / रसिद नं</span><span>'+esc(e.bill)+'</span></div>':'')
       +   '<div class="v-row"><span class="v-label">Payment Mode / भुक्तानी</span><span>'+esc(e.pay||'Cash')+'</span></div>'
       +   '<div class="v-row"><span class="v-label">Particulars / विवरण</span><b>'+esc(e.desc||'—')+'</b></div>'
-      +   '<div class="v-amt-box"><span class="lbl">'+(isInc?'Amount Received / प्राप्त रकम':'Amount Paid / भुक्तानी रकम')+'</span><span class="val">Rs. '+fmtRs(amt)+'</span></div>'
+      +   '<div class="v-amt-box"><span class="lbl">'+(isInc?'Amount Received / प्राप्त रकम':'Amount Paid / भुक्तानी रकम')+'</span><span class="val">'+fmtRs(amt)+'</span></div>'
       +   (amtWords?'<div class="v-words">In words: '+esc(amtWords)+'</div>':'')
       +   (e.notes?'<div class="v-narr"><span class="lbl">Narration / कैफियत</span>'+esc(e.notes)+'</div>':'')
       + '</div>'
@@ -6548,9 +6604,9 @@ var DayBook = {
     var msg = '*📒 Day Book — '+fl+'*\n'
       + (co.companyName||'PRERAK MULTIPURPOSE PVT LTD')+'\n'
       + '━━━━━━━━━━━━━━━\n'
-      + '💰 Income: Rs '+fmtRs(inc)+'\n'
-      + '💸 Expense: Rs '+fmtRs(exp)+'\n'
-      + '📊 Net '+(net>=0?'Profit':'Loss')+': Rs '+fmtRs(Math.abs(net))+'\n'
+      + '💰 Income: '+fmtRs(inc)+'\n'
+      + '💸 Expense: '+fmtRs(exp)+'\n'
+      + '📊 Net '+(net>=0?'Profit':'Loss')+': '+fmtRs(Math.abs(net))+'\n'
       + '🧾 Entries: '+list.length;
     if(typeof Wa!=='undefined'&&Wa.send) Wa.send('', msg);
     else window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');
@@ -6598,7 +6654,7 @@ var Expenses = {
     }
     list = list.filter(inRange);
     var total=list.reduce(function(s,e){return s+(parseFloat(e.amount)||0);},0);
-    setText('ex-total','Rs.'+fmtRs(total));
+    setText('ex-total',fmtRs(total));
     setText('ex-count',String(list.length));
 
     // Category breakdown (कुन category मा कति) — from the same filtered list
@@ -6612,7 +6668,7 @@ var Expenses = {
         bd.innerHTML='<div style="font-size:0.72rem;color:var(--text-muted);margin-bottom:6px;">Category अनुसार खर्च</div>'
           + cats.map(function(c){
               var amt=byCat[c]; var pct=total>0?Math.round(amt/total*100):0;
-              return '<div style="margin-bottom:6px;"><div style="display:flex;justify-content:space-between;font-size:0.78rem;margin-bottom:2px;"><span>'+esc(c)+'</span><span style="font-weight:700;">Rs.'+fmtRs(amt)+' <span style="color:var(--text-muted);font-weight:400;">('+pct+'%)</span></span></div>'
+              return '<div style="margin-bottom:6px;"><div style="display:flex;justify-content:space-between;font-size:0.78rem;margin-bottom:2px;"><span>'+esc(c)+'</span><span style="font-weight:700;">'+fmtRs(amt)+' <span style="color:var(--text-muted);font-weight:400;">('+pct+'%)</span></span></div>'
                 +'<div style="height:6px;background:var(--surface-2);border-radius:4px;overflow:hidden;"><div style="height:100%;width:'+pct+'%;background:var(--red);"></div></div></div>';
             }).join('');
       }
@@ -6633,7 +6689,7 @@ var Expenses = {
       return '<tr><td style="font-size:0.78rem;">'+(e.dateBs?bsStringToDisplay(e.dateBs):(e.date||'\u2014'))+'</td>'
         +'<td style="font-weight:600;">'+esc(e.desc||'\u2014')+subLine+'</td>'
         +'<td style="font-size:0.76rem;color:var(--text-muted);">'+esc(e.cat||'\u2014')+'</td>'
-        +'<td style="text-align:right;font-weight:700;color:var(--red);">Rs.'+fmtRs(e.amount)+'</td>'
+        +'<td style="text-align:right;font-weight:700;color:var(--red);">'+fmtRs(e.amount)+'</td>'
         +'<td><div class="btn-group"><button onclick="DayBook.printVoucher(\''+e.id+'\')" class="btn btn-xs btn-primary" title="Print Voucher">\ud83d\udda8\ufe0f</button><button onclick="DayBook.edit(\''+e.id+'\')" class="btn btn-xs btn-secondary" title="Edit">\u270f\ufe0f</button><button onclick="DayBook.del(\''+e.id+'\')" class="btn btn-xs btn-danger" title="Delete">\ud83d\uddd1</button></div></td></tr>';
     }).join('');
   }
@@ -7252,7 +7308,7 @@ var AccountSummary = {
         if(!iv || iv._demo || iv._returned) return sum;
         return sum + (parseFloat(iv.amount)||0);
       }, 0);
-      setText('acs-total-sales', 'Rs.' + fmtRs(_totalSales));
+      setText('acs-total-sales', fmtRs(_totalSales));
     } catch(e){ setText('acs-total-sales','Rs.0'); }
     // Charts (simple bar)
     var self=this;
@@ -8329,9 +8385,9 @@ var VatCalc = {
       : '<span style="font-size:0.66rem;background:rgba(34,197,94,0.15);color:var(--green);padding:2px 8px;border-radius:10px;font-weight:700;">➕ VAT थपिएको</span>';
     box.innerHTML =
       '<div style="margin-bottom:8px;">'+modeTag+'</div>'
-      + '<div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);font-size:0.88rem;"><span style="color:var(--text-muted);">शुद्ध मूल्य (VAT बिना)</span><b>Rs '+fmtRs(v.pre)+'</b></div>'
-      + '<div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);font-size:0.88rem;"><span style="color:var(--text-muted);">VAT ('+v.rate+'%)</span><b style="color:#eab308;">'+(this._mode==='incl'?'भित्रै ':'+ ')+'Rs '+fmtRs(v.vat)+'</b></div>'
-      + '<div style="display:flex;justify-content:space-between;padding:12px 0;font-size:1.05rem;"><span style="font-weight:700;">जम्मा (VAT सहित)</span><b style="color:var(--green);font-size:1.25rem;">Rs '+fmtRs(v.total)+'</b></div>';
+      + '<div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);font-size:0.88rem;"><span style="color:var(--text-muted);">शुद्ध मूल्य (VAT बिना)</span><b>'+fmtRs(v.pre)+'</b></div>'
+      + '<div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);font-size:0.88rem;"><span style="color:var(--text-muted);">VAT ('+v.rate+'%)</span><b style="color:#eab308;">'+(this._mode==='incl'?'भित्रै ':'+ ')+fmtRs(v.vat)+'</b></div>'
+      + '<div style="display:flex;justify-content:space-between;padding:12px 0;font-size:1.05rem;"><span style="font-weight:700;">जम्मा (VAT सहित)</span><b style="color:var(--green);font-size:1.25rem;">'+fmtRs(v.total)+'</b></div>';
   },
 
   clear: function(){
@@ -8347,9 +8403,9 @@ var VatCalc = {
     return '🧮 VAT Calculation (Nepal '+v.rate+'%)\n'
       + modeLine + '\n'
       + '━━━━━━━━━━━━━━━\n'
-      + 'शुद्ध मूल्य: Rs '+fmtRs(v.pre)+'\n'
-      + 'VAT ('+v.rate+'%): Rs '+fmtRs(v.vat)+'\n'
-      + 'जम्मा: Rs '+fmtRs(v.total)+'\n'
+      + 'शुद्ध मूल्य: '+fmtRs(v.pre)+'\n'
+      + 'VAT ('+v.rate+'%): '+fmtRs(v.vat)+'\n'
+      + 'जम्मा: '+fmtRs(v.total)+'\n'
       + '— PRERAK MULTIPURPOSE PVT LTD';
   },
 
@@ -9264,7 +9320,7 @@ var Estimate = {
     var discPct=document.getElementById('est-disc-pct');
     if(discPct) discPct.textContent = (sub>0 && disc>0) ? '('+((disc/sub)*100).toFixed(1).replace(/\.0$/,'')+'%)' : '';
     // Show tax amount in rupees next to the total area
-    var taxLabel=document.getElementById('est-tax-amt'); if(taxLabel) taxLabel.textContent='(Rs '+fmtRs(taxAmt)+')';
+    var taxLabel=document.getElementById('est-tax-amt'); if(taxLabel) taxLabel.textContent='('+fmtRs(taxAmt)+')';
     setText('est-total',fmtRs(total));
     setText('est-balance',fmtRs(total-adv));
   },
@@ -10010,7 +10066,14 @@ var Brochure = {
 
 var Ledger = {
   _selectedCustId: '',
-  getData: function(){ return STORE.get('pk3_ledger', []) || []; },
+  getData: function(){
+    // v6.9.0: older versions sometimes stored date as a {y,m,d} object — normalise to 'YYYY-MM-DD'
+    return (STORE.get('pk3_ledger', []) || []).map(function(t){
+      if(t && t.date && typeof t.date==='object' && t.date.y){ t.date = t.date.y+'-'+String(t.date.m).padStart(2,'0')+'-'+String(t.date.d).padStart(2,'0'); }
+      else if(t && t.date!=null && typeof t.date!=='string'){ t.date = String(t.date); }
+      return t;
+    });
+  },
   setData: function(list){ STORE.set('pk3_ledger', list); },
 
   render: function(){
@@ -10059,9 +10122,9 @@ var Ledger = {
         return '<tr style="cursor:pointer;" onclick="Ledger.select(\''+k+'\');var s=document.getElementById(\'ledger-cust-select\');if(s)s.value=\''+k+'\';">'
           + '<td style="font-weight:600;">'+esc(c.name)+'</td>'
           + '<td style="text-align:center;color:var(--text-muted);">'+c.count+'</td>'
-          + '<td style="text-align:right;color:var(--red);">Rs '+fmtRs(c.debit)+'</td>'
-          + '<td style="text-align:right;color:var(--green);">Rs '+fmtRs(c.credit)+'</td>'
-          + '<td style="text-align:right;font-weight:700;color:'+(bal>=0?'var(--red)':'var(--green)')+';">Rs '+fmtRs(Math.abs(bal))+' '+(bal>=0?'Dr':'Cr')+'</td>'
+          + '<td style="text-align:right;color:var(--red);">'+fmtRs(c.debit)+'</td>'
+          + '<td style="text-align:right;color:var(--green);">'+fmtRs(c.credit)+'</td>'
+          + '<td style="text-align:right;font-weight:700;color:'+(bal>=0?'var(--red)':'var(--green)')+';">'+fmtRs(Math.abs(bal))+' '+(bal>=0?'Dr':'Cr')+'</td>'
           + '</tr>';
       }).join('');
       cont.innerHTML = '<div class="card card-body"><div style="font-size:0.82rem;color:var(--text-muted);margin-bottom:10px;">📊 All Customers Summary (click row to view detail)</div>'
@@ -10082,9 +10145,9 @@ var Ledger = {
       bal += dr - cr;
       return '<tr><td style="font-size:0.8rem;">'+esc(t.date||'')+'</td>'
         + '<td>'+esc(t.narration||t.desc||'')+'</td>'
-        + '<td style="text-align:right;color:var(--red);">'+(dr?'Rs '+fmtRs(dr):'—')+'</td>'
-        + '<td style="text-align:right;color:var(--green);">'+(cr?'Rs '+fmtRs(cr):'—')+'</td>'
-        + '<td style="text-align:right;font-weight:600;color:'+(bal>=0?'var(--red)':'var(--green)')+';">Rs '+fmtRs(Math.abs(bal))+'</td>'
+        + '<td style="text-align:right;color:var(--red);">'+(dr?fmtRs(dr):'—')+'</td>'
+        + '<td style="text-align:right;color:var(--green);">'+(cr?fmtRs(cr):'—')+'</td>'
+        + '<td style="text-align:right;font-weight:600;color:'+(bal>=0?'var(--red)':'var(--green)')+';">'+fmtRs(Math.abs(bal))+'</td>'
         + '<td><button onclick="Ledger.delTx(\''+t.id+'\')" class="btn btn-xs btn-danger" title="Delete">🗑</button></td></tr>';
     }).join('');
     var totalDr = rows.reduce(function(s,t){ return s+parseFloat(t.debit||0); },0);
@@ -10092,12 +10155,12 @@ var Ledger = {
     cont.innerHTML = '<div class="card card-body">'
       + '<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:12px;">'
         + '<div style="font-size:1.05rem;font-weight:700;">📒 '+esc(custName)+(cust&&cust.phone?' <span style="font-size:0.78rem;color:var(--text-muted);">'+esc(cust.phone)+'</span>':'')+'</div>'
-        + '<div style="font-size:0.92rem;font-weight:800;color:'+(bal>=0?'var(--red)':'var(--green)')+';">Balance: Rs '+fmtRs(Math.abs(bal))+' '+(bal>=0?'(Dr)':'(Cr)')+'</div>'
+        + '<div style="font-size:0.92rem;font-weight:800;color:'+(bal>=0?'var(--red)':'var(--green)')+';">Balance: '+fmtRs(Math.abs(bal))+' '+(bal>=0?'(Dr)':'(Cr)')+'</div>'
       + '</div>'
       + (rows.length
           ? '<div style="overflow-x:auto;"><table style="width:100%;"><thead><tr><th>Date</th><th>Narration</th><th style="text-align:right;">Debit</th><th style="text-align:right;">Credit</th><th style="text-align:right;">Balance</th><th></th></tr></thead><tbody>'
             + bodyRows
-            + '<tr style="border-top:2px solid var(--border);font-weight:700;"><td colspan="2" style="text-align:right;">TOTAL</td><td style="text-align:right;color:var(--red);">Rs '+fmtRs(totalDr)+'</td><td style="text-align:right;color:var(--green);">Rs '+fmtRs(totalCr)+'</td><td colspan="2"></td></tr>'
+            + '<tr style="border-top:2px solid var(--border);font-weight:700;"><td colspan="2" style="text-align:right;">TOTAL</td><td style="text-align:right;color:var(--red);">'+fmtRs(totalDr)+'</td><td style="text-align:right;color:var(--green);">'+fmtRs(totalCr)+'</td><td colspan="2"></td></tr>'
             + '</tbody></table></div>'
           : '<div class="empty-state" style="padding:30px;"><div class="icon">📝</div><div class="title">यो customer को कुनै transaction छैन</div><button onclick="Ledger.addTransaction()" class="btn btn-primary">+ Add Transaction</button></div>')
       + '</div>';
@@ -10125,7 +10188,7 @@ var Ledger = {
     var custs = STORE.get('pk3_customers', []) || [];
     var cust = custs.find(function(c){ return c.id == custId; });
     var dateBs = '';
-    try { if(dateAd && typeof adToBs==='function'){ var dt=new Date(dateAd); dateBs = adToBs(dt); } } catch(e){}
+    try { if(dateAd && typeof adToBs==='function'){ var _p=dateAd.split('-'); var _b=adToBs(parseInt(_p[0],10),parseInt(_p[1],10),parseInt(_p[2],10)); dateBs = _b.y+'-'+String(_b.m).padStart(2,'0')+'-'+String(_b.d).padStart(2,'0'); } } catch(e){}
     var rec = {
       id: 'lx_'+Date.now().toString(36),
       customerId: custId,
@@ -10238,12 +10301,12 @@ var Reports = {
       stats.innerHTML=[
         ['👥 New Customers',fCust.length,'var(--accent)'],
         ['📋 Quotations',fQuots.length,'var(--purple)'],
-        ['💵 Quote Value','Rs '+fmtRs(quotVal),'var(--secondary)'],
+        ['💵 Quote Value',fmtRs(quotVal),'var(--secondary)'],
         ['🧾 Invoices',fInvs.length,'#f97316'],
-        ['💰 Income','Rs '+fmtRs(income),'var(--green)'],
-        ['💸 Expense','Rs '+fmtRs(expense),'var(--red)'],
-        ['↩️ Returns','Rs '+fmtRs(returns),'var(--red)'],
-        ['📊 Net '+(net>=0?'Profit':'Loss'),'Rs '+fmtRs(Math.abs(net)),net>=0?'var(--green)':'var(--red)']
+        ['💰 Income',fmtRs(income),'var(--green)'],
+        ['💸 Expense',fmtRs(expense),'var(--red)'],
+        ['↩️ Returns',fmtRs(returns),'var(--red)'],
+        ['📊 Net '+(net>=0?'Profit':'Loss'),fmtRs(Math.abs(net)),net>=0?'var(--green)':'var(--red)']
       ].map(function(s){
         return '<div class="stat-card"><div class="stat-label">'+s[0]+'</div><div class="stat-value" style="color:'+s[2]+';font-size:1.25rem;">'+s[1]+'</div></div>';
       }).join('');
@@ -10256,7 +10319,7 @@ var Reports = {
       var keys=Object.keys(byStaff).filter(function(k){return k!=='—';});
       if(keys.length){
         staffEl.innerHTML='<div class="card"><div class="card-head"><span>🧑‍💼 Salesperson Performance</span></div><div class="table-wrap"><table><thead><tr><th>Salesperson</th><th style="text-align:center;">Customers</th><th style="text-align:right;">Advance Collected</th></tr></thead><tbody>'
-          + keys.map(function(k){ return '<tr><td style="font-weight:600;">'+esc(k)+'</td><td style="text-align:center;">'+byStaff[k].cust+'</td><td style="text-align:right;color:var(--green);">Rs '+fmtRs(byStaff[k].adv)+'</td></tr>'; }).join('')
+          + keys.map(function(k){ return '<tr><td style="font-weight:600;">'+esc(k)+'</td><td style="text-align:center;">'+byStaff[k].cust+'</td><td style="text-align:right;color:var(--green);">'+fmtRs(byStaff[k].adv)+'</td></tr>'; }).join('')
           + '</tbody></table></div></div>';
       } else { staffEl.innerHTML=''; }
     }
@@ -10293,11 +10356,11 @@ var Reports = {
       +'</head><body><h1>'+esc(co.companyName||'PRERAK MULTIPURPOSE PVT LTD')+'</h1>'
       +'<div class="sub">📊 Report ('+this._filterLabel()+') • '+esc(co.address||'Hetauda-2, Makwanpur')+'</div>'
       +'<table><tr><th>New Customers</th><td class="r">'+(d.custCount||0)+'</td></tr>'
-      +'<tr><th>Quotations</th><td class="r">'+(d.quotCount||0)+' (Rs '+fmtRs(d.quotVal||0)+')</td></tr>'
+      +'<tr><th>Quotations</th><td class="r">'+(d.quotCount||0)+' ('+fmtRs(d.quotVal||0)+')</td></tr>'
       +'<tr><th>Invoices</th><td class="r">'+(d.invCount||0)+'</td></tr>'
-      +'<tr><th>Income</th><td class="r" style="color:green;">Rs '+fmtRs(d.income||0)+'</td></tr>'
-      +'<tr><th>Expense</th><td class="r" style="color:#d00;">Rs '+fmtRs(d.expense||0)+'</td></tr>'
-      +'<tr><th>Net '+((d.net||0)>=0?'Profit':'Loss')+'</th><td class="r" style="font-weight:700;">Rs '+fmtRs(Math.abs(d.net||0))+'</td></tr></table>'
+      +'<tr><th>Income</th><td class="r" style="color:green;">'+fmtRs(d.income||0)+'</td></tr>'
+      +'<tr><th>Expense</th><td class="r" style="color:#d00;">'+fmtRs(d.expense||0)+'</td></tr>'
+      +'<tr><th>Net '+((d.net||0)>=0?'Profit':'Loss')+'</th><td class="r" style="font-weight:700;">'+fmtRs(Math.abs(d.net||0))+'</td></tr></table>'
       +'<script>setTimeout(function(){window.print();},400);<\/script></body></html>');
     w.document.close();
   },
@@ -10306,11 +10369,11 @@ var Reports = {
     var d=this._lastData||{};
     var msg='*📊 '+(co.companyName||'PRERAK')+' Report*\n('+this._filterLabel()+')\n\n'
       +'👥 New Customers: '+(d.custCount||0)+'\n'
-      +'📋 Quotations: '+(d.quotCount||0)+' (Rs '+fmtRs(d.quotVal||0)+')\n'
+      +'📋 Quotations: '+(d.quotCount||0)+' ('+fmtRs(d.quotVal||0)+')\n'
       +'🧾 Invoices: '+(d.invCount||0)+'\n'
-      +'💰 Income: Rs '+fmtRs(d.income||0)+'\n'
-      +'💸 Expense: Rs '+fmtRs(d.expense||0)+'\n'
-      +'📊 Net '+((d.net||0)>=0?'Profit':'Loss')+': Rs '+fmtRs(Math.abs(d.net||0));
+      +'💰 Income: '+fmtRs(d.income||0)+'\n'
+      +'💸 Expense: '+fmtRs(d.expense||0)+'\n'
+      +'📊 Net '+((d.net||0)>=0?'Profit':'Loss')+': '+fmtRs(Math.abs(d.net||0));
     if(typeof Wa!=='undefined'&&Wa.send){ Wa.send('',msg); }
     else window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');
   },
@@ -10358,10 +10421,10 @@ var Dashboard = {
         var _tIncome = db.filter(function(d){return d.date===todayISO_&&(d.type==='income'||d.type==='receipt'||d.type==='advance');}).reduce(function(a,d){return a+(parseFloat(d.amount)||0);},0);
         var _tExpense = db.filter(function(d){return d.date===todayISO_&&(d.type==='expense'||d.type==='payment');}).reduce(function(a,d){return a+(parseFloat(d.amount)||0);},0);
         var _tNet = _tIncome - _tExpense;
-        setText('snap-income', 'Rs '+fmtRs(_tIncome));
-        setText('snap-expense', 'Rs '+fmtRs(_tExpense));
+        setText('snap-income', fmtRs(_tIncome));
+        setText('snap-expense', fmtRs(_tExpense));
         var _netEl = document.getElementById('snap-net');
-        if(_netEl){ _netEl.textContent = 'Rs '+fmtRs(Math.abs(_tNet)); _netEl.style.color = _tNet>=0 ? 'var(--green)' : 'var(--red)'; }
+        if(_netEl){ _netEl.textContent = fmtRs(Math.abs(_tNet)); _netEl.style.color = _tNet>=0 ? 'var(--green)' : 'var(--red)'; }
         var _sd = document.getElementById('snap-date'); if(_sd) _sd.textContent = bsStringToDisplay(today);
         // due chips: followups today/overdue + planner today/overdue
         var _plList = (typeof Planner!=='undefined') ? Planner.getData() : [];
@@ -10579,13 +10642,13 @@ var Dashboard = {
   // आजको सारांश notification (v5.9)
   notifyToday: function(){
     var c = this._snapCache || {};
-    var netTxt = (c.net>=0?'नाफा ':'घाटा ') + 'Rs '+fmtRs(Math.abs(c.net||0));
+    var netTxt = (c.net>=0?'नाफा ':'घाटा ') + fmtRs(Math.abs(c.net||0));
     var dueBits = [];
     if(c.fuToday)   dueBits.push(c.fuToday+' FU आज');
     if(c.fuOverdue) dueBits.push(c.fuOverdue+' FU बाँकी');
     if(c.plToday)   dueBits.push(c.plToday+' task आज');
     if(c.plOver)    dueBits.push(c.plOver+' task बाँकी');
-    var body = 'Income Rs '+fmtRs(c.income||0)+' • Expense Rs '+fmtRs(c.expense||0)+' • '+netTxt
+    var body = 'Income '+fmtRs(c.income||0)+' • Expense '+fmtRs(c.expense||0)+' • '+netTxt
              + (dueBits.length ? '\n\u23f0 '+dueBits.join(', ') : '\n\u2705 आज केही बाँकी छैन');
     var coName = (STORE.get('pk3_settings',{})||{}).companyName || 'CRM';
     if(('Notification' in window) && Notification.permission==='granted'){
@@ -10768,7 +10831,7 @@ var Dashboard = {
         var len = frac*circ;
         var el = '<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="none" stroke="'+s.color+'" stroke-width="26" '
           +'stroke-dasharray="'+len.toFixed(2)+' '+(circ-len).toFixed(2)+'" stroke-dashoffset="'+(-offset).toFixed(2)+'" '
-          +'stroke-linecap="butt" transform="rotate(-90 '+cx+' '+cy+')"><title>'+s.label+': Rs '+fmtRs(s.val)+' ('+Math.round(frac*100)+'%)</title></circle>';
+          +'stroke-linecap="butt" transform="rotate(-90 '+cx+' '+cy+')"><title>'+s.label+': '+fmtRs(s.val)+' ('+Math.round(frac*100)+'%)</title></circle>';
         offset += len;
         return el;
       }).join('');
@@ -10776,7 +10839,7 @@ var Dashboard = {
         + '<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="none" stroke="var(--surface-2)" stroke-width="26"></circle>'
         + circles
         + '<text x="'+cx+'" y="'+(cy-8)+'" text-anchor="middle" style="font-size:11px;fill:var(--text-muted);font-weight:600;">Net '+(net>=0?'Profit':'Loss')+'</text>'
-        + '<text x="'+cx+'" y="'+(cy+13)+'" text-anchor="middle" style="font-size:15px;font-weight:800;fill:'+(net>=0?'#22c55e':'#ef4444')+';">Rs '+fmtRs(Math.abs(net))+'</text>'
+        + '<text x="'+cx+'" y="'+(cy+13)+'" text-anchor="middle" style="font-size:15px;font-weight:800;fill:'+(net>=0?'#22c55e':'#ef4444')+';">'+fmtRs(Math.abs(net))+'</text>'
         + '</svg>';
     }
     // Legend + count chips
@@ -10785,7 +10848,7 @@ var Dashboard = {
       return '<div style="display:flex;align-items:center;gap:8px;font-size:0.8rem;">'
         +'<span style="width:12px;height:12px;border-radius:3px;background:'+s.color+';flex-shrink:0;"></span>'
         +'<span style="flex:1;">'+s.label+'</span>'
-        +'<span style="font-weight:700;">Rs '+fmtRs(s.val)+'</span>'
+        +'<span style="font-weight:700;">'+fmtRs(s.val)+'</span>'
         +'<span style="color:var(--text-muted);font-size:0.7rem;min-width:34px;text-align:right;">'+pct+'%</span>'
       +'</div>';
     }).join('');
@@ -10889,7 +10952,7 @@ var Dashboard = {
       quots.forEach(function(q){var m=(q.date||q.created||'').slice(0,7); if(months[m]!==undefined) months[m]+=parseFloat(q.total||q.amount||0);});
       var keys=Object.keys(months); var maxM=Math.max.apply(null,Object.values(months))||1;
       spEl.innerHTML='<div style="display:flex;align-items:flex-end;gap:8px;height:100px;padding:4px 0;">'
-        +keys.map(function(k){var h=Math.round((months[k]/maxM)*80);return '<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:100%;background:var(--accent);border-radius:4px 4px 0 0;height:'+h+'px;min-height:3px;" title="Rs.'+fmtRs(months[k])+'"></div><div style="font-size:0.62rem;color:var(--text-muted);">'+k.slice(5)+'</div></div>';}).join('')
+        +keys.map(function(k){var h=Math.round((months[k]/maxM)*80);return '<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="width:100%;background:var(--accent);border-radius:4px 4px 0 0;height:'+h+'px;min-height:3px;" title="'+fmtRs(months[k])+'"></div><div style="font-size:0.62rem;color:var(--text-muted);">'+k.slice(5)+'</div></div>';}).join('')
         +'</div>';
     }
   },
@@ -11398,9 +11461,9 @@ var CRMCalc = {
         ? '<span style="font-size:0.62rem;background:rgba(168,85,247,0.18);color:#a855f7;padding:2px 8px;border-radius:10px;font-weight:700;">📦 VAT भित्रै (13%)</span>'
         : '<span style="font-size:0.62rem;background:rgba(34,197,94,0.18);color:var(--green);padding:2px 8px;border-radius:10px;font-weight:700;">➕ VAT थपियो (13%)</span>';
       box.innerHTML = '<div style="margin-bottom:6px;">'+tag+'</div>'
-        + '<div style="display:flex;justify-content:space-between;padding:4px 0;"><span style="color:var(--text-muted);">शुद्ध मूल्य</span><b>Rs '+fmtRs(pre)+'</b></div>'
-        + '<div style="display:flex;justify-content:space-between;padding:4px 0;"><span style="color:var(--text-muted);">VAT (13%)</span><b style="color:#eab308;">Rs '+fmtRs(vatAmt)+'</b></div>'
-        + '<div style="display:flex;justify-content:space-between;padding:5px 0;border-top:1px solid var(--border);margin-top:3px;"><b>जम्मा</b><b style="color:var(--green);">Rs '+fmtRs(total)+'</b></div>'
+        + '<div style="display:flex;justify-content:space-between;padding:4px 0;"><span style="color:var(--text-muted);">शुद्ध मूल्य</span><b>'+fmtRs(pre)+'</b></div>'
+        + '<div style="display:flex;justify-content:space-between;padding:4px 0;"><span style="color:var(--text-muted);">VAT (13%)</span><b style="color:#eab308;">'+fmtRs(vatAmt)+'</b></div>'
+        + '<div style="display:flex;justify-content:space-between;padding:5px 0;border-top:1px solid var(--border);margin-top:3px;"><b>जम्मा</b><b style="color:var(--green);">'+fmtRs(total)+'</b></div>'
         + '<div style="text-align:right;margin-top:6px;"><button onclick="App.navigate(\'vatcalc\');document.getElementById(\'calc-modal\').classList.remove(\'open\');" class="btn btn-xs btn-secondary">⛶ Full VAT Calculator</button></div>';
       box.style.display = '';
     }
@@ -12105,9 +12168,9 @@ var CashBook = {
         + '<td style="font-size:0.8rem;">'+esc(d.desc||d.cat||'—')
           + (d.type==='return' ? ' <span class="tag tag-gray" style="font-size:0.56rem;">RETURN</span>' : '')
           + '</td>'
-        + '<td style="text-align:right;color:var(--green);white-space:nowrap;">'+(isIn?('Rs '+fmtRs(amt)):'')+'</td>'
-        + '<td style="text-align:right;color:var(--red);white-space:nowrap;">'+(isOut?('Rs '+fmtRs(amt)):'')+'</td>'
-        + '<td style="text-align:right;font-weight:700;white-space:nowrap;color:'+(bal>=0?'var(--text)':'var(--red)')+';">Rs '+fmtRs(bal)+'</td>'
+        + '<td style="text-align:right;color:var(--green);white-space:nowrap;">'+(isIn?(fmtRs(amt)):'')+'</td>'
+        + '<td style="text-align:right;color:var(--red);white-space:nowrap;">'+(isOut?(fmtRs(amt)):'')+'</td>'
+        + '<td style="text-align:right;font-weight:700;white-space:nowrap;color:'+(bal>=0?'var(--text)':'var(--red)')+';">'+fmtRs(bal)+'</td>'
         + '</tr>';
     }).filter(Boolean).join('');
 
@@ -12117,10 +12180,10 @@ var CashBook = {
     var st = document.getElementById('cb-summary');
     if(st){
       st.innerHTML =
-        '<div class="stat-card"><div class="stat-label">Opening</div><div class="stat-value" style="color:var(--text-muted);">Rs '+fmtRs(this._opening)+'</div></div>'
-        + '<div class="stat-card"><div class="stat-label">कुल IN</div><div class="stat-value" style="color:var(--green);">Rs '+fmtRs(totalIn)+'</div></div>'
-        + '<div class="stat-card"><div class="stat-label">कुल OUT</div><div class="stat-value" style="color:var(--red);">Rs '+fmtRs(totalOut)+'</div></div>'
-        + '<div class="stat-card"><div class="stat-label">Closing Balance</div><div class="stat-value" style="color:'+(closing>=0?'var(--green)':'var(--red)')+';">Rs '+fmtRs(closing)+'</div></div>';
+        '<div class="stat-card"><div class="stat-label">Opening</div><div class="stat-value" style="color:var(--text-muted);">'+fmtRs(this._opening)+'</div></div>'
+        + '<div class="stat-card"><div class="stat-label">कुल IN</div><div class="stat-value" style="color:var(--green);">'+fmtRs(totalIn)+'</div></div>'
+        + '<div class="stat-card"><div class="stat-label">कुल OUT</div><div class="stat-value" style="color:var(--red);">'+fmtRs(totalOut)+'</div></div>'
+        + '<div class="stat-card"><div class="stat-label">Closing Balance</div><div class="stat-value" style="color:'+(closing>=0?'var(--green)':'var(--red)')+';">'+fmtRs(closing)+'</div></div>';
     }
 
     if(!rowsHtml){
@@ -12131,12 +12194,12 @@ var CashBook = {
       + '<th>मिति</th><th>विवरण</th><th style="text-align:right;">IN</th><th style="text-align:right;">OUT</th><th style="text-align:right;">Balance</th>'
       + '</tr></thead><tbody>'
       + '<tr style="background:var(--surface-2);"><td colspan="4" style="font-size:0.74rem;color:var(--text-muted);">Opening Balance</td>'
-        + '<td style="text-align:right;font-weight:700;">Rs '+fmtRs(this._opening)+'</td></tr>'
+        + '<td style="text-align:right;font-weight:700;">'+fmtRs(this._opening)+'</td></tr>'
       + rowsHtml
       + '<tr style="background:var(--surface-2);font-weight:800;"><td colspan="2">Closing Balance</td>'
-        + '<td style="text-align:right;color:var(--green);">Rs '+fmtRs(totalIn)+'</td>'
-        + '<td style="text-align:right;color:var(--red);">Rs '+fmtRs(totalOut)+'</td>'
-        + '<td style="text-align:right;color:'+(closing>=0?'var(--green)':'var(--red)')+';">Rs '+fmtRs(closing)+'</td></tr>'
+        + '<td style="text-align:right;color:var(--green);">'+fmtRs(totalIn)+'</td>'
+        + '<td style="text-align:right;color:var(--red);">'+fmtRs(totalOut)+'</td>'
+        + '<td style="text-align:right;color:'+(closing>=0?'var(--green)':'var(--red)')+';">'+fmtRs(closing)+'</td></tr>'
       + '</tbody></table></div>';
   },
 
@@ -12185,7 +12248,7 @@ var SalesReturns = {
     document.getElementById('return-amount').value = amt;
     document.getElementById('return-amount').setAttribute('max', amt);
     document.getElementById('return-reason').value = '';
-    document.getElementById('return-hint').textContent = 'मूल रकम: Rs ' + fmtRs(amt) + ' — आंशिक refund भए रकम घटाउनुहोस्';
+    document.getElementById('return-hint').textContent = 'मूल रकम: '+fmtRs(amt) + ' — आंशिक refund भए रकम घटाउनुहोस्';
     m.classList.add('open');
   },
 
@@ -12269,10 +12332,10 @@ var SalesReturns = {
     } catch(e){ console.warn('return daybook', e); }
 
     try { Audit.log('RETURN', 'Return Rs '+amt+' — '+p.num+' ('+p.custName+')'); } catch(e){}
-    try { Activity.add('↩️ Sales return: '+p.num+' — Rs '+fmtRs(amt)); } catch(e){}
+    try { Activity.add('↩️ Sales return: '+p.num+' — '+fmtRs(amt)); } catch(e){}
 
     var m=document.getElementById('return-modal'); if(m) m.classList.remove('open');
-    App.toast('↩️ Return record गरियो — Rs '+fmtRs(amt),'success',3500);
+    App.toast('↩️ Return record गरियो — '+fmtRs(amt),'success',3500);
     this._pending = null;
 
     // refresh whatever view is open
@@ -12288,7 +12351,7 @@ var SalesReturns = {
     var list = this.getData();
     var total = list.reduce(function(s,r){ return s + (parseFloat(r.amount)||0); }, 0);
     var tot = document.getElementById('returns-total');
-    if(tot) tot.textContent = 'Rs ' + fmtRs(total);
+    if(tot) tot.textContent = fmtRs(total);
     if(!list.length){
       el.innerHTML = '<div class="empty-state" style="padding:30px;"><div class="icon">↩️</div><div>कुनै return/refund छैन</div></div>';
       return;
@@ -12302,7 +12365,7 @@ var SalesReturns = {
             + '<td style="font-size:0.78rem;"><span class="tag tag-gray">'+esc(r.srcType==='invoice'?'INV':'QUO')+'</span> '+esc(r.num||'')+'</td>'
             + '<td>'+esc(r.custName||'General')+'</td>'
             + '<td style="font-size:0.76rem;color:var(--text-muted);">'+esc(r.reason||'—')+'</td>'
-            + '<td style="text-align:right;font-weight:700;color:var(--red);white-space:nowrap;">Rs '+fmtRs(r.amount||0)+'</td>'
+            + '<td style="text-align:right;font-weight:700;color:var(--red);white-space:nowrap;">'+fmtRs(r.amount||0)+'</td>'
             + '<td><button onclick="SalesReturns.undo(\''+r.id+'\')" class="btn btn-xs" style="background:var(--surface-2);" title="Undo this return">✕</button></td>'
             + '</tr>';
         }).join('')
@@ -12857,7 +12920,8 @@ var AdminDash = {
     if (!Auth.isSuperAdmin()) { App.toast('\u26d4 Super Admin \u092e\u093e\u0924\u094d\u0930','error'); return; }
     var pw = prompt('🔒 '+actionName+'\n\nपुष्टि गर्न Super Admin password टाइप गर्नुस्:');
     if(pw === null) return; // user pressed Cancel
-    var ok = USERS_CONFIG.some(function(u){ return u.role==='superadmin' && u.pass===pw; });
+    var _ph = _pwHash(pw);
+    var ok = USERS_CONFIG.some(function(u){ return u.role==='superadmin' && u.passHash===_ph; });
     if(!ok){
       App.toast('गलत Super Admin Password','error',3000);
       try { Audit.log('SECURITY','Failed danger-zone confirm: '+actionName+' by '+(currentUser?currentUser.user:'?')); } catch(e){}
@@ -12882,7 +12946,7 @@ var AdminDash = {
     var p = prompt('🔒 New password for @'+USERS_CONFIG[idx].user+':');
     if (!p) return;
     if (p.length < 4) { App.toast('Password too short (min 4 chars)','error'); return; }
-    USERS_CONFIG[idx].pass = p;
+    USERS_CONFIG[idx].passHash = _pwHash(p);
     try { Audit.log('USERS','Password reset for: '+USERS_CONFIG[idx].user); } catch(e){}
     App.toast('\u2705 Password updated for @'+USERS_CONFIG[idx].user,'success');
   },
@@ -12929,7 +12993,7 @@ var AdminDash = {
     var nm=prompt('Display Name:'); if(!nm)return;
     var rl=prompt('Role (staff/admin/superadmin):','staff')||'staff';
     if(['staff','admin','superadmin'].indexOf(rl)<0) rl='staff';
-    USERS_CONFIG.push({user:un,pass:pw,name:nm,role:rl});
+    USERS_CONFIG.push({user:un,passHash:_pwHash(pw),name:nm,role:rl});
     try { Audit.log('USERS','Added user: '+un+' ('+rl+')'); } catch(e){}
     App.toast('\u2705 User added: '+nm,'success');
     this.renderUsers();
