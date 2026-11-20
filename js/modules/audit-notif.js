@@ -10,7 +10,7 @@ var Audit = {
     tb.innerHTML=list.map(function(a){var tm=a.time||a.date||''; var dpart=tm?fmtDisplayDate(String(tm).slice(0,10)):''; var tpart=tm&&String(tm).length>=16?String(tm).slice(11,16):''; return '<tr><td style="font-size:0.72rem;">'+dpart+' '+tpart+'</td><td style="font-size:0.78rem;">'+esc(a.user||'')+'</td><td><span class="tag tag-blue" style="font-size:0.65rem;">'+esc(a.action||'')+'</span></td><td style="font-size:0.78rem;">'+esc(a.details||'')+'</td></tr>';}).join('');
   },
   clear: function(){ if(!confirm('Audit log clear गर्नुहुन्छ?'))return; STORE.set('pk3_audit',[]); this.render(); App.toast('🗑 Audit cleared','info'); },
-  export: function(){ var data=JSON.stringify(this.getData(),null,2); downloadFile('prerak-audit-'+todayISO()+'.json',data); App.toast('✅ Audit exported!','success'); }
+  export: function(){ var data=JSON.stringify(this.getData(),null,2); downloadFile('audit-'+todayISO()+'.json',data); App.toast('✅ Audit exported!','success'); }
 };
 
 // ─── ACTIVITY MODULE ──────────────────────────────────────────

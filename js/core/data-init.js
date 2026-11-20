@@ -103,11 +103,10 @@ function fillTemplate(template, customer) {
     '{phone}':   c.phone || '',
     '{service}': (function(){ try { var a = Customers.getServices(c).map(function(x){return x.work;}).filter(Boolean); return a.length ? a.join(', ') : (c.work || c.service || 'तपाईंको काम'); } catch(e){ return c.work || c.service || 'तपाईंको काम'; } })(),
     '{address}': c.address || '',
-    '{company}': co.companyName || 'PRERAK MULTIPURPOSE PVT LTD',
-    '{phone1}':  co.phone1 || '9855069733',
-    '{phone2}':  co.phone2 || '9801069733',
     '{amount}':  c.amount || c.balance || ''
   };
+  // v7.0.0: company placeholders come only from the user's own Company Settings
+  try { var cv = Company.vars(); Object.keys(cv).forEach(function(k){ if(!(k in vars)) vars[k] = cv[k] || ''; }); } catch(e) {}
   // Also support [name] legacy format
   Object.keys(vars).forEach(function(k){
     var v = vars[k];
@@ -117,6 +116,7 @@ function fillTemplate(template, customer) {
   });
   // Clean up double spaces, trailing whitespace per line
   body = body.split('\n').map(function(l){ return l.replace(/  +/g,' ').replace(/\s+$/,''); }).join('\n');
+  try { body = Company.tidy(body); } catch(e) {}
   return body;
 }
 
@@ -201,22 +201,8 @@ var DEFAULT_RATES = {
   ]
 };
 
-var DEFAULT_TEMPLATES = [
-  {name:'🏢 Company Introduction', text:'नमस्ते {name} जी! 🙏\nPRERAK MULTIPURPOSE PVT LTD मा हार्दिक स्वागत छ!\n\nहाम्रा सेवाहरू:\n✅ Construction, Civil Work & Renovation\n✅ Prefab Wall / Homes\n✅ Truss Works / Roofing\n✅ UPVC / Aluminum Window & Door\n✅ Gypsum / False Ceiling\n✅ Interior Design & Decoration\n✅ Modular Kitchen & Furniture\n✅ Tiles / Marble / Parquet Flooring\n✅ Painting / Texture Work\n✅ WPC Door & Panel\n✅ Solar Water Heater & Panel\n✅ Chimney / Cooking Stove\n✅ Water Purifier Installation\n\nQuality Work • Best Price • On-time Delivery\n📞 9855069733 | 9801069733\n📍 Hetauda-2, Kantirajpath, Makwanpur\n✉️ prerakconstrucion21@gmail.com\n\n"Building Your Dreams"\nतपाईंको सेवामा सदैव तत्पर! 🙏'},
-  {name:'🚪 Walk-in Welcome', text:'नमस्कार {name} जी 🙏\nPrerak Multipurpose Pvt. Ltd. मा हार्दिक स्वागत छ।\nहाम्रो showroom/सेवाबारे चासो देखाउनुभएकोमा धन्यवाद।\nघर निर्माण, इन्टेरियर, UPVC/Aluminum, Gypsum, Plumbing, Electrical, Painting तथा Renovation सम्बन्धी सल्लाह, site visit र estimate का लागि हामी उपलब्ध छौं।\n📞 {phone1} / {phone2}\n📍 Hetauda-2, Kantirajpath, Makwanpur'},
-  {name:'🪟 Service Info: UPVC', text:'नमस्कार {name} जी 🙏\nहामी UPVC/Aluminum झ्याल–ढोका, sliding window, partition तथा glass work सम्बन्धी काम गर्छौं।\nतपाईंको आवश्यकता अनुसार measurement, design suggestion र estimate उपलब्ध गराउन सक्छौं।\n📞 {phone1} / {phone2}'},
-  {name:'🏗️ Service Info: Gypsum', text:'नमस्कार {name} जी 🙏\nहामी gypsum ceiling, false ceiling, partition, TV unit, lighting setup तथा interior finishing सम्बन्धी काम गर्छौं।\nतपाईंको room/site अनुसार design र estimate तयार गर्न सकिन्छ।\n📞 {phone1}'},
-  {name:'📞 Follow-up Reminder', text:'नमस्कार {name} जी 🙏\nपहिले भएको कुराकानी अनुसार {service} सम्बन्धी follow-up गर्न सम्पर्क गरेको हुँ।\nथप सल्लाह, site visit वा estimate आवश्यक भए जानकारी दिनुहोला।\n📞 {phone1}'},
-  {name:'🏠 Site Visit', text:'नमस्कार {name} जी 🙏\nतपाईंको {service} सम्बन्धी site visit / measurement का लागि हामी उपलब्ध छौं।\nकृपया location र उपयुक्त समय पठाइदिनुहोस्।\n📞 {phone1} / {phone2}'},
-  {name:'✅ Quotation Ready', text:'नमस्कार {name} जी 🙏\nतपाईंको {service} सम्बन्धी quotation/estimate तयार भएको छ।\nकृपया हेरेर कुनै सुधार वा थप जानकारी चाहिएको भए बताइदिनुहोस्।\n📞 {phone1}'},
-  {name:'💰 Payment Reminder', text:'नमस्कार {name} जी 🙏\nतपाईंको {service} सम्बन्धी बाँकी payment सम्झाउन यो सन्देश पठाइएको हो।\nकृपया समय मिलाएर payment update गरिदिनुहोला।\n📞 {phone1}'},
-  {name:'🎉 Work Complete', text:'नमस्कार {name} जी 🙏\nतपाईंको {service} सम्बन्धी काम सम्पन्न भएको जानकारी गराउँदछौं।\nहामीलाई विश्वास गर्नुभएकोमा धन्यवाद।\nFeedback दिनुहोला।\n📞 {phone1}'},
-  {name:'🎁 Discount Offer', text:'नमस्कार {name} जी 🙏\nPrerak Multipurpose Pvt. Ltd. मा construction, interior, UPVC/Aluminum, gypsum तथा renovation सेवामा विशेष offer उपलब्ध छ।\nथप जानकारीका लागि सम्पर्क गर्नुहोस्।\n📞 {phone1} / {phone2}'},
-  {name:'⭐ Review Request', text:'नमस्कार {name} जी 🙏\nहाम्रो सेवा मन परेको भए कृपया feedback/review दिनुहोला।\nतपाईंको सुझावले हामीलाई अझ राम्रो सेवा दिन सहयोग गर्छ।\n📞 {phone1}'},
-  {name:'🌟 New Lead Greeting', text:'नमस्कार {name} जी 🙏\nPrerak Multipurpose Pvt. Ltd. बाट सम्पर्क गरेको हुँ।\nतपाईंलाई construction, interior, UPVC/Aluminum, gypsum वा renovation सम्बन्धी सेवा चाहिएको भए हामी site visit र estimate मा सहयोग गर्न तयार छौं।\n📞 {phone1} / {phone2}'},
-  {name:'🔥 Hot Lead', text:'नमस्कार {name} जी 🙏\nतपाईंको काम urgent देखिएकोले हामी छिटो site visit/estimate मिलाउन तयार छौं।\nकृपया location र उपयुक्त समय पठाइदिनुहोस्।\n📞 {phone1}'},
-  {name:'🪔 Dashain/Tihar', text:'नमस्कार {name} जी 🙏\nविजया दशमी, शुभ दीपावली तथा छठ पर्वको हार्दिक मंगलमय शुभकामना।\nPrerak Multipurpose Pvt. Ltd. परिवार।'}
-];
+// v7.0.0: DEFAULT_TEMPLATES is now a getter (see js/core/business-profiles.js) that returns the
+// templates of the chosen business type, with {company}/{phone1}/… placeholders — no hardcoded company.
 
 function migrateOldKeysToPk3() {
   // Copy data from old bare keys → pk3_* keys if pk3_* is missing
@@ -350,7 +336,7 @@ function initAppDataSafe() {
     if (!STORE.get('pk3_estimates', null)) STORE.set('pk3_estimates', []);
     if (!STORE.get('pk3_activity', null)) STORE.set('pk3_activity', []);
     if (!STORE.get('pk3_audit', null)) STORE.set('pk3_audit', []);
-    if (!STORE.get('pk3_company', null)) STORE.set('pk3_company', {name:'PRERAK MULTIPURPOSE PVT LTD', address:'Hetauda-2, Makwanpur', phone1:'9801069733'});
+    // v7.0.0: pk3_company is no longer seeded with any company's details (Company Settings = pk3_settings)
     if (!STORE.get('pk3_settings', null)) STORE.set('pk3_settings', {});
   } catch(e) { console.warn('initAppDataSafe error:', e); }
 }

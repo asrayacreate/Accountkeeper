@@ -33,29 +33,8 @@ var Followups = {
       chips.appendChild(span);
     });
   },
-  _defTpl: function(){ return [
-    {name:'🏢 Company Introduction', text:'नमस्ते {name} जी! 🙏\nPRERAK MULTIPURPOSE PVT LTD मा हार्दिक स्वागत छ!\n\nहाम्रा सेवाहरू:\n✅ Construction, Civil Work & Renovation\n✅ Prefab Wall / Homes\n✅ Truss Works / Roofing\n✅ UPVC / Aluminum Window & Door\n✅ Gypsum / False Ceiling\n✅ Interior Design & Decoration\n✅ Modular Kitchen & Furniture\n✅ Tiles / Marble / Parquet Flooring\n✅ Painting / Texture Work\n✅ WPC Door & Panel\n✅ Solar Water Heater & Panel\n✅ Chimney / Cooking Stove\n✅ Water Purifier Installation\n\nQuality Work • Best Price • On-time Delivery\n📞 9855069733 | 9801069733\n📍 Hetauda-2, Kantirajpath, Makwanpur\n✉️ prerakconstrucion21@gmail.com\n\n"Building Your Dreams"\nतपाईंको सेवामा सदैव तत्पर! 🙏'},
-    {name:'🚪 Walk-in Welcome (Short)', size:'short', text:'नमस्कार {name} जी 🙏\nPrerak Multipurpose Pvt. Ltd. मा स्वागत छ।\nघर निर्माण, इन्टेरियर, UPVC/Aluminum, Gypsum, Plumbing, Electrical, Painting तथा Renovation सम्बन्धी सल्लाह, site visit र estimate का लागि हामी उपलब्ध छौं।\n📞 {phone1} / {phone2}'},
-    {name:'🚪 Walk-in Welcome (Medium)', size:'medium', text:'नमस्कार {name} जी 🙏\nPrerak Multipurpose Pvt. Ltd. मा हार्दिक स्वागत छ।\nहाम्रो showroom/सेवाबारे चासो देखाउनुभएकोमा धन्यवाद।\n\nहामी उपलब्ध सेवा:\n• घर तथा भवन निर्माण\n• इन्टेरियर डिजाइन\n• UPVC/Aluminum झ्याल–ढोका\n• Gypsum/False Ceiling\n• Plumbing, Electrical, Painting\n• Renovation तथा Finishing\n\nSite visit वा estimate का लागि सम्पर्क गर्नुहोस्।\n📞 {phone1} / {phone2}\n📍 Hetauda-2, Kantirajpath, Makwanpur'},
-    {name:'🏠 Site Visit', size:'medium', text:'नमस्कार {name} जी 🙏\nतपाईंको {service} सम्बन्धी site visit / measurement का लागि हामी उपलब्ध छौं।\nकृपया location र उपयुक्त समय पठाइदिनुहोस्।\n📞 {phone1} / {phone2}'},
-    {name:'✅ Quotation Ready', size:'medium', text:'नमस्कार {name} जी 🙏\nतपाईंको {service} सम्बन्धी quotation/estimate तयार भएको छ।\nकृपया हेरेर कुनै सुधार वा थप जानकारी चाहिएको भए बताइदिनुहोस्।\n📞 {phone1} / {phone2}'},
-    {name:'📞 Follow-up', size:'medium', text:'नमस्कार {name} जी 🙏\nपहिले भएको कुराकानी अनुसार {service} सम्बन्धी follow-up गर्न सम्पर्क गरेको हुँ।\nथप सल्लाह, site visit वा estimate आवश्यक भए जानकारी दिनुहोला।\n📞 {phone1}'},
-    {name:'💰 Payment Reminder', size:'short', text:'नमस्कार {name} जी 🙏\nतपाईंको {service} सम्बन्धी बाँकी payment सम्झाउन यो सन्देश पठाइएको हो।\nकृपया समय मिलाएर payment update गरिदिनुहोला।\n📞 {phone1}'},
-    {name:'🎉 Work Complete', size:'short', text:'नमस्कार {name} जी 🙏\nतपाईंको {service} सम्बन्धी काम सम्पन्न भएको जानकारी गराउँदछौं।\nहामीलाई विश्वास गर्नुभएकोमा धन्यवाद।\nFeedback दिनुहोला।\n📞 {phone1}'},
-    {name:'🌟 Lead Greeting', size:'medium', text:'नमस्कार {name} जी 🙏\nPrerak Multipurpose Pvt. Ltd. बाट सम्पर्क गरेको हुँ।\nतपाईंलाई construction, interior, UPVC/Aluminum, gypsum वा renovation सम्बन्धी सेवा चाहिएको भए हामी site visit र estimate मा सहयोग गर्न तयार छौं।\n📞 {phone1} / {phone2}'},
-    {name:'🔥 Hot Lead', size:'short', text:'नमस्कार {name} जी 🙏\nतपाईंको काम urgent देखिएकोले हामी छिटो site visit/estimate मिलाउन तयार छौं।\nकृपया location र उपयुक्त समय पठाइदिनुहोस्।\n📞 {phone1} / {phone2}'},
-    {name:'☀️ Warm Lead Reminder', size:'short', text:'नमस्कार {name} जी 🙏\nपहिले तपाईंले {service} सम्बन्धी सोधपुछ गर्नुभएको थियो।\nअझै estimate वा site visit आवश्यक भए हामी सहयोग गर्न तयार छौं।\n📞 {phone1}'},
-    {name:'❄️ Cold Lead', size:'short', text:'नमस्कार {name} जी 🙏\nभविष्यमा construction, interior, UPVC/Aluminum, gypsum वा renovation सम्बन्धी आवश्यकता परे Prerak Multipurpose Pvt. Ltd. लाई सम्झनुहोला।\n📞 {phone1}'},
-    {name:'🪟 Service: UPVC/Aluminum', size:'medium', text:'नमस्कार {name} जी 🙏\nहामी UPVC/Aluminum झ्याल–ढोका, sliding window, partition तथा glass work सम्बन्धी काम गर्छौं।\nतपाईंको आवश्यकता अनुसार measurement, design suggestion र estimate उपलब्ध गराउन सक्छौं।\n📞 {phone1}'},
-    {name:'🏗️ Service: Gypsum', size:'medium', text:'नमस्कार {name} जी 🙏\nहामी gypsum ceiling, false ceiling, partition, TV unit, lighting setup तथा interior finishing सम्बन्धी काम गर्छौं।\nतपाईंको room/site अनुसार design र estimate तयार गर्न सकिन्छ।\n📞 {phone1}'},
-    {name:'🛋️ Interior Consultation', size:'medium', text:'नमस्कार {name} जी 🙏\nतपाईंको घर/office interior design, modular kitchen, wardrobe, ceiling, lighting तथा finishing सम्बन्धी सल्लाह र estimate का लागि हामी तयार छौं।\n📞 {phone1} / {phone2}'},
-    {name:'🏛️ Construction Consultation', size:'medium', text:'नमस्कार {name} जी 🙏\nघर तथा भवन निर्माण, planning, estimate, material suggestion र turnkey construction सम्बन्धी परामर्शका लागि Prerak Multipurpose Pvt. Ltd. लाई सम्झनुहोस्।\n📞 {phone1} / {phone2}'},
-    {name:'🪔 Dashain/Tihar शुभकामना', size:'short', text:'नमस्कार {name} जी 🙏\nविजया दशमी, शुभ दीपावली तथा छठ पर्वको हार्दिक मंगलमय शुभकामना।\nPrerak Multipurpose Pvt. Ltd. परिवार।'},
-    {name:'🎁 Discount Offer', size:'short', text:'नमस्कार {name} जी 🙏\nPrerak Multipurpose Pvt. Ltd. मा construction, interior, UPVC/Aluminum, gypsum तथा renovation सेवामा विशेष offer उपलब्ध छ।\nथप जानकारीका लागि सम्पर्क गर्नुहोस्।\n📞 {phone1}'},
-    {name:'🛍️ Festival Sale', size:'medium', text:'नमस्कार {name} जी 🙏\nचाडपर्वको अवसरमा घर निर्माण, interior design, UPVC/Aluminum, gypsum र renovation सेवामा विशेष छुट उपलब्ध छ।\nआफ्नो कामको estimate का लागि आजै सम्पर्क गर्नुहोस्।\n📞 {phone1} / {phone2}'},
-    {name:'⭐ Review Request', size:'short', text:'नमस्कार {name} जी 🙏\nहामीसँग सेवा लिनुभएकोमा धन्यवाद।\nहाम्रो काम मन परेमा कृपया feedback/review दिनुहोला।\nतपाईंको सुझावले हामीलाई अझ राम्रो सेवा दिन सहयोग गर्छ।\n📞 {phone1}'},
-    {name:'🤝 Referral Request', size:'short', text:'नमस्कार {name} जी 🙏\nहाम्रो सेवा मन परेको भए construction, interior वा renovation चाहिने आफन्त/साथीहरूलाई Prerak Multipurpose Pvt. Ltd. सिफारिस गरिदिनुहोला।\n📞 {phone1}'}
-  ]; },
+  // v7.0.0: default templates come from the chosen business profile (js/core/business-profiles.js)
+  _defTpl: function(){ return BusinessProfiles.templates(Company.businessType()); },
   save: function(){
     var custId=getVal('fu-cust');
     if(!custId){
@@ -167,7 +146,7 @@ var Followups = {
     var existing = document.getElementById('fu-greet-picker-modal');
     if(existing) existing.remove();
     var templates = STORE.get('pk3_templates',null) || (typeof DEFAULT_TEMPLATES!=='undefined'?DEFAULT_TEMPLATES:Followups._defTpl()) || [];
-    var defaultMsg = f.msg || ('नमस्ते '+f.custName+'! PRERAK MULTIPURPOSE बाट follow-up।');
+    var defaultMsg = f.msg || ('नमस्ते '+f.custName+'! '+Company.name()+' बाट follow-up।');
     var m = document.createElement('div');
     m.className = 'modal-overlay open';
     m.id = 'fu-greet-picker-modal';
@@ -261,7 +240,7 @@ var Followups = {
     var m = document.createElement('div');
     m.className = 'modal-overlay';
     m.id = 'greet-all-modal';
-    var defaultMsg = (templates[0] && (templates[0].text||templates[0].body||templates[0].message)) || 'नमस्ते {name}! PRERAK MULTIPURPOSE PVT LTD बाट तपाईंलाई शुभकामना।';
+    var defaultMsg = (templates[0] && (templates[0].text||templates[0].body||templates[0].message)) || 'नमस्ते {name}! {company} बाट तपाईंलाई शुभकामना।';
     m.innerHTML =
       '<div class="modal" style="max-width:580px;">'
       +'<div class="modal-head">'

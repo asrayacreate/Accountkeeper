@@ -1,8 +1,12 @@
 // ─── SMART REMINDERS + 1-CLICK AI WHATSAPP (v6.8.1) ───────────
 var SmartRem = {
+  // v7.0.0: one line about what the business offers — from the user's own services, never hardcoded
+  _offer: function(){
+    try { var l = Company.introServices().slice(0,3).map(function(s){ return s.t; }); return l.length ? 'हामी ' + l.join(', ') + ' सम्बन्धी सेवा दिन्छौं। ' : ''; } catch(e){ return ''; }
+  },
   _company: function(){
     var s = STORE.get('pk3_settings',{}) || {};
-    return { name: s.companyName || 'Prerak Multipurpose Pvt. Ltd.', phone: s.phone1 || s.phone || '9855069733' };
+    return { name: Company.name(), phone: s.phone1 || s.phone || '' };
   },
   _daysSince: function(iso){
     if(!iso) return 0;
@@ -236,7 +240,7 @@ var AIWA = {
       due: due.total, stage: stg ? stg.stage : '', type: it.type, company: co.name, coPhone: co.phone, address: c.address || '' };
   },
   template: function(x){
-    var n = (x.name || '').trim(), svc = x.service || '', sig = '\n\nधन्यवाद 🙏\n' + x.company + '\n📞 ' + x.coPhone;
+    var n = (x.name || '').trim(), svc = x.service || '', sig = '\n\nधन्यवाद 🙏\n' + x.company + (x.coPhone ? '\n📞 ' + x.coPhone : '');
     var hi = (n ? 'नमस्ते ' + n + ' जी 🙏' : 'नमस्ते 🙏') + '\n\n';
     if(x.type==='bday') return '🎂 जन्मदिनको हार्दिक मंगलमय शुभकामना' + (n ? ', ' + n + ' जी' : '') + '!\n\nतपाईंको जीवन सुख, शान्ति, सुस्वास्थ्य र समृद्धिले भरिपूर्ण रहोस्। हामीमाथि राख्नुभएको विश्वासका लागि हृदयदेखि आभार।' + sig;
     if(x.type==='anniv') return '💍 वैवाहिक वार्षिकोत्सवको हार्दिक शुभकामना' + (n ? ', ' + n + ' जी' : '') + '!\n\nतपाईंहरूको दाम्पत्य जीवन सधैं प्रेम, खुसी र सफलताले भरिएको रहोस्।' + sig;
@@ -245,12 +249,12 @@ var AIWA = {
     if(x.type==='walkin') return hi + x.company + ' मा पाल्नुभएकोमा हार्दिक धन्यवाद! ' + (svc ? svc + ' सम्बन्धी ' : '') + 'तपाईंलाई चाहिने जानकारी, नमुना र उचित मूल्यका लागि हामी सधैं तयार छौं। केही जिज्ञासा भए निःसंकोच सम्पर्क गर्नुहोला।' + sig;
     if(x.type==='quoteready') return hi + 'तपाईंको ' + (svc || 'काम') + ' को Quotation तयार भएको छ' + (x.amount ? ' (कुल ' + fmtRs(x.amount) + ')' : '') + '। हेरेर कुनै परिवर्तन चाहिए भन्नुहोला, हामी मिलाउन तयार छौं।' + sig;
     if(x.type==='complete') return hi + 'तपाईंको ' + (svc || 'काम') + ' सम्पन्न भएको जानकारी गराउँदा खुसी लागेको छ। हामीमाथि विश्वास गर्नुभएकोमा धन्यवाद! कामबारे तपाईंको प्रतिक्रिया (review) पाए हामीलाई अझ राम्रो गर्न सहयोग हुनेछ।' + sig;
-    if(x.type==='greet') return hi + x.company + ' मा सम्पर्क गर्नुभएकोमा धन्यवाद! हामी Construction, Interior र Prefab Homes सम्बन्धी सेवा दिन्छौं। ' + (svc ? svc + ' बारे ' : '') + 'तपाईंको आवश्यकता बुझेर उत्तम सल्लाह र मूल्य दिन चाहन्छौं। कहिले कुरा गर्दा सजिलो हुन्छ?' + sig;
+    if(x.type==='greet') return hi + x.company + ' मा सम्पर्क गर्नुभएकोमा धन्यवाद! ' + SmartRem._offer() + (svc ? svc + ' बारे ' : '') + 'तपाईंको आवश्यकता बुझेर उत्तम सल्लाह र मूल्य दिन चाहन्छौं। कहिले कुरा गर्दा सजिलो हुन्छ?' + sig;
     return hi + x.company + ' बाट सम्झना गर्दैछौं। तपाईंको ' + (svc || 'काम') + ' सम्बन्धी कुराकानी अगाडि बढाउन चाहन्छौं। तपाईंलाई कहिले सम्पर्क गर्दा सजिलो हुन्छ? केही जिज्ञासा भए निःसंकोच भन्नुहोला।' + sig;
   },
   // Shared AI prompt builder (used by AI WhatsApp + Walk-in)
   _prompt: function(x, topic, style){
-    var system = 'You write short, warm, polite WhatsApp messages in Nepali (Devanagari script) for ' + x.company + ', a construction, interior and prefab-homes company in Hetauda, Nepal. Rules: 40-80 words; respectful (use "जी", "हजुर"); natural and personal, not pushy; 1-2 fitting emojis max; never invent prices, dates, discounts or promises not given; if an amount is given write it exactly as given; for payment reminders be courteous, never threatening; if no customer name is given, greet without a name; no placeholders like [name]; no hashtags. End with exactly two lines: "धन्यवाद 🙏" then "' + x.company + ' — 📞 ' + x.coPhone + '". Output ONLY the message text.';
+    var system = 'You write short, warm, polite WhatsApp messages in Nepali (Devanagari script) for ' + Company.aiContext() + '. Rules: 40-80 words; respectful (use "जी", "हजुर"); natural and personal, not pushy; 1-2 fitting emojis max; never invent prices, dates, discounts or promises not given; if an amount is given write it exactly as given; for payment reminders be courteous, never threatening; if no customer name is given, greet without a name; no placeholders like [name]; no hashtags. End with exactly two lines: "धन्यवाद 🙏" then "' + x.company + ' — 📞 ' + x.coPhone + '". Output ONLY the message text.';
     var amtLabel = x.type==='due' ? 'बाँकी रकम (ठ्याक्कै यही लेख्नुहोस्)' : 'Quotation रकम';
     var user = 'अवसर/विषय: ' + topic + '\nग्राहकको नाम: ' + (x.name || '(नाम थाहा छैन)')
       + (x.service ? '\nसेवा/काम: ' + x.service : '')

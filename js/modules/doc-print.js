@@ -3,8 +3,8 @@ var DocPrint = {
   _co: function(){
     var co = STORE.get('pk3_settings',{}) || {};
     return {
-      name: co.companyName || 'PRERAK MULTIPURPOSE PVT LTD', tagline: co.tagline || '',
-      address: co.address || 'Hetauda-2, Makwanpur', phone: [co.phone1 || '9855069733', co.phone2].filter(Boolean).join(', '),
+      name: Company.name(''), tagline: co.tagline || '',
+      address: co.address || '', phone: [co.phone1, co.phone2].filter(Boolean).join(', '),
       email: co.email || '', pan: co.pan || co.vat || '', logo: co.logo || '',
       bank: co.bankName || '', acc: co.bankAcc || '', esewa: co.esewa || '', khalti: co.khalti || ''
     };

@@ -173,8 +173,8 @@ var Ledger = {
     if(!w){ App.toast('Popup blocked','error'); return; }
     w.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Ledger — '+esc(custName)+'</title>'
       + '<style>body{font-family:Arial,sans-serif;padding:24px;color:#222;}h1{font-size:1.3rem;margin-bottom:4px;}.sub{color:#666;font-size:0.85rem;margin-bottom:16px;}table{width:100%;border-collapse:collapse;font-size:0.85rem;}th,td{border:1px solid #ccc;padding:7px 9px;text-align:left;}th{background:#f0f0f0;}.r{text-align:right;}.b{font-weight:700;}</style>'
-      + '</head><body><h1>'+esc(co.companyName||'PRERAK MULTIPURPOSE PVT LTD')+'</h1>'
-      + '<div class="sub">📒 Customer Ledger — '+esc(custName)+' · '+esc(co.address||'Hetauda-2, Makwanpur')+'</div>'
+      + '</head><body><h1>'+esc(Company.name(''))+'</h1>'
+      + '<div class="sub">📒 Customer Ledger — '+esc(custName)+(co.address?' · '+esc(co.address):'')+'</div>'
       + '<table><thead><tr><th>Date</th><th>Customer</th><th>Narration</th><th class="r">Debit</th><th class="r">Credit</th><th class="r">Balance</th></tr></thead><tbody>'
       + bodyRows + '</tbody></table>'
       + '<script>setTimeout(function(){window.print();},400);<\/script></body></html>');

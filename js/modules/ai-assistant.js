@@ -7,11 +7,18 @@ var AIAssistant = {
   _lastOutputText: '',
 
   _prompts: {
-    lead: 'You are a lead analyst for Prerak Multipurpose Pvt. Ltd., a construction company in Nepal (Hetauda-2, Makwanpur). Analyze the pasted customer message (from Facebook/TikTok/WhatsApp/inquiry) and extract structured lead data. Respond ONLY with a valid JSON object (no markdown, no extra text) with these exact keys: name, phone, location, service, urgency (High/Medium/Low), budget_hint, followup_msg (short Nepali WhatsApp message to send), crm_note (1-2 line internal note). If a field is unknown write "N/A".',
-    reply: 'You are a professional customer service representative for Prerak Multipurpose Pvt. Ltd., Nepal. Write a SHORT, warm, professional reply in Nepali (Devanagari) to the pasted customer message. Structure: 1) Greeting with name if known 2) Acknowledge their query 3) Offer solution or next step 4) Call-to-action (site visit / call / quotation). Keep it under 6 lines. Tone: helpful, confident, not salesy.',
-    followup: 'You are a sales executive at Prerak Multipurpose Pvt. Ltd., Nepal. Write a friendly, non-pushy follow-up WhatsApp message in Nepali for the pasted customer context. Include: reference to previous discussion, soft check-in, value reminder (free site visit / free estimate), and a gentle CTA. Max 6 lines. Do NOT use pressure tactics.',
-    estimate: 'You are a construction estimator for Prerak Multipurpose Pvt. Ltd. Based on the pasted project description or customer requirement, suggest a structured estimate outline. Format: PROJECT TYPE header, then a list of ITEMS with columns: Item | Unit | Approx Qty | Note. Then add: Rate Note (what rates to confirm), Special Considerations, Quotation Remarks. Do NOT invent final amounts unless rates are provided. Respond in a mix of English and Nepali.',
-    competitor: 'You are a marketing strategist for Prerak Multipurpose Pvt. Ltd., Nepal. Analyze the pasted competitor post/offer/ad. Extract: 1) Service offered 2) Pricing hint 3) Marketing angle/style 4) Strengths 5) Weaknesses/gaps. Then suggest a BETTER post idea for Prerak Multipurpose highlighting: UPVC, Gypsum, Interior, full renovation, free site visit. Use Nepali language and strong CTA. Be specific and actionable.'
+    lead: 'You are a lead analyst for {BIZ}. Analyze the pasted customer message (from Facebook/TikTok/WhatsApp/inquiry) and extract structured lead data. Respond ONLY with a valid JSON object (no markdown, no extra text) with these exact keys: name, phone, location, service, urgency (High/Medium/Low), budget_hint, followup_msg (short Nepali WhatsApp message to send), crm_note (1-2 line internal note). If a field is unknown write "N/A".',
+    reply: 'You are a professional customer service representative for {BIZ}. Write a SHORT, warm, professional reply in Nepali (Devanagari) to the pasted customer message. Structure: 1) Greeting with name if known 2) Acknowledge their query 3) Offer solution or next step 4) Call-to-action (visit / call / quotation). Keep it under 6 lines. Tone: helpful, confident, not salesy.',
+    followup: 'You are a sales executive at {BIZ}. Write a friendly, non-pushy follow-up WhatsApp message in Nepali for the pasted customer context. Include: reference to previous discussion, soft check-in, value reminder (free consultation / free estimate), and a gentle CTA. Max 6 lines. Do NOT use pressure tactics.',
+    estimate: 'You are an estimator for {BIZ}. Based on the pasted project description or customer requirement, suggest a structured estimate outline. Format: PROJECT TYPE header, then a list of ITEMS with columns: Item | Unit | Approx Qty | Note. Then add: Rate Note (what rates to confirm), Special Considerations, Quotation Remarks. Do NOT invent final amounts unless rates are provided. Respond in a mix of English and Nepali.',
+    competitor: 'You are a marketing strategist for {BIZ}. Analyze the pasted competitor post/offer/ad. Extract: 1) Service offered 2) Pricing hint 3) Marketing angle/style 4) Strengths 5) Weaknesses/gaps. Then suggest a BETTER post idea for {NAME} highlighting its own services: {SERVICES}. Use Nepali language and strong CTA. Be specific and actionable.'
+  },
+
+  // v7.0.0: prompts are filled with the user's OWN company (Settings) — never a hardcoded company
+  _prompt: function(mode){
+    var p = this._prompts[mode] || '';
+    var svcs = ''; try { svcs = Company.introServices().map(function(x){ return x.t; }).join(', '); } catch(e){}
+    return p.split('{BIZ}').join(Company.aiContext()).split('{NAME}').join(Company.name('the business')).split('{SERVICES}').join(svcs || 'its main services');
   },
 
   _modeConfig: {
@@ -37,7 +44,7 @@ var AIAssistant = {
       +'<div style="background:linear-gradient(135deg,#1a0533 0%,#2d0a5e 60%,#0f172a 100%);border-radius:14px;margin-bottom:12px;overflow:hidden;">'
         +'<div style="padding:16px 18px 10px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">'
           +'<div><div style="font-size:1.15rem;font-weight:800;color:#fff;letter-spacing:-.3px;">🤖 AI Sales Assistant</div>'
-          +'<div style="font-size:0.7rem;color:rgba(255,255,255,.5);margin-top:2px;">Powered by AI (Gemini / Claude / OpenAI) · PRERAK MULTIPURPOSE PVT LTD</div></div>'
+          +'<div style="font-size:0.7rem;color:rgba(255,255,255,.5);margin-top:2px;">Powered by AI (Gemini / Claude / OpenAI) · '+esc(Company.name(''))+'</div></div>'
           +'<div id="ai-status-badge" style="font-size:0.68rem;padding:3px 10px;border-radius:20px;background:rgba(255,255,255,.1);color:rgba(255,255,255,.7);">Ready</div>'
         +'</div>'
         +'<div style="padding:0 12px 14px;display:flex;gap:7px;flex-wrap:wrap;">'+modeBtns+'</div>'
@@ -350,7 +357,7 @@ var AIAssistant = {
           +'<div style="font-size:1.02rem;font-weight:800;color:var(--accent);margin-bottom:8px;">AI Assistant सक्रिय गर्नुहोस्</div>'
           +'<div style="font-size:0.83rem;color:var(--text-muted);line-height:1.7;max-width:460px;margin:0 auto 14px;">'
           +'AI Assistant ले customer message बाट lead बनाउन, estimate draft गर्न, र प्रतिस्पर्धी विश्लेषण जस्ता काममा मद्दत गर्छ।<br><br>'
-          +'यो चलाउन तपाईंको <b>आफ्नै API key</b> (Google Gemini — निःशुल्क, वा Anthropic / OpenAI) चाहिन्छ — तपाईंको आफ्नै account र billing (Prerak को कुनै key संलग्न हुँदैन)।'
+          +'यो चलाउन तपाईंको <b>आफ्नै API key</b> (Google Gemini — निःशुल्क, वा Anthropic / OpenAI) चाहिन्छ — तपाईंको आफ्नै account र billing (Swagatik को कुनै key संलग्न हुँदैन)।'
           +'</div>'
           +'<button onclick="App.navigate(\'settings\')" class="btn btn-sm btn-primary">⚙️ Settings मा key हाल्नुहोस्</button>'
           +'</div>';
@@ -372,7 +379,7 @@ var AIAssistant = {
     var mode = this._mode;
     var aiS  = STORE.get('pk3_ai_settings',{}) || {};
     try{
-      var aiRes = await this._callAI(aiPick, this._prompts[mode], input);
+      var aiRes = await this._callAI(aiPick, this._prompt(mode), input);
       if(aiRes.error){
         var em = aiRes.error;
         if(ob) ob.innerHTML='<div style="color:var(--red);padding:14px;line-height:1.6;">❌ '+esc(em)+'<br><br><span style="font-size:0.76rem;color:var(--text-muted);">('+esc(aiPick.label)+') API key सही छ कि र Internet छ कि जाँच्नुहोस्।</span></div>';
@@ -482,7 +489,7 @@ var AIAssistant = {
     var inBetter = false;
     lines.forEach(function(line){
       if(!line.trim()){ html+='<div style="height:5px;"></div>'; return; }
-      var isBetter = /better post|suggest.*prerak|prerak.*post|हाम्रो/i.test(line);
+      var isBetter = /better post|suggest.*post|हाम्रो/i.test(line);
       if(isBetter) inBetter = true;
       if(line.match(/^\d+\)|^#{1,3}\s|\*\*.*\*\*/)){
         if(inBetter&&/^\d+\)/.test(line)&&parseInt(line)<5) inBetter=false;

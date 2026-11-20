@@ -14,7 +14,7 @@ var Brochure = {
       icon: '🏠',
       preview: '#f97316',
       data: {
-        title: '🏠 PRERAK Home Solutions',
+        title: '🏠 {company}',
         tagline: '✨ Quality • Trust • Experience ✨',
         intro: 'तपाईंको सपनाको घर हाम्रो जिम्मेवारी 🏗️\nUPVC, Gypsum, Interior — सबै एकै ठाउँमा!',
         services: [
@@ -25,9 +25,9 @@ var Brochure = {
           {emoji:'🪨', name:'Tile / Marble / Granite', desc:'Italian marble, vitrified tiles, anti-skid bathroom'},
           {emoji:'⚡', name:'Electrical & Plumbing', desc:'Wiring, switchboards, CP fittings, water tank setup'}
         ],
-        whyUs: '✅ 100+ Happy Customers in Hetauda\n✅ On-time delivery guarantee\n✅ Free site visit & estimate\n✅ Genuine material with bill\n✅ Skilled team with 10+ years experience',
+        whyUs: '✅ 100+ Happy Customers\n✅ On-time delivery guarantee\n✅ Free site visit & estimate\n✅ Genuine material with bill\n✅ Skilled team with 10+ years experience',
         offer: '🎁 Special Offer: Free Site Visit + 5% Discount on Combo Booking!',
-        cta: '📞 Call Today: 9855069733'
+        cta: '📞 Call Today: {phone1}'
       }
     },
     {
@@ -36,7 +36,7 @@ var Brochure = {
       icon: '🪟',
       preview: '#06b6d4',
       data: {
-        title: '🪟 PRERAK UPVC Doors & Windows',
+        title: '🪟 {company} — UPVC Doors & Windows',
         tagline: '🌟 German Profile • Premium Quality 🌟',
         intro: 'अब तपाईंको घरमा पनि European-grade UPVC! 🏠\nNo termite • No rust • Sound proof + Heat proof',
         services: [
@@ -48,7 +48,7 @@ var Brochure = {
         ],
         whyUs: '✅ German VEKA / Encraft profiles\n✅ 10-year warranty on profile\n✅ Lead-free, eco-friendly\n✅ Custom colors: White, Wood-grain, Grey\n✅ Free measurement & installation',
         offer: '🎁 Sample showroom visit free! Compare with aluminum & wood.',
-        cta: '📞 Quote: 9855069733 / 9801069733'
+        cta: '📞 Quote: {phone1} / {phone2}'
       }
     },
     {
@@ -57,7 +57,7 @@ var Brochure = {
       icon: '🛋️',
       preview: '#a855f7',
       data: {
-        title: '🛋️ PRERAK Interior Design',
+        title: '🛋️ {company} — Interior Design',
         tagline: '✨ Style your space, beautifully ✨',
         intro: 'तपाईंको घर/अफिस लाई आधुनिक रूप दिनुहोस्! 🏡\nFull turnkey solutions — design देखि furniture सम्म',
         services: [
@@ -70,7 +70,7 @@ var Brochure = {
         ],
         whyUs: '✅ 3D design preview before work\n✅ Branded materials (Greenply, Century, Asian)\n✅ Fixed timeline contract\n✅ 1-year service warranty\n✅ EMI option available',
         offer: '🎁 Free 3D design on confirmation!',
-        cta: '📞 Visit Showroom: Hetauda-2 | 9855069733'
+        cta: '📞 Visit Showroom: {company_address} | {phone1}'
       }
     },
     {
@@ -174,7 +174,8 @@ var Brochure = {
       icon: tpl.icon,
       color: tpl.preview,
       name: tpl.name,
-      data: JSON.parse(JSON.stringify(tpl.data)), // deep clone
+      // v7.0.0: {company}/{phone1}/… are filled from the user's own Company Settings
+      data: (function fill(x){ if(typeof x==='string') return Company.fill(x); if(Array.isArray(x)) return x.map(fill); if(x&&typeof x==='object'){ var o={}; for(var k in x) o[k]=fill(x[k]); return o; } return x; })(tpl.data), // deep clone
       created: new Date().toISOString().slice(0,10),
       updated: new Date().toISOString().slice(0,10)
     };
@@ -523,8 +524,8 @@ var Brochure = {
       // Footer
       +'<div style="border-top:2px solid '+color+';padding-top:14px;margin-top:auto;text-align:center;">'
         +'<div style="font-size:1.05rem;font-weight:900;color:'+color+';">'+esc(d.cta||'')+'</div>'
-        +'<div style="font-size:0.78rem;color:#666;margin-top:6px;">'+esc(co.companyName||'PRERAK MULTIPURPOSE PVT LTD')+' • '+esc(co.address||'Hetauda-2, Makwanpur')+'</div>'
-        +'<div style="font-size:0.74rem;color:#888;margin-top:2px;">📞 '+esc(co.phone1||'9855069733')+(co.phone2?' / '+esc(co.phone2):'')+(co.email?' • '+esc(co.email):'')+'</div>'
+        +'<div style="font-size:0.78rem;color:#666;margin-top:6px;">'+esc(Company.name(''))+(co.address?' • '+esc(co.address):'')+'</div>'
+        +'<div style="font-size:0.74rem;color:#888;margin-top:2px;">📞 '+esc(Company.phones())+(co.email?' • '+esc(co.email):'')+'</div>'
       +'</div>'
       +'</div>';
     prev.innerHTML = html;
@@ -690,8 +691,8 @@ var Brochure = {
           }).join('')
         +'<div class="foot">'
           +'<div class="cta">'+esc(d.cta||'')+'</div>'
-          +'<div class="info">'+esc(co.companyName||'PRERAK MULTIPURPOSE PVT LTD')+' • '+esc(co.address||'Hetauda-2, Makwanpur')+'</div>'
-          +'<div class="info">📞 '+esc(co.phone1||'9855069733')+(co.phone2?' / '+esc(co.phone2):'')+(co.email?' • '+esc(co.email):'')+'</div>'
+          +'<div class="info">'+esc(Company.name(''))+(co.address?' • '+esc(co.address):'')+'</div>'
+          +'<div class="info">📞 '+esc(Company.phones())+(co.email?' • '+esc(co.email):'')+'</div>'
         +'</div>'
       +'</div>'
       +'<script>setTimeout(function(){window.print();},500);<\/script>'

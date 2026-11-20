@@ -79,7 +79,7 @@ var Projects = {
       + '<input type="hidden" id="pj-id" value="'+esc(p?p.id:'')+'">'
       + '<div class="form-group full"><label>Project / Site नाम *</label><input type="text" id="pj-name" value="'+esc(p?p.name:'')+'" placeholder="जस्तै: राम निवास — Kitchen & Wardrobe"></div>'
       + '<div class="form-group"><label>Customer</label><select id="pj-cust">'+cOpts+'</select></div>'
-      + '<div class="form-group"><label>📍 Site / ठेगाना</label><input type="text" id="pj-site" value="'+esc(p?p.site||'':'')+'" placeholder="Hetauda-4"></div>'
+      + '<div class="form-group"><label>📍 Site / ठेगाना</label><input type="text" id="pj-site" value="'+esc(p?p.site||'':'')+'" placeholder="साइटको ठेगाना"></div>'
       + '<div class="form-group"><label>Stage</label><select id="pj-stage" onchange="Projects._stageChanged()">'+stOpts+'</select></div>'
       + '<div class="form-group"><label>प्रगति % <b id="pj-prog-v">'+(p?parseInt(p.progress,10)||0:5)+'%</b></label><input type="range" id="pj-prog" min="0" max="100" step="5" value="'+(p?parseInt(p.progress,10)||0:5)+'" oninput="document.getElementById(\'pj-prog-v\').textContent=this.value+\'%\'" style="width:100%;"></div>'
       + '<div class="form-group"><label>💼 जम्मा बजेट / Contract (Rs.)</label><input type="number" id="pj-budget" min="0" value="'+(p?p.budget||'':'')+'" placeholder="0"></div>'

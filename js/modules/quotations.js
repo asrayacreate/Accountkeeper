@@ -149,7 +149,7 @@ var Quotations = {
   whatsapp: function(id){
     var q = this.getData().find(function(x){ return x.id==id; });
     if(!q) return;
-    var t = 'Quotation from PRERAK MULTIPURPOSE\nCustomer: '+( q.custName||'')+
+    var t = 'Quotation from '+Company.name()+'\nCustomer: '+( q.custName||'')+
             '\nTotal: '+fmtRs(q.amount||q.total||0)+
             '\nStatus: '+(q.status||'pending');
     var phone = (q.custPhone||'').replace(/[^0-9]/g,'');

@@ -233,11 +233,11 @@ var License = {
 
     var v = this.validate(company, key);
     if (!v.ok) {
-      if (err) { err.innerHTML = '❌ License Key वा Company Name मिलेन।<br><span style="opacity:.8;font-size:.72rem;">Key किन्न / renew गर्न 📞 9855069733</span>'; err.style.display = 'block'; }
+      if (err) { err.innerHTML = '❌ License Key वा Company Name मिलेन।<br><span style="opacity:.8;font-size:.72rem;">Key किन्न / renew गर्न 📞 ' + SWAGATIK_VENDOR.supportPhone + '</span>'; err.style.display = 'block'; }
       return;
     }
     if (v.expiry && new Date() > new Date(v.expiry)) {
-      if (err) { err.innerHTML = '⏰ यो key को म्याद सकियो। नयाँ key लिन 📞 9855069733'; err.style.display = 'block'; }
+      if (err) { err.innerHTML = '⏰ यो key को म्याद सकियो। नयाँ key लिन 📞 ' + SWAGATIK_VENDOR.supportPhone + ''; err.style.display = 'block'; }
       return;
     }
 
@@ -277,7 +277,7 @@ var License = {
     var login = document.getElementById('login-screen');
     var err = document.getElementById('license-err');
     if (this._expiredFlag && err) {
-      err.innerHTML = '⏰ License को म्याद सकियो। Renew गर्न 📞 9855069733';
+      err.innerHTML = '⏰ License को म्याद सकियो। Renew गर्न 📞 ' + SWAGATIK_VENDOR.supportPhone + '';
       err.style.display = 'block';
     }
     if (login) login.style.display = 'none';
@@ -300,7 +300,7 @@ var License = {
     bar.style.background = urgent ? '#7f1d1d' : '#78350f';
     bar.innerHTML = (urgent ? '🚨 ' : '⏳ ') + 'License म्याद ' + s.daysLeft + ' दिन बाँकी (' +
       s.expiry.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) +
-      ') — Renew: 📞 9855069733' +
+      ') — Renew: 📞 ' + SWAGATIK_VENDOR.supportPhone +
       '<span onclick="this.parentNode.style.display=\'none\'" style="float:right;cursor:pointer;padding:0 6px;">✕</span>';
     bar.style.display = 'block';
   },

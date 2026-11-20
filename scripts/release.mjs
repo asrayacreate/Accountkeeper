@@ -6,6 +6,7 @@
 //   npm run release -- minor     → 6.9.0 → 6.10.0
 //   npm run release -- 7.0.0     → exact version
 //   npm run release -- --check   → only verify that all files agree (used by tests)
+//   npm run release -- --assets  → only rebuild the sw.js file list (after adding a js/css file)
 //
 // Updates: index.html (APP_VERSION + every <span data-app-version> + every ?v= on js/css),
 //          sw.js (APP_VERSION + CACHE_VERSION number +1 + ASSETS list built from index.html),
@@ -64,6 +65,14 @@ const arg = process.argv[2];
 if (arg === '--check') {
   const { ok, v } = check();
   console.log(JSON.stringify(v));
+  process.exit(ok ? 0 : 1);
+}
+
+if (arg === '--assets') {
+  // Only rebuild the sw.js pre-cache list (after adding/removing a js/css file) — no version bump.
+  fs.writeFileSync(F.sw, read(F.sw).replace(ASSETS_RE, () => assetsBlock(assetList(read(F.html)))));
+  const { ok, v } = check();
+  console.log(ok ? '✅ sw.js asset list updated' : '❌ ' + JSON.stringify(v));
   process.exit(ok ? 0 : 1);
 }
 

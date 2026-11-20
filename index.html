@@ -28,6 +28,7 @@ var APP_VERSION = '7.0.0';
 <script src="js/core/manifest.js?v=7.0.0"></script>
 <link rel="stylesheet" href="css/app.css?v=7.0.0">
 <link rel="stylesheet" href="css/extra.css?v=7.0.0">
+<link rel="stylesheet" href="css/v7.css?v=7.0.0">
 </head>
 <body>
 
@@ -40,17 +41,10 @@ var APP_VERSION = '7.0.0';
     <div class="om-mantra">ॐ नमः शिवाय</div>
     <div class="om-sub">Om Namah Shivaya • शिवको जय</div>
     <div style="margin:12px 0 8px;text-align:center;">
-      <div style="font-size:1.05rem;font-weight:900;color:#f97316;">PRERAK MULTIPURPOSE Pvt.Ltd.</div>
-      <div style="font-size:0.62rem;color:rgba(255,255,255,0.35);">Hetauda-2, Makwanpur • 📞 9855069733</div>
+      <div id="welcome-co-name" style="font-size:1.05rem;font-weight:900;color:#f97316;"></div>
+      <div id="welcome-co-sub" style="font-size:0.62rem;color:rgba(255,255,255,0.35);"></div>
     </div>
-    <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:4px;margin:6px 0 10px;max-width:280px;">
-      <span style="background:rgba(249,115,22,0.1);border:1px solid rgba(249,115,22,0.2);color:#f97316;font-size:0.55rem;padding:2px 6px;border-radius:20px;">🪟 UPVC</span>
-      <span style="background:rgba(249,115,22,0.1);border:1px solid rgba(249,115,22,0.2);color:#f97316;font-size:0.55rem;padding:2px 6px;border-radius:20px;">🏠 Gypsum</span>
-      <span style="background:rgba(249,115,22,0.1);border:1px solid rgba(249,115,22,0.2);color:#f97316;font-size:0.55rem;padding:2px 6px;border-radius:20px;">🎨 Interior</span>
-      <span style="background:rgba(249,115,22,0.1);border:1px solid rgba(249,115,22,0.2);color:#f97316;font-size:0.55rem;padding:2px 6px;border-radius:20px;">🏗️ Construction</span>
-      <span style="background:rgba(249,115,22,0.1);border:1px solid rgba(249,115,22,0.2);color:#f97316;font-size:0.55rem;padding:2px 6px;border-radius:20px;">☀️ Solar</span>
-      <span style="background:rgba(249,115,22,0.1);border:1px solid rgba(249,115,22,0.2);color:#f97316;font-size:0.55rem;padding:2px 6px;border-radius:20px;">🔧 Truss</span>
-    </div>
+    <div id="welcome-co-chips" style="display:flex;flex-wrap:wrap;justify-content:center;gap:4px;margin:6px 0 10px;max-width:280px;"></div>
     <button class="enter-btn" onclick="App.showLogin()">🙏 प्रवेश गर्नुहोस्</button>
     <label class="skip-chk-wrap">
       <input type="checkbox" id="skip-welcome-chk" onchange="App.saveSkipWelcome(this.checked)" style="width:14px;height:14px;accent-color:#f97316;">
@@ -76,12 +70,12 @@ var APP_VERSION = '7.0.0';
     </div>
     <div style="text-align:left;margin-bottom:18px;">
       <label style="font-size:0.76rem;font-weight:700;color:#cbd5e1;display:block;margin-bottom:5px;">🔑 License Key</label>
-      <input type="text" id="license-key" placeholder="PRERAK-XXXX-XXXX-XXXX" autocomplete="off" style="width:100%;padding:11px 14px;background:#0f172a;border:1.5px solid #334155;border-radius:10px;color:#e2e8f0;font-size:0.9rem;letter-spacing:1px;text-transform:uppercase;" onkeydown="if(event.key==='Enter')License.activate()">
+      <input type="text" id="license-key" placeholder="XXXX-XXXX-XXXX-XXXX" autocomplete="off" style="width:100%;padding:11px 14px;background:#0f172a;border:1.5px solid #334155;border-radius:10px;color:#e2e8f0;font-size:0.9rem;letter-spacing:1px;text-transform:uppercase;" onkeydown="if(event.key==='Enter')License.activate()">
     </div>
     <button onclick="License.activate()" style="width:100%;padding:13px;background:linear-gradient(135deg,#f97316,#ea580c);border:none;border-radius:11px;color:#fff;font-size:0.95rem;font-weight:800;cursor:pointer;box-shadow:0 6px 20px rgba(249,115,22,0.35);">✅ Activate गर्नुहोस्</button>
     <div style="margin-top:18px;padding-top:16px;border-top:1px solid #334155;font-size:0.74rem;color:#64748b;line-height:1.6;">
       License Key किन्न वा सहायताको लागि सम्पर्क:<br>
-      <b style="color:#f97316;">📞 9855069733</b> — PRERAK MULTIPURPOSE
+      <b style="color:#f97316;">📞 <span data-vendor-phone></span></b> — Swagatik
     </div>
   </div>
 </div>
@@ -115,12 +109,12 @@ var APP_VERSION = '7.0.0';
         <label class="login-remember">
           <input type="checkbox" id="remember-me" style="width:14px;height:14px;"> Remember me
         </label>
-        <button class="login-forgot" onclick="alert('Admin सँग सम्पर्क: 9855069733')">🔑 Forgot?</button>
+        <button class="login-forgot" onclick="alert('Password बिर्सनुभयो? आफ्नो Admin सँग सम्पर्क गर्नुहोस्। Swagatik support: ' + SWAGATIK_VENDOR.supportPhone)">🔑 Forgot?</button>
       </div>
     </div>
-    <!-- Login credentials hint REMOVED for security — contact admin at 9855069733 -->
+    <!-- Login credentials hint REMOVED for security -->
     <div style="margin-top:14px;padding:10px 14px;background:var(--surface-2);border-radius:9px;font-size:0.72rem;color:var(--text-dim);text-align:center;">
-      📞 Access issues? Contact Admin: <strong style="color:var(--accent);">9855069733</strong>
+      📞 Access issues? Swagatik Support: <strong style="color:var(--accent);" data-vendor-phone></strong>
     </div>
   </div>
 </div>
@@ -170,7 +164,7 @@ var APP_VERSION = '7.0.0';
     <div class="nav-item" data-page="ledger" data-role="admin" onclick="App.navigate('ledger')"><span class="icon">📘</span>Customer Ledger</div>
 
     <div class="nav-section">Quotations</div>
-    <div class="nav-item" data-page="quotations" onclick="App.navigate('quotations')"><span class="icon">📋</span>Quotations</div>
+    <div class="nav-item" data-page="quotations" data-module="quotations" onclick="App.navigate('quotations')"><span class="icon">📋</span>Quotations</div>
     <div class="nav-item" data-page="invoices" data-role="admin" onclick="App.navigate('invoices')"><span class="icon">🧾</span>Sales / बिक्री</div>
 
     <div class="nav-section">Follow-ups</div>
@@ -179,19 +173,19 @@ var APP_VERSION = '7.0.0';
     <div class="nav-item" data-page="planner" onclick="App.navigate('planner')"><span class="icon">📝</span>Daily Planner<span class="badge" id="pl-badge" style="display:none;">0</span></div>
 
     <div class="nav-section">Showroom</div>
-    <div class="nav-item" data-page="walkin" onclick="App.navigate('walkin')"><span class="icon">🚶</span>Walk-in Greeting</div>
+    <div class="nav-item" data-page="walkin" data-module="walkin" onclick="App.navigate('walkin')"><span class="icon">🚶</span>Walk-in Greeting</div>
     <div class="nav-item" data-page="qrcode" onclick="App.navigate('qrcode')"><span class="icon">📲</span>QR Code</div>
 
     <div class="nav-section">Business</div>
-    <div class="nav-item" data-page="projects" data-role="admin" onclick="App.navigate('projects')"><span class="icon">🏗️</span>Projects / Sites</div>
+    <div class="nav-item" data-page="projects" data-module="projects" data-role="admin" onclick="App.navigate('projects')"><span class="icon">🏗️</span>Projects / Sites</div>
     <div class="nav-item" data-page="ratelist" onclick="App.navigate('ratelist')"><span class="icon">💰</span>Rate List</div>
     <div class="nav-item" data-page="vcard" onclick="App.navigate('vcard')"><span class="icon">💼</span>Visiting Card</div>
     <div class="nav-item" data-page="brochures" onclick="App.navigate('brochures')"><span class="icon">📄</span>Brochures</div>
-    <div class="nav-item" data-page="ai-assistant" onclick="App.navigate('ai-assistant')"><span class="icon">🤖</span>AI Assistant</div>
+    <div class="nav-item" data-page="ai-assistant" data-module="ai" onclick="App.navigate('ai-assistant')"><span class="icon">🤖</span>AI Assistant</div>
 
     <div class="nav-section">📁 Estimate</div>
-    <div class="nav-item" data-page="estimate-choice" onclick="EstimateChoice.open()"><span class="icon">✨</span>New Estimate</div>
-    <div class="nav-item" data-page="estimates-list" onclick="App.navigate('estimates-list')"><span class="icon">📂</span>Saved Estimates</div>
+    <div class="nav-item" data-page="estimate-choice" data-module="quotations" onclick="EstimateChoice.open()"><span class="icon">✨</span>New Estimate</div>
+    <div class="nav-item" data-page="estimates-list" data-module="quotations" onclick="App.navigate('estimates-list')"><span class="icon">📂</span>Saved Estimates</div>
     <div class="nav-item" data-page="vatcalc" onclick="App.navigate('vatcalc')"><span class="icon">🧮</span>VAT Calculator</div>
 
     <div class="nav-section">Reports</div>
@@ -203,7 +197,7 @@ var APP_VERSION = '7.0.0';
 
     <div class="nav-section">Staff & Stock</div>
     <div class="nav-item" data-page="staff" data-role="admin" onclick="App.navigate('staff')"><span class="icon">👷</span>Staff Log</div>
-    <div class="nav-item" data-page="stocklist" data-role="admin" onclick="App.navigate('stocklist')"><span class="icon">📦</span>Stock / Items</div>
+    <div class="nav-item" data-page="stocklist" data-module="stock" data-role="admin" onclick="App.navigate('stocklist')"><span class="icon">📦</span>Stock / Items</div>
     <div class="nav-item" data-page="salesteam" data-role="admin" onclick="App.navigate('salesteam')"><span class="icon">🎯</span>Sales Team</div>
     <div class="nav-item" data-page="bulkmsg" onclick="App.navigate('bulkmsg')"><span class="icon">📢</span>Bulk Message</div>
 
@@ -271,8 +265,8 @@ var APP_VERSION = '7.0.0';
       <div class="hero-date" id="dash-date-sub">बि.सं. लोड...</div>
       <div class="hero-quick">
         <button class="hero-quick-btn primary" onclick="App.navigate('add-customer')"><span class="icon">➕</span>Customer</button>
-        <button class="hero-quick-btn secondary" onclick="App.navigate('add-quotation')"><span class="icon">📝</span>Quote</button>
-        <button class="hero-quick-btn secondary" onclick="App.navigate('walkin')"><span class="icon">🚶</span>Walk-in</button>
+        <button class="hero-quick-btn secondary" data-module="quotations" onclick="App.navigate('add-quotation')"><span class="icon">📝</span>Quote</button>
+        <button class="hero-quick-btn secondary" data-module="walkin" onclick="App.navigate('walkin')"><span class="icon">🚶</span>Walk-in</button>
       </div>
     </div>
     <div id="dash-greet" style="font-size:1.05rem;font-weight:800;margin-bottom:10px;">👋</div>
@@ -291,12 +285,12 @@ var APP_VERSION = '7.0.0';
     </div>
     <div class="stats-grid">
       <div class="stat-card" onclick="App.navigate('customers')"><div class="stat-label">👥 Customers</div><div class="stat-value text-accent" id="s-cust">0</div><div class="stat-foot">Total registered</div></div>
-      <div class="stat-card c-blue" onclick="App.navigate('quotations')"><div class="stat-label">📋 Quotations</div><div class="stat-value text-blue" id="s-quotes">0</div><div class="stat-foot text-yellow">Pending: <span id="s-ongoing">0</span></div></div>
+      <div class="stat-card c-blue" data-module="quotations" onclick="App.navigate('quotations')"><div class="stat-label">📋 Quotations</div><div class="stat-value text-blue" id="s-quotes">0</div><div class="stat-foot text-yellow">Pending: <span id="s-ongoing">0</span></div></div>
       <div class="stat-card c-green" onclick="App.navigate('daybook')"><div class="stat-label">💰 आज Income</div><div class="stat-value sm text-green" id="s-income">Rs.0</div><div class="stat-foot">Today's earnings</div></div>
       <div class="stat-card c-green" onclick="App.navigate('daybook')"><div class="stat-label">💵 Advance</div><div class="stat-value sm text-green" id="s-advance">Rs.0</div><div class="stat-foot">Today collected</div></div>
       <div class="stat-card c-yellow" onclick="App.navigate('followups')"><div class="stat-label">📅 FU आज</div><div class="stat-value text-yellow" id="s-today">0</div><div class="stat-foot">Today's follow-ups</div></div>
       <div class="stat-card c-yellow" onclick="App.navigate('staff')"><div class="stat-label">👷 Staff</div><div class="stat-value text-yellow" id="s-staff">0</div><div class="stat-foot">Total staff</div></div>
-      <div class="stat-card c-red" onclick="App.navigate('stocklist')"><div class="stat-label">⚠️ Low Stock</div><div class="stat-value text-red" id="s-lowstock">0</div><div class="stat-foot">Need restock</div></div>
+      <div class="stat-card c-red" data-module="stock" onclick="App.navigate('stocklist')"><div class="stat-label">⚠️ Low Stock</div><div class="stat-value text-red" id="s-lowstock">0</div><div class="stat-foot">Need restock</div></div>
       <div class="stat-card c-red" onclick="App.navigate('followups')"><div class="stat-label">📅 Overdue FU</div><div class="stat-value text-red" id="s-overdue">0</div><div class="stat-foot">Pending overdue</div></div>
     </div>
 
@@ -304,9 +298,9 @@ var APP_VERSION = '7.0.0';
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;">
       <div class="card" onclick="App.navigate('daybook')" style="cursor:pointer;"><div class="card-head"><span>📊 Income vs Expense (7 दिन)</span></div><div class="card-body" id="dash-summary-cash" style="min-height:160px;"></div></div>
       <div class="card" onclick="App.navigate('customers')" style="cursor:pointer;"><div class="card-head"><span>🔧 Services Breakdown</span></div><div class="card-body" id="dash-summary-svc" style="min-height:160px;"></div></div>
-      <div class="card" onclick="App.navigate('quotations')" style="cursor:pointer;"><div class="card-head"><span>📋 Quotation Status</span></div><div class="card-body" id="dash-summary-quot" style="min-height:160px;"></div></div>
+      <div class="card" data-module="quotations" onclick="App.navigate('quotations')" style="cursor:pointer;"><div class="card-head"><span>📋 Quotation Status</span></div><div class="card-body" id="dash-summary-quot" style="min-height:160px;"></div></div>
       <div class="card" onclick="App.navigate('salesteam')" style="cursor:pointer;"><div class="card-head"><span>🎯 Sales Performance</span></div><div class="card-body" id="dash-sales-perf" style="min-height:160px;"></div></div>
-      <div class="card" onclick="App.navigate('ai-assistant')" style="cursor:pointer;background:linear-gradient(135deg,rgba(124,58,237,0.10),transparent);"><div class="card-head"><span>🤖 AI Assistant</span></div><div class="card-body" id="dash-ai-panel" style="min-height:60px;font-size:0.8rem;color:var(--text-muted);display:flex;align-items:center;">Lead बनाउन, estimate draft गर्न — तपाईंको आफ्नै API key ले। थिच्नुहोस् →</div></div>
+      <div class="card" data-module="ai" onclick="App.navigate('ai-assistant')" style="cursor:pointer;background:linear-gradient(135deg,rgba(124,58,237,0.10),transparent);"><div class="card-head"><span>🤖 AI Assistant</span></div><div class="card-body" id="dash-ai-panel" style="min-height:60px;font-size:0.8rem;color:var(--text-muted);display:flex;align-items:center;">Lead बनाउन, estimate draft गर्न — तपाईंको आफ्नै API key ले। थिच्नुहोस् →</div></div>
     </div>
 
     <!-- ═══════ BUSINESS OVERVIEW ROUND CHART (v4.1) ═══════ -->
@@ -429,7 +423,7 @@ var APP_VERSION = '7.0.0';
           <button onclick="Dashboard.setTotalMetric('sale')" id="dtm-sale" class="btn btn-xs btn-secondary">🛒 Sale</button>
           <button onclick="Dashboard.setTotalMetric('customer')" id="dtm-customer" class="btn btn-xs btn-secondary">👥 New Customer</button>
           <button onclick="Dashboard.setTotalMetric('advance')" id="dtm-advance" class="btn btn-xs btn-secondary">💵 Advance</button>
-          <button onclick="Dashboard.setTotalMetric('quotation')" id="dtm-quotation" class="btn btn-xs btn-secondary">📋 Quotation</button>
+          <button data-module="quotations" onclick="Dashboard.setTotalMetric('quotation')" id="dtm-quotation" class="btn btn-xs btn-secondary">📋 Quotation</button>
         </div>
       </div>
       <div class="card-body" id="dash-total-chart" style="min-height:240px;padding:14px;"></div>
@@ -869,7 +863,7 @@ var APP_VERSION = '7.0.0';
   <div class="page" id="page-estimate-new">
     <div class="card card-body" style="max-width:820px;">
       <div class="section-head" style="margin-bottom:14px;"><div><div class="section-title">✨ Professional Estimate</div><div class="section-subtitle">Customer लाई पठाउने final estimate</div></div><div class="btn-group"><button onclick="App.navigate('estimates-list')" class="btn btn-sm btn-blue">📂 Saved</button><button onclick="Estimate.clear()" class="btn btn-sm btn-secondary">🗑️ New</button><button onclick="Estimate.preview()" class="btn btn-sm btn-primary">👁️ Preview</button><button onclick="Estimate.save()" class="btn btn-sm btn-success">💾 Save</button><button onclick="Estimate.toQuotation()" class="btn btn-sm btn-secondary">📋 → Quote</button></div></div>
-      <div style="background:var(--surface-2);padding:14px;border-radius:10px;margin-bottom:14px;"><div style="font-weight:700;margin-bottom:10px;color:var(--accent);font-size:0.88rem;">👤 Customer Information</div><div class="form-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;"><div class="form-group"><label>Customer Name *</label><input type="text" id="est-cust-name" placeholder="Full name" list="est-cust-datalist"><datalist id="est-cust-datalist"></datalist></div><div class="form-group"><label>Phone</label><input type="tel" id="est-cust-phone" placeholder="9855069733"></div><div class="form-group" style="grid-column:1/-1;"><label>Address</label><input type="text" id="est-cust-address" placeholder="Site address"></div></div></div>
+      <div style="background:var(--surface-2);padding:14px;border-radius:10px;margin-bottom:14px;"><div style="font-weight:700;margin-bottom:10px;color:var(--accent);font-size:0.88rem;">👤 Customer Information</div><div class="form-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;"><div class="form-group"><label>Customer Name *</label><input type="text" id="est-cust-name" placeholder="Full name" list="est-cust-datalist"><datalist id="est-cust-datalist"></datalist></div><div class="form-group"><label>Phone</label><input type="tel" id="est-cust-phone" placeholder="98XXXXXXXX"></div><div class="form-group" style="grid-column:1/-1;"><label>Address</label><input type="text" id="est-cust-address" placeholder="Site address"></div></div></div>
       <div style="background:var(--surface-2);padding:14px;border-radius:10px;margin-bottom:14px;"><div style="font-weight:700;margin-bottom:10px;color:var(--accent);font-size:0.88rem;">🏗️ Project Details</div><div class="form-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;"><div class="form-group"><label>Project Title</label><input type="text" id="est-title" placeholder="e.g. House Renovation" list="est-title-datalist"><datalist id="est-title-datalist"><option>House Construction</option><option>House Renovation</option><option>Interior Design</option><option>Modular Kitchen</option><option>UPVC Windows & Doors</option><option>Aluminum Windows & Doors</option><option>Gypsum False Ceiling</option><option>Solar Installation</option><option>Painting Work</option><option>Tiles & Marble Work</option><option>Electrical Work</option><option>Plumbing Work</option></datalist></div><div class="form-group"><label>Estimate No.</label><input type="text" id="est-no" readonly></div><div class="form-group"><label>Date</label><div class="bs-picker-display" onclick="BSPicker.open('est-date','Estimate Date')"><span id="est-date-text">📅 आज</span></div><input type="hidden" id="est-date"><input type="hidden" id="est-date-bs"></div><div class="form-group"><label>Validity</label><select id="est-validity"><option>7 days</option><option selected>15 days</option><option>30 days</option><option>60 days</option></select></div></div></div>
       <div style="background:var(--surface-2);padding:14px;border-radius:10px;margin-bottom:14px;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;"><div style="font-weight:700;color:var(--accent);font-size:0.88rem;">📦 Items & Services</div><div class="btn-group"><button onclick="Estimate.loadFromRateList()" class="btn btn-xs btn-secondary">📋 From Rate List</button><button onclick="Estimate.addRow()" class="btn btn-xs btn-primary">+ Row</button></div></div><div class="table-wrap"><table style="font-size:0.82rem;"><thead><tr><th style="width:36px;">#</th><th>Description</th><th style="width:60px;">Qty</th><th style="width:60px;">Unit</th><th style="width:90px;">Rate</th><th style="width:90px;">Amount</th><th style="width:40px;"></th></tr></thead><tbody id="est-rows"></tbody></table></div></div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;"><div><div style="font-weight:700;margin-bottom:8px;color:var(--accent);font-size:0.88rem;">📝 Terms & Remarks</div><textarea id="est-terms" placeholder="e.g. 50% advance on start..." style="width:100%;min-height:120px;padding:10px;font-size:0.85rem;"></textarea></div><div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end;"><div style="display:flex;gap:16px;font-size:0.88rem;"><span style="color:var(--text-muted);">Subtotal:</span><span id="est-sub" style="min-width:100px;text-align:right;font-weight:600;">Rs. 0</span></div><div style="display:flex;gap:10px;align-items:center;font-size:0.88rem;"><span style="color:var(--text-muted);">Discount:</span><input type="number" id="est-disc" value="0" min="0" oninput="Estimate.calc()" style="width:90px;padding:4px 8px;text-align:right;"><span id="est-disc-pct" style="color:var(--text-muted);font-size:0.78rem;min-width:52px;text-align:right;"></span></div><div style="display:flex;gap:10px;align-items:center;font-size:0.88rem;"><span style="color:var(--text-muted);">Tax % (VAT):</span><input type="number" id="est-tax" value="13" min="0" oninput="Estimate.calc()" style="width:60px;padding:4px 8px;text-align:right;"><span id="est-tax-amt" style="color:var(--text-muted);font-size:0.8rem;min-width:70px;text-align:right;"></span></div><div style="display:flex;gap:20px;font-size:1.1rem;font-weight:800;color:var(--accent);border-top:2px solid var(--accent);padding-top:8px;"><span>Total:</span><span id="est-total" style="min-width:100px;text-align:right;">Rs. 0</span></div><div style="display:flex;gap:10px;align-items:center;margin-top:6px;"><span style="color:var(--green);font-size:0.88rem;font-weight:600;">💵 Advance:</span><input type="number" id="est-advance" value="0" min="0" oninput="Estimate.calc()" style="width:110px;padding:4px 8px;text-align:right;border:1px solid var(--green);color:var(--green);font-weight:700;"></div><div style="display:flex;gap:20px;font-size:0.95rem;font-weight:700;color:var(--red);"><span>बाँकी:</span><span id="est-balance" style="min-width:100px;text-align:right;">Rs. 0</span></div></div></div>
@@ -892,7 +886,7 @@ var APP_VERSION = '7.0.0';
       <div style="border-top:1px solid var(--border);padding-top:14px;"><div class="form-group" style="margin-bottom:12px;"><label>🎨 Gradient Presets</label><div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;" id="vc-colors"></div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;"><div class="form-group" style="margin:0;"><label>🎨 Custom Colors</label><div style="display:flex;gap:8px;align-items:center;margin-top:6px;"><input type="color" id="vc-color1" value="#f97316" oninput="VCard.setCustomColor(1,this.value)" style="width:44px;height:36px;border:2px solid var(--border);border-radius:6px;cursor:pointer;background:transparent;padding:0;"><span style="font-size:14px;color:var(--text-muted)">→</span><input type="color" id="vc-color2" value="#ea580c" oninput="VCard.setCustomColor(2,this.value)" style="width:44px;height:36px;border:2px solid var(--border);border-radius:6px;cursor:pointer;background:transparent;padding:0;"></div></div><div class="form-group" style="margin:0;"><label>↗️ Direction</label><select id="vc-direction" onchange="VCard.setDirection(this.value)" style="width:100%;padding:8px 10px;margin-top:6px;"><option value="135deg">↘ Diagonal</option><option value="90deg">→ Horizontal</option><option value="180deg">↓ Vertical</option><option value="45deg">↗ Reverse Diag</option></select></div></div></div>
       <div class="btn-group" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;padding-top:14px;border-top:1px solid var(--border);"><button onclick="VCard.save()" class="btn btn-sm btn-primary">💾 Save</button><button onclick="VCard.print()" class="btn btn-sm btn-secondary">🖨️ Print</button><button onclick="VCard.shareWA()" class="btn btn-sm btn-wa">📱 WhatsApp Share</button><button onclick="VCard.shareImage()" class="btn btn-sm btn-wa">📸 Share Image</button><button onclick="VCard.downloadImage()" class="btn btn-sm btn-secondary">⬇️ PNG Save</button><button onclick="VCard.sendWA()" class="btn btn-sm btn-secondary">💬 Text WA</button><button onclick="VCard.copyText()" class="btn btn-sm btn-secondary">📋 Copy</button></div>
     </div>
-    <div class="card card-body"><div class="section-title" style="margin-bottom:14px;">✏️ Card Details</div><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;"><div class="form-group"><label>नाम / Name</label><input type="text" id="vc-name" oninput="VCard.update()" placeholder="Full Name"></div><div class="form-group"><label>Designation</label><input type="text" id="vc-title" oninput="VCard.update()" placeholder="Managing Director"></div><div class="form-group" style="grid-column:1/-1;"><label>Company</label><input type="text" id="vc-company" oninput="VCard.update()" placeholder="PRERAK MULTIPURPOSE PVT LTD"></div><div class="form-group"><label>Phone 1</label><input type="tel" id="vc-phone1" oninput="VCard.update()" placeholder="9855069733"></div><div class="form-group"><label>Phone 2</label><input type="tel" id="vc-phone2" oninput="VCard.update()" placeholder="9801069733"></div><div class="form-group"><label>Email</label><input type="email" id="vc-email" oninput="VCard.update()" placeholder="info@example.com"></div><div class="form-group"><label>Website</label><input type="text" id="vc-web" oninput="VCard.update()" placeholder="www.prerak.com.np"></div><div class="form-group" style="grid-column:1/-1;"><label>Address</label><input type="text" id="vc-addr" oninput="VCard.update()" placeholder="Hetauda-2, Makwanpur"></div></div></div>
+    <div class="card card-body"><div class="section-title" style="margin-bottom:14px;">✏️ Card Details</div><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;"><div class="form-group"><label>नाम / Name</label><input type="text" id="vc-name" oninput="VCard.update()" placeholder="Full Name"></div><div class="form-group"><label>Designation</label><input type="text" id="vc-title" oninput="VCard.update()" placeholder="Managing Director"></div><div class="form-group" style="grid-column:1/-1;"><label>Company</label><input type="text" id="vc-company" oninput="VCard.update()" placeholder="तपाईंको कम्पनीको नाम"></div><div class="form-group"><label>Phone 1</label><input type="tel" id="vc-phone1" oninput="VCard.update()" placeholder="98XXXXXXXX"></div><div class="form-group"><label>Phone 2</label><input type="tel" id="vc-phone2" oninput="VCard.update()" placeholder="98XXXXXXXX"></div><div class="form-group"><label>Email</label><input type="email" id="vc-email" oninput="VCard.update()" placeholder="info@example.com"></div><div class="form-group"><label>Website</label><input type="text" id="vc-web" oninput="VCard.update()" placeholder="www.example.com"></div><div class="form-group" style="grid-column:1/-1;"><label>Address</label><input type="text" id="vc-addr" oninput="VCard.update()" placeholder="ठेगाना"></div></div></div>
   </div>
 
   <!-- ========================= BROCHURES PAGE ========================= -->
@@ -1064,13 +1058,24 @@ var APP_VERSION = '7.0.0';
           <div class="form-group full"><label>Address</label><input type="text" id="set-co-address" oninput="Settings.save()"></div>
           <div class="form-group"><label>Phone 1</label><input type="tel" id="set-co-phone1" oninput="Settings.save()"></div>
           <div class="form-group"><label>Phone 2</label><input type="tel" id="set-co-phone2" oninput="Settings.save()"></div>
-          <div class="form-group full"><label>Email</label><input type="email" id="set-co-email" oninput="Settings.save()"></div>
+          <div class="form-group"><label>Email</label><input type="email" id="set-co-email" oninput="Settings.save()"></div>
+          <div class="form-group"><label>Website</label><input type="text" id="set-co-web" placeholder="www.example.com" oninput="Settings.save()"></div>
           <div class="form-group"><label>Fiscal Year</label><input type="text" id="set-co-fy" placeholder="2082/083" onfocus="if(!this.value)this.value=autoFiscalYear();" oninput="Settings.save()"></div>
           <div class="form-group"><label>PAN / VAT</label><input type="text" id="set-co-pan" oninput="Settings.save()"></div>
         </div>
         <div style="margin-top:14px;display:flex;justify-content:flex-end;">
           <button type="button" onclick="Settings.saveManual('company')" class="btn btn-primary">💾 Save Company Info</button>
         </div>
+      </div>
+      <div class="card card-body" id="set-business-card">
+        <div class="section-title">🧙 व्यवसायको प्रकार / Setup Wizard</div>
+        <div style="font-size:0.78rem;color:var(--text-muted);margin:6px 0 10px;line-height:1.6;">हालको प्रकार: <b id="set-business-type" style="color:var(--accent);">—</b><br>Wizard फेरि चलाउँदा तपाईंको हालको Rate List, Services र Templates मेटिँदैनन् — नभएका मात्र थपिन्छन्।</div>
+        <button type="button" onclick="SetupWizard.open()" class="btn btn-sm btn-primary">🧙 Setup Wizard खोल्नुहोस्</button>
+      </div>
+      <div class="card card-body" id="set-modules-card">
+        <div class="section-title">🎛️ Modules / फिचर व्यवस्थापन</div>
+        <div style="font-size:0.72rem;color:var(--text-muted);margin:6px 0 10px;">तपाईंको व्यवसायलाई नचाहिने फिचर Off गर्नुहोस् — मेनु र ड्यासबोर्डबाट लुक्छ। Data मेटिँदैन, फेरि On गरे सबै फर्किन्छ।</div>
+        <div id="set-modules-list" style="display:grid;gap:6px;"></div>
       </div>
       <div class="card card-body">
         <div class="section-title">💳 Payment Details</div>
@@ -1168,7 +1173,7 @@ var APP_VERSION = '7.0.0';
       <!-- ========================= TESTING CHECKLIST ========================= -->
       <div class="card card-body">
         <div class="section-title">🧪 System Test Checklist</div>
-        <div style="font-size:0.78rem;color:var(--text-muted);margin-bottom:12px;">v3.9 Final — सबै features test गरी confirm गर्नुस्</div>
+        <div style="font-size:0.78rem;color:var(--text-muted);margin-bottom:12px;">Swagatik <span data-app-version>v7.0.0</span> — सबै features test गरी confirm गर्नुस्</div>
         <div id="test-checklist-results">
           <div class="card" style="overflow:hidden;">
             <div class="card-head" style="font-size:0.8rem;">🧪 Quick Tests — Run गर्न button थिच्नुस्</div>
@@ -1283,18 +1288,16 @@ var APP_VERSION = '7.0.0';
       <div class="card card-body" style="margin-bottom:14px;background:linear-gradient(135deg,rgba(249,115,22,0.06),transparent);">
         <div class="section-title" style="margin-bottom:10px;">🏢 Maker & Support</div>
         <div style="font-size:0.82rem;color:var(--text-muted);line-height:1.7;">
-          <b style="color:var(--text);">Swagatik</b> — a product by<br>
-          <b style="color:var(--accent);font-size:0.95rem;">Prerak Multipurpose Pvt Ltd</b><br>
-          <span id="help-address">Hetauda-2, Kantirajpath, Makwanpur, Nepal</span>
+          <b style="color:var(--text);">Swagatik</b> — Smart Business CRM<br>
+          <span>License, renew वा प्राविधिक सहायताका लागि Swagatik support मा सम्पर्क गर्नुहोस्।</span>
         </div>
         <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border);font-size:0.82rem;line-height:1.8;">
-          <div>📞 Support: <b style="color:var(--accent);" id="help-phone">9855069733</b></div>
-          <div id="help-email-row">✉️ Email: <b style="color:var(--accent);" id="help-email">info@prerak.com.np</b></div>
+          <div>📞 Support: <b style="color:var(--accent);" id="help-phone" data-vendor-phone></b></div>
         </div>
       </div>
 
       <div style="text-align:center;font-size:0.7rem;color:var(--text-muted);opacity:0.7;padding:8px 0 20px;">
-        © Prerak Multipurpose Pvt Ltd • Swagatik Smart Business CRM
+        © <span data-company-name></span> • Swagatik Smart Business CRM
       </div>
 
     </div>
@@ -1308,7 +1311,7 @@ var APP_VERSION = '7.0.0';
       <div style="background:linear-gradient(135deg,#1a0533,#2d0a5e,#0f172a);border-radius:14px;padding:20px 24px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
         <div>
           <div style="font-size:1.3rem;font-weight:800;color:#fff;">🛡️ Super Admin Dashboard</div>
-          <div style="font-size:0.75rem;color:rgba(255,255,255,0.55);margin-top:3px;">PRERAK MULTIPURPOSE PVT LTD — System Control</div>
+          <div style="font-size:0.75rem;color:rgba(255,255,255,0.55);margin-top:3px;"><span data-company-name></span> — System Control</div>
         </div>
         <div id="sa-role-badge" style="font-size:0.72rem;padding:4px 14px;border-radius:20px;background:rgba(255,255,255,0.12);color:#a78bfa;font-weight:700;"></div>
       </div>
@@ -1828,7 +1831,7 @@ var APP_VERSION = '7.0.0';
     <div class="bn-inner">
       <button class="bn-btn active" id="bn-dashboard" onclick="App.navigate('dashboard')"><span class="bn-icon">🏠</span>Home</button>
       <button class="bn-btn" id="bn-customers" onclick="App.navigate('customers')"><span class="bn-icon">👥</span>Customers</button>
-      <button class="bn-btn" id="bn-quotations" onclick="App.navigate('quotations')"><span class="bn-icon">📋</span>Quotes</button>
+      <button class="bn-btn" id="bn-quotations" data-module="quotations" onclick="App.navigate('quotations')"><span class="bn-icon">📋</span>Quotes</button>
       <button class="bn-btn" id="bn-followups" onclick="App.navigate('followups')"><span class="bn-icon">📅</span>Follow-ups</button>
       <button class="bn-btn" id="bn-settings" onclick="App.navigate('settings')"><span class="bn-icon">⚙️</span>Settings</button>
     </div>
@@ -1843,7 +1846,7 @@ var APP_VERSION = '7.0.0';
       <div style="width:24px;height:24px;border-radius:7px;background:linear-gradient(135deg,#f97316,#ea580c);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(249,115,22,0.35);">
         <svg width="15" height="15" viewBox="0 0 48 48" fill="none"><path d="M32 16.5c-1.6-1.7-4.2-2.8-7-2.8-4.2 0-7 2.2-7 5.3 0 3 2.4 4.3 6.3 5.2 4.6 1 6 1.8 6 3.6 0 1.7-1.9 2.9-4.8 2.9-2.6 0-4.8-1-6.4-2.7" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
-      <div style="display:flex;flex-direction:column;line-height:1.4;"><span style="font-size:0.82rem;"><b style="color:#f97316;font-weight:800;">Swagatik</b> <span style="opacity:0.7;color:var(--text-muted);">स्वागतिक</span></span><span style="font-size:0.66rem;color:var(--text-muted);opacity:0.85;">by Prerak Multipurpose Pvt Ltd</span></div>
+      <div style="display:flex;flex-direction:column;line-height:1.4;"><span style="font-size:0.82rem;"><b style="color:#f97316;font-weight:800;">Swagatik</b> <span style="opacity:0.7;color:var(--text-muted);">स्वागतिक</span></span><span style="font-size:0.66rem;color:var(--text-muted);opacity:0.85;" data-company-name></span></div>
     </div>
     <div style="font-size:0.64rem;color:var(--text-muted);margin-top:5px;opacity:0.7;">Smart Business CRM • <span data-app-version>v7.0.0</span></div>
   </footer>
@@ -1852,11 +1855,15 @@ var APP_VERSION = '7.0.0';
 <!-- ── App scripts (classic scripts, loaded in order — no build step). Order matters. ── -->
 <script src="js/core/security.js?v=7.0.0"></script>
 <script src="js/core/store.js?v=7.0.0"></script>
+<script src="js/core/company.js?v=7.0.0"></script>
 <script src="js/core/date-bs.js?v=7.0.0"></script>
 <script src="js/ui/brand.js?v=7.0.0"></script>
 <script src="js/core/license.js?v=7.0.0"></script>
 <script src="js/core/auth.js?v=7.0.0"></script>
 <script src="js/core/data-init.js?v=7.0.0"></script>
+<script src="js/core/business-profiles.js?v=7.0.0"></script>
+<script src="js/core/modules.js?v=7.0.0"></script>
+<script src="js/core/migrations.js?v=7.0.0"></script>
 <script src="js/ui/brand-logo.js?v=7.0.0"></script>
 <script src="js/ui/whatsapp.js?v=7.0.0"></script>
 <script src="js/core/app.js?v=7.0.0"></script>
@@ -1895,6 +1902,7 @@ var APP_VERSION = '7.0.0';
 <script src="js/modules/cashbook-returns.js?v=7.0.0"></script>
 <script src="js/modules/sample-data.js?v=7.0.0"></script>
 <script src="js/ui/admin-dashboard.js?v=7.0.0"></script>
+<script src="js/ui/setup-wizard.js?v=7.0.0"></script>
 <script src="js/core/runtime.js?v=7.0.0"></script>
 <script src="js/vendor/qrcode.min.js?v=7.0.0"></script>
 <script src="js/modules/sync-dropbox.js?v=7.0.0"></script>

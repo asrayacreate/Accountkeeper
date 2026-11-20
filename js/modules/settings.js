@@ -2,11 +2,12 @@
 var Settings = {
   render: function(){
     var s=STORE.get('pk3_settings',{});
-    setVal('set-co-name',s.companyName||'PRERAK MULTIPURPOSE PVT LTD');
-    setVal('set-co-tagline',s.tagline||'Building Your Dreams 🏠');
-    setVal('set-co-address',s.address||'Hetauda-2, Makwanpur');
-    setVal('set-co-phone1',s.phone1||'9855069733');
-    setVal('set-co-phone2',s.phone2||'9801069733');
+    setVal('set-co-name',s.companyName||'');
+    setVal('set-co-tagline',s.tagline||'');
+    setVal('set-co-address',s.address||'');
+    setVal('set-co-phone1',s.phone1||'');
+    setVal('set-co-phone2',s.phone2||'');
+    setVal('set-co-web',s.website||'');
     setVal('set-co-email',s.email||'');
     setVal('set-co-fy',s.fiscalYear||autoFiscalYear());
     setVal('set-co-pan',s.pan||'');
@@ -29,6 +30,7 @@ var Settings = {
     var aiSettings=STORE.get('pk3_ai_settings',{}); setVal('set-ai-lang',aiSettings.lang||'nepali'); if(/^gemini-2\.5/.test(aiSettings.model||'')){ aiSettings.model='gemini-3.8-flash'; STORE.set('pk3_ai_settings',aiSettings); } setVal('set-ai-model',aiSettings.model||'claude-sonnet-4-6');
     // Templates
     this.renderTemplates();
+    this.renderBusiness();
     Backup.render();
   },
   // ── COMPANY LOGO (v4.0.4): edit / add / delete ──
@@ -95,12 +97,23 @@ var Settings = {
   },
   save: function(){
     var existing = STORE.get('pk3_settings',{}) || {};
-    var s={companyName:getVal('set-co-name'),tagline:getVal('set-co-tagline'),address:getVal('set-co-address'),phone1:getVal('set-co-phone1'),phone2:getVal('set-co-phone2'),email:getVal('set-co-email'),fiscalYear:getVal('set-co-fy'),pan:getVal('set-co-pan'),bankName:getVal('set-bank-name'),bankAcc:getVal('set-bank-acc'),esewa:getVal('set-esewa'),khalti:getVal('set-khalti'),notifications:document.getElementById('set-notif')?document.getElementById('set-notif').checked:false,bdayReminders:document.getElementById('set-bday')?document.getElementById('set-bday').checked:false,muteTost:document.getElementById('set-mute')?document.getElementById('set-mute').checked:false};
+    var s={website:getVal('set-co-web'),companyName:getVal('set-co-name'),tagline:getVal('set-co-tagline'),address:getVal('set-co-address'),phone1:getVal('set-co-phone1'),phone2:getVal('set-co-phone2'),email:getVal('set-co-email'),fiscalYear:getVal('set-co-fy'),pan:getVal('set-co-pan'),bankName:getVal('set-bank-name'),bankAcc:getVal('set-bank-acc'),esewa:getVal('set-esewa'),khalti:getVal('set-khalti'),notifications:document.getElementById('set-notif')?document.getElementById('set-notif').checked:false,bdayReminders:document.getElementById('set-bday')?document.getElementById('set-bday').checked:false,muteTost:document.getElementById('set-mute')?document.getElementById('set-mute').checked:false};
     // Preserve logo (set via uploadLogo, not via inputs)
     if(existing.logo) s.logo = existing.logo;
+    // v7.0.0: keep every other saved key (e.g. introServices) — the form only overrides its own fields
+    Object.keys(existing).forEach(function(k){ if(!(k in s)) s[k] = existing[k]; });
+    if(!document.getElementById('set-co-web')) s.website = existing.website || '';
     STORE.set('pk3_settings',s);
     try { Brand.apply(); } catch(e){}
     var fy=s.fiscalYear; var fyEl=document.getElementById('tb-fy'); if(fyEl)fyEl.textContent='FY '+fy;
+  },
+  // v7.0.0: business type label + modules list in Settings
+  renderBusiness: function(){
+    try {
+      var t = Company.businessType();
+      setText('set-business-type', t ? (BusinessProfiles.get(t).icon + ' ' + BusinessProfiles.get(t).label) : 'छानिएको छैन');
+    } catch(e){}
+    try { Modules.render(); } catch(e){}
   },
   // Explicit Save button handler — same data write but with clear user feedback
   toggleWelcome: function(on){

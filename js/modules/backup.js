@@ -11,7 +11,7 @@ var Backup = {
     ['pk3_customers','pk3_quotations','pk3_followups','pk3_daybook','pk3_rates','pk3_walkins','pk3_staff','pk3_stock','pk3_stockHistory','pk3_sales','pk3_templates','pk3_bulkFolders','pk3_users','pk3_audit','pk3_invoices','pk3_ledger','pk3_notif','pk3_activity','pk3_company','pk3_settings','pk3_tracker','pk3_vcard','pk3_estimates','pk3_planner','pk3_brochures','pk3_qa_order','pk3_returns','pk3_cashbook_opening','pk3_projects','pk3_pay_qr','pk3_doc_terms'].forEach(function(k){data[k]=STORE.get(k,null);});
     data._meta={version:'v3.9 Final',date:todayISO(),exportedBy:currentUser?currentUser.name:'unknown'};
     var dateStr=new Date().toISOString().slice(0,10);
-    var filename='prerak-crm-v39final-backup-'+dateStr+'.json';
+    var filename='swagatik-backup-'+dateStr+'.json';
     downloadFile(filename,JSON.stringify(data,null,2));
     var now=new Date().toISOString();
     STORE.set('lastBackup',now);
@@ -23,7 +23,7 @@ var Backup = {
     var custs=Customers.getData();
     var header='Name,Phone,Address,Service,Sub-Service,Advance,Salesperson,Issue Date,FU Date,Created\n';
     var rows=custs.map(function(c){return [c.name,c.phone,(c.address||'').replace(/,/g,';'),'"'+Customers.getServices(c).map(function(x){return x.work;}).filter(Boolean).join('; ')+'"','"'+Customers.getServices(c).map(function(x){return x.subwork;}).filter(Boolean).join('; ')+'"',c.advance||0,c.sales||'',c.issueDateBs||'',c.fuDateBs||'',c.created||''].join(',');}).join('\n');
-    downloadCSV('prerak-customers-'+todayISO()+'.csv',header+rows);
+    downloadCSV('customers-'+todayISO()+'.csv',header+rows);
     App.toast('✅ CSV downloaded!','success');
   },
   importJSON: function(e){
@@ -57,7 +57,7 @@ var Backup = {
     App.toast('🗑 All data cleared','info');
     setTimeout(function(){window.location.reload();},1000);
   },
-  sendEmail: function(){ var co=STORE.get('pk3_settings',{}); var email=co.email||'admin@prerak.com'; window.location.href='mailto:'+email+'?subject=Swagatik Backup&body=Please find the backup attached.'; App.toast('📧 Email app opened','info'); },
+  sendEmail: function(){ var co=STORE.get('pk3_settings',{}); var email=co.email||''; window.location.href='mailto:'+email+'?subject=Swagatik Backup&body=Please find the backup attached.'; App.toast('📧 Email app opened','info'); },
 
   // ═══════════════ AUTO-SAVE SYSTEM (v4.1) ═══════════════
   // Data already lives in localStorage (survives refresh/close). This adds:

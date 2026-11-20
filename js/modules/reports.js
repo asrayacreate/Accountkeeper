@@ -96,8 +96,8 @@ var Reports = {
     if(!w){ App.toast('Popup blocked','error'); return; }
     w.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Report</title>'
       +'<style>body{font-family:Arial,sans-serif;padding:24px;color:#222;}h1{color:#f97316;font-size:1.3rem;margin-bottom:2px;}.sub{color:#666;margin-bottom:16px;}table{width:100%;border-collapse:collapse;}td,th{border:1px solid #ddd;padding:8px 10px;text-align:left;}th{background:#f5f5f5;}.r{text-align:right;}</style>'
-      +'</head><body><h1>'+esc(co.companyName||'PRERAK MULTIPURPOSE PVT LTD')+'</h1>'
-      +'<div class="sub">📊 Report ('+this._filterLabel()+') • '+esc(co.address||'Hetauda-2, Makwanpur')+'</div>'
+      +'</head><body><h1>'+esc(Company.name(''))+'</h1>'
+      +'<div class="sub">📊 Report ('+this._filterLabel()+')'+(co.address?' • '+esc(co.address):'')+'</div>'
       +'<table><tr><th>New Customers</th><td class="r">'+(d.custCount||0)+'</td></tr>'
       +'<tr><th>Quotations</th><td class="r">'+(d.quotCount||0)+' ('+fmtRs(d.quotVal||0)+')</td></tr>'
       +'<tr><th>Invoices</th><td class="r">'+(d.invCount||0)+'</td></tr>'
@@ -110,7 +110,7 @@ var Reports = {
   shareWA: function(){
     var co=STORE.get('pk3_settings',{})||{};
     var d=this._lastData||{};
-    var msg='*📊 '+(co.companyName||'PRERAK')+' Report*\n('+this._filterLabel()+')\n\n'
+    var msg='*📊 '+Company.name()+' Report*\n('+this._filterLabel()+')\n\n'
       +'👥 New Customers: '+(d.custCount||0)+'\n'
       +'📋 Quotations: '+(d.quotCount||0)+' ('+fmtRs(d.quotVal||0)+')\n'
       +'🧾 Invoices: '+(d.invCount||0)+'\n'

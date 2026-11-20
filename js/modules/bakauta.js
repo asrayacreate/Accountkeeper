@@ -31,7 +31,7 @@ var Bakauta = {
     var sub=this._rows.reduce(function(s,r){return s+(r.qty||0)*(r.rate||0);},0);
     var tax=parseFloat(getVal('bk-tax'))||0, disc=parseFloat(getVal('bk-disc'))||0, adv=parseFloat(getVal('bk-advance'))||0;
     var total=sub+sub*(tax/100)-disc;
-    var html='<div style="padding:20px;font-family:sans-serif;"><div style="text-align:center;margin-bottom:14px;"><div style="font-size:1.3rem;font-weight:900;color:#f97316;">'+(co.companyName||'PRERAK MULTIPURPOSE')+'</div><div style="font-size:0.8rem;color:#666;">'+(co.address||'Hetauda-2')+'</div></div>';
+    var html='<div style="padding:20px;font-family:sans-serif;"><div style="text-align:center;margin-bottom:14px;"><div style="font-size:1.3rem;font-weight:900;color:#f97316;">'+esc(Company.name(''))+'</div><div style="font-size:0.8rem;color:#666;">'+esc(co.address||'')+'</div></div>';
     html+='<div style="margin-bottom:10px;"><b>Customer:</b> '+getVal('bk-name')+' | <b>Phone:</b> '+getVal('bk-phone')+'</div>';
     html+='<table style="width:100%;border-collapse:collapse;margin-bottom:10px;"><tr style="background:#f97316;color:#fff;"><th style="padding:5px;">SN</th><th style="padding:5px;text-align:left;">Item</th><th style="padding:5px;">Qty</th><th style="padding:5px;">Unit</th><th style="padding:5px;text-align:right;">Rate</th><th style="padding:5px;text-align:right;">Amount</th></tr>';
     this._rows.forEach(function(r,i){html+='<tr style="border-bottom:1px solid #eee;"><td style="padding:5px;text-align:center;">'+(i+1)+'</td><td style="padding:5px;">'+r.name+'</td><td style="padding:5px;text-align:center;">'+(r.qty||0)+'</td><td style="padding:5px;text-align:center;">'+(r.unit||'')+'</td><td style="padding:5px;text-align:right;">'+fmtRs(r.rate||0)+'</td><td style="padding:5px;text-align:right;font-weight:700;">'+fmtRs((r.qty||0)*(r.rate||0))+'</td></tr>';});
@@ -41,7 +41,7 @@ var Bakauta = {
     document.getElementById('bk-preview-body').innerHTML=html;
     document.getElementById('bk-preview-modal').classList.add('open');
   },
-  shareWA: function(){ var name=getVal('bk-name'); var total=this._rows.reduce(function(s,r){return s+(r.qty||0)*(r.rate||0);},0); var msg='Estimate for '+name+'\nTotal: '+fmtRs(total)+'\nFrom PRERAK MULTIPURPOSE'; var phone=getVal('bk-phone'); if(phone)window.open('https://wa.me/977'+phone.replace(/[^0-9]/g,'')+'?text='+encodeURIComponent(msg),'_blank'); else App.toast('Phone number चाहिन्छ!','error'); },
+  shareWA: function(){ var name=getVal('bk-name'); var total=this._rows.reduce(function(s,r){return s+(r.qty||0)*(r.rate||0);},0); var msg='Estimate for '+name+'\nTotal: '+fmtRs(total)+'\nFrom '+Company.name(); var phone=getVal('bk-phone'); if(phone)window.open('https://wa.me/977'+phone.replace(/[^0-9]/g,'')+'?text='+encodeURIComponent(msg),'_blank'); else App.toast('Phone number चाहिन्छ!','error'); },
   print: function(){ window.print(); },
   toQuotation: function(){
     var custs=Customers.getData(); var sel=document.getElementById('bk-toquot-cust'); if(sel) sel.innerHTML='<option value="">-- Customer --</option>'+custs.map(function(c){return '<option value="'+c.id+'">'+c.name+'</option>';}).join('');
@@ -84,11 +84,11 @@ var Bakauta = {
   shareEstWA: function(id){
     var e=STORE.get('pk3_estimates',[]).find(function(x){return x.id===id;}); if(!e)return;
     var co=STORE.get('pk3_settings',{})||{};
-    var msg='*🧾 ESTIMATE '+(e.estNo||'')+'*\n'+(co.companyName||'PRERAK MULTIPURPOSE PVT LTD')+'\n\n'
+    var msg='*🧾 ESTIMATE '+(e.estNo||'')+'*\n'+Company.name()+'\n\n'
       +'Customer: '+(e.custName||'')+'\n'+(e.title?'Project: '+e.title+'\n':'')
       +'Total: '+fmtRs(e.total)+'\n'
       +(e.advance>0?'Advance: '+fmtRs(e.advance)+'\nBalance: '+fmtRs((e.total||0)-(e.advance||0))+'\n':'')
-      +'\n'+(co.phone1||'9855069733');
+      +'\n'+Company.phones();
     var phone=(e.phone||'').replace(/[^0-9]/g,'');
     if(typeof Wa!=='undefined'&&Wa.send) Wa.send(e.phone||'', msg);
     else window.open('https://wa.me/'+(phone?'977'+phone:'')+'?text='+encodeURIComponent(msg),'_blank');

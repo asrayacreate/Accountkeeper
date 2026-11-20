@@ -186,8 +186,8 @@ var Invoices = {
     var taxV  = inv&&inv.taxP!=null ? inv.taxP : 13;
     var paidV = inv ? (parseFloat(inv.paid)||0) : 0;
 
-    var coName = (STORE.get('pk3_settings',{})||{}).companyName || 'PRERAK MULTIPURPOSE PVT LTD';
-    var coAddr = (STORE.get('pk3_settings',{})||{}).address || 'Hetauda, Nepal';
+    var coName = Company.name('');
+    var coAddr = Company.get().address;
     var invBsStr = (typeof todayBs==='function') ? todayBs() : '';
     if(inv && inv.dateBs) invBsStr = inv.dateBs;
 
@@ -361,7 +361,7 @@ var Invoices = {
     var bal = inv.balance != null ? inv.balance : ((parseFloat(inv.amount)||0)-(parseFloat(inv.paid)||0));
     var itemLines = (Array.isArray(inv.items)?inv.items:[]).map(function(r){ return '• '+(r.name||'')+' — '+(r.qty||0)+(r.unit?' '+r.unit:'')+' × '+fmtRs(r.rate||0)+' = '+fmtRs((parseFloat(r.qty)||0)*(parseFloat(r.rate)||0)); }).join('\n');
     var msg = '*🧾 Invoice '+(inv.invNum||'')+'*\n'
-      + (co.companyName||'PRERAK MULTIPURPOSE PVT LTD')+'\n\n'
+      + Company.name()+'\n\n'
       + 'Customer: '+(inv.custName||'')+'\n'
       + (itemLines?itemLines+'\n\n':'')
       + 'Total: '+fmtRs(inv.amount||0)+'\n'

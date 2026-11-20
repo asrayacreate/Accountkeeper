@@ -8,6 +8,7 @@ var currentUser = null;
 // दुवै flow आफ्नै ठाउँमा उस्तै छन् — केवल सुरुको ढोका एउटा भयो।
 var EstimateChoice = {
   open: function () {
+    if (typeof Modules !== 'undefined' && !Modules.isOn('quotations')) { App.toast('🎛️ Quotations / Estimates बन्द छ — Settings → Modules', 'info'); return; }
     var ov = document.getElementById('est-choice-modal');
     if (!ov) {
       ov = document.createElement('div');
@@ -62,30 +63,17 @@ var EstimateChoice = {
 // Company Introduction लाई सुन्दर styled card मा देखाउने — WhatsApp मा
 // screenshot लिएर वा Print/PDF गरेर पठाउन मिल्ने। Text-only भन्दा आकर्षक।
 var IntroCard = {
-  SERVICES: [
-    { icon: '🏗️', t: 'Construction, Civil Work & Renovation' },
-    { icon: '🏠', t: 'Prefab Wall / Homes' },
-    { icon: '🔩', t: 'Truss Works / Roofing' },
-    { icon: '🪟', t: 'UPVC / Aluminum Window & Door' },
-    { icon: '🎨', t: 'Gypsum / False Ceiling' },
-    { icon: '🛋️', t: 'Interior Design & Decoration' },
-    { icon: '🍽️', t: 'Modular Kitchen & Furniture' },
-    { icon: '🧱', t: 'Tiles / Marble / Parquet Flooring' },
-    { icon: '🖌️', t: 'Painting / Texture Work' },
-    { icon: '🚪', t: 'WPC Door & Panel' },
-    { icon: '☀️', t: 'Solar Water Heater & Panel' },
-    { icon: '🔥', t: 'Chimney / Cooking Stove' },
-    { icon: '💧', t: 'Water Purifier Installation' }
-  ],
+  // v7.0.0: services shown on the card = user's own list or the chosen business profile's
+  get SERVICES() { return Company.introServices(); },
 
   open: function () {
     var co = STORE.get('pk3_settings', {}) || {};
-    var name = (co.companyName || 'PRERAK MULTIPURPOSE PVT LTD');
-    var tagline = co.tagline || 'Building Your Dreams';
-    var addr = co.address || 'Hetauda-2, Kantirajpath, Makwanpur';
-    var ph1 = co.phone1 || '9855069733';
-    var ph2 = co.phone2 || '9801069733';
-    var email = co.email || 'prerakconstrucion21@gmail.com';
+    var name = Company.name();
+    var tagline = co.tagline || '';
+    var addr = co.address || '';
+    var ph1 = co.phone1 || '';
+    var ph2 = co.phone2 || '';
+    var email = co.email || '';
     var logo = co.logo || '';
 
     var svcHtml = this.SERVICES.map(function (s) {
@@ -107,7 +95,7 @@ var IntroCard = {
       + logoBlock
       + '<div style="flex:1;min-width:0;">'
       + '<div style="font-size:20px;font-weight:900;line-height:1.2;">' + esc(name) + '</div>'
-      + '<div style="font-size:12px;opacity:0.95;margin-top:3px;font-style:italic;">"' + esc(tagline) + '"</div>'
+      + (tagline ? '<div style="font-size:12px;opacity:0.95;margin-top:3px;font-style:italic;">"' + esc(tagline) + '"</div>' : '')
       + '</div></div>'
       // services heading
       + '<div style="padding:20px 24px 8px;">'
@@ -119,8 +107,8 @@ var IntroCard = {
       + '⭐ Quality Work &nbsp;•&nbsp; 💰 Best Price &nbsp;•&nbsp; ⏱️ On-time Delivery</div>'
       // contact
       + '<div style="background:#1f2937;color:#fff;padding:16px 24px;font-size:12.5px;line-height:1.9;">'
-      + '<div>📞 ' + esc(ph1) + (ph2 ? ' | ' + esc(ph2) : '') + '</div>'
-      + '<div>📍 ' + esc(addr) + '</div>'
+      + (ph1 || ph2 ? '<div>📞 ' + esc([ph1, ph2].filter(Boolean).join(' | ')) + '</div>' : '')
+      + (addr ? '<div>📍 ' + esc(addr) + '</div>' : '')
       + (email ? '<div>✉️ ' + esc(email) + '</div>' : '')
       + '</div>'
       + '</div></div>';
@@ -149,14 +137,14 @@ var IntroCard = {
 
   _textVersion: function () {
     var co = STORE.get('pk3_settings', {}) || {};
-    var name = (co.companyName || 'PRERAK MULTIPURPOSE PVT LTD');
+    var name = Company.name();
     var lines = ['🙏 ' + name + ' मा हार्दिक स्वागत छ!', '', 'हाम्रा सेवाहरू:'];
     this.SERVICES.forEach(function (s) { lines.push('✅ ' + s.t); });
     lines.push('', 'Quality Work • Best Price • On-time Delivery');
-    lines.push('📞 ' + (co.phone1 || '9855069733') + (co.phone2 ? ' | ' + co.phone2 : ''));
-    lines.push('📍 ' + (co.address || 'Hetauda-2, Kantirajpath, Makwanpur'));
+    if (co.phone1 || co.phone2) lines.push('📞 ' + Company.phones(' | '));
+    if (co.address) lines.push('📍 ' + co.address);
     if (co.email) lines.push('✉️ ' + co.email);
-    lines.push('', '"' + (co.tagline || 'Building Your Dreams') + '"');
+    if (co.tagline) lines.push('', '"' + co.tagline + '"');
     return lines.join('\n');
   },
 
@@ -179,10 +167,10 @@ var IntroCard = {
   _buildCanvas: function () {
     try {
       var co = STORE.get('pk3_settings', {}) || {};
-      var name = (co.companyName || 'PRERAK MULTIPURPOSE PVT LTD');
-      var tagline = co.tagline || 'Building Your Dreams';
-      var addr = co.address || 'Hetauda-2, Kantirajpath, Makwanpur';
-      var ph1 = co.phone1 || '9855069733';
+      var name = Company.name();
+      var tagline = co.tagline || '';
+      var addr = co.address || '';
+      var ph1 = co.phone1 || '';
       var ph2 = co.phone2 || '';
       var email = co.email || '';
       var svcs = this.SERVICES;
@@ -258,7 +246,7 @@ var IntroCard = {
       nameLines.slice(0, 2).forEach(function (ln, i) { x.fillText(ln, pad + 78, ny + i * 22); });
       x.font = 'italic 12px "Segoe UI",system-ui,Arial,sans-serif';
       x.fillStyle = 'rgba(255,255,255,0.95)';
-      x.fillText('"' + tagline + '"', pad + 78, (nameLines.length > 1 ? 84 : 68));
+      if (tagline) x.fillText('"' + tagline + '"', pad + 78, (nameLines.length > 1 ? 84 : 68));
 
       // services heading
       x.fillStyle = '#c2410c';
@@ -302,8 +290,8 @@ var IntroCard = {
       x.fillStyle = '#e5e7eb'; x.font = '12.5px "Segoe UI Emoji","Segoe UI",system-ui,Arial';
       x.fillStyle = '#ffffff';
       var cyy = contactY + 26;
-      x.fillText('📞 ' + ph1 + (ph2 ? '  |  ' + ph2 : ''), pad, cyy); cyy += 22;
-      x.fillText('📍 ' + addr, pad, cyy); cyy += 22;
+      if (ph1 || ph2) { x.fillText('📞 ' + [ph1, ph2].filter(Boolean).join('  |  '), pad, cyy); cyy += 22; }
+      if (addr) { x.fillText('📍 ' + addr, pad, cyy); cyy += 22; }
       if (email) { x.fillText('✉️ ' + email, pad, cyy); }
 
       // canvas तयार भयो — फर्काउने
@@ -440,6 +428,19 @@ var Brand = {
 
     // PWA manifest → product name
     try { this.updateManifest(); } catch (e) {}
+
+    // v7.0.0: user's OWN company everywhere outside the app/login brand (footer, welcome, admin)
+    try {
+      var c = Company.get();
+      document.querySelectorAll('[data-company-name]').forEach(function (el) { el.textContent = c.name || ''; });
+      document.querySelectorAll('[data-vendor-phone]').forEach(function (el) { el.textContent = SWAGATIK_VENDOR.supportPhone; });
+      var wn = document.getElementById('welcome-co-name'); if (wn) wn.textContent = c.name || P;
+      var ws = document.getElementById('welcome-co-sub'); if (ws) ws.textContent = [c.address, c.phone1 ? '📞 ' + c.phone1 : ''].filter(Boolean).join(' • ');
+      var wc = document.getElementById('welcome-co-chips');
+      if (wc) wc.innerHTML = Company.introServices().slice(0, 6).map(function (x) {
+        return '<span style="background:rgba(249,115,22,0.1);border:1px solid rgba(249,115,22,0.2);color:#f97316;font-size:0.55rem;padding:2px 6px;border-radius:20px;">' + esc(x.icon + ' ' + x.t) + '</span>';
+      }).join('');
+    } catch (e) {}
   },
 
   updateManifest: function () {

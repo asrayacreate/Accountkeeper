@@ -177,7 +177,7 @@ var Walkin = {
     var topic = this._tplName || 'Walk-in Welcome';
     var isPay = /payment|भुक्तानी|बाँकी/i.test(topic);
     // Short prompt → faster Gemini response
-    var system = 'Write a short polite WhatsApp message in Nepali (Devanagari) for ' + x.company + ' (construction/interior, Hetauda). 30-60 words, respectful, 1 emoji max, no invented facts or prices, no placeholders. End with: धन्यवाद 🙏 / ' + x.company + ' — 📞 ' + x.coPhone + '. Output only the message.';
+    var system = 'Write a short polite WhatsApp message in Nepali (Devanagari) for ' + Company.aiContext() + '. 30-60 words, respectful, 1 emoji max, no invented facts or prices, no placeholders. End with: धन्यवाद 🙏 / ' + x.company + (x.coPhone ? ' — 📞 ' + x.coPhone : '') + '. Output only the message.';
     var user = 'विषय: ' + topic
       + (x.name ? '\nनाम: ' + x.name : '')
       + (x.service ? '\nसेवा: ' + x.service : '')

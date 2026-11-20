@@ -23,6 +23,10 @@ var App = {
     if(bn) bn.style.display='';
     var fy=STORE.get('pk3_settings',{}).fiscalYear||autoFiscalYear();
     setText('tb-fy','FY '+fy);
+    // v7.0.0: Modules On/Off + first-run Setup Wizard
+    try { Modules.apply(); Modules.render(); } catch(e) { console.warn('Modules', e); }
+    try { Settings.renderBusiness && Settings.renderBusiness(); } catch(e) {}
+    setTimeout(function(){ try { SetupWizard.maybeAutoOpen(); } catch(e){} }, 600);
   },
   navigate: function(page) {
     // ═══════ SUPER ADMIN GATE (v4.0) — block direct access ═══════
@@ -42,6 +46,12 @@ var App = {
     // Role check (admin AND superadmin can access non-STAFF pages)
     if(currentUser && currentUser.role!=='admin' && currentUser.role!=='superadmin' && STAFF_PAGES.indexOf(page)===-1) {
       App.toast('🔒 Admin access only','error'); return;
+    }
+    // v7.0.0: a page whose module is switched Off cannot be opened
+    if(typeof Modules!=='undefined' && !Modules.pageAllowed(page)){
+      App.toast('🎛️ यो फिचर बन्द छ — Settings → Modules बाट On गर्नुहोस्','info',3000);
+      if(this.currentPage!=='dashboard' && Modules.pageAllowed(this.currentPage)) return;
+      page='dashboard';
     }
     if(page!=='ratelist' && typeof RateList!=='undefined') RateList._editMode=false;
     try{ if(typeof Notif!=='undefined') Notif.close(); }catch(e){}
@@ -68,7 +78,7 @@ var App = {
       'dailyreport':'Daily Report','daybook':'Day Book','expenses':'Expenses','staff':'Staff Log',
       'stocklist':'Stock','salesteam':'Sales Team','bulkmsg':'Bulk Message',
       'account-summary':'Account Summary','backup':'Backup & Restore','audit':'Audit Log',
-      'settings':'Settings','projects':'Projects / Sites'};
+      'settings':'Settings','projects':'Projects / Sites','payables':'Supplier र मिस्त्री खाता'};
     setText('page-title', titles[page]||page);
     // Back button
     var bb=document.getElementById('back-btn');

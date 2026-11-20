@@ -4,7 +4,7 @@ var VCard = {
   _curColor: 0, _dir: '135deg',
   render: function(){
     var vc=STORE.get('pk3_vcard',{})||{};
-    setVal('vc-name',vc.name||''); setVal('vc-title',vc.title||''); setVal('vc-company',vc.company||'PRERAK MULTIPURPOSE PVT LTD'); setVal('vc-phone1',vc.phone1||'9855069733'); setVal('vc-phone2',vc.phone2||''); setVal('vc-email',vc.email||''); setVal('vc-web',vc.web||''); setVal('vc-addr',vc.addr||'Hetauda-2, Makwanpur');
+    setVal('vc-name',vc.name||''); setVal('vc-title',vc.title||''); setVal('vc-company',vc.company||Company.name('')); setVal('vc-phone1',vc.phone1||Company.get().phone1); setVal('vc-phone2',vc.phone2||''); setVal('vc-email',vc.email||Company.get().email); setVal('vc-web',vc.web||Company.get().website); setVal('vc-addr',vc.addr||Company.get().address);
     // Color presets
     var colorsDiv=document.getElementById('vc-colors'); if(colorsDiv) colorsDiv.innerHTML=this._colors.map(function(c,i){return '<div onclick="VCard.setPresetColor('+i+')" class="vc-preset" style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,'+c.c1+','+c.c2+');cursor:pointer;border:2px solid '+(i===VCard._curColor?'#fff':'transparent')+'"></div>';}).join('');
     this.update();
@@ -138,7 +138,7 @@ var VCard = {
       canvas.toBlob(function(blob){
         if(!blob){ if(Wa.send(phone,msg)&&m) m.classList.remove('open'); return; }
         var file=null;
-        try{ file=new File([blob],'prerak-visiting-card.png',{type:'image/png'}); }catch(e){}
+        try{ file=new File([blob],'visiting-card.png',{type:'image/png'}); }catch(e){}
         // MOBILE: native share sheet → WhatsApp मा image सिधै जान्छ
         if(file && navigator.canShare && navigator.canShare({files:[file]})){
           navigator.share({files:[file], text:msg}).then(function(){
@@ -154,7 +154,7 @@ var VCard = {
   },
   _fallbackImgShare: function(blob, phone, msg, m){
     var url=URL.createObjectURL(blob);
-    var a=document.createElement('a'); a.href=url; a.download='prerak-visiting-card.png';
+    var a=document.createElement('a'); a.href=url; a.download='visiting-card.png';
     document.body.appendChild(a); a.click(); a.remove();
     setTimeout(function(){ URL.revokeObjectURL(url); },3000);
     App.toast('🖼️ Card image download भयो — WhatsApp मा 📎 photo attach गरेर पठाउनुस्','success',6000);
@@ -165,11 +165,11 @@ var VCard = {
     VCard._drawCard(function(canvas){
       canvas.toBlob(function(blob){
         var file=null;
-        try{ file=new File([blob],'prerak-visiting-card.png',{type:'image/png'}); }catch(e){}
+        try{ file=new File([blob],'visiting-card.png',{type:'image/png'}); }catch(e){}
         if(file && navigator.canShare && navigator.canShare({files:[file]})){
           navigator.share({files:[file]}).catch(function(){});
         } else {
-          var a=document.createElement('a'); a.download='prerak-card.png'; a.href=canvas.toDataURL('image/png'); a.click();
+          var a=document.createElement('a'); a.download='visiting-card.png'; a.href=canvas.toDataURL('image/png'); a.click();
           App.toast('🖼️ Card PNG downloaded','success');
         }
       },'image/png');
@@ -177,7 +177,7 @@ var VCard = {
   },
   downloadImage: function(){
     VCard._drawCard(function(canvas){
-      var a=document.createElement('a'); a.download='prerak-card.png'; a.href=canvas.toDataURL('image/png'); a.click();
+      var a=document.createElement('a'); a.download='visiting-card.png'; a.href=canvas.toDataURL('image/png'); a.click();
       App.toast('⬇️ Card PNG saved','success');
     });
   },

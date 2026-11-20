@@ -5,7 +5,7 @@ var QR = {
     var inp = document.getElementById('qr-url');
     if(inp && !inp.value){
       var co = STORE.get('pk3_settings',{})||{};
-      var phone = (co.phone1||'9855069733').replace(/[^0-9]/g,'');
+      var phone = (co.phone1||'').replace(/[^0-9]/g,'');
       // Default to a WhatsApp link for the business
       inp.value = 'https://wa.me/977'+phone;
     }
@@ -124,7 +124,7 @@ var VatCalc = {
       + 'शुद्ध मूल्य: '+fmtRs(v.pre)+'\n'
       + 'VAT ('+v.rate+'%): '+fmtRs(v.vat)+'\n'
       + 'जम्मा: '+fmtRs(v.total)+'\n'
-      + '— PRERAK MULTIPURPOSE PVT LTD';
+      + '— ' + Company.name();
   },
 
   copyAll: function(){

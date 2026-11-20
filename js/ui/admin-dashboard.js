@@ -243,7 +243,7 @@ var AdminDash = {
       '⏳ म्याद: *' + expTxt + '*\n\n' +
       'App खोल्दा Company Name ठ्याक्कै माथिको जस्तै टाइप गरी Key हाल्नुहोस्।\n' +
       'एक पटक हाले पछि फेरि सोध्दैन। ✅\n\n' +
-      '— PRERAK MULTIPURPOSE PVT LTD 📞 9855069733';
+      '— Swagatik 📞 ' + SWAGATIK_VENDOR.supportPhone;
     window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank');
   },
 
@@ -518,7 +518,7 @@ var AdminDash = {
 
   // Prepare a clean copy for a NEW paying customer (v6.0.6)
   //   Clears: all business data + company/settings + license storage.
-  //   Keeps: Prerak publisher/footer/support branding (in file, not storage).
+  //   Keeps: Swagatik product branding (in file, not storage).
   prepareForCustomer: function() {
     AdminDash._dangerConfirm('PREPARE COPY FOR NEW CUSTOMER \u2014 wipes ALL data, settings & activation', function(){
       var c = prompt('This makes a BLANK copy for a new customer.\n\nType NEW (uppercase) to confirm \u2014 all current data, company settings and license will be erased:');
@@ -538,7 +538,7 @@ var AdminDash = {
 
 // Version check console message
 console.log('%cSwagatik v'+APP_VERSION+' — LIVE', 'color:#f97316;font-weight:bold;font-size:16px');
-console.log('Company: PRERAK MULTIPURPOSE PVT LTD, Hetauda-2, Makwanpur');
+try { console.log('Company: ' + Company.name('(Settings मा भरिएको छैन)')); } catch (e) {}
 console.log('Build: 2083 BS | Role-based access | Offline single-file');
 try { var _ls = License.status(); console.log('License:', _ls.active ? (_ls.company + ' — ' + (_ls.lifetime ? 'Lifetime' : _ls.daysLeft + ' days left')) : 'not activated'); } catch(e){}
 

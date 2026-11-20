@@ -15,6 +15,10 @@ function downloadText(content, filename, mime){
 // APP INITIALIZATION
 // ============================================================
 document.addEventListener('DOMContentLoaded', function(){
+  // STEP 0 (v7.0.0): fresh-vs-existing detection + one-time safe migration. MUST run before
+  // any default data is seeded, so a fresh device can be told apart from an existing one.
+  try { Migrations.run(); } catch(e) { console.warn('v7 migration error:', e); }
+  try { Modules.apply(); } catch(e) {}
   // STEP 1: Migrate any old bare keys → pk3_* keys
   try { migrateOldKeysToPk3(); } catch(e) { console.warn('migrate error:', e); }
   // STEP 2: Repair/seed business data (services, rates, templates)

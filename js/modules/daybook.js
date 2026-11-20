@@ -109,8 +109,8 @@ var DayBook = {
     var e = this.getData().find(function(x){return x.id===id;});
     if(!e){ App.toast('Entry भेटिएन','error'); return; }
     var co = STORE.get('pk3_settings', {}) || {};
-    var cName = co.companyName || 'PRERAK MULTIPURPOSE PVT LTD';
-    var cAddr = co.address || 'Hetauda, Nepal';
+    var cName = Company.name('');
+    var cAddr = co.address || '';
     var cPhone = co.phone || '';
     var cPan = co.pan || co.vat || '';
     var isInc = e.type==='income';
@@ -188,7 +188,7 @@ var DayBook = {
     var net = inc-exp;
     var fl = {today:'आज',week:'७ दिन',month:'यो महिना',all:'सबै'}[this._filter]||this._filter;
     var msg = '*📒 Day Book — '+fl+'*\n'
-      + (co.companyName||'PRERAK MULTIPURPOSE PVT LTD')+'\n'
+      + Company.name()+'\n'
       + '━━━━━━━━━━━━━━━\n'
       + '💰 Income: '+fmtRs(inc)+'\n'
       + '💸 Expense: '+fmtRs(exp)+'\n'

@@ -1,0 +1,9 @@
+/* ═══════════ v7.0.0 — Modules On/Off, Setup Wizard, Payables, Measurement, Photos ═══════════ */
+/* Modules: anything tagged data-module="x" hides while module x is Off (see js/core/modules.js) */
+html[data-mod-off~="projects"] [data-module~="projects"],
+html[data-mod-off~="measurement"] [data-module~="measurement"],
+html[data-mod-off~="payables"] [data-module~="payables"],
+html[data-mod-off~="stock"] [data-module~="stock"],
+html[data-mod-off~="quotations"] [data-module~="quotations"],
+html[data-mod-off~="walkin"] [data-module~="walkin"],
+html[data-mod-off~="ai"] [data-module~="ai"] { display: none !important; }
