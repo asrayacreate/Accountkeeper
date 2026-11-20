@@ -119,6 +119,12 @@ var Invoices = {
         });
       });
     }catch(e){}
+    // v7.2.0: stock items too (label shows मौज्दात)
+    try{
+      if(Stock.autoOn()) Stock.getData().forEach(function(st){
+        if(st&&st.name){ var o=document.createElement('option'); o.value=st.name; o.label='📦 Stock: '+(st.qty||0)+' '+(st.unit||'')+(st.selling?' • Rs.'+st.selling:''); idl.appendChild(o); }
+      });
+    }catch(e){}
     document.body.appendChild(idl);
 
     tb.innerHTML=this._rows.map(function(r,i){
@@ -145,6 +151,7 @@ var Invoices = {
           return false;
         });
       });
+      if(!found){ try{ var st=Stock.autoOn() && Stock.find(r.name); if(st && parseFloat(st.selling)>0) found={rate:st.selling,unit:st.unit}; }catch(e){} }
       if(found){ r.rate=parseFloat(found.rate)||0; if(found.unit) r.unit=found.unit; this.renderRows(); this.calc(); }
     }catch(e){}
   },
@@ -295,17 +302,19 @@ var Invoices = {
     var list=this.getData();
     if(this._editId){
       var idx=list.findIndex(function(x){return x.id===rec.id;});
-      if(idx>=0){ rec.created=list[idx].created; list[idx]=rec; }
+      if(idx>=0){ rec.created=list[idx].created; if(list[idx].stockTracked) rec.stockTracked=true; list[idx]=rec; }
       else list.unshift(rec);
       Audit.log('INVOICE','Updated: '+rec.invNum);
     } else {
       rec.created=new Date().toISOString();
+      rec.stockTracked=true;   // v7.2.0: new bills move stock (old bills never do)
       list.unshift(rec);
       Audit.log('INVOICE','Created: '+rec.invNum+' '+cust.name);
       try{ Activity.add('🧾 Invoice created: '+rec.invNum+' — '+cust.name); }catch(e){}
     }
     STORE.set('pk3_invoices',list);
     App.toast(this._editId?'✅ Invoice updated!':'✅ Invoice saved!','success');
+    try{ Stock.warnLow(Stock.syncInvoice(rec)); }catch(e){ console.warn('stock sync', e); }
     this._editId=null; this._rows=[];
     document.getElementById('inv-edit-modal').classList.remove('open');
     this.render();
@@ -366,7 +375,7 @@ var Invoices = {
     if(!inv._demo){ App.toast('ℹ️ बिल नम्बर नटुटोस् भनेर Invoice delete हुँदैन — कारणसहित Cancel गर्नुहोस्','warning',3500); return this.cancelModal(id); }
     return this._hardDelete(id);
   },
-  _hardDelete: function(id){ if(!confirm('Invoice delete गर्ने?'))return; STORE.set('pk3_invoices',this.getData().filter(function(x){return x.id!==id;})); try{ QuoteConvert.onInvoiceDeleted(id); }catch(e){} Audit.log('INVOICE','Deleted'); this.render(); App.toast('Invoice deleted','info'); },
+  _hardDelete: function(id){ if(!confirm('Invoice delete गर्ने?'))return; STORE.set('pk3_invoices',this.getData().filter(function(x){return x.id!==id;})); try{ QuoteConvert.onInvoiceDeleted(id); }catch(e){} try{ Stock.reverse('inv:'+id,{note:'🗑 Invoice deleted'}); }catch(e){} Audit.log('INVOICE','Deleted'); this.render(); App.toast('Invoice deleted','info'); },
 
   // ═══ v7.1.0: Invoice Cancel (बिल रद्द) + Credit Note — audit safe ═══
   // • Number stays used (nextNum scans every invoice, cancelled too), record stays in history with a CANCELLED badge.
@@ -415,6 +424,7 @@ var Invoices = {
     }
     if(mine.length || refund) STORE.set('pk3_ledger', led);
     STORE.set('pk3_invoices', list);
+    try{ Stock.syncInvoice(inv); }catch(e){}   // v7.2.0: रद्द बिलको सामान stock मा फिर्ता
     // free the source quotation / estimate so it can be converted again (the cancelled bill stays in history)
     [['pk3_quotations'],['pk3_estimates']].forEach(function(k){
       var l=STORE.get(k[0],[])||[], ch=false;
