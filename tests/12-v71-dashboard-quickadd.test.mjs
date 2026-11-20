@@ -84,6 +84,15 @@ test('⚖️ Receivables vs Payables and 🏆 Top 5 items', async () => {
     return DashCharts.topItems(5, 'months');
   });
   assert.equal(q.source, 'quotation');
+  // Invoice cancelled with reason (PR #4) → out of sales, receivables and Top 5
+  const c = await page.evaluate(() => {
+    STORE.set('pk3_invoices', [{ id: 'k1', custId: 'c1', invNum: 'INV-9', date: todayISO(), amount: 20000, paid: 0, balance: 20000, status: 'Pending', items: [{ name: 'Gone', amount: 20000 }] }]);
+    STORE.set('pk3_ledger', []); STORE.set('pk3_daybook', []); STORE.set('pk3_quotations', []);
+    const before = { sales: DashCharts.monthly(6)[5].sales, recv: DashCharts.dues().receivable };
+    Invoices.cancel('k1', 'गलत बिल बन्यो');
+    return { before, sales: DashCharts.monthly(6)[5].sales, recv: DashCharts.dues().receivable, top: DashCharts.topItems(5, 'all').items.length };
+  });
+  assert.deepEqual(c, { before: { sales: 20000, recv: 20000 }, sales: 0, recv: 0, top: 0 });
   assert.deepEqual(q.items.map((x) => x.name), ['UPVC Window']);
   assert.deepEqual(errors, []);
   await ctx.close();

@@ -68,7 +68,7 @@ var Voice = {
   LANGS: [{ code: 'ne-NP', label: 'नेपाली' }, { code: 'en-US', label: 'English' }],
   // Known note/remark/description fields. Any element with data-voice also gets a mic.
   TARGETS: ['db-desc', 'db-notes', 'dash-db-desc', 'c-notes', 'q-details', 'fu-note', 'bk-remarks', 'ltx-desc',
-            'stk-notes', 'stk-adj-note', 'stf-snotes', 'stm-notes', 'peshki-note', 'pl-content'],
+            'stk-notes', 'stk-adj-note', 'stf-snotes', 'stm-notes', 'peshki-note', 'pl-content', 'inv-cxl-reason'],
   _rec: null, _active: null,
 
   Ctor: function () { return window.SpeechRecognition || window.webkitSpeechRecognition || null; },
