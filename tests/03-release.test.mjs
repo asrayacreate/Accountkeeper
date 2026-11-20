@@ -76,14 +76,21 @@ test('service worker serves the newest app after a release (no stuck old version
   // deploy a "new release"
   served.html = served.html.replace(/var APP_VERSION = '[\d.]+';/, "var APP_VERSION = '99.0.0';");
   served.sw = served.sw.replace(/swagatik-cache-v\d+/, 'swagatik-cache-v999');
-  await page.reload();
-  await page.waitForFunction(() => typeof APP_VERSION !== 'undefined');
   assert.notEqual(v1, '99.0.0');
-  assert.equal(await page.evaluate(() => APP_VERSION), '99.0.0');
+  // The app may also reload itself when the new service worker takes over — tolerate that.
+  const until = async (fn) => {
+    for (let i = 0; i < 60; i++) {
+      try { if (await page.evaluate(fn)) return true; } catch (e) { /* navigating */ }
+      await new Promise((r) => setTimeout(r, 250));
+    }
+    return false;
+  };
+  await page.reload().catch(() => {});
+  assert.ok(await until(() => typeof APP_VERSION !== 'undefined' && APP_VERSION === '99.0.0'), 'new version shown');
+  await new Promise((r) => setTimeout(r, 1500));   // let any self-reload settle
   // offline still works from cache
   await ctx.setOffline(true);
-  await page.reload();
-  await page.waitForFunction(() => typeof APP_VERSION !== 'undefined');
-  assert.equal(await page.evaluate(() => APP_VERSION), '99.0.0');
+  await page.reload().catch(() => {});
+  assert.ok(await until(() => typeof APP_VERSION !== 'undefined' && APP_VERSION === '99.0.0'), 'offline copy is the new version');
   await ctx.close();
 });

@@ -562,6 +562,59 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
 .inv-tot-grand b{color:var(--accent);}
 .inv-doc-actions{display:flex;justify-content:flex-end;gap:8px;padding:14px 18px;border-top:1px solid var(--border);background:var(--surface-2);}
 @media(max-width:640px){.inv-doc-foot{grid-template-columns:1fr;}.inv-foot-left{grid-template-columns:1fr 1fr;}.inv-doc-head{flex-direction:column;gap:8px;}}
+/* ── v6.9.0: Projects / Sites ── */
+.proj-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:12px;}
+.proj-stat{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:10px 12px;min-width:0;}
+.proj-stat-l{font-size:0.7rem;color:var(--text-muted);}
+.proj-stat-v{font-size:1.02rem;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.proj-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;}
+.proj-card{padding:14px;cursor:pointer;transition:var(--trans);min-width:0;}
+.proj-card:hover{border-color:var(--accent);}
+.proj-top{display:flex;gap:8px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;}
+.proj-name{font-weight:800;font-size:0.95rem;overflow-wrap:anywhere;}
+.proj-sub{font-size:0.72rem;color:var(--text-muted);margin-top:2px;overflow-wrap:anywhere;}
+.proj-stage{font-size:0.66rem;font-weight:700;padding:3px 9px;border-radius:20px;border:1px solid;white-space:nowrap;}
+.proj-bar{height:8px;background:var(--surface-2);border-radius:10px;overflow:hidden;margin-top:10px;}
+.proj-bar>div{height:100%;border-radius:10px;transition:width .4s ease;}
+.proj-pct{font-size:0.7rem;color:var(--text-muted);margin-top:4px;}
+.proj-nums{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 12px;margin-top:10px;}
+.proj-nums>div{display:flex;flex-direction:column;min-width:0;}
+.proj-nums span{font-size:0.66rem;color:var(--text-muted);}
+.proj-nums b{font-size:0.88rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.proj-steps{display:flex;gap:4px;flex-wrap:wrap;}
+.proj-step{font-size:0.64rem;padding:3px 8px;border-radius:12px;border:1px solid var(--border);color:var(--text-muted);}
+.proj-step.on{color:#fff;font-weight:700;}
+@media(max-width:480px){.proj-list{grid-template-columns:1fr;}.proj-summary{grid-template-columns:repeat(2,minmax(0,1fr));}}
+
+/* ── v6.9.0: mobile polish — popups, tables and buttons never cut off ── */
+/* The menu button used to sit in the page flow and pushed the whole app ~13px
+   off the right edge on phones. Pin it in the top bar instead. */
+@media(max-width:899px){
+  #hamburger{position:fixed;top:10px;left:8px;z-index:60;width:38px;height:38px;flex:none;}
+  .topbar{padding-left:54px!important;}
+  #main{min-width:0;}
+}
+html,body{max-width:100%;overflow-x:hidden;}
+.modal-overlay{overscroll-behavior:contain;}
+.modal{overflow-x:hidden;}
+.modal .table-wrap,.modal table{max-width:100%;}
+.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+img,canvas,svg,video{max-width:100%;}
+@media(max-width:640px){
+  .modal-overlay{padding:8px;align-items:flex-end;}
+  .modal{max-height:94vh;max-height:94dvh;padding:14px 12px calc(14px + env(safe-area-inset-bottom));border-radius:16px 16px 12px 12px;}
+  .modal-head{margin-bottom:12px;padding-bottom:10px;}
+  .modal-title{font-size:0.98rem;overflow-wrap:anywhere;}
+  .form-actions{position:sticky;bottom:-14px;background:var(--surface);padding-top:10px;margin-top:10px;flex-wrap:wrap;z-index:2;}
+  .form-actions .btn{flex:1 1 auto;}
+  .btn-group{flex-wrap:wrap;}
+  .section-head{flex-wrap:wrap;gap:8px;}
+  .table-wrap table{min-width:520px;}
+  .table-wrap td,.table-wrap th{padding:8px 8px;}
+  .card{max-width:100%;}
+  input,select,textarea{font-size:16px;}  /* stops iOS zooming into fields */
+  #aiwa-modal>div,#est-choice-modal>div{max-height:94dvh;}
+}
 </style>
 <style>
 /* ═══ v4.8 additions: global search + clock ═══ */
@@ -727,6 +780,7 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
     <div class="nav-item" data-page="qrcode" onclick="App.navigate('qrcode')"><span class="icon">📲</span>QR Code</div>
 
     <div class="nav-section">Business</div>
+    <div class="nav-item" data-page="projects" data-role="admin" onclick="App.navigate('projects')"><span class="icon">🏗️</span>Projects / Sites</div>
     <div class="nav-item" data-page="ratelist" onclick="App.navigate('ratelist')"><span class="icon">💰</span>Rate List</div>
     <div class="nav-item" data-page="vcard" onclick="App.navigate('vcard')"><span class="icon">💼</span>Visiting Card</div>
     <div class="nav-item" data-page="brochures" onclick="App.navigate('brochures')"><span class="icon">📄</span>Brochures</div>
@@ -1161,6 +1215,21 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
   <div class="page" id="page-invoices">
     <div class="section-head"><div class="search-wrap"><input type="text" id="inv-search" placeholder="Search invoice..." oninput="Invoices.render()"></div><button onclick="Invoices.create()" class="btn btn-sm btn-primary">+ New Invoice</button></div>
     <div class="card"><div class="table-wrap"><table><thead><tr><th style="width:90px;">Invoice #</th><th>Customer</th><th>Service</th><th style="text-align:right;">Amount</th><th style="text-align:right;">Paid</th><th style="text-align:right;">Balance</th><th>Status</th><th style="width:80px;">मिति</th><th style="width:70px;"></th></tr></thead><tbody id="inv-table"></tbody></table></div><div id="no-inv" class="empty-state" style="display:none;"><div class="icon">🧾</div><div class="title">कुनै Invoice छैन</div><button onclick="Invoices.create()" class="btn btn-primary">+ Create Invoice</button></div></div>
+  </div>
+
+  <!-- ========================= PROJECTS / SITES PAGE (v6.9.0) ========================= -->
+  <div class="page" id="page-projects">
+    <div class="section-head">
+      <div><div class="section-title">🏗️ Projects / Sites</div><div class="section-subtitle">निर्माण र इन्टेरियर कामको Stage, प्रगति र नाफा/घाटा</div></div>
+      <button onclick="Projects.openForm()" class="btn btn-sm btn-primary">➕ नयाँ Project</button>
+    </div>
+    <div class="proj-summary" id="proj-summary"></div>
+    <div class="btn-group" style="margin-bottom:12px;">
+      <button class="btn btn-sm btn-primary" id="proj-f-active" onclick="Projects.setFilter('active')">चालु</button>
+      <button class="btn btn-sm btn-secondary" id="proj-f-completed" onclick="Projects.setFilter('completed')">सम्पन्न</button>
+      <button class="btn btn-sm btn-secondary" id="proj-f-all" onclick="Projects.setFilter('all')">सबै</button>
+    </div>
+    <div id="proj-list" class="proj-list"></div>
   </div>
 
   <!-- ========================= FOLLOW-UPS PAGE ========================= -->
@@ -1607,6 +1676,21 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
           <div class="form-group"><label>Account Number</label><input type="text" id="set-bank-acc" oninput="Settings.save()"></div>
           <div class="form-group"><label>eSewa ID</label><input type="tel" id="set-esewa" oninput="Settings.save()"></div>
           <div class="form-group"><label>Khalti ID</label><input type="tel" id="set-khalti" oninput="Settings.save()"></div>
+          <div class="form-group full"><label>📲 Payment QR (eSewa / Fonepay / Bank QR)</label>
+            <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+              <div style="width:110px;height:110px;border-radius:10px;border:2px dashed var(--border);background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;">
+                <span id="set-payqr-ph" style="font-size:2rem;color:#9ca3af;">▦</span>
+                <img id="set-payqr-img" alt="Payment QR" style="display:none;width:100%;height:100%;object-fit:contain;">
+              </div>
+              <div style="display:flex;flex-direction:column;gap:6px;min-width:0;flex:1;">
+                <input type="file" id="set-payqr-file" accept="image/*" onchange="PayQR.upload(event)" style="display:none;">
+                <button type="button" class="btn btn-sm btn-primary" onclick="document.getElementById('set-payqr-file').click()">📤 QR Upload</button>
+                <button type="button" id="set-payqr-del" class="btn btn-sm btn-danger" onclick="PayQR.remove()" style="display:none;">🗑️ हटाउनुहोस्</button>
+                <div style="font-size:0.7rem;color:var(--text-muted);line-height:1.5;">Quotation / Invoice / Estimate print र PDF को तल यो QR देखिन्छ।</div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group full"><label>📜 Default Terms &amp; Conditions (Print / PDF)</label><textarea id="set-doc-terms" rows="3" oninput="PayQR.saveTerms()" placeholder="जस्तै: १) ५०% अग्रिम, बाँकी काम सकिएपछि। २) Quotation १५ दिनसम्म मान्य। ३) VAT सहित।"></textarea></div>
         </div>
         <div style="margin-top:14px;display:flex;justify-content:flex-end;">
           <button type="button" onclick="Settings.saveManual('payment')" class="btn btn-primary">💾 Save Payment Details</button>
@@ -2096,6 +2180,7 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
         <div class="form-group" id="db-pay-grp"><label>💳 भुक्तानी</label><select id="db-pay"><option value="Cash">💵 Cash</option><option value="Bank">🏦 Bank</option><option value="Online">📱 Online</option><option value="Cheque">📄 Cheque</option></select></div>
         <div class="form-group"><label>Date (BS)</label><div class="bs-picker-display" onclick="BSPicker.open('db-date-inp','📅 Date')"><span id="db-date-inp-text">📅 मिति...</span><span style="color:var(--text-muted);font-size:0.8rem;">▼</span></div><input type="hidden" id="db-date-inp"><input type="hidden" id="db-date-inp-bs"></div>
         <div class="form-group full"><label>Notes</label><input type="text" id="db-notes" placeholder="Optional..."></div>
+        <div class="form-group full" id="db-project-grp" style="display:none;"><label>🏗️ Project / Site (optional)</label><select id="db-project"></select></div>
       </div>
       <div class="form-actions"><button class="btn btn-secondary" onclick="document.getElementById('db-modal').classList.remove('open')">Cancel</button><button class="btn btn-primary" onclick="DayBook.save()">💾 Save</button></div>
     </div>
@@ -2134,8 +2219,8 @@ tr.expand-row td{padding:0!important;border-bottom:2px solid var(--accent)!impor
 
   <!-- Image Preview Modal (full-size view) -->
   <div class="modal-overlay" id="img-preview-modal" onclick="if(event.target===this)this.classList.remove('open')">
-    <div class="modal" style="max-width:600px;background:transparent;box-shadow:none;border:none;padding:0;">
-      <button class="modal-close" onclick="document.getElementById('img-preview-modal').classList.remove('open')" style="position:absolute;top:-40px;right:0;background:rgba(0,0,0,0.6);color:#fff;border-radius:50%;width:32px;height:32px;">✕</button>
+    <div class="modal" style="max-width:600px;background:transparent;box-shadow:none;border:none;padding:0;position:relative;">
+      <button class="modal-close" onclick="document.getElementById('img-preview-modal').classList.remove('open')" style="position:absolute;top:8px;right:8px;z-index:2;background:rgba(0,0,0,0.6);color:#fff;border-radius:50%;width:32px;height:32px;">✕</button>
       <img id="img-preview-full" src="" style="width:100%;height:auto;max-height:80vh;object-fit:contain;border-radius:12px;">
     </div>
   </div>
@@ -4230,7 +4315,7 @@ var App = {
       'dailyreport':'Daily Report','daybook':'Day Book','expenses':'Expenses','staff':'Staff Log',
       'stocklist':'Stock','salesteam':'Sales Team','bulkmsg':'Bulk Message',
       'account-summary':'Account Summary','backup':'Backup & Restore','audit':'Audit Log',
-      'settings':'Settings'};
+      'settings':'Settings','projects':'Projects / Sites'};
     setText('page-title', titles[page]||page);
     // Back button
     var bb=document.getElementById('back-btn');
@@ -4243,7 +4328,7 @@ var App = {
     var bnEl=document.getElementById('bn-'+bnKey);
     if(bnEl) bnEl.classList.add('active');
     // Render page
-    var renders={'expenses':function(){Expenses.render();},'cashbook':function(){CashBook.render();},'returns':function(){SalesReturns.render();},'customers':function(){Customers.render();},'quotations':function(){Quotations.render();},'followups':function(){Followups.render();},'planner':function(){Planner.render();},'daybook':function(){DayBook.render();},'ratelist':function(){RateList.render();},'staff':function(){Staff.render();},'stocklist':function(){Stock.render();},'salesteam':function(){SalesTeam.render();},'bulkmsg':function(){BulkMsg.render();},'account-summary':function(){AccountSummary.render();},'backup':function(){Backup.render();},'audit':function(){Audit.render();},'settings':function(){Settings.render();try{DBX.render();}catch(e){}},'add-customer':function(){Customers.initForm();},'add-quotation':function(){Quotations.initForm();},'add-followup':function(){Followups.initForm();},'invoices':function(){Invoices.render();},'ledger':function(){Ledger.render();},'bakauta':function(){Bakauta.render();},'estimates-list':function(){Bakauta.renderList();},'estimate-new':function(){Estimate.init();},'vcard':function(){VCard.render();},'brochures':function(){Brochure.render();},'ai-assistant':function(){AIAssistant.render();},'admin-dashboard':function(){AdminDash.render();},'dailyreport':function(){Reports.render();},'walkin':function(){Walkin.render();},'qrcode':function(){QR.render();},'vatcalc':function(){VatCalc.render();},'dashboard':function(){Dashboard.render();}};
+    var renders={'projects':function(){Projects.render();},'expenses':function(){Expenses.render();},'cashbook':function(){CashBook.render();},'returns':function(){SalesReturns.render();},'customers':function(){Customers.render();},'quotations':function(){Quotations.render();},'followups':function(){Followups.render();},'planner':function(){Planner.render();},'daybook':function(){DayBook.render();},'ratelist':function(){RateList.render();},'staff':function(){Staff.render();},'stocklist':function(){Stock.render();},'salesteam':function(){SalesTeam.render();},'bulkmsg':function(){BulkMsg.render();},'account-summary':function(){AccountSummary.render();},'backup':function(){Backup.render();},'audit':function(){Audit.render();},'settings':function(){Settings.render();try{DBX.render();}catch(e){}},'add-customer':function(){Customers.initForm();},'add-quotation':function(){Quotations.initForm();},'add-followup':function(){Followups.initForm();},'invoices':function(){Invoices.render();},'ledger':function(){Ledger.render();},'bakauta':function(){Bakauta.render();},'estimates-list':function(){Bakauta.renderList();},'estimate-new':function(){Estimate.init();},'vcard':function(){VCard.render();},'brochures':function(){Brochure.render();},'ai-assistant':function(){AIAssistant.render();},'admin-dashboard':function(){AdminDash.render();},'dailyreport':function(){Reports.render();},'walkin':function(){Walkin.render();},'qrcode':function(){QR.render();},'vatcalc':function(){VatCalc.render();},'dashboard':function(){Dashboard.render();}};
     if(renders[page]) {
       try { renders[page](); }
       catch(e) { console.error('Page render error ['+page+']:', e); App.toast('⚠️ Page load error: '+e.message,'error'); }
@@ -4977,37 +5062,14 @@ var Quotations = {
     if(!preview){App.toast('✅ Quotation saved!','success');App.navigate('quotations');}
     else{this.showPreview(rec);}
   },
+  // v6.9.0: professional print/PDF layout (DocPrint) + 1-click Convert to Invoice
   showPreview: function(q) {
-    var co=STORE.get('pk3_settings',{});
-    var html='<div style="padding:20px;font-family:sans-serif;max-width:600px;margin:0 auto;">';
-    html+='<div style="text-align:center;margin-bottom:16px;"><div style="font-size:1.3rem;font-weight:900;color:#f97316;">'+(co.companyName||'PRERAK MULTIPURPOSE PVT LTD')+'</div>';
-    html+='<div style="font-size:0.8rem;color:#666;">'+(co.address||'Hetauda-2, Makwanpur')+' • '+(co.phone1||'9855069733')+'</div></div>';
-    html+='<div style="background:#f97316;color:#fff;padding:8px 14px;border-radius:6px;margin-bottom:14px;display:flex;justify-content:space-between;">';
-    html+='<span>QUOTATION</span><span>मिति: '+bsStringToDisplay(q.dateBs)+'</span></div>';
-    html+='<div style="margin-bottom:12px;"><b>Customer:</b> '+q.custName+' | <b>Phone:</b> '+q.custPhone+'</div>';
-    html+='<table style="width:100%;border-collapse:collapse;margin-bottom:12px;">';
-    html+='<tr style="background:#f97316;color:#fff;"><th style="padding:6px;">SN</th><th style="padding:6px;text-align:left;">Item</th><th style="padding:6px;">Qty</th><th style="padding:6px;">Unit</th><th style="padding:6px;text-align:right;">Rate</th><th style="padding:6px;text-align:right;">Amount</th></tr>';
-    (q.items||[]).forEach(function(r,i){html+='<tr style="border-bottom:1px solid #eee;"><td style="padding:6px;text-align:center;">'+(i+1)+'</td><td style="padding:6px;">'+r.name+'</td><td style="padding:6px;text-align:center;">'+(r.qty||0)+'</td><td style="padding:6px;text-align:center;">'+(r.unit||'')+'</td><td style="padding:6px;text-align:right;">'+fmtRs(r.rate||0)+'</td><td style="padding:6px;text-align:right;font-weight:700;">'+fmtRs((r.qty||0)*(r.rate||0))+'</td></tr>';});
-    var sub=(q.items||[]).reduce(function(s,r){return s+(r.qty||0)*(r.rate||0);},0);
-    html+='</table>';
-    html+='<div style="text-align:right;"><div>Subtotal: '+fmtRs(sub)+'</div>';
-    if(q.discount)html+='<div>Discount: -'+fmtRs(q.discount)+'</div>';
-    if(q.tax)html+='<div>Tax ('+q.tax+'%): +'+fmtRs(sub*(q.tax/100))+'</div>';
-    html+='<div style="font-size:1.1rem;font-weight:900;color:#f97316;border-top:2px solid #f97316;padding-top:6px;margin-top:4px;">Total: '+fmtRs(q.amount)+'</div>';
-    if(q.advance)html+='<div style="color:green;">Advance: '+fmtRs(q.advance)+'</div>';
-    if(q.balance)html+='<div style="color:red;">Balance: '+fmtRs(q.balance)+'</div>';
-    html+='</div></div>';
-    var m=document.getElementById('view-modal'); setText('view-modal-title','📋 Quotation Preview');
-    (function(){
-      var _mb=document.getElementById('view-modal-body');
-      _mb.innerHTML=html;
-      var _bd=document.createElement('div'); _bd.className='btn-group mt-3';
-      var _pb=document.createElement('button'); _pb.className='btn btn-primary'; _pb.textContent='🖨️ Print'; _pb.onclick=function(){window.print();};
-      var _wb=document.createElement('button'); _wb.className='btn btn-wa'; _wb.textContent='📱 WhatsApp';
-      var _qid=q.id; _wb.onclick=function(){Quotations.whatsapp(_qid);};
-      _bd.appendChild(_pb); _bd.appendChild(_wb); _mb.appendChild(_bd);
-    })();
-    m.classList.add('open');
+    var conv = QuoteConvert.isConverted(q);
+    DocPrint.preview(DocPrint.fromQuotation(q), '📋 Quotation — '+(q.custName||''), [
+      { label:'📱 WhatsApp', cls:'btn-wa', onClick:function(){ Quotations.whatsapp(q.id); } },
+      conv ? { label:'✅ Converted · '+(q.convertedInvNum||''), cls:'btn-secondary', id:'q-conv-btn', onClick:function(){ document.getElementById('view-modal').classList.remove('open'); App.navigate('invoices'); Invoices.preview(q.convertedInvId); } }
+           : { label:'✅ Convert to Invoice / Sale', cls:'btn-success', id:'q-conv-btn', onClick:function(){ QuoteConvert.fromQuotation(q.id); } }
+    ]);
   },
   whatsapp: function(id){
     var q = this.getData().find(function(x){ return x.id==id; });
@@ -5027,7 +5089,7 @@ var Quotations = {
     setText('q-filter-label',list.length+' quotations');
     if(!list.length){tb.innerHTML='';ne.style.display='';return;} ne.style.display='none';
     var statusColors={'Pending':'tag-yellow','Approved':'tag-green','Completed':'tag-blue','Cancelled':'tag-red'};
-    tb.innerHTML=list.map(function(q){return '<tr style="cursor:pointer;" onmouseover="this.style.background=\'var(--surface-2)\'" onmouseout="this.style.background=\'\'" onclick="Quotations.preview(\''+q.id+'\')"><td><div style="font-weight:600;">'+q.custName+(q._demo?' <span style="background:#f59e0b;color:#000;font-size:0.56rem;font-weight:800;padding:1px 5px;border-radius:7px;">DEMO</span>':'')+'</div><div style="font-size:0.72rem;color:var(--text-muted);">'+q.custPhone+'</div></td><td style="font-size:0.82rem;">'+(q.work||'—')+'</td><td style="text-align:right;font-weight:700;">'+fmtRs(q.amount)+'</td><td style="text-align:right;color:var(--green);">'+fmtRs(q.advance||0)+'</td><td style="font-size:0.78rem;">'+(q.dateBs?bsStringToDisplay(q.dateBs):fmtDisplayDate(q.date))+'</td><td><span class="tag '+(statusColors[q.status]||'tag-gray')+'">'+q.status+'</span>'+(q._returned?' <span class="tag tag-gray" style="font-size:0.56rem;">↩️ Returned</span>':'')+'</td><td onclick="event.stopPropagation();"><div class="btn-group"><button onclick="event.stopPropagation();Quotations.preview(\''+q.id+'\')" class="btn btn-xs btn-secondary" title="Preview">👁</button><button onclick="event.stopPropagation();Quotations.edit(\''+q.id+'\')" class="btn btn-xs btn-secondary" title="Edit">✏️</button><button onclick="event.stopPropagation();SalesReturns.open(\'quotation\',\''+q.id+'\')" class="btn btn-xs" style="background:#7f1d1d;color:#fff;" title="Return / Refund">↩️</button><button onclick="event.stopPropagation();Quotations.del(\''+q.id+'\')" class="btn btn-xs btn-danger" title="Delete">🗑</button></div></td></tr>';}).join('');
+    tb.innerHTML=list.map(function(q){return '<tr style="cursor:pointer;" onmouseover="this.style.background=\'var(--surface-2)\'" onmouseout="this.style.background=\'\'" onclick="Quotations.preview(\''+q.id+'\')"><td><div style="font-weight:600;">'+q.custName+(q._demo?' <span style="background:#f59e0b;color:#000;font-size:0.56rem;font-weight:800;padding:1px 5px;border-radius:7px;">DEMO</span>':'')+'</div><div style="font-size:0.72rem;color:var(--text-muted);">'+q.custPhone+'</div></td><td style="font-size:0.82rem;">'+(q.work||'—')+'</td><td style="text-align:right;font-weight:700;">'+fmtRs(q.amount)+'</td><td style="text-align:right;color:var(--green);">'+fmtRs(q.advance||0)+'</td><td style="font-size:0.78rem;">'+(q.dateBs?bsStringToDisplay(q.dateBs):fmtDisplayDate(q.date))+'</td><td><span class="tag '+(statusColors[q.status]||'tag-gray')+'">'+q.status+'</span>'+(QuoteConvert.isConverted(q)?' '+QuoteConvert.badge(q):'')+(q._returned?' <span class="tag tag-gray" style="font-size:0.56rem;">↩️ Returned</span>':'')+'</td><td onclick="event.stopPropagation();"><div class="btn-group">'+(QuoteConvert.isConverted(q)?'':'<button onclick="event.stopPropagation();QuoteConvert.fromQuotation(\''+q.id+'\')" class="btn btn-xs btn-success" data-convert="'+q.id+'" title="Convert to Invoice / Sale">✅ Invoice</button>')+'<button onclick="event.stopPropagation();Quotations.preview(\''+q.id+'\')" class="btn btn-xs btn-secondary" title="Preview">👁</button><button onclick="event.stopPropagation();Quotations.edit(\''+q.id+'\')" class="btn btn-xs btn-secondary" title="Edit">✏️</button><button onclick="event.stopPropagation();SalesReturns.open(\'quotation\',\''+q.id+'\')" class="btn btn-xs" style="background:#7f1d1d;color:#fff;" title="Return / Refund">↩️</button><button onclick="event.stopPropagation();Quotations.del(\''+q.id+'\')" class="btn btn-xs btn-danger" title="Delete">🗑</button></div></td></tr>';}).join('');
   },
   preview: function(id) { var q=this.getData().find(function(x){return x.id===id;}); if(q) this.showPreview(q); },
   edit: function(id) { var q=this.getData().find(function(x){return x.id===id;}); if(!q)return; this._edit=q; App.navigate('add-quotation'); },
@@ -5365,7 +5427,7 @@ var Invoices = {
         +' onclick="Invoices.preview(\''+i.id+'\')">'
         +'<td style="font-weight:700;">'+esc(i.invNum||'')+due+'</td>'
         +'<td>'+esc(i.custName||'')+'<div style="font-size:0.7rem;color:var(--text-muted);">'+esc(i.custPhone||'')+'</div></td>'
-        +'<td style="font-size:0.76rem;">'+esc(i.desc||'—')+'</td>'
+        +'<td style="font-size:0.76rem;">'+esc(i.desc||'—')+(i.fromQuote?'<div><span class="tag tag-blue" style="font-size:0.56rem;">📋 '+(i.fromQuote.type==='estimate'?'Estimate':'Quotation')+' बाट</span></div>':'')+'</td>'
         +'<td style="text-align:right;white-space:nowrap;">'+fmtRs(i.amount||0)+'</td>'
         +'<td style="text-align:right;color:var(--green);white-space:nowrap;">'+fmtRs(i.paid||0)+'</td>'
         +'<td style="text-align:right;font-weight:700;color:'+(bal>0?'var(--red)':'var(--green)')+';white-space:nowrap;">'+fmtRs(bal)+'</td>'
@@ -5378,90 +5440,17 @@ var Invoices = {
     }).join('');
   },
 
+  // v6.9.0: professional print/PDF layout with Payment QR (DocPrint)
   preview: function(id){
     var inv=this.getData().find(function(x){return x.id===id;}); if(!inv)return;
     this._curPreviewId = id;
-    var co=STORE.get('pk3_settings',{})||{};
-    var logo = co.logo || '';
-    var coName = co.companyName || 'PRERAK MULTIPURPOSE PVT LTD';
-    var bal = inv.balance != null ? inv.balance : ((parseFloat(inv.amount)||0)-(parseFloat(inv.paid)||0));
-    var items = Array.isArray(inv.items)&&inv.items.length ? inv.items : [{name:inv.desc||'Amount',qty:1,unit:'',rate:inv.amount||0,amount:inv.amount||0}];
-    var dateStr = inv.dateBs?bsStringToDisplay(inv.dateBs):fmtDisplayDate(inv.date);
-
-    var rowsHtml=items.map(function(r,i){
-      return '<tr>'
-        +'<td style="padding:7px 9px;border-bottom:1px solid #eee;">'+(i+1)+'</td>'
-        +'<td style="padding:7px 9px;border-bottom:1px solid #eee;">'+esc(r.name||'')+'</td>'
-        +'<td style="padding:7px 9px;border-bottom:1px solid #eee;text-align:center;">'+(r.qty||0)+' '+esc(r.unit||'')+'</td>'
-        +'<td style="padding:7px 9px;border-bottom:1px solid #eee;text-align:right;">'+fmtRs(r.rate||0)+'</td>'
-        +'<td style="padding:7px 9px;border-bottom:1px solid #eee;text-align:right;font-weight:600;">'+fmtRs((parseFloat(r.qty)||0)*(parseFloat(r.rate)||0))+'</td>'
-        +'</tr>';
-    }).join('');
-
-    var sub = inv.subtotal!=null?inv.subtotal:items.reduce(function(a,r){return a+(parseFloat(r.qty)||0)*(parseFloat(r.rate)||0);},0);
-    var stt = inv.status||'Pending';
-    var stColor = stt==='Paid'?'#16a34a':(stt==='Partial'?'#2563eb':(stt==='Cancelled'?'#6b7280':'#d97706'));
-
-    var html = '<div id="inv-print-area" style="padding:22px;font-family:\'Segoe UI\',sans-serif;max-width:640px;margin:0 auto;color:#1f2937;background:#fff;">'
-      // header
-      + '<div style="display:flex;align-items:center;gap:14px;border-bottom:3px solid #f97316;padding-bottom:14px;margin-bottom:18px;">'
-        + (logo?'<img src="'+logo+'" style="width:64px;height:64px;object-fit:contain;">':'')
-        + '<div style="flex:1;">'
-          + '<div style="font-size:22px;font-weight:900;color:#ea580c;letter-spacing:-0.5px;">'+esc(coName)+'</div>'
-          + '<div style="font-size:12px;color:#6b7280;margin-top:2px;">'+esc(co.address||'Hetauda-2, Makwanpur')+' • 📞 '+esc(co.phone1||'9855069733')+'</div>'
-          + (co.email?'<div style="font-size:12px;color:#6b7280;">✉️ '+esc(co.email)+'</div>':'')
-        + '</div>'
-        + '<div style="text-align:right;"><div style="font-size:26px;font-weight:900;color:#e5e7eb;letter-spacing:1px;">INVOICE</div></div>'
-      + '</div>'
-      // meta strip
-      + '<div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:18px;font-size:13px;">'
-        + '<div><div style="color:#9ca3af;font-size:11px;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:3px;">Bill To</div>'
-          + '<div style="font-weight:700;font-size:15px;">'+esc(inv.custName||'')+'</div>'
-          + '<div style="color:#6b7280;">'+esc(inv.custPhone||'')+'</div></div>'
-        + '<div style="text-align:right;">'
-          + '<div><span style="color:#9ca3af;">Invoice #:</span> <b>'+esc(inv.invNum||'')+'</b></div>'
-          + '<div><span style="color:#9ca3af;">मिति:</span> '+dateStr+'</div>'
-          + (inv.dueDate?'<div><span style="color:#9ca3af;">Due:</span> <b style="color:#dc2626;">'+fmtDisplayDate(inv.dueDate)+'</b></div>':'')
-        + '</div>'
-      + '</div>'
-      // items
-      + '<table style="width:100%;border-collapse:collapse;margin-bottom:14px;font-size:13px;">'
-        + '<thead><tr style="background:#fff7ed;color:#9a3412;"><th style="padding:8px 9px;text-align:left;border-bottom:2px solid #fed7aa;">#</th><th style="padding:8px 9px;text-align:left;border-bottom:2px solid #fed7aa;">Item / Description</th><th style="padding:8px 9px;text-align:center;border-bottom:2px solid #fed7aa;">Qty</th><th style="padding:8px 9px;text-align:right;border-bottom:2px solid #fed7aa;">Rate</th><th style="padding:8px 9px;text-align:right;border-bottom:2px solid #fed7aa;">Amount</th></tr></thead>'
-        + '<tbody>'+rowsHtml+'</tbody>'
-      + '</table>'
-      // totals
-      + '<div style="display:flex;justify-content:flex-end;margin-bottom:16px;">'
-        + '<table style="font-size:13px;min-width:250px;">'
-          + '<tr><td style="padding:3px 9px;color:#6b7280;">Subtotal</td><td style="padding:3px 9px;text-align:right;">'+fmtRs(sub)+'</td></tr>'
-          + (inv.discAmt?'<tr><td style="padding:3px 9px;color:#6b7280;">Discount ('+(inv.discP||0)+'%)</td><td style="padding:3px 9px;text-align:right;color:#dc2626;">- '+fmtRs(inv.discAmt)+'</td></tr>':'')
-          + (inv.taxAmt?'<tr><td style="padding:3px 9px;color:#6b7280;">VAT ('+(inv.taxP||0)+'%)</td><td style="padding:3px 9px;text-align:right;">+ '+fmtRs(inv.taxAmt)+'</td></tr>':'')
-          + '<tr style="border-top:2px solid #f97316;"><td style="padding:6px 9px;font-weight:900;font-size:15px;">Grand Total</td><td style="padding:6px 9px;text-align:right;font-weight:900;font-size:15px;color:#ea580c;">'+fmtRs(inv.amount||sub)+'</td></tr>'
-          + '<tr><td style="padding:3px 9px;color:#16a34a;">Paid</td><td style="padding:3px 9px;text-align:right;color:#16a34a;">'+fmtRs(inv.paid||0)+'</td></tr>'
-          + '<tr style="background:#fef2f2;"><td style="padding:6px 9px;font-weight:700;color:#b91c1c;">Balance Due</td><td style="padding:6px 9px;text-align:right;font-weight:700;color:#b91c1c;">'+fmtRs(bal)+'</td></tr>'
-        + '</table>'
-        + '<div style="font-size:11px;font-style:italic;color:#4b5563;margin-top:8px;padding-top:6px;border-top:1px dashed #d1d5db;">In words: '+((typeof numToWords==='function')?numToWords(inv.amount||sub):'')+'</div>'
-      + '</div>'
-      // status + terms
-      + '<div style="display:inline-block;padding:5px 16px;border-radius:20px;font-weight:700;font-size:13px;background:'+stColor+'18;color:'+stColor+';border:1px solid '+stColor+'55;margin-bottom:14px;">● '+stt+'</div>'
-      + (inv.terms?'<div style="margin-bottom:12px;padding:11px;background:#f9fafb;border-left:3px solid #f97316;border-radius:4px;font-size:12px;color:#4b5563;"><b>Terms:</b> '+esc(inv.terms)+'</div>':'')
-      + ((co.bankName||co.esewa)?'<div style="margin-top:12px;padding:11px;background:#f9fafb;border-radius:6px;font-size:12px;"><b>💳 Payment:</b> '+(co.esewa?'eSewa '+esc(co.esewa)+'  ':'')+(co.bankName?esc(co.bankName)+' - '+esc(co.bankAcc||''):'')+'</div>':'')
-      + '<div style="margin-top:20px;text-align:center;font-size:11px;color:#9ca3af;border-top:1px solid #eee;padding-top:10px;">धन्यवाद! — '+esc(coName)+'</div>'
-      + '</div>';
-
-    setText('view-modal-title','🧾 Invoice Preview');
-    var mb = document.getElementById('view-modal-body');
-    mb.innerHTML = html;
-    var bd=document.createElement('div'); bd.className='btn-group'; bd.style.cssText='display:flex;gap:8px;padding:12px;flex-wrap:wrap;';
-    var pb=document.createElement('button'); pb.className='btn btn-primary btn-sm'; pb.textContent='🖨️ Print / PDF'; pb.onclick=function(){ Invoices.print(id); };
-    var eb=document.createElement('button'); eb.className='btn btn-secondary btn-sm'; eb.textContent='✏️ Edit';
-    eb.onclick=function(){ document.getElementById('view-modal').classList.remove('open'); Invoices.edit(id); };
-    var wb=document.createElement('button'); wb.className='btn btn-wa btn-sm'; wb.textContent='📱 WhatsApp';
-    wb.onclick=function(){ Invoices.shareWA(id); };
-    bd.appendChild(pb); bd.appendChild(eb); bd.appendChild(wb); mb.appendChild(bd);
-    document.getElementById('view-modal').classList.add('open');
+    DocPrint.preview(DocPrint.fromInvoice(inv), '🧾 Invoice '+(inv.invNum||''), [
+      { label:'✏️ Edit', onClick:function(){ document.getElementById('view-modal').classList.remove('open'); Invoices.edit(id); } },
+      { label:'📱 WhatsApp', cls:'btn-wa', onClick:function(){ Invoices.shareWA(id); } }
+    ]);
   },
 
-  del: function(id){ if(!confirm('Invoice delete गर्ने?'))return; STORE.set('pk3_invoices',this.getData().filter(function(x){return x.id!==id;})); Audit.log('INVOICE','Deleted'); this.render(); App.toast('Invoice deleted','info'); },
+  del: function(id){ if(!confirm('Invoice delete गर्ने?'))return; STORE.set('pk3_invoices',this.getData().filter(function(x){return x.id!==id;})); try{ QuoteConvert.onInvoiceDeleted(id); }catch(e){} Audit.log('INVOICE','Deleted'); this.render(); App.toast('Invoice deleted','info'); },
 
   shareWA: function(id){
     var inv = this.getData().find(function(x){ return x.id===id; });
@@ -5485,14 +5474,9 @@ var Invoices = {
   },
 
   print: function(id){
-    var pid = id || this._curPreviewId;
-    var area = document.getElementById('inv-print-area');
-    if(pid && area){
-      var w=window.open('','_blank');
-      w.document.write('<html><head><title>Invoice</title><meta charset="utf-8"><style>@page{margin:12mm;}body{margin:0;}</style></head><body>'+area.outerHTML+'</body></html>');
-      w.document.close();
-      setTimeout(function(){ try{w.print();}catch(e){} }, 400);
-    } else { window.print(); }
+    var inv = this.getData().find(function(x){ return x.id===(id || Invoices._curPreviewId); });
+    if(inv) return DocPrint.print(DocPrint.fromInvoice(inv), 'Invoice '+(inv.invNum||''));
+    window.print();
   }
 };
 
@@ -6453,6 +6437,7 @@ var DayBook = {
     setVal('db-type','income'); setVal('db-amount',''); setVal('db-desc',''); setVal('db-cat',''); setVal('db-notes',''); setVal('db-vendor',''); setVal('db-bill',''); setVal('db-pay','Cash');
     setVal('db-date-inp',''); setText('db-date-inp-text','📅 मिति...');
     setText('db-modal-title','📒 Add Entry');
+    try { Projects.fillSelect(''); } catch(e){}
     document.getElementById('db-modal').classList.add('open');
     setTimeout(function(){var a=document.getElementById('db-amount');if(a)a.focus();},200);
   },
@@ -6463,6 +6448,7 @@ var DayBook = {
     var dateInp=getVal('db-date-inp')||todayBs(); var dateAd=todayISO();
     if(dateInp){try{var p=dateInp.split('-');var ad=bsToAd(parseInt(p[0]),parseInt(p[1]),parseInt(p[2]));dateAd=ad.toISOString().slice(0,10);}catch(e){}}
     var rec={id:id,type:getVal('db-type'),amount:amount,desc:desc,cat:getVal('db-cat'),vendor:getVal('db-vendor'),bill:getVal('db-bill'),pay:getVal('db-pay'),notes:getVal('db-notes'),date:dateAd,dateBs:dateInp||todayBs(),user:currentUser?currentUser.name:''};
+    var _pj=getVal('db-project'); if(_pj) rec.projectId=_pj;
     var list=this.getData();
     if(isEdit){ var _o=list.find(function(x){return x.id===id;}); rec.voucherNo=(_o&&_o.voucherNo)||DayBook.nextVoucherNo(rec.type,rec.dateBs,list); }
     else { rec.voucherNo=DayBook.nextVoucherNo(rec.type,rec.dateBs,list); }
@@ -6510,6 +6496,7 @@ var DayBook = {
     setVal('db-date-inp',e.dateBs||'');
     setText('db-date-inp-text', e.dateBs?bsStringToDisplay(e.dateBs):'📅 मिति...');
     setText('db-modal-title', (e.type==='income'?'📥 Sale सम्पादन':'📤 Expense सम्पादन'));
+    try { Projects.fillSelect(e.projectId||''); } catch(err){}
     // show type selector when editing from generic Day Book; keep hidden nuance simple: always show on edit
     var _ts=document.getElementById('db-type'); if(_ts && _ts.parentElement) _ts.parentElement.style.display='';
     document.getElementById('db-modal').classList.add('open');
@@ -6638,6 +6625,7 @@ var Expenses = {
     ['db-vendor-grp','db-bill-grp','db-pay-grp'].forEach(function(g){var el=document.getElementById(g);if(el)el.style.display='';});
     setVal('db-date-inp',''); setText('db-date-inp-text','📅 मिति...');
     setText('db-modal-title','📤 नयाँ Expense');
+    try { Projects.fillSelect(''); } catch(e){}
     var tsel=document.getElementById('db-type'); if(tsel && tsel.parentElement) tsel.parentElement.style.display='none';
     document.getElementById('db-modal').classList.add('open');
     setTimeout(function(){var a=document.getElementById('db-amount');if(a)a.focus();},200);
@@ -7337,7 +7325,7 @@ var Backup = {
   },
   exportJSON: function(){
     var data={};
-    ['pk3_customers','pk3_quotations','pk3_followups','pk3_daybook','pk3_rates','pk3_walkins','pk3_staff','pk3_stock','pk3_stockHistory','pk3_sales','pk3_templates','pk3_bulkFolders','pk3_users','pk3_audit','pk3_invoices','pk3_ledger','pk3_notif','pk3_activity','pk3_company','pk3_settings','pk3_tracker','pk3_vcard','pk3_estimates','pk3_planner','pk3_brochures','pk3_qa_order','pk3_returns','pk3_cashbook_opening'].forEach(function(k){data[k]=STORE.get(k,null);});
+    ['pk3_customers','pk3_quotations','pk3_followups','pk3_daybook','pk3_rates','pk3_walkins','pk3_staff','pk3_stock','pk3_stockHistory','pk3_sales','pk3_templates','pk3_bulkFolders','pk3_users','pk3_audit','pk3_invoices','pk3_ledger','pk3_notif','pk3_activity','pk3_company','pk3_settings','pk3_tracker','pk3_vcard','pk3_estimates','pk3_planner','pk3_brochures','pk3_qa_order','pk3_returns','pk3_cashbook_opening','pk3_projects','pk3_pay_qr','pk3_doc_terms'].forEach(function(k){data[k]=STORE.get(k,null);});
     data._meta={version:'v3.9 Final',date:todayISO(),exportedBy:currentUser?currentUser.name:'unknown'};
     var dateStr=new Date().toISOString().slice(0,10);
     var filename='prerak-crm-v39final-backup-'+dateStr+'.json';
@@ -7382,7 +7370,7 @@ var Backup = {
   clearAll: function(){
     if(!confirm('⚠️ ALL data permanently delete गर्नुहुन्छ? यो action undo हुँदैन!'))return;
     if(!confirm('CONFIRM: सबै data delete गर्नुहुन्छ?'))return;
-    ['pk3_customers','pk3_quotations','pk3_followups','pk3_daybook','pk3_rates','pk3_walkins','pk3_staff','pk3_stock','pk3_sales','pk3_templates','pk3_invoices','pk3_ledger','pk3_audit','pk3_vcard','pk3_estimates','pk3_activity','pk3_notif'].forEach(function(k){STORE.del(k);});
+    ['pk3_customers','pk3_quotations','pk3_followups','pk3_daybook','pk3_rates','pk3_walkins','pk3_staff','pk3_stock','pk3_sales','pk3_templates','pk3_invoices','pk3_ledger','pk3_audit','pk3_vcard','pk3_estimates','pk3_activity','pk3_notif','pk3_projects'].forEach(function(k){STORE.del(k);});
     App.toast('🗑 All data cleared','info');
     setTimeout(function(){window.location.reload();},1000);
   },
@@ -7393,7 +7381,7 @@ var Backup = {
   //  • A rolling in-browser snapshot for recovery
   //  • A "download backup on exit" safety reminder
   //  • Daily auto-backup nudge so the document file कहिल्यै हराउँदैन
-  ALL_KEYS: ['pk3_customers','pk3_quotations','pk3_followups','pk3_daybook','pk3_rates','pk3_walkins','pk3_staff','pk3_stock','pk3_stockHistory','pk3_sales','pk3_templates','pk3_bulkFolders','pk3_users','pk3_audit','pk3_invoices','pk3_ledger','pk3_notif','pk3_activity','pk3_company','pk3_settings','pk3_tracker','pk3_vcard','pk3_estimates','pk3_planner','pk3_qa_order','pk3_brochures','pk3_returns','pk3_cashbook_opening'],
+  ALL_KEYS: ['pk3_customers','pk3_quotations','pk3_followups','pk3_daybook','pk3_rates','pk3_walkins','pk3_staff','pk3_stock','pk3_stockHistory','pk3_sales','pk3_templates','pk3_bulkFolders','pk3_users','pk3_audit','pk3_invoices','pk3_ledger','pk3_notif','pk3_activity','pk3_company','pk3_settings','pk3_tracker','pk3_vcard','pk3_estimates','pk3_planner','pk3_qa_order','pk3_brochures','pk3_returns','pk3_cashbook_opening','pk3_projects','pk3_pay_qr','pk3_doc_terms'],
 
   _snapshot: function(){
     var data={};
@@ -7476,6 +7464,7 @@ var Settings = {
     var oaiKey=STORE.get('pk3_oai_key',''); setVal('set-oai-key',oaiKey);
     setVal('set-gem-key',STORE.get('pk3_gem_key',''));
     setVal('set-gem-key2',STORE.get('pk3_gem_key2',''));
+    try { PayQR.render(); } catch(e){}
     try{ setVal('set-wa-mode', AIWA.mode()); }catch(e){}
     var aiSettings=STORE.get('pk3_ai_settings',{}); setVal('set-ai-lang',aiSettings.lang||'nepali'); if(/^gemini-2\.5/.test(aiSettings.model||'')){ aiSettings.model='gemini-3.8-flash'; STORE.set('pk3_ai_settings',aiSettings); } setVal('set-ai-model',aiSettings.model||'claude-sonnet-4-6');
     // Templates
@@ -7787,7 +7776,7 @@ var SmartRem = {
       if(b > 0.5) out.inv += b;
     });
     (STORE.get('pk3_ledger',[])||[]).forEach(function(t){
-      if(!t || t.customerId!==custId || t._return) return;
+      if(!t || t.customerId!==custId || t._return || t._inv) return;   // _inv: auto-posted from an invoice (already counted above)
       out.ledger += (parseFloat(t.debit)||0) - (parseFloat(t.credit)||0);
     });
     out.inv = Math.round(out.inv*100)/100; out.ledger = Math.round(out.ledger*100)/100;
@@ -9241,43 +9230,17 @@ var Bakauta = {
     var tb=document.getElementById('est-table'); var ne=document.getElementById('no-est');
     if(!list.length){tb.innerHTML='';ne.style.display='';return;} ne.style.display='none';
     var sc={'Draft':'tag-gray','Approved':'tag-green','Sent':'tag-blue','Rejected':'tag-red'};
-    tb.innerHTML=list.map(function(e){return '<tr><td style="font-weight:600;">'+e.custName+'</td><td style="font-size:0.78rem;">'+(e.dateBs?bsStringToDisplay(e.dateBs):fmtDisplayDate(e.date))+'</td><td style="text-align:right;font-weight:700;">'+fmtRs(e.total)+'</td><td><span class="tag '+(sc[e.status]||'tag-gray')+'">'+e.status+'</span></td><td><div class="btn-group"><button onclick="Bakauta.viewEst(\''+e.id+'\')" class="btn btn-xs btn-primary" title="View / Print">👁</button><button onclick="Bakauta.shareEstWA(\''+e.id+'\')" class="btn btn-xs btn-wa" title="WhatsApp">📱</button><button onclick="Bakauta.loadEst(\''+e.id+'\')" class="btn btn-xs btn-secondary" title="Edit">✏️</button><button onclick="Bakauta.delEst(\''+e.id+'\')" class="btn btn-xs btn-danger" title="Delete">🗑</button></div></td></tr>';}).join('');
+    tb.innerHTML=list.map(function(e){return '<tr><td style="font-weight:600;">'+e.custName+'</td><td style="font-size:0.78rem;">'+(e.dateBs?bsStringToDisplay(e.dateBs):fmtDisplayDate(e.date))+'</td><td style="text-align:right;font-weight:700;">'+fmtRs(e.total)+'</td><td><span class="tag '+(sc[e.status]||'tag-gray')+'">'+e.status+'</span>'+(QuoteConvert.isConverted(e)?' '+QuoteConvert.badge(e):'')+'</td><td><div class="btn-group">'+(QuoteConvert.isConverted(e)?'':'<button onclick="QuoteConvert.fromEstimate(\''+e.id+'\')" class="btn btn-xs btn-success" data-convert="'+e.id+'" title="Convert to Invoice / Sale">✅ Invoice</button>')+'<button onclick="Bakauta.viewEst(\''+e.id+'\')" class="btn btn-xs btn-primary" title="View / Print">👁</button><button onclick="Bakauta.shareEstWA(\''+e.id+'\')" class="btn btn-xs btn-wa" title="WhatsApp">📱</button><button onclick="Bakauta.loadEst(\''+e.id+'\')" class="btn btn-xs btn-secondary" title="Edit">✏️</button><button onclick="Bakauta.delEst(\''+e.id+'\')" class="btn btn-xs btn-danger" title="Delete">🗑</button></div></td></tr>';}).join('');
   },
-  // View saved estimate in a branded A4 preview (v4.9)
+  // View saved estimate — v6.9.0 professional print/PDF layout + Convert to Invoice
   viewEst: function(id){
     var e=STORE.get('pk3_estimates',[]).find(function(x){return x.id===id;}); if(!e)return;
-    var co=STORE.get('pk3_settings',{})||{};
-    var logo=co.logo||'';
-    var items=e.items||[];
-    var sub=items.reduce(function(s,r){return s+(r.qty||0)*(r.rate||0);},0);
-    var disc=parseFloat(e.disc)||0, taxAmt=parseFloat(e.taxAmt)||0, adv=parseFloat(e.advance)||0;
-    var rows=items.map(function(r,i){return '<tr><td style="text-align:center;">'+(i+1)+'</td><td>'+esc(r.name||'')+'</td><td style="text-align:center;">'+(r.qty||0)+' '+esc(r.unit||'')+'</td><td style="text-align:right;">'+fmtRs(r.rate||0)+'</td><td style="text-align:right;font-weight:700;">'+fmtRs((r.qty||0)*(r.rate||0))+'</td></tr>';}).join('');
-    var html='<div style="padding:22px;font-family:sans-serif;max-width:640px;margin:0 auto;color:#222;background:#fff;">'
-      +'<div style="display:flex;align-items:center;gap:12px;border-bottom:3px solid #f97316;padding-bottom:12px;margin-bottom:16px;">'
-        +(logo?'<img src="'+logo+'" style="width:58px;height:58px;object-fit:contain;">':'')
-        +'<div style="flex:1;"><div style="font-size:1.25rem;font-weight:900;color:#f97316;">'+esc(co.companyName||'PRERAK MULTIPURPOSE PVT LTD')+'</div>'
-        +'<div style="font-size:0.76rem;color:#666;">'+esc(co.address||'Hetauda-2, Makwanpur')+' • '+esc(co.phone1||'9855069733')+'</div></div>'
-        +'<div style="text-align:right;"><div style="font-size:1.1rem;font-weight:800;color:#f97316;">ESTIMATE</div><div style="font-size:0.72rem;color:#666;">'+esc(e.estNo||'')+'</div></div>'
-      +'</div>'
-      +'<div style="display:flex;justify-content:space-between;margin-bottom:12px;font-size:0.84rem;"><div><b>To:</b> '+esc(e.custName||'')+(e.phone?'<br><b>Phone:</b> '+esc(e.phone):'')+(e.addr?'<br><b>Address:</b> '+esc(e.addr):'')+'</div><div style="text-align:right;"><b>Date:</b> '+(e.dateBs?bsStringToDisplay(e.dateBs):fmtDisplayDate(e.date))+(e.title?'<br><b>Project:</b> '+esc(e.title):'')+'</div></div>'
-      +'<table style="width:100%;border-collapse:collapse;font-size:0.82rem;margin-bottom:14px;"><thead><tr style="background:#f97316;color:#fff;"><th style="padding:7px;">#</th><th style="padding:7px;text-align:left;">Description</th><th style="padding:7px;">Qty</th><th style="padding:7px;text-align:right;">Rate</th><th style="padding:7px;text-align:right;">Amount</th></tr></thead><tbody>'+rows+'</tbody></table>'
-      +'<div style="margin-left:auto;width:250px;font-size:0.85rem;">'
-        +'<div style="display:flex;justify-content:space-between;padding:4px 0;"><span>Subtotal</span><b>'+fmtRs(sub)+'</b></div>'
-        +(disc?'<div style="display:flex;justify-content:space-between;padding:4px 0;color:#d00;"><span>Discount</span><span>- '+fmtRs(disc)+'</span></div>':'')
-        +(taxAmt?'<div style="display:flex;justify-content:space-between;padding:4px 0;"><span>VAT ('+(e.tax||13)+'%)</span><span>+ '+fmtRs(taxAmt)+'</span></div>':'')
-        +'<div style="display:flex;justify-content:space-between;padding:8px 0;border-top:2px solid #f97316;margin-top:4px;font-size:1.05rem;"><b>Total</b><b style="color:#f97316;">'+fmtRs(e.total)+'</b></div>'
-        +(adv?'<div style="display:flex;justify-content:space-between;padding:4px 0;color:green;"><span>Advance</span><span>'+fmtRs(adv)+'</span></div><div style="display:flex;justify-content:space-between;padding:4px 0;color:#d00;"><b>Balance</b><b>'+fmtRs((e.total||0)-adv)+'</b></div>':'')
-      +'</div>'
-      +(e.terms?'<div style="margin-top:16px;font-size:0.76rem;color:#555;border-top:1px solid #eee;padding-top:8px;"><b>Terms:</b> '+esc(e.terms)+'</div>':'')
-      +'<div style="margin-top:20px;text-align:center;font-size:0.72rem;color:#999;">धन्यवाद! — '+esc(co.companyName||'PRERAK MULTIPURPOSE PVT LTD')+'</div>'
-      +'</div>';
-    setText('view-modal-title','👁 Estimate — '+esc(e.custName||''));
-    var mb=document.getElementById('view-modal-body'); mb.innerHTML=html;
-    var bd=document.createElement('div'); bd.style.cssText='display:flex;gap:8px;padding:12px;flex-wrap:wrap;';
-    var pb=document.createElement('button'); pb.className='btn btn-primary btn-sm'; pb.textContent='🖨️ Print'; pb.onclick=function(){window.print();};
-    var wb=document.createElement('button'); wb.className='btn btn-wa btn-sm'; wb.textContent='📱 WhatsApp'; wb.onclick=function(){Bakauta.shareEstWA(id);};
-    bd.appendChild(pb); bd.appendChild(wb); mb.appendChild(bd);
-    document.getElementById('view-modal').classList.add('open');
+    var conv = QuoteConvert.isConverted(e);
+    DocPrint.preview(DocPrint.fromEstimate(e), '👁 Estimate — '+(e.custName||''), [
+      { label:'📱 WhatsApp', cls:'btn-wa', onClick:function(){ Bakauta.shareEstWA(id); } },
+      conv ? { label:'✅ Converted · '+(e.convertedInvNum||''), id:'e-conv-btn', onClick:function(){ document.getElementById('view-modal').classList.remove('open'); App.navigate('invoices'); Invoices.preview(e.convertedInvId); } }
+           : { label:'✅ Convert to Invoice / Sale', cls:'btn-success', id:'e-conv-btn', onClick:function(){ QuoteConvert.fromEstimate(id); } }
+    ]);
   },
   shareEstWA: function(id){
     var e=STORE.get('pk3_estimates',[]).find(function(x){return x.id===id;}); if(!e)return;
@@ -13063,7 +13026,7 @@ var AdminDash = {
       ['pk3_customers','pk3_quotations','pk3_followups','pk3_daybook','pk3_invoices',
        'pk3_staff','pk3_stock','pk3_walkins','pk3_estimates','pk3_activity','pk3_audit',
        'pk3_sales','pk3_tracker','pk3_bulkFolders','pk3_ledger','pk3_notif','pk3_planner',
-       'pk3_brochures','pk3_rates','pk3_stockHistory','pk3_templates','pk3_vcard','pk3_returns'
+       'pk3_brochures','pk3_rates','pk3_stockHistory','pk3_templates','pk3_vcard','pk3_returns','pk3_projects'
       ].forEach(function(k){STORE.set(k,[]);});
       App.toast('\ud83d\udca5 All business data cleared','error',5000);
       App.navigate('dashboard');
@@ -13080,7 +13043,7 @@ var AdminDash = {
       var dataKeys = ['pk3_customers','pk3_quotations','pk3_followups','pk3_daybook','pk3_invoices',
         'pk3_staff','pk3_stock','pk3_walkins','pk3_estimates','pk3_activity','pk3_audit',
         'pk3_sales','pk3_tracker','pk3_bulkFolders','pk3_ledger','pk3_notif','pk3_planner',
-        'pk3_brochures','pk3_rates','pk3_stockHistory','pk3_templates','pk3_vcard','pk3_returns'];
+        'pk3_brochures','pk3_rates','pk3_stockHistory','pk3_templates','pk3_vcard','pk3_returns','pk3_projects','pk3_pay_qr','pk3_doc_terms'];
       dataKeys.forEach(function(k){ try { localStorage.removeItem(k); } catch(e){} });
       ['pk3_settings','pk3_company','pk3_qa_order','pk3_showWelcome','pk3_skipWelcome','pk3_cashbook_opening','pk3_sample_seeded'].forEach(function(k){ try { localStorage.removeItem(k); } catch(e){} });
       try { License._wipe(); } catch(e){}
@@ -13300,7 +13263,7 @@ var DBX = {
     return h.toString(36) + ':' + keys.length;
   },
   hasLocalData: function(){
-    var ks = ['pk3_customers','pk3_quotations','pk3_invoices','pk3_daybook','pk3_estimates','pk3_followups','pk3_returns','pk3_ledger','pk3_stock','pk3_walkins'];
+    var ks = ['pk3_customers','pk3_quotations','pk3_invoices','pk3_daybook','pk3_estimates','pk3_followups','pk3_returns','pk3_ledger','pk3_stock','pk3_walkins','pk3_projects'];
     for (var i = 0; i < ks.length; i++) {
       try { var v = JSON.parse(localStorage.getItem(ks[i]) || 'null');
         if (v && (Array.isArray(v) ? v.length : Object.keys(v).length)) return true; } catch(e){}
@@ -13428,6 +13391,522 @@ var DBX = {
   }
 };
 window.addEventListener('load', function(){ try { DBX.start(); } catch(e){ console.warn('DBX', e); } });
+</script>
+<script>
+// ═══════════════════════════════════════════════════════════════════
+// v6.9.0 MODULES
+//   • DocPrint     — professional Quotation / Invoice / Estimate print & PDF
+//                    (company header, PAN/VAT, BS + AD date, items, totals,
+//                    Terms & Conditions, Payment QR)
+//   • PayQR        — Payment QR image (eSewa / Fonepay / Bank) in Settings
+//   • QuoteConvert — 1-click Quotation / Estimate → Invoice (Sale) + Ledger
+//   • Projects     — Project / Site progress & profit tracker
+// ═══════════════════════════════════════════════════════════════════
+
+function _bsFromAd(iso){
+  try { var p = String(iso||'').slice(0,10).split('-'); var b = adToBs(parseInt(p[0],10), parseInt(p[1],10), parseInt(p[2],10));
+    return b.y+'-'+String(b.m).padStart(2,'0')+'-'+String(b.d).padStart(2,'0'); } catch(e){ return ''; }
+}
+
+// ─── PAYMENT QR + DEFAULT TERMS (Settings) ───────────────────────────
+var PayQR = {
+  get: function(){ return STORE.get('pk3_pay_qr', '') || ''; },
+  terms: function(){ return STORE.get('pk3_doc_terms', '') || ''; },
+  saveTerms: function(){ STORE.set('pk3_doc_terms', (getVal('set-doc-terms')||'').trim()); },
+  render: function(){
+    var src = this.get();
+    var img = document.getElementById('set-payqr-img'), ph = document.getElementById('set-payqr-ph'), del = document.getElementById('set-payqr-del');
+    if(img){ img.src = src || ''; img.style.display = src ? '' : 'none'; }
+    if(ph) ph.style.display = src ? 'none' : '';
+    if(del) del.style.display = src ? '' : 'none';
+    var t = document.getElementById('set-doc-terms'); if(t && document.activeElement !== t) t.value = this.terms();
+  },
+  // Resize to max 600px (QR stays sharp & scannable) and store as PNG data URL
+  upload: function(event){
+    var file = event && event.target && event.target.files && event.target.files[0];
+    if(!file) return;
+    if(!/^image\//.test(file.type)){ App.toast('Image file मात्र छान्नुस् (PNG/JPG)','error'); return; }
+    if(file.size > 10*1024*1024){ App.toast('फोटो धेरै ठूलो छ (max 10MB)','error'); return; }
+    var self = this, reader = new FileReader();
+    reader.onload = function(e){ self._fromDataUrl(e.target.result); };
+    reader.readAsDataURL(file);
+    try { event.target.value = ''; } catch(e){}
+  },
+  _fromDataUrl: function(dataUrl, done){
+    var self = this, img = new Image();
+    img.onload = function(){
+      var max = 600, r = Math.min(max/img.width, max/img.height, 1);
+      var c = document.createElement('canvas'); c.width = Math.round(img.width*r); c.height = Math.round(img.height*r);
+      var x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0,0,c.width,c.height);
+      x.imageSmoothingEnabled = false; x.drawImage(img, 0, 0, c.width, c.height);
+      var out = c.toDataURL('image/png');
+      STORE.set('pk3_pay_qr', out);
+      self.render();
+      try { App.toast('✅ Payment QR सेभ भयो — Quotation / Invoice print मा देखिन्छ','success'); } catch(e){}
+      try { Audit.log('SETTINGS','Payment QR updated'); } catch(e){}
+      if(done) done(out);
+    };
+    img.onerror = function(){ App.toast('❌ Image पढ्न सकिएन','error'); };
+    img.src = dataUrl;
+  },
+  remove: function(){
+    if(!confirm('Payment QR हटाउने?')) return;
+    STORE.del ? STORE.del('pk3_pay_qr') : localStorage.removeItem('pk3_pay_qr');
+    this.render();
+    App.toast('🗑️ Payment QR हटाइयो','info');
+  }
+};
+
+// ─── PROFESSIONAL PRINT / PDF ────────────────────────────────────────
+var DocPrint = {
+  _co: function(){
+    var co = STORE.get('pk3_settings',{}) || {};
+    return {
+      name: co.companyName || 'PRERAK MULTIPURPOSE PVT LTD', tagline: co.tagline || '',
+      address: co.address || 'Hetauda-2, Makwanpur', phone: [co.phone1 || '9855069733', co.phone2].filter(Boolean).join(', '),
+      email: co.email || '', pan: co.pan || co.vat || '', logo: co.logo || '',
+      bank: co.bankName || '', acc: co.bankAcc || '', esewa: co.esewa || '', khalti: co.khalti || ''
+    };
+  },
+  // Normalise a quotation / invoice / estimate into one document shape
+  fromQuotation: function(q){
+    var items = (q.items||[]).map(function(r){ return { name:r.name||'', qty:parseFloat(r.qty)||0, unit:r.unit||'', rate:parseFloat(r.rate)||0 }; });
+    var sub = items.reduce(function(s,r){ return s + r.qty*r.rate; }, 0);
+    var disc = parseFloat(q.discount)||0, taxP = parseFloat(q.tax)||0, taxAmt = (sub-disc)*taxP/100;
+    var total = q.amount!=null ? parseFloat(q.amount)||0 : sub-disc+taxAmt;
+    var adv = parseFloat(q.advance)||0;
+    return { kind:'QUOTATION', kindNe:'कोटेसन', no: q.quoteNo || ('QT-'+String(q.id||'').slice(-6).toUpperCase()), dateAd: q.date || todayISO(), dateBs: q.dateBs || _bsFromAd(q.date),
+      cust:{ name:q.custName||'', phone:q.custPhone||'', address:(Customers.getData().find(function(c){ return c.id===q.custId; })||{}).address||'' },
+      subject: [q.work, q.subwork].filter(Boolean).join(' — '), items: items, sub: sub, disc: disc, taxP: taxP, taxAmt: taxAmt, total: total,
+      paidLabel:'Advance / अग्रिम', paid: adv, balance: total-adv, notes: q.details||'', terms: '', status: q.status||'Pending' };
+  },
+  fromInvoice: function(inv){
+    var items = Array.isArray(inv.items) && inv.items.length ? inv.items : [{ name:inv.desc||'Amount', qty:1, unit:'', rate:parseFloat(inv.amount)||0 }];
+    items = items.map(function(r){ return { name:r.name||'', qty:parseFloat(r.qty)||0, unit:r.unit||'', rate:parseFloat(r.rate)||0 }; });
+    var sub = inv.subtotal!=null ? parseFloat(inv.subtotal)||0 : items.reduce(function(s,r){ return s + r.qty*r.rate; }, 0);
+    var total = parseFloat(inv.amount)||sub, paid = parseFloat(inv.paid)||0;
+    var bal = inv.balance!=null ? parseFloat(inv.balance)||0 : total-paid;
+    var cust = Customers.getData().find(function(c){ return c.id===inv.custId; }) || {};
+    return { kind: (parseFloat(inv.taxP)||0) > 0 ? 'TAX INVOICE' : 'INVOICE', kindNe:'बिल', no: inv.invNum||'', dateAd: inv.date || todayISO(), dateBs: inv.dateBs || _bsFromAd(inv.date),
+      dueDate: inv.dueDate || '', cust:{ name:inv.custName||'', phone:inv.custPhone||'', address:cust.address||'' },
+      items: items, sub: sub, disc: parseFloat(inv.discAmt)||0, discP: parseFloat(inv.discP)||0, taxP: parseFloat(inv.taxP)||0, taxAmt: parseFloat(inv.taxAmt)||0,
+      total: total, paidLabel:'Paid / भुक्तानी', paid: paid, balance: bal, terms: inv.terms||'', status: inv.status||'Pending',
+      ref: inv.fromQuote ? (inv.fromQuote.type==='estimate' ? 'Estimate ' : 'Quotation ') + (inv.fromQuote.no||'') : '' };
+  },
+  fromEstimate: function(e){
+    var items = (e.items||[]).map(function(r){ return { name:r.name||'', qty:parseFloat(r.qty)||0, unit:r.unit||'', rate:parseFloat(r.rate)||0 }; });
+    var sub = items.reduce(function(s,r){ return s + r.qty*r.rate; }, 0);
+    var disc = parseFloat(e.disc)||0, taxP = parseFloat(e.tax)||0;
+    var taxAmt = e.taxAmt!=null ? parseFloat(e.taxAmt)||0 : (sub-disc)*taxP/100;
+    var total = e.total!=null ? parseFloat(e.total)||0 : sub-disc+taxAmt, adv = parseFloat(e.advance)||0;
+    return { kind:'ESTIMATE', kindNe:'लागत अनुमान', no: e.estNo||'', dateAd: e.date || todayISO(), dateBs: e.dateBs || _bsFromAd(e.date),
+      cust:{ name:e.custName||'', phone:e.phone||'', address:e.addr||'' }, subject: e.title||'', validity: e.validity||'',
+      items: items, sub: sub, disc: disc, taxP: taxP, taxAmt: taxAmt, total: total, paidLabel:'Advance / अग्रिम', paid: adv, balance: total-adv,
+      notes: e.remarks || '', terms: e.terms || '', status: e.status||'Draft' };
+  },
+
+  build: function(d){
+    var co = this._co(), qr = PayQR.get();
+    var terms = (d.terms && String(d.terms).trim()) ? d.terms : PayQR.terms();
+    var adStr = d.dateAd ? String(d.dateAd).slice(0,10) : '';
+    var bsStr = d.dateBs ? bsStringToDisplay(d.dateBs) + ' (' + d.dateBs + ')' : '';
+    var rows = d.items.map(function(r, i){
+      return '<tr><td class="c">'+(i+1)+'</td><td>'+esc(r.name)+'</td><td class="c">'+(r.qty||0)+'</td><td class="c">'+esc(r.unit||'')+'</td>'
+        +'<td class="r">'+fmtRs(r.rate)+'</td><td class="r b">'+fmtRs((r.qty||0)*(r.rate||0))+'</td></tr>';
+    }).join('');
+    var pay = [];
+    if(co.bank) pay.push('🏦 '+esc(co.bank)+(co.acc?' — A/C '+esc(co.acc):''));
+    if(co.esewa) pay.push('📱 eSewa: '+esc(co.esewa));
+    if(co.khalti) pay.push('💜 Khalti: '+esc(co.khalti));
+    var css = '.swg-doc{font-family:"Segoe UI","Noto Sans Devanagari",Arial,sans-serif;color:#1f2937;background:#fff;max-width:760px;margin:0 auto;padding:22px 24px;box-sizing:border-box;font-size:13px;line-height:1.45;}'
+      + '.swg-doc *{box-sizing:border-box;}'
+      + '.swg-doc .hd{display:flex;gap:14px;align-items:center;border-bottom:3px solid #f97316;padding-bottom:12px;margin-bottom:14px;}'
+      + '.swg-doc .hd img{width:66px;height:66px;object-fit:contain;}'
+      + '.swg-doc .co{flex:1;min-width:0;}.swg-doc .co .n{font-size:20px;font-weight:900;color:#c2410c;letter-spacing:-.3px;}'
+      + '.swg-doc .co .s{font-size:11.5px;color:#4b5563;}'
+      + '.swg-doc .tt{text-align:right;}.swg-doc .tt .k{font-size:20px;font-weight:900;color:#111827;letter-spacing:1px;}.swg-doc .tt .kn{font-size:11px;color:#6b7280;}'
+      + '.swg-doc .meta{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:14px;}'
+      + '.swg-doc .box{border:1px solid #e5e7eb;border-radius:8px;padding:9px 11px;flex:1;min-width:220px;}'
+      + '.swg-doc .lbl{font-size:10px;text-transform:uppercase;letter-spacing:.6px;color:#9ca3af;margin-bottom:2px;}'
+      + '.swg-doc table.it{width:100%;border-collapse:collapse;margin-bottom:12px;}'
+      + '.swg-doc table.it th{background:#fff7ed;color:#9a3412;border-bottom:2px solid #fdba74;padding:7px 8px;font-size:11.5px;text-align:left;}'
+      + '.swg-doc table.it td{padding:7px 8px;border-bottom:1px solid #f1f5f9;vertical-align:top;}'
+      + '.swg-doc .c{text-align:center;}.swg-doc .r{text-align:right;white-space:nowrap;}.swg-doc .b{font-weight:700;}'
+      + '.swg-doc .tot{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:flex-start;}'
+      + '.swg-doc .words{flex:1;min-width:220px;font-size:11.5px;font-style:italic;color:#4b5563;padding-top:4px;}'
+      + '.swg-doc table.sum{min-width:260px;border-collapse:collapse;}.swg-doc table.sum td{padding:4px 8px;}'
+      + '.swg-doc table.sum tr.g td{border-top:2px solid #f97316;font-size:15px;font-weight:900;color:#c2410c;padding-top:7px;}'
+      + '.swg-doc table.sum tr.bal td{background:#fef2f2;color:#b91c1c;font-weight:700;}'
+      + '.swg-doc .terms{margin-top:14px;padding:10px 12px;background:#f9fafb;border-left:3px solid #f97316;border-radius:4px;font-size:11.5px;color:#374151;white-space:pre-wrap;}'
+      + '.swg-doc .foot{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-top:16px;}'
+      + '.swg-doc .pay{display:flex;gap:12px;align-items:center;border:1px dashed #fdba74;border-radius:10px;padding:10px;}'
+      + '.swg-doc .pay img{width:132px;height:132px;object-fit:contain;background:#fff;}'
+      + '.swg-doc .sig{min-width:170px;text-align:center;font-size:11.5px;color:#4b5563;}.swg-doc .sig .ln{border-top:1px solid #9ca3af;margin-top:46px;padding-top:4px;}'
+      + '.swg-doc .thx{margin-top:16px;text-align:center;font-size:11px;color:#9ca3af;border-top:1px solid #eee;padding-top:8px;}'
+      + '@media(max-width:560px){.swg-doc{padding:12px 10px;font-size:12px;}.swg-doc .hd{flex-wrap:wrap;}.swg-doc .tt{text-align:left;width:100%;}'
+      + '.swg-doc table.it th:nth-child(4),.swg-doc table.it td:nth-child(4){display:none;}.swg-doc table.it{table-layout:auto;font-size:11px;}.swg-doc table.it th,.swg-doc table.it td{padding:6px 3px;width:auto!important;}.swg-doc table.it td:nth-child(2){word-break:break-word;}.swg-doc table.it .r{white-space:normal;}.swg-doc table.sum{min-width:0;width:100%;}.swg-doc .pay img{width:110px;height:110px;}}';
+    var h = '<style>'+css+'</style><div class="swg-doc" data-doc-kind="'+esc(d.kind)+'">'
+      + '<div class="hd">' + (co.logo ? '<img src="'+co.logo+'" alt="">' : '')
+        + '<div class="co"><div class="n">'+esc(co.name)+'</div>'
+          + (co.tagline ? '<div class="s">'+esc(co.tagline)+'</div>' : '')
+          + '<div class="s">📍 '+esc(co.address)+' &nbsp;•&nbsp; 📞 '+esc(co.phone)+'</div>'
+          + (co.email ? '<div class="s">✉️ '+esc(co.email)+'</div>' : '')
+          + (co.pan ? '<div class="s"><b>PAN / VAT No:</b> '+esc(co.pan)+'</div>' : '')
+        + '</div>'
+        + '<div class="tt"><div class="k">'+esc(d.kind)+'</div><div class="kn">'+esc(d.kindNe||'')+'</div></div>'
+      + '</div>'
+      + '<div class="meta">'
+        + '<div class="box"><div class="lbl">'+(d.kind==='QUOTATION'||d.kind==='ESTIMATE' ? 'To / ग्राहक' : 'Bill To / ग्राहक')+'</div>'
+          + '<div style="font-weight:800;font-size:14px;">'+esc(d.cust.name)+'</div>'
+          + (d.cust.phone ? '<div>📞 '+esc(d.cust.phone)+'</div>' : '') + (d.cust.address ? '<div>📍 '+esc(d.cust.address)+'</div>' : '')
+          + (d.subject ? '<div style="margin-top:3px;"><b>Subject / काम:</b> '+esc(d.subject)+'</div>' : '')
+        + '</div>'
+        + '<div class="box" style="max-width:300px;"><div><span class="lbl">No.</span> <b>'+esc(d.no||'—')+'</b></div>'
+          + '<div><span class="lbl">मिति (BS)</span> <b>'+esc(bsStr||'—')+'</b></div>'
+          + '<div><span class="lbl">Date (AD)</span> <b>'+esc(adStr||'—')+'</b></div>'
+          + (d.dueDate ? '<div><span class="lbl">Due</span> <b style="color:#b91c1c;">'+esc(d.dueDate)+'</b></div>' : '')
+          + (d.validity ? '<div><span class="lbl">Valid</span> '+esc(d.validity)+'</div>' : '')
+          + (d.ref ? '<div><span class="lbl">Ref</span> '+esc(d.ref)+'</div>' : '')
+        + '</div>'
+      + '</div>'
+      + '<table class="it"><thead><tr><th class="c" style="width:34px;">#</th><th>Particulars / विवरण</th><th class="c" style="width:56px;">Qty</th><th class="c" style="width:56px;">Unit</th><th class="r" style="width:92px;">Rate</th><th class="r" style="width:108px;">Amount</th></tr></thead>'
+      + '<tbody>'+(rows || '<tr><td colspan="6" class="c" style="color:#9ca3af;">—</td></tr>')+'</tbody></table>'
+      + '<div class="tot"><div class="words">In words: <b>'+((typeof numToWords==='function') ? esc(numToWords(d.total)) : '')+'</b></div>'
+        + '<table class="sum">'
+          + '<tr><td>Subtotal</td><td class="r">'+fmtRs(d.sub)+'</td></tr>'
+          + (d.disc ? '<tr><td>Discount'+(d.discP ? ' ('+(Math.round(d.discP*100)/100)+'%)' : '')+'</td><td class="r" style="color:#b91c1c;">- '+fmtRs(d.disc)+'</td></tr>' : '')
+          + (d.taxAmt ? '<tr><td>VAT ('+d.taxP+'%)</td><td class="r">+ '+fmtRs(d.taxAmt)+'</td></tr>' : '')
+          + '<tr class="g"><td>Grand Total</td><td class="r">'+fmtRs(d.total)+'</td></tr>'
+          + (d.paid ? '<tr><td style="color:#15803d;">'+esc(d.paidLabel)+'</td><td class="r" style="color:#15803d;">'+fmtRs(d.paid)+'</td></tr>' : '')
+          + (d.paid || d.kind.indexOf('INVOICE')>=0 ? '<tr class="bal"><td>Balance / बाँकी</td><td class="r">'+fmtRs(d.balance)+'</td></tr>' : '')
+        + '</table></div>'
+      + (d.notes ? '<div class="terms" style="border-left-color:#0ea5e9;"><b>Details / विवरण</b>\n'+esc(d.notes)+'</div>' : '')
+      + (terms ? '<div class="terms"><b>Terms &amp; Conditions / शर्तहरू</b>\n'+esc(terms)+'</div>' : '')
+      + '<div class="foot">'
+        + ((qr || pay.length) ? '<div class="pay">'+(qr ? '<img src="'+qr+'" alt="Payment QR" data-pay-qr>' : '')
+            + '<div><div style="font-weight:800;color:#c2410c;margin-bottom:4px;">💳 Scan to Pay / भुक्तानी</div>'+pay.map(function(p){ return '<div>'+p+'</div>'; }).join('')+'</div></div>' : '<div></div>')
+        + '<div class="sig"><div class="ln">Authorised Signature<br>'+esc(co.name)+'</div></div>'
+      + '</div>'
+      + '<div class="thx">धन्यवाद! — '+esc(co.name)+' &nbsp;•&nbsp; Generated by Swagatik</div>'
+      + '</div>';
+    return h;
+  },
+
+  // Open the A4 print window (choose "Save as PDF" in the print dialog for a PDF)
+  print: function(d, title){
+    var html = this.build(d);
+    var w = window.open('', '_blank');
+    if(!w){ App.toast('❌ Popup block भयो — browser मा popup allow गर्नुहोस्','error',4000); return null; }
+    w.document.write('<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+esc(title || (d.kind+' '+(d.no||'')))+'</title>'
+      + '<style>@page{size:A4;margin:10mm;}body{margin:0;background:#fff;}@media print{.swg-doc{max-width:none;padding:0;}}</style></head><body>'
+      + html + '<script>window.onload=function(){setTimeout(function(){try{window.print();}catch(e){}},350);};<\/script></body></html>');
+    w.document.close();
+    return w;
+  },
+
+  // In-app preview inside #view-modal with action buttons
+  preview: function(d, title, buttons){
+    setText('view-modal-title', title || d.kind);
+    var mb = document.getElementById('view-modal-body');
+    mb.innerHTML = '<div style="overflow-x:auto;border-radius:10px;background:#fff;">'+this.build(d)+'</div>';
+    var bd = document.createElement('div'); bd.className = 'btn-group'; bd.style.cssText = 'display:flex;gap:8px;padding:12px 0 0;flex-wrap:wrap;';
+    var self = this;
+    var pb = document.createElement('button'); pb.className = 'btn btn-primary btn-sm'; pb.textContent = '🖨️ Print / PDF'; pb.onclick = function(){ self.print(d, title); };
+    bd.appendChild(pb);
+    (buttons||[]).forEach(function(b){ var x = document.createElement('button'); x.className = 'btn btn-sm '+(b.cls||'btn-secondary'); x.textContent = b.label; if(b.id) x.id = b.id; x.onclick = b.onClick; bd.appendChild(x); });
+    mb.appendChild(bd);
+    document.getElementById('view-modal').classList.add('open');
+  }
+};
+
+// ─── 1-CLICK QUOTATION / ESTIMATE → INVOICE (SALE) ───────────────────
+var QuoteConvert = {
+  _invExists: function(id){ return !!id && Invoices.getData().some(function(i){ return i.id===id; }); },
+  isConverted: function(rec){ return !!(rec && rec.convertedInvId && this._invExists(rec.convertedInvId)); },
+  badge: function(rec){
+    return '<span class="tag tag-green" data-converted style="font-size:0.62rem;white-space:nowrap;" title="'+esc(rec.convertedInvNum||'')+'">✅ Converted'+(rec.convertedInvNum?' · '+esc(rec.convertedInvNum):'')+'</span>';
+  },
+  // Find the customer for an estimate (estimates store name/phone, not an id); create one if new
+  _custFor: function(name, phone, addr){
+    var custs = Customers.getData();
+    var digits = function(p){ return String(p||'').replace(/\D/g,'').slice(-10); };
+    var c = (phone && custs.find(function(x){ return x && digits(x.phone) && digits(x.phone)===digits(phone); }))
+         || (name && custs.find(function(x){ return x && (x.name||'').trim().toLowerCase()===String(name).trim().toLowerCase(); }));
+    if(c) return c;
+    c = { id: uid(), name: String(name||'Customer').trim(), phone: phone||'', address: addr||'', services: [], notes: 'Estimate बाट Invoice बनाउँदा स्वतः थपिएको', created: todayISO(), updated: todayISO() };
+    custs.unshift(c); STORE.set('pk3_customers', custs);
+    try { Audit.log('CUSTOMER','Auto-added from estimate: '+c.name); } catch(e){}
+    return c;
+  },
+  _build: function(d, cust, src){
+    var items = d.items.filter(function(r){ return (r.name||'').trim() || r.rate; })
+      .map(function(r){ return { name:(r.name||'').trim(), qty:r.qty, unit:r.unit||'', rate:r.rate, amount:r.qty*r.rate }; });
+    var total = Math.round(d.total*100)/100, paid = Math.max(0, d.paid||0);
+    var bal = Math.round((total - paid)*100)/100;
+    var dateAd = todayISO();
+    return {
+      id: uid(), invNum: Invoices.nextNum(), custId: cust.id, custName: cust.name||'', custPhone: cust.phone||'',
+      items: items, subtotal: d.sub, discP: d.sub>0 ? (d.disc/d.sub*100) : 0, discAmt: d.disc, taxP: d.taxP, taxAmt: d.taxAmt,
+      amount: total, paid: paid, balance: bal,
+      status: paid<=0 ? 'Pending' : (paid < total-0.5 ? 'Partial' : 'Paid'),
+      dueDate: '', terms: d.terms || PayQR.terms() || '',
+      desc: items.map(function(r){ return r.name; }).filter(Boolean).slice(0,3).join(', '),
+      date: dateAd, dateBs: _bsFromAd(dateAd), created: new Date().toISOString(),
+      fromQuote: { type: src.type, id: src.id, no: src.no || '' }
+    };
+  },
+  // Sale = Debit; advance already received = Credit. Tagged _inv so dues are not counted twice
+  _postLedger: function(inv){
+    var led = STORE.get('pk3_ledger', []) || [];
+    var base = { customerId: inv.custId, custName: inv.custName, date: inv.dateBs, dateAd: inv.date, _inv: inv.id, created: new Date().toISOString() };
+    var e1 = Object.assign({ id:'lx_'+uid(), narration:'🧾 Sale — '+inv.invNum+' ('+(inv.fromQuote.type==='estimate'?'Estimate':'Quotation')+' बाट)', debit: inv.amount, credit: 0 }, base);
+    e1.desc = e1.narration; led.push(e1);
+    if(inv.paid > 0){
+      var e2 = Object.assign({ id:'lx_'+uid(), narration:'💰 अग्रिम प्राप्त — '+inv.invNum, debit: 0, credit: inv.paid }, base);
+      e2.desc = e2.narration; led.push(e2);
+    }
+    STORE.set('pk3_ledger', led);
+  },
+  _finish: function(inv, label){
+    var list = Invoices.getData(); list.unshift(inv); STORE.set('pk3_invoices', list);
+    this._postLedger(inv);
+    try { Audit.log('INVOICE','Converted '+label+' → '+inv.invNum+' '+inv.custName+' '+fmtRs(inv.amount)); } catch(e){}
+    try { Activity.add('🧾 '+label+' → Invoice '+inv.invNum+' — '+inv.custName); } catch(e){}
+    App.toast('✅ Invoice '+inv.invNum+' बन्यो र Customer Ledger मा पोस्ट भयो','success',3500);
+    return inv;
+  },
+  fromQuotation: function(id, silent){
+    var list = Quotations.getData(), q = list.find(function(x){ return x.id===id; });
+    if(!q){ App.toast('Quotation भेटिएन','error'); return null; }
+    if(this.isConverted(q)){ App.toast('ℹ️ यो Quotation पहिल्यै Invoice '+(q.convertedInvNum||'')+' मा Converted छ','warning',3500); return null; }
+    if(!silent && !confirm('यो Quotation लाई Invoice / Sale मा बदल्ने?\n\n'+(q.custName||'')+' — '+fmtRs(q.amount)+'\nसबै item, VAT र advance सहित Invoice बन्छ र Customer Ledger मा पोस्ट हुन्छ।')) return null;
+    var cust = Customers.getData().find(function(c){ return c.id===q.custId; }) || { id:q.custId, name:q.custName, phone:q.custPhone };
+    var d = DocPrint.fromQuotation(q);
+    var inv = this._build(d, cust, { type:'quotation', id:q.id, no:d.no });
+    q.convertedInvId = inv.id; q.convertedInvNum = inv.invNum; q.convertedAt = new Date().toISOString();
+    if(!q.status || q.status==='Pending') q.status = 'Approved';
+    STORE.set('pk3_quotations', list);
+    this._finish(inv, 'Quotation');
+    try { document.getElementById('view-modal').classList.remove('open'); } catch(e){}
+    try { if(App.currentPage==='quotations') Quotations.render(); } catch(e){}
+    return inv;
+  },
+  fromEstimate: function(id, silent){
+    var list = STORE.get('pk3_estimates', []) || [], e = list.find(function(x){ return x.id===id; });
+    if(!e){ App.toast('Estimate भेटिएन','error'); return null; }
+    if(this.isConverted(e)){ App.toast('ℹ️ यो Estimate पहिल्यै Invoice '+(e.convertedInvNum||'')+' मा Converted छ','warning',3500); return null; }
+    if(!silent && !confirm('यो Estimate लाई Invoice / Sale मा बदल्ने?\n\n'+(e.custName||'')+' — '+fmtRs(e.total))) return null;
+    var cust = this._custFor(e.custName, e.phone, e.addr);
+    var d = DocPrint.fromEstimate(e);
+    var inv = this._build(d, cust, { type:'estimate', id:e.id, no:d.no });
+    e.convertedInvId = inv.id; e.convertedInvNum = inv.invNum; e.convertedAt = new Date().toISOString(); e.status = 'Approved';
+    STORE.set('pk3_estimates', list);
+    this._finish(inv, 'Estimate');
+    try { document.getElementById('view-modal').classList.remove('open'); } catch(e2){}
+    try { if(App.currentPage==='estimates-list') Bakauta.renderList(); } catch(e3){}
+    return inv;
+  },
+  // When an invoice is deleted: remove its auto ledger lines and free the source to convert again
+  onInvoiceDeleted: function(invId){
+    if(!invId) return;
+    STORE.set('pk3_ledger', (STORE.get('pk3_ledger',[])||[]).filter(function(t){ return !(t && t._inv===invId); }));
+    [['pk3_quotations'],['pk3_estimates']].forEach(function(k){
+      var l = STORE.get(k[0],[])||[], ch = false;
+      l.forEach(function(x){ if(x && x.convertedInvId===invId){ delete x.convertedInvId; delete x.convertedInvNum; delete x.convertedAt; ch = true; } });
+      if(ch) STORE.set(k[0], l);
+    });
+  }
+};
+
+// ─── PROJECT / SITE PROGRESS & PROFIT TRACKER ────────────────────────
+var Projects = {
+  STAGES: [
+    { k:'Measurement',    ne:'नाप-जाँच',        pct:5,   color:'#64748b' },
+    { k:'Design',         ne:'डिजाइन',          pct:15,  color:'#8b5cf6' },
+    { k:'Material Order', ne:'सामग्री अर्डर',     pct:30,  color:'#0ea5e9' },
+    { k:'Work Running',   ne:'काम चालु',         pct:50,  color:'#f97316' },
+    { k:'Handover',       ne:'हस्तान्तरण',        pct:90,  color:'#eab308' },
+    { k:'Completed',      ne:'सम्पन्न',          pct:100, color:'#22c55e' }
+  ],
+  _filter: 'active',
+  getData: function(){ return STORE.get('pk3_projects', []) || []; },
+  setData: function(l){ STORE.set('pk3_projects', l); },
+  get: function(id){ return this.getData().find(function(p){ return p.id===id; }) || null; },
+  stage: function(k){ return this.STAGES.find(function(s){ return s.k===k; }) || this.STAGES[0]; },
+  // Money for one project — from Day Book entries tagged with projectId
+  stats: function(p){
+    var db = (STORE.get('pk3_daybook', []) || []).filter(function(e){ return e && e.projectId===p.id; });
+    var received = db.filter(function(e){ return e.type==='income'; }).reduce(function(s,e){ return s+(parseFloat(e.amount)||0); }, 0);
+    var expense  = db.filter(function(e){ return e.type==='expense'; }).reduce(function(s,e){ return s+(parseFloat(e.amount)||0); }, 0);
+    var budget = parseFloat(p.budget)||0;
+    return { budget: budget, received: received, expense: expense,
+      profit: budget - expense,          // अनुमानित नाफा/घाटा = कुल बजेट − साइट खर्च
+      cash: received - expense,          // हातमा: प्राप्त − खर्च
+      due: Math.max(0, budget - received), // लिन बाँकी
+      entries: db };
+  },
+  setFilter: function(f){ this._filter = f; this.render(); },
+  render: function(){
+    var wrap = document.getElementById('proj-list'); if(!wrap) return;
+    var all = this.getData(), self = this, f = this._filter;
+    ['active','completed','all'].forEach(function(x){ var b = document.getElementById('proj-f-'+x); if(b) b.className = 'btn btn-sm '+(x===f?'btn-primary':'btn-secondary'); });
+    var list = all.filter(function(p){ return f==='all' ? true : (f==='completed' ? p.stage==='Completed' : p.stage!=='Completed'); });
+    // summary
+    var tot = { budget:0, received:0, expense:0, profit:0 };
+    all.filter(function(p){ return p.stage!=='Completed'; }).forEach(function(p){ var s = self.stats(p); tot.budget+=s.budget; tot.received+=s.received; tot.expense+=s.expense; tot.profit+=s.profit; });
+    var sum = document.getElementById('proj-summary');
+    if(sum) sum.innerHTML = [['🏗️ चालु Projects', String(all.filter(function(p){ return p.stage!=='Completed'; }).length), 'var(--accent)'],
+        ['💼 जम्मा बजेट', fmtRs(tot.budget), 'var(--text)'], ['💰 प्राप्त', fmtRs(tot.received), 'var(--green)'],
+        ['💸 खर्च', fmtRs(tot.expense), 'var(--red)'], ['📈 अनुमानित नाफा', fmtRs(tot.profit), tot.profit>=0?'var(--green)':'var(--red)']]
+      .map(function(c){ return '<div class="proj-stat"><div class="proj-stat-l">'+c[0]+'</div><div class="proj-stat-v" style="color:'+c[2]+';">'+c[1]+'</div></div>'; }).join('');
+    if(!list.length){
+      wrap.innerHTML = '<div class="empty-state"><div class="icon">🏗️</div><div class="title">'+(all.length?'यो filter मा कुनै project छैन':'अहिलेसम्म कुनै Project / Site छैन')+'</div>'
+        + '<div class="subtitle">निर्माण / इन्टेरियर कामको Stage, प्रगति, बजेट, प्राप्त रकम र खर्च एकै ठाउँमा ट्र्याक गर्नुहोस्।</div>'
+        + '<button class="btn btn-primary" onclick="Projects.openForm()">➕ नयाँ Project</button></div>';
+      return;
+    }
+    wrap.innerHTML = list.map(function(p){
+      var s = self.stats(p), st = self.stage(p.stage), pct = Math.max(0, Math.min(100, parseInt(p.progress,10)||0));
+      return '<div class="card proj-card" data-proj="'+esc(p.id)+'" onclick="Projects.view(\''+esc(p.id)+'\')">'
+        + '<div class="proj-top"><div style="min-width:0;flex:1;"><div class="proj-name">'+esc(p.name)+'</div>'
+          + '<div class="proj-sub">'+(p.custName?'👤 '+esc(p.custName)+' · ':'')+(p.site?'📍 '+esc(p.site):'')+'</div></div>'
+          + '<span class="proj-stage" style="background:'+st.color+'22;color:'+st.color+';border-color:'+st.color+'66;">'+esc(st.k)+' · '+esc(st.ne)+'</span></div>'
+        + '<div class="proj-bar"><div style="width:'+pct+'%;background:'+st.color+';"></div></div>'
+        + '<div class="proj-pct">प्रगति '+pct+'%</div>'
+        + '<div class="proj-nums">'
+          + '<div><span>बजेट</span><b>'+fmtRs(s.budget)+'</b></div>'
+          + '<div><span>प्राप्त</span><b style="color:var(--green);">'+fmtRs(s.received)+'</b></div>'
+          + '<div><span>खर्च</span><b style="color:var(--red);">'+fmtRs(s.expense)+'</b></div>'
+          + '<div><span>'+(s.profit>=0?'अनुमानित नाफा':'अनुमानित घाटा')+'</span><b data-profit style="color:'+(s.profit>=0?'var(--green)':'var(--red)')+';">'+fmtRs(Math.abs(s.profit))+'</b></div>'
+        + '</div></div>';
+    }).join('');
+  },
+  _ensureModal: function(){
+    if(document.getElementById('proj-modal')) return;
+    var d = document.createElement('div'); d.className = 'modal-overlay'; d.id = 'proj-modal';
+    d.innerHTML = '<div class="modal" style="max-width:620px;"><div class="modal-head"><div class="modal-title" id="proj-modal-title">🏗️ Project</div>'
+      + '<button class="modal-close" onclick="document.getElementById(\'proj-modal\').classList.remove(\'open\')">✕</button></div><div id="proj-modal-body"></div></div>';
+    document.body.appendChild(d);
+  },
+  openForm: function(id){
+    this._ensureModal();
+    var p = id ? this.get(id) : null, self = this;
+    var custs = Customers.getData();
+    var stOpts = this.STAGES.map(function(s){ return '<option value="'+s.k+'"'+(p&&p.stage===s.k?' selected':'')+'>'+s.k+' — '+s.ne+'</option>'; }).join('');
+    var cOpts = '<option value="">-- Customer (optional) --</option>' + custs.map(function(c){ return '<option value="'+esc(c.id)+'"'+(p&&p.custId===c.id?' selected':'')+'>'+esc(c.name)+(c.phone?' ('+esc(c.phone)+')':'')+'</option>'; }).join('');
+    setText('proj-modal-title', p ? '✏️ Project सम्पादन' : '🏗️ नयाँ Project / Site');
+    document.getElementById('proj-modal-body').innerHTML = '<div class="form-grid">'
+      + '<input type="hidden" id="pj-id" value="'+esc(p?p.id:'')+'">'
+      + '<div class="form-group full"><label>Project / Site नाम *</label><input type="text" id="pj-name" value="'+esc(p?p.name:'')+'" placeholder="जस्तै: राम निवास — Kitchen & Wardrobe"></div>'
+      + '<div class="form-group"><label>Customer</label><select id="pj-cust">'+cOpts+'</select></div>'
+      + '<div class="form-group"><label>📍 Site / ठेगाना</label><input type="text" id="pj-site" value="'+esc(p?p.site||'':'')+'" placeholder="Hetauda-4"></div>'
+      + '<div class="form-group"><label>Stage</label><select id="pj-stage" onchange="Projects._stageChanged()">'+stOpts+'</select></div>'
+      + '<div class="form-group"><label>प्रगति % <b id="pj-prog-v">'+(p?parseInt(p.progress,10)||0:5)+'%</b></label><input type="range" id="pj-prog" min="0" max="100" step="5" value="'+(p?parseInt(p.progress,10)||0:5)+'" oninput="document.getElementById(\'pj-prog-v\').textContent=this.value+\'%\'" style="width:100%;"></div>'
+      + '<div class="form-group"><label>💼 जम्मा बजेट / Contract (Rs.)</label><input type="number" id="pj-budget" min="0" value="'+(p?p.budget||'':'')+'" placeholder="0"></div>'
+      + '<div class="form-group"><label>📅 सुरु मिति (BS)</label><input type="text" id="pj-start" value="'+esc(p?p.startBs||'':todayBs())+'" placeholder="2083-08-04"></div>'
+      + '<div class="form-group full"><label>📝 Notes</label><textarea id="pj-notes" rows="2">'+esc(p?p.notes||'':'')+'</textarea></div>'
+      + '</div><div class="form-actions"><button class="btn btn-secondary" onclick="document.getElementById(\'proj-modal\').classList.remove(\'open\')">Cancel</button>'
+      + '<button class="btn btn-primary" id="pj-save" onclick="Projects.save()">💾 Save</button></div>';
+    document.getElementById('proj-modal').classList.add('open');
+    setTimeout(function(){ var n = document.getElementById('pj-name'); if(n) n.focus(); }, 120);
+  },
+  _stageChanged: function(){
+    var st = this.stage(getVal('pj-stage')), r = document.getElementById('pj-prog');
+    if(r && (parseInt(r.value,10)||0) < st.pct || st.k==='Completed'){ r.value = st.pct; setText('pj-prog-v', st.pct+'%'); }
+  },
+  save: function(){
+    var name = (getVal('pj-name')||'').trim(); if(!name){ App.toast('Project नाम लेख्नुहोस्!','error'); return; }
+    var id = getVal('pj-id'), list = this.getData(), old = id ? list.find(function(x){ return x.id===id; }) : null;
+    var custId = getVal('pj-cust'), cust = Customers.getData().find(function(c){ return c.id===custId; }) || {};
+    var rec = { id: id || uid(), name: name, custId: custId||'', custName: cust.name||'', custPhone: cust.phone||'', site: getVal('pj-site')||'',
+      stage: getVal('pj-stage')||'Measurement', progress: Math.max(0, Math.min(100, parseInt(getVal('pj-prog'),10)||0)),
+      budget: Math.max(0, parseFloat(getVal('pj-budget'))||0), startBs: getVal('pj-start')||'', notes: getVal('pj-notes')||'',
+      created: old ? old.created : new Date().toISOString(), updated: new Date().toISOString() };
+    if(old && old.stage !== rec.stage){ rec.log = (old.log||[]).concat([{ at: new Date().toISOString(), from: old.stage, to: rec.stage }]); }
+    else rec.log = old ? old.log||[] : [];
+    if(old){ list[list.indexOf(old)] = rec; } else list.unshift(rec);
+    this.setData(list);
+    try { Audit.log('PROJECT',(old?'Updated: ':'Created: ')+name+' ['+rec.stage+' '+rec.progress+'%]'); } catch(e){}
+    document.getElementById('proj-modal').classList.remove('open');
+    App.toast('✅ Project सेभ भयो','success');
+    this.render();
+    return rec;
+  },
+  del: function(id){
+    var p = this.get(id); if(!p) return;
+    if(!confirm('Project "'+p.name+'" मेटाउने?\n(Day Book का खर्च/आम्दानी entry मेटिँदैनन् — project tag मात्र हट्छ)')) return;
+    this.setData(this.getData().filter(function(x){ return x.id!==id; }));
+    var db = STORE.get('pk3_daybook',[])||[], ch = false;
+    db.forEach(function(e){ if(e && e.projectId===id){ delete e.projectId; ch = true; } });
+    if(ch) STORE.set('pk3_daybook', db);
+    try { Audit.log('PROJECT','Deleted: '+p.name); } catch(e){}
+    document.getElementById('view-modal').classList.remove('open');
+    this.render();
+  },
+  view: function(id){
+    var p = this.get(id); if(!p) return;
+    var s = this.stats(p), st = this.stage(p.stage), pct = parseInt(p.progress,10)||0;
+    var rows = s.entries.slice().sort(function(a,b){ return String(b.date||'').localeCompare(String(a.date||'')); }).map(function(e){
+      return '<tr><td style="font-size:0.74rem;white-space:nowrap;">'+esc(e.dateBs?bsStringToDisplay(e.dateBs):e.date||'')+'</td><td>'+esc(e.desc||'')+(e.cat?'<div style="font-size:0.66rem;color:var(--text-muted);">'+esc(e.cat)+'</div>':'')+'</td>'
+        + '<td style="text-align:right;white-space:nowrap;color:'+(e.type==='income'?'var(--green)':'var(--red)')+';">'+(e.type==='income'?'+ ':'- ')+fmtRs(e.amount)+'</td></tr>';
+    }).join('');
+    var stepper = this.STAGES.map(function(x){ var done = Projects.STAGES.indexOf(x) <= Projects.STAGES.indexOf(st);
+      return '<span class="proj-step'+(done?' on':'')+'" style="'+(done?'background:'+x.color+';border-color:'+x.color+';':'')+'" title="'+x.k+'">'+esc(x.ne)+'</span>'; }).join('');
+    var html = '<div class="proj-view">'
+      + '<div style="font-size:1.05rem;font-weight:800;">'+esc(p.name)+'</div>'
+      + '<div style="font-size:0.78rem;color:var(--text-muted);margin-bottom:10px;">'+(p.custName?'👤 '+esc(p.custName)+' ':'')+(p.site?'· 📍 '+esc(p.site)+' ':'')+(p.startBs?'· 📅 '+esc(bsStringToDisplay(p.startBs)):'')+'</div>'
+      + '<div class="proj-steps">'+stepper+'</div>'
+      + '<div class="proj-bar" style="margin-top:10px;"><div style="width:'+pct+'%;background:'+st.color+';"></div></div><div class="proj-pct">प्रगति '+pct+'% — '+esc(st.k)+'</div>'
+      + '<div class="proj-nums" style="margin:12px 0;">'
+        + '<div><span>💼 बजेट</span><b>'+fmtRs(s.budget)+'</b></div><div><span>💰 प्राप्त</span><b style="color:var(--green);">'+fmtRs(s.received)+'</b></div>'
+        + '<div><span>💸 साइट खर्च</span><b style="color:var(--red);">'+fmtRs(s.expense)+'</b></div><div><span>⏳ लिन बाँकी</span><b>'+fmtRs(s.due)+'</b></div>'
+        + '<div><span>'+(s.profit>=0?'📈 अनुमानित नाफा':'📉 अनुमानित घाटा')+'</span><b id="pv-profit" style="color:'+(s.profit>=0?'var(--green)':'var(--red)')+';">'+fmtRs(Math.abs(s.profit))+'</b></div>'
+        + '<div><span>💵 हातमा (प्राप्त − खर्च)</span><b style="color:'+(s.cash>=0?'var(--green)':'var(--red)')+';">'+fmtRs(s.cash)+'</b></div>'
+      + '</div>'
+      + '<div style="font-size:0.7rem;color:var(--text-muted);margin-bottom:8px;">अनुमानित नाफा = जम्मा बजेट − साइट खर्च। खर्च/आम्दानी Day Book मा पनि देखिन्छ।</div>'
+      + '<div class="btn-group" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;">'
+        + '<button class="btn btn-sm btn-danger" onclick="Projects.addEntry(\''+esc(p.id)+'\',\'expense\')">➖ साइट खर्च</button>'
+        + '<button class="btn btn-sm btn-success" onclick="Projects.addEntry(\''+esc(p.id)+'\',\'income\')">➕ भुक्तानी प्राप्त</button>'
+        + '<button class="btn btn-sm btn-secondary" onclick="document.getElementById(\'view-modal\').classList.remove(\'open\');Projects.openForm(\''+esc(p.id)+'\')">✏️ Stage / प्रगति</button>'
+        + '<button class="btn btn-sm btn-secondary" onclick="Projects.del(\''+esc(p.id)+'\')">🗑</button>'
+      + '</div>'
+      + (rows ? '<div class="table-wrap" style="overflow-x:auto;"><table style="width:100%;"><thead><tr><th>मिति</th><th>विवरण</th><th style="text-align:right;">रकम</th></tr></thead><tbody>'+rows+'</tbody></table></div>'
+              : '<div style="font-size:0.8rem;color:var(--text-muted);padding:10px 0;">अहिलेसम्म कुनै खर्च / भुक्तानी entry छैन।</div>')
+      + (p.notes ? '<div style="margin-top:10px;font-size:0.78rem;"><b>Notes:</b> '+esc(p.notes)+'</div>' : '')
+      + '</div>';
+    setText('view-modal-title', '🏗️ '+p.name);
+    document.getElementById('view-modal-body').innerHTML = html;
+    document.getElementById('view-modal').classList.add('open');
+  },
+  // Quick site expense / payment → real Day Book entry tagged with the project
+  addEntry: function(id, type, amount, desc, cat){
+    var p = this.get(id); if(!p) return null;
+    if(amount == null){
+      var a = prompt((type==='expense'?'➖ साइट खर्च रकम (Rs.)':'➕ प्राप्त रकम (Rs.)')+' — '+p.name+':'); if(a === null) return null;
+      amount = parseFloat(a);
+      if(!(amount > 0)){ App.toast('सही रकम लेख्नुहोस्','error'); return null; }
+      desc = prompt('विवरण:', type==='expense' ? 'Material / ज्याला' : 'Payment received') || (type==='expense'?'Site expense':'Payment received');
+    }
+    var list = STORE.get('pk3_daybook',[])||[];
+    var rec = { id: uid(), type: type, amount: amount, desc: desc + ' — 🏗️ ' + p.name, cat: cat || (type==='expense' ? 'Raw Material' : 'Sales/Payment Received'),
+      vendor:'', bill:'', pay:'Cash', notes:'', date: todayISO(), dateBs: todayBs(), user: currentUser ? currentUser.name : '', projectId: p.id };
+    rec.voucherNo = DayBook.nextVoucherNo(type, rec.dateBs, list);
+    list.unshift(rec); STORE.set('pk3_daybook', list);
+    try { Audit.log('PROJECT',(type==='expense'?'Expense ':'Payment ')+fmtRs(amount)+' — '+p.name); } catch(e){}
+    App.toast('✅ '+(type==='expense'?'खर्च':'भुक्तानी')+' थपियो — '+fmtRs(amount),'success');
+    if(document.getElementById('view-modal').classList.contains('open')) this.view(id);
+    this.render();
+    return rec;
+  },
+  // Day Book modal helper: fill the 🏗️ Project dropdown
+  fillSelect: function(selected){
+    var sel = document.getElementById('db-project'); if(!sel) return;
+    var list = this.getData();
+    sel.innerHTML = '<option value="">— कुनै Project होइन —</option>' + list.map(function(p){ return '<option value="'+esc(p.id)+'">'+esc(p.name)+(p.stage==='Completed'?' (Completed)':'')+'</option>'; }).join('');
+    sel.value = selected || '';
+    var grp = document.getElementById('db-project-grp'); if(grp) grp.style.display = list.length ? '' : 'none';
+  }
+};
 </script>
 <script>
 /* PWA service worker — registers only when hosted over http(s) (not file://).
