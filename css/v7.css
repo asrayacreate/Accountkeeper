@@ -22,3 +22,8 @@ html[data-mod-off~="ai"] [data-module~="ai"] { display: none !important; }
 .data-table input, .data-table select { padding: 6px 7px; font-size: 0.8rem; }
 .pay-card { cursor: pointer; padding: 12px 14px; }
 @media (max-width: 600px) { .media-thumb { width: 56px; height: 56px; } }
+
+/* Setup Wizard + Modules list */
+#wz-types .btn { white-space: normal; width: 100%; min-width: 0; }
+#wz-types .btn > span:last-child { min-width: 0; overflow-wrap: anywhere; }
+.mod-row, .mod-row span { text-transform: none !important; letter-spacing: normal !important; }

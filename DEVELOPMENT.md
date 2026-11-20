@@ -1,7 +1,21 @@
 # Swagatik — Development / Release गाइड
 
-App आफैं अझै एउटै `index.html` हो (build चाहिँदैन)। `package.json`, `tests/` र `scripts/`
-development का लागि मात्र हुन् — GitHub Pages मा भएपनि app लाई केही असर गर्दैनन्।
+v7 देखि app सफा फाइलहरूमा छ — तर अझै **build चाहिँदैन** (साधारण `<script src>`, file:// मा पनि चल्छ):
+
+```
+index.html          HTML मात्र + script/style tag (क्रम महत्त्वपूर्ण)
+css/                app.css, extra.css, v7.css
+js/core/            STORE, BS पात्रो, License, Auth, Company, Modules, Migrations, Sync engine, init
+js/modules/         Customers, Quotations, Invoices, Payables, CA Export, Projects, Dropbox/Drive sync …
+js/ui/              Dashboard, Brand, Setup Wizard, Admin dashboard …
+js/vendor/          qrcode.min.js
+```
+
+`package.json`, `tests/` र `scripts/` development का लागि मात्र हुन्। Commercial launch (Private repo,
+Cloudflare Pages, Supabase license, Google Drive) : `COMMERCIAL_LAUNCH.md`।
+
+**नियम:** कुनै कम्पनीको नाम/फोन/ठेगाना code मा नलेख्ने — `Company.get()` / `Company.name()` /
+template मा `{company}` `{phone1}` `{company_address}` प्रयोग गर्ने। (test `09-v7-foundation` ले समात्छ)
 
 ## पहिलो पटक (एक पटक मात्र)
 
@@ -28,9 +42,11 @@ npm run release -- minor   # 6.9.0 → 6.10.0
 npm run release -- 7.0.0   # ठ्याक्कै यो version
 ```
 
-यसले `index.html` को `APP_VERSION` र देखिने version label, `sw.js` को version र
-cache नाम (`swagatik-cache-vN`), र `package.json` — सबै एकैचोटि बदल्छ।
-त्यसपछि `index.html` र `sw.js` दुवै GitHub मा upload/commit गर्नुहोस्।
+यसले `index.html` को `APP_VERSION`, देखिने version label र हरेक `?v=`, `sw.js` को version,
+cache नाम (`swagatik-cache-vN`) र offline file list, र `package.json` — सबै एकैचोटि बदल्छ।
+त्यसपछि `index.html`, `sw.js`, `js/`, `css/` सबै commit गर्नुहोस्।
+
+नयाँ js/css फाइल थपेपछि (version नबदली) : `npm run release -- --assets`
 
 Service worker ले app page लाई **network-first** ल्याउँछ, त्यसैले internet भएको
 मोबाइल/ट्याब्लेटले सधैं नयाँ version पाउँछ; internet नभए cache को copy खुल्छ।
@@ -45,8 +61,8 @@ npm run hash-secret -- password "NewStrongPassword"
 ```
 
 आएको hash `index.html` मा राख्नुहोस्:
-- master → `License.MASTER_HASH`
-- password → `_RAW_USERS` को `punya` line
+- master → `js/core/license.js` को `License.MASTER_HASH`
+- password → `js/core/security.js` को `_RAW_USERS` मा `punya` line
 
 ⚠️ छोटो key/password (जस्तै ४ अंक) hash बाट पनि केही सेकेन्डमै अनुमान गर्न सकिन्छ।
 कम्तिमा १२+ अक्षरको प्रयोग गर्नुहोस्। पुराना devices मा पहिल्यै activate भएको license
