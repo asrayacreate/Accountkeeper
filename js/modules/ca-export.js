@@ -44,6 +44,8 @@ var CAExport = {
       .sort(function (a, b) { return self._bsOf(a).localeCompare(self._bsOf(b)); })
       .forEach(function (x) {
         var c = custs[x.custId] || {}, sub = self._n(x.subtotal != null ? x.subtotal : x.amount), disc = self._n(x.discAmt), vat = self._n(x.taxAmt);
+        // v7.1.0: a cancelled bill keeps its number in the register, with zero amounts
+        if (x.status === 'Cancelled' || x.cancelled) { rows.push([self._bsOf(x), self._adOf(x), x.invNum || '', x.custName || c.name || '', c.pan || c.vat || '', x.custPhone || c.phone || '', 0, 0, 0, self._n(x.taxP), 0, 0, 0, 0, 'CANCELLED' + (x.cancelled && x.cancelled.reason ? ': ' + x.cancelled.reason : '')]); return; }
         rows.push([self._bsOf(x), self._adOf(x), x.invNum || '', x.custName || c.name || '', c.pan || c.vat || '', x.custPhone || c.phone || '',
           sub, disc, self._n(sub - disc), self._n(x.taxP), vat, self._n(x.amount), self._n(x.paid), self._n(x.balance), x._returned ? 'Returned' : (x.status || '')]);
       });

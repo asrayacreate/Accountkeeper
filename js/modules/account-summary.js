@@ -16,7 +16,7 @@ var AccountSummary = {
     try {
       var _invs = STORE.get('pk3_invoices', []) || [];
       var _totalSales = _invs.reduce(function(sum, iv){
-        if(!iv || iv._demo || iv._returned) return sum;
+        if(!iv || iv._demo || iv._returned || iv.status==='Cancelled' || iv.cancelled) return sum;
         return sum + (parseFloat(iv.amount)||0);
       }, 0);
       setText('acs-total-sales', fmtRs(_totalSales));

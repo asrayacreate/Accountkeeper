@@ -165,7 +165,7 @@ test('wizard on a device with data only ADDS (never overwrites) rates, services,
 test('Modules On/Off hides menus + dashboard cards and comes back with data intact', async () => {
   const { page, errors, ctx } = await loggedIn({ base, browser, storage: V6_DEVICE });
   await page.evaluate(() => App.navigate('settings'));
-  assert.equal(await page.locator('#set-modules-list input[type=checkbox]').count(), 7);
+  assert.equal(await page.locator('#set-modules-list input[type=checkbox]').count(), 8);   // v7.1.0: + Staff
   const vis = () => page.evaluate(() => ['.nav-item[data-page="stocklist"]', '.stat-card[data-module="stock"]', '.nav-item[data-page="quotations"]', '#bn-quotations', '.nav-item[data-page="walkin"]', '.nav-item[data-page="ai-assistant"]']
     .map((s) => getComputedStyle(document.querySelector(s)).display !== 'none'));
   assert.deepEqual(await vis(), [true, true, true, true, true, true]);

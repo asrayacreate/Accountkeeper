@@ -70,11 +70,17 @@ test('Converting twice is blocked — no duplicate invoice or ledger lines', asy
   await ctx.close();
 });
 
-test('Deleting the invoice removes its ledger lines and allows converting again', async () => {
+// v7.1.0: a real invoice is no longer deleted (bill numbers must stay unbroken). Cancelling it with a reason
+// reverses its ledger with a Credit Note and frees the quotation to convert again.
+test('Cancelling the invoice reverses its ledger lines and allows converting again', async () => {
   const { page, ctx } = await loggedIn({ base, browser, storage });
   const inv = await page.evaluate(() => QuoteConvert.fromQuotation('q1', true));
-  await page.evaluate((id) => Invoices.del(id), inv.id);
-  assert.equal(await page.evaluate(() => STORE.get('pk3_ledger', []).length), 0);
+  await page.evaluate((id) => Invoices.del(id), inv.id);   // del → opens the Cancel dialog, deletes nothing
+  assert.equal(await page.evaluate(() => Invoices.getData().length), 1);
+  await page.evaluate((id) => Invoices.cancel(id, 'Customer changed the order'), inv.id);
+  const led = await page.evaluate(() => STORE.get('pk3_ledger', []));
+  assert.equal(led.length, 3);
+  assert.equal(led.reduce((s, t) => s + (t.debit || 0) - (t.credit || 0), 0), -5000, 'sale reversed; advance shows as customer credit');
   assert.equal(await page.evaluate(() => QuoteConvert.isConverted(STORE.get('pk3_quotations', [])[0])), false);
   assert.ok(await page.evaluate(() => QuoteConvert.fromQuotation('q1', true)));
   await ctx.close();

@@ -32,7 +32,8 @@ var DocPrint = {
       dueDate: inv.dueDate || '', cust:{ name:inv.custName||'', phone:inv.custPhone||'', address:cust.address||'' },
       items: items, sub: sub, disc: parseFloat(inv.discAmt)||0, discP: parseFloat(inv.discP)||0, taxP: parseFloat(inv.taxP)||0, taxAmt: parseFloat(inv.taxAmt)||0,
       total: total, paidLabel:'Paid / भुक्तानी', paid: paid, balance: bal, terms: inv.terms||'', status: inv.status||'Pending',
-      ref: inv.fromQuote ? (inv.fromQuote.type==='estimate' ? 'Estimate ' : 'Quotation ') + (inv.fromQuote.no||'') : '' };
+      ref: inv.fromQuote ? (inv.fromQuote.type==='estimate' ? 'Estimate ' : 'Quotation ') + (inv.fromQuote.no||'') : '',
+      cancelled: (inv.cancelled || inv.status==='Cancelled') ? { reason: (inv.cancelled&&inv.cancelled.reason)||'', at: (inv.cancelled&&inv.cancelled.at)||'' } : null };
   },
   fromEstimate: function(e){
     var items = (e.items||[]).map(function(r){ return { name:r.name||'', qty:parseFloat(r.qty)||0, unit:r.unit||'', rate:parseFloat(r.rate)||0 }; });
@@ -96,6 +97,7 @@ var DocPrint = {
         + '</div>'
         + '<div class="tt"><div class="k">'+esc(d.kind)+'</div><div class="kn">'+esc(d.kindNe||'')+'</div></div>'
       + '</div>'
+      + (d.cancelled ? '<div class="cxl-stamp" style="border:2px solid #dc2626;color:#dc2626;background:#fef2f2;border-radius:8px;padding:8px 12px;margin-bottom:12px;font-weight:800;letter-spacing:1px;">❌ CANCELLED / रद्द'+(d.cancelled.reason?'<div style="font-weight:600;letter-spacing:0;font-size:12px;margin-top:2px;">कारण: '+esc(d.cancelled.reason)+(d.cancelled.at?' • '+esc(String(d.cancelled.at).slice(0,10)):'')+'</div>':'')+'</div>' : '')
       + '<div class="meta">'
         + '<div class="box"><div class="lbl">'+(d.kind==='QUOTATION'||d.kind==='ESTIMATE' ? 'To / ग्राहक' : 'Bill To / ग्राहक')+'</div>'
           + '<div style="font-weight:800;font-size:14px;">'+esc(d.cust.name)+'</div>'
