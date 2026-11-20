@@ -1,6 +1,6 @@
 {
   "name": "swagatik-crm",
-  "version": "7.1.0",
+  "version": "7.2.0",
   "private": true,
   "description": "Swagatik — Smart Business CRM (single-file PWA). This package.json is for development only: tests and release scripts. The app itself needs no build.",
   "scripts": {
