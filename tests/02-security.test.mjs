@@ -4,13 +4,13 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
-import { startServer, launch, loggedIn, ROOT, LICENSED, TEST_MASTER, TEST_PASS, testHtml } from './helpers.mjs';
+import { startServer, launch, loggedIn, ROOT, LICENSED, TEST_MASTER, TEST_PASS, testHtml, appSource } from './helpers.mjs';
 
 let srv, base, browser;
 before(async () => { ({ srv, base } = await startServer()); browser = await launch(); });
 after(async () => { await browser.close(); srv.close(); });
 
-const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
+const html = appSource();
 
 test('public source holds no plaintext master key or password', () => {
   assert.doesNotMatch(html, /^\s*MASTER:\s*'/m);          // old plaintext field is gone
