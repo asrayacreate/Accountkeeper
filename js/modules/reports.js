@@ -31,7 +31,7 @@ var Reports = {
     var invs =STORE.get('pk3_invoices',[])||[];
     var db   =STORE.get('pk3_daybook',[])||[];
     var fQuots=quots.filter(function(q){ return self._inRange(q.date||q.created); });
-    var fInvs =invs.filter(function(i){ return self._inRange(i.date||i.created); });
+    var fInvs =invs.filter(function(i){ return i && i.status!=='Cancelled' && !i.cancelled && self._inRange(i.date||i.created); });
     var fDb   =db.filter(function(d){ return self._inRange(d.date||d.dateAd); });
     var fCust =custs.filter(function(c){ return self._inRange(c.created||c.updated); });
     var income =fDb.filter(function(d){return d.type==='income';}).reduce(function(s,d){return s+parseFloat(d.amount||0);},0);

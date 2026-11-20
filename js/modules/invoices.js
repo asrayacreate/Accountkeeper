@@ -157,7 +157,11 @@ var Invoices = {
   },
 
   create: function(){ this._openForm(null); },
-  edit: function(id){ this._openForm(id); },
+  edit: function(id){
+    var inv=this.getData().find(function(x){ return x.id===id; });
+    if(inv && this.isCancelled(inv)){ App.toast('❌ रद्द (CANCELLED) बिल edit गर्न मिल्दैन','error'); return; }
+    this._openForm(id);
+  },
 
   _openForm: function(id){
     var custs=Customers.getData();
@@ -223,7 +227,7 @@ var Invoices = {
           +'<div class="inv-fld-group"><label class="inv-mlbl">VAT / Tax (%)</label><input type="number" id="inv-tax" value="'+taxV+'" min="0" oninput="Invoices.calc()" class="inv-fld"></div>'
           +'<div class="inv-fld-group"><label class="inv-mlbl">Paid (Rs.)</label><input type="number" id="inv-paid-inp" value="'+paidV+'" min="0" oninput="Invoices.calc()" class="inv-fld"><span id="inv-paid-warn" style="display:none;font-size:0.64rem;color:var(--red);margin-top:2px;">⚠️ Grand भन्दा बढी</span></div>'
           +'<div class="inv-fld-group"><label class="inv-mlbl">Status <span id="inv-status-hint" style="font-weight:400;color:var(--text-muted);font-size:0.7rem;"></span></label><select id="inv-status-inp" class="inv-fld" onchange="this.dataset.userset=1">'
-            +['Pending','Partial','Paid','Overdue','Cancelled'].map(function(s){return '<option'+(inv&&inv.status===s?' selected':'')+'>'+s+'</option>';}).join('')
+            +['Pending','Partial','Paid','Overdue'].map(function(s){return '<option'+(inv&&inv.status===s?' selected':'')+'>'+s+'</option>';}).join('')
           +'</select></div>'
           +'<div class="inv-fld-group" style="grid-column:1/-1;"><label class="inv-mlbl">Narration / Payment Terms / कैफियत</label><textarea id="inv-terms-inp" placeholder="उदा: भुक्तानी १५ दिनभित्र। ग्यारेन्टी १ वर्ष।" class="inv-fld" style="min-height:52px;resize:vertical;">'+esc(terms)+'</textarea></div>'
         +'</div>'
@@ -322,6 +326,7 @@ var Invoices = {
     if(!list.length){tb.innerHTML='';if(ne)ne.style.display='';return;} if(ne)ne.style.display='none';
     var sc={'Pending':'tag-yellow','Partial':'tag-blue','Paid':'tag-green','Overdue':'tag-red','Cancelled':'tag-gray'};
     tb.innerHTML=list.map(function(i){
+      if(Invoices.isCancelled(i)) return Invoices._cancelledRow(i);
       var bal = i.balance!=null ? i.balance : ((parseFloat(i.amount)||0)-(parseFloat(i.paid)||0));
       var stt = i._overdue ? 'Overdue' : (i.status||'Pending');
       var due = i.dueDate ? '<div style="font-size:0.66rem;color:'+(i._overdue?'var(--red)':'var(--text-muted)')+';">Due: '+fmtDisplayDate(i.dueDate)+'</div>' : '';
@@ -337,7 +342,7 @@ var Invoices = {
         +'<td style="font-size:0.72rem;color:var(--text-muted);">'+(i.dateBs?bsStringToDisplay(i.dateBs):fmtDisplayDate(i.date))+'</td>'
         +'<td><div class="btn-group"><button onclick="event.stopPropagation();Invoices.edit(\''+i.id+'\')" class="btn btn-xs btn-secondary">✏️</button>'
           +'<button onclick="event.stopPropagation();SalesReturns.open(\'invoice\',\''+i.id+'\')" class="btn btn-xs" style="background:#7f1d1d;color:#fff;" title="Return / Refund">↩️</button>'
-          +'<button onclick="event.stopPropagation();Invoices.del(\''+i.id+'\')" class="btn btn-xs" style="background:var(--red);color:#fff;">🗑</button></div></td>'
+          +'<button onclick="event.stopPropagation();Invoices.cancelModal(\''+i.id+'\')" class="btn btn-xs" data-inv-cancel="'+esc(i.id)+'" style="background:var(--red);color:#fff;" title="Cancel Invoice / बिल रद्द">❌</button></div></td>'
         +'</tr>';
     }).join('');
   },
@@ -346,13 +351,124 @@ var Invoices = {
   preview: function(id){
     var inv=this.getData().find(function(x){return x.id===id;}); if(!inv)return;
     this._curPreviewId = id;
-    DocPrint.preview(DocPrint.fromInvoice(inv), '🧾 Invoice '+(inv.invNum||''), [
+    var cxl=this.isCancelled(inv);
+    DocPrint.preview(DocPrint.fromInvoice(inv), '🧾 Invoice '+(inv.invNum||'')+(cxl?' — ❌ CANCELLED':''), cxl ? [] : [
       { label:'✏️ Edit', onClick:function(){ document.getElementById('view-modal').classList.remove('open'); Invoices.edit(id); } },
-      { label:'📱 WhatsApp', cls:'btn-wa', onClick:function(){ Invoices.shareWA(id); } }
+      { label:'📱 WhatsApp', cls:'btn-wa', onClick:function(){ Invoices.shareWA(id); } },
+      { label:'❌ Cancel Invoice', cls:'btn-danger', id:'inv-prev-cancel', onClick:function(){ document.getElementById('view-modal').classList.remove('open'); Invoices.cancelModal(id); } }
     ]);
   },
 
-  del: function(id){ if(!confirm('Invoice delete गर्ने?'))return; STORE.set('pk3_invoices',this.getData().filter(function(x){return x.id!==id;})); try{ QuoteConvert.onInvoiceDeleted(id); }catch(e){} Audit.log('INVOICE','Deleted'); this.render(); App.toast('Invoice deleted','info'); },
+  // v7.1.0: a real invoice is never deleted (bill numbers must stay unbroken) — it is cancelled with a reason.
+  // Only sample/demo invoices can still be deleted.
+  del: function(id){
+    var inv=this.getData().find(function(x){ return x.id===id; }); if(!inv) return;
+    if(!inv._demo){ App.toast('ℹ️ बिल नम्बर नटुटोस् भनेर Invoice delete हुँदैन — कारणसहित Cancel गर्नुहोस्','warning',3500); return this.cancelModal(id); }
+    return this._hardDelete(id);
+  },
+  _hardDelete: function(id){ if(!confirm('Invoice delete गर्ने?'))return; STORE.set('pk3_invoices',this.getData().filter(function(x){return x.id!==id;})); try{ QuoteConvert.onInvoiceDeleted(id); }catch(e){} Audit.log('INVOICE','Deleted'); this.render(); App.toast('Invoice deleted','info'); },
+
+  // ═══ v7.1.0: Invoice Cancel (बिल रद्द) + Credit Note — audit safe ═══
+  // • Number stays used (nextNum scans every invoice, cancelled too), record stays in history with a CANCELLED badge.
+  // • Reason is mandatory. Original totals are kept in inv.cancelled for the audit trail.
+  // • Customer Ledger: if the invoice posted ledger lines (_inv), a Credit Note line reverses the sale;
+  //   an optional refund of the paid amount posts a ledger debit + Day Book "Sales Return" entry.
+  isCancelled: function(inv){ return !!inv && (inv.status==='Cancelled' || !!inv.cancelled); },
+  active: function(list){ var self=this; return (list||this.getData()).filter(function(i){ return i && !self.isCancelled(i); }); },
+
+  cancel: function(id, reason, opts){
+    opts=opts||{};
+    reason=String(reason||'').trim();
+    if(reason.length<3) throw new Error('रद्द गर्नुको कारण अनिवार्य छ (कम्तिमा ३ अक्षर)');
+    var list=this.getData(), inv=list.find(function(x){ return x.id===id; });
+    if(!inv) throw new Error('Invoice भेटिएन');
+    if(this.isCancelled(inv)) throw new Error('यो बिल पहिल्यै रद्द भइसकेको छ');
+    var amount=parseFloat(inv.amount)||0, paid=parseFloat(inv.paid)||0;
+    var bal=(inv.balance!=null&&inv.balance!=='') ? (parseFloat(inv.balance)||0) : amount-paid;
+    var refund=!!opts.refund && paid>0;
+    var now=new Date().toISOString(), by=(window.currentUser&&currentUser.name)||'system';
+    var today=(typeof Staff!=='undefined'&&Staff._today) ? Staff._today() : todayISO(), todayB=(typeof todayBs==='function')?todayBs():'';
+    inv.cancelled={ at: now, by: by, reason: reason, prevStatus: inv.status||'Pending', amount: amount, paid: paid, balance: bal, refund: refund };
+    inv.status='Cancelled';
+    inv.balance=0;
+    // Customer Ledger adjustment
+    var led=STORE.get('pk3_ledger',[])||[];
+    var mine=led.filter(function(t){ return t && t._inv===id; });
+    var base={ customerId: inv.custId, custName: inv.custName, date: todayB, dateAd: today, _inv: id, created: now };
+    if(mine.length){
+      var sale=mine.reduce(function(t,x){ return t+(x._cn?0:(parseFloat(x.debit)||0)); },0);
+      if(sale>0){
+        var cn=Object.assign({ id:'lx_'+uid(), narration:'❌ Credit Note — '+inv.invNum+' रद्द ('+reason+')', debit:0, credit:sale, _cn:true }, base);
+        cn.desc=cn.narration; led.push(cn);
+      }
+    }
+    if(refund){
+      if(mine.length){
+        var rf=Object.assign({ id:'lx_'+uid(), narration:'↩️ रकम फिर्ता — '+inv.invNum+' (रद्द)', debit:paid, credit:0, _cn:true }, base);
+        rf.desc=rf.narration; led.push(rf);
+      }
+      var db=STORE.get('pk3_daybook',[])||[];
+      inv.cancelled.dbId=uid();
+      db.unshift({ id:inv.cancelled.dbId, type:'return', amount:paid, desc:'↩️ बिल रद्द, रकम फिर्ता — '+inv.invNum+' '+(inv.custName||''), cat:'Sales Return',
+        date:today, dateBs:todayB, user:by, _invCancel:id });
+      STORE.set('pk3_daybook', db);
+    }
+    if(mine.length || refund) STORE.set('pk3_ledger', led);
+    STORE.set('pk3_invoices', list);
+    // free the source quotation / estimate so it can be converted again (the cancelled bill stays in history)
+    [['pk3_quotations'],['pk3_estimates']].forEach(function(k){
+      var l=STORE.get(k[0],[])||[], ch=false;
+      l.forEach(function(x){ if(x && x.convertedInvId===id){ delete x.convertedInvId; delete x.convertedInvNum; delete x.convertedAt; ch=true; } });
+      if(ch) STORE.set(k[0], l);
+    });
+    try { Audit.log('INVOICE','Cancelled: '+inv.invNum+' '+(inv.custName||'')+' '+fmtRs(amount)+' — कारण: '+reason); } catch(e){}
+    try { Activity.add('❌ Invoice cancelled: '+inv.invNum+' — '+reason); } catch(e){}
+    return inv;
+  },
+
+  cancelModal: function(id){
+    var inv=this.getData().find(function(x){ return x.id===id; }); if(!inv) return;
+    if(this.isCancelled(inv)){ App.toast('यो बिल पहिल्यै रद्द भइसकेको छ','info'); return; }
+    var paid=parseFloat(inv.paid)||0;
+    var m=document.getElementById('inv-cxl-modal');
+    if(!m){
+      m=document.createElement('div'); m.className='modal-overlay'; m.id='inv-cxl-modal';
+      m.innerHTML='<div class="modal" style="max-width:480px;"><div class="modal-head"><div class="modal-title">❌ Cancel Invoice / बिल रद्द</div><button class="modal-close" onclick="document.getElementById(\'inv-cxl-modal\').classList.remove(\'open\')">✕</button></div><div id="inv-cxl-body"></div></div>';
+      document.body.appendChild(m);
+    }
+    document.getElementById('inv-cxl-body').innerHTML=
+      '<div style="font-size:0.84rem;line-height:1.6;margin-bottom:10px;"><b>'+esc(inv.invNum||'')+'</b> — '+esc(inv.custName||'')+'<br>Total '+fmtRs(inv.amount||0)+' • Paid '+fmtRs(paid)+'</div>'
+      +'<div style="font-size:0.74rem;background:var(--yellow-soft);color:var(--text);padding:8px 10px;border-radius:8px;margin-bottom:10px;">ℹ️ बिल मेटिँदैन — CANCELLED ब्याजसहित इतिहासमा रहन्छ र बिल नम्बर क्रम टुट्दैन। Customer Ledger को बाँकी स्वतः मिलाइन्छ।</div>'
+      +'<div class="form-group"><label>रद्द गर्नुको कारण * (अनिवार्य)</label><textarea id="inv-cxl-reason" style="min-height:60px;" placeholder="उदा: ग्राहकले अर्डर रद्द गर्नुभयो / गलत बिल बन्यो"></textarea></div>'
+      +(paid>0?'<label style="display:flex;gap:8px;align-items:center;font-size:0.8rem;margin-bottom:10px;cursor:pointer;text-transform:none;letter-spacing:0;"><input type="checkbox" id="inv-cxl-refund"> भुक्तानी भएको '+fmtRs(paid)+' ग्राहकलाई फिर्ता दिइयो (Day Book मा Return दर्ता हुन्छ)</label>':'')
+      +'<div class="form-actions"><button class="btn btn-secondary" onclick="document.getElementById(\'inv-cxl-modal\').classList.remove(\'open\')">पछाडि</button>'
+      +'<button class="btn btn-danger" id="inv-cxl-confirm" onclick="Invoices.confirmCancel(\''+id+'\')">❌ बिल रद्द गर्नुस्</button></div>';
+    m.classList.add('open');
+    setTimeout(function(){ var r=document.getElementById('inv-cxl-reason'); if(r) r.focus(); }, 100);
+  },
+  confirmCancel: function(id){
+    var rf=document.getElementById('inv-cxl-refund');
+    try { var inv=this.cancel(id, getVal('inv-cxl-reason'), { refund: !!(rf&&rf.checked) }); }
+    catch(e){ App.toast(e.message,'error'); var r=document.getElementById('inv-cxl-reason'); if(r) r.focus(); return; }
+    document.getElementById('inv-cxl-modal').classList.remove('open');
+    App.toast('❌ '+inv.invNum+' रद्द भयो — रेकर्ड इतिहासमा सुरक्षित छ','success',3500);
+    this.render();
+    try { if(App.currentPage==='ledger') Ledger.render(); } catch(e){}
+  },
+  _cancelledRow: function(i){
+    var c=i.cancelled||{}, amt=c.amount!=null?c.amount:(parseFloat(i.amount)||0);
+    var tip='रद्द: '+(c.reason||'—')+(c.at?' • '+String(c.at).slice(0,10):'')+(c.by?' • '+c.by:'');
+    return '<tr class="inv-cancelled" data-inv-id="'+esc(i.id)+'" style="cursor:pointer;opacity:0.7;" onclick="Invoices.preview(\''+i.id+'\')">'
+      +'<td style="font-weight:700;text-decoration:line-through;">'+esc(i.invNum||'')+'</td>'
+      +'<td>'+esc(i.custName||'')+'<div style="font-size:0.7rem;color:var(--text-muted);">'+esc(i.custPhone||'')+'</div></td>'
+      +'<td style="font-size:0.74rem;color:var(--red);">❌ '+esc(c.reason||'Cancelled')+'</td>'
+      +'<td style="text-align:right;white-space:nowrap;text-decoration:line-through;">'+fmtRs(amt)+'</td>'
+      +'<td style="text-align:right;color:var(--text-muted);white-space:nowrap;">'+fmtRs(i.paid||0)+'</td>'
+      +'<td style="text-align:right;white-space:nowrap;">'+fmtRs(0)+'</td>'
+      +'<td><span class="tag tag-red" title="'+esc(tip)+'">CANCELLED</span>'+(c.refund?' <span class="tag tag-gray" style="font-size:0.56rem;">↩️ फिर्ता</span>':'')+'</td>'
+      +'<td style="font-size:0.72rem;color:var(--text-muted);">'+(i.dateBs?bsStringToDisplay(i.dateBs):fmtDisplayDate(i.date))+'</td>'
+      +'<td></td></tr>';
+  },
 
   shareWA: function(id){
     var inv = this.getData().find(function(x){ return x.id===id; });
