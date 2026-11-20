@@ -235,7 +235,7 @@ var Invoices = {
           +((typeof TaxInvoice!=='undefined')?TaxInvoice.formHtml(inv):'')
           +'<div class="inv-fld-group"><label class="inv-mlbl">Discount <select id="inv-disc-mode" onchange="Invoices.calc()" style="font-size:0.66rem;padding:1px 3px;border-radius:4px;"><option value="percent">%</option><option value="flat">Rs.</option></select></label><input type="number" id="inv-disc" value="'+discV+'" min="0" oninput="Invoices.calc()" class="inv-fld"></div>'
           +'<div class="inv-fld-group"><label class="inv-mlbl">VAT / Tax (%)</label><input type="number" id="inv-tax" value="'+taxV+'" min="0" oninput="Invoices.calc()" class="inv-fld"></div>'
-          +'<div class="inv-fld-group"><label class="inv-mlbl">Paid (Rs.)</label><input type="number" id="inv-paid-inp" value="'+paidV+'" min="0" oninput="Invoices.calc()" class="inv-fld"><span id="inv-paid-warn" style="display:none;font-size:0.64rem;color:var(--red);margin-top:2px;">⚠️ Grand भन्दा बढी</span></div>'
+          +'<div class="inv-fld-group"><label class="inv-mlbl">Paid (Rs.)</label><input type="number" id="inv-paid-inp" value="'+paidV+'" min="0" oninput="Invoices.calc()" class="inv-fld"'+(inv&&Array.isArray(inv.payments)&&inv.payments.length?' readonly title="किस्ता भुक्तानी 💵 बटनबाट मात्र"':'')+'><span id="inv-paid-warn" style="display:none;font-size:0.64rem;color:var(--red);margin-top:2px;">⚠️ Grand भन्दा बढी</span></div>'
           +'<div class="inv-fld-group"><label class="inv-mlbl">Status <span id="inv-status-hint" style="font-weight:400;color:var(--text-muted);font-size:0.7rem;"></span></label><select id="inv-status-inp" class="inv-fld" onchange="this.dataset.userset=1">'
             +['Pending','Partial','Paid','Overdue'].map(function(s){return '<option'+(inv&&inv.status===s?' selected':'')+'>'+s+'</option>';}).join('')
           +'</select></div>'
@@ -308,7 +308,7 @@ var Invoices = {
     var list=this.getData();
     if(this._editId){
       var idx=list.findIndex(function(x){return x.id===rec.id;});
-      if(idx>=0){ rec.created=list[idx].created; if(list[idx].stockTracked) rec.stockTracked=true; list[idx]=rec; }
+      if(idx>=0){ rec.created=list[idx].created; if(list[idx].stockTracked) rec.stockTracked=true; if(Array.isArray(list[idx].payments)) rec.payments=list[idx].payments; list[idx]=rec; }   // v7.2.0: keep stock link + installment history
       else list.unshift(rec);
       Audit.log('INVOICE','Updated: '+rec.invNum);
     } else {
@@ -356,6 +356,7 @@ var Invoices = {
         +'<td><span class="tag '+(sc[stt]||'tag-gray')+'">'+stt+'</span>'+(i._returned?' <span class="tag tag-gray" style="font-size:0.56rem;">↩️ Returned</span>':'')+'</td>'
         +'<td style="font-size:0.72rem;color:var(--text-muted);">'+(i.dateBs?bsStringToDisplay(i.dateBs):fmtDisplayDate(i.date))+'</td>'
         +'<td><div class="btn-group"><button onclick="event.stopPropagation();Invoices.edit(\''+i.id+'\')" class="btn btn-xs btn-secondary">✏️</button>'
+          +(bal>0.5?'<button onclick="event.stopPropagation();Receivables.payModal(\''+i.id+'\')" class="btn btn-xs btn-success" data-inv-pay="'+esc(i.id)+'" title="भुक्तानी लिनुहोस् / Receive Payment">💵</button>':'')
           +'<button onclick="event.stopPropagation();SalesReturns.open(\'invoice\',\''+i.id+'\')" class="btn btn-xs" style="background:#7f1d1d;color:#fff;" title="Return / Refund">↩️</button>'
           +'<button onclick="event.stopPropagation();Invoices.cancelModal(\''+i.id+'\')" class="btn btn-xs" data-inv-cancel="'+esc(i.id)+'" style="background:var(--red);color:#fff;" title="Cancel Invoice / बिल रद्द">❌</button></div></td>'
         +'</tr>';
@@ -369,9 +370,15 @@ var Invoices = {
     var cxl=this.isCancelled(inv);
     DocPrint.preview(DocPrint.fromInvoice(inv), '🧾 Invoice '+(inv.invNum||'')+(cxl?' — ❌ CANCELLED':''), cxl ? [] : [
       { label:'✏️ Edit', onClick:function(){ document.getElementById('view-modal').classList.remove('open'); Invoices.edit(id); } },
-      { label:'📱 WhatsApp', cls:'btn-wa', onClick:function(){ Invoices.shareWA(id); } },
+      { label:'📱 WhatsApp', cls:'btn-wa', onClick:function(){ Invoices.shareWA(id); } }
+    ].concat(Receivables.balanceOf(inv)>0.5 ? [
+      { label:'💵 भुक्तानी लिनुहोस्', cls:'btn-success', id:'inv-prev-pay', onClick:function(){ document.getElementById('view-modal').classList.remove('open'); Receivables.payModal(id); } },
+      { label:'📲 बाँकी रिमाइन्डर', cls:'btn-wa', id:'inv-prev-remind', onClick:function(){ Receivables.remind(inv.custId); } }
+    ] : []).concat(Receivables.payments(inv).length ? [
+      { label:'🧾 भुक्तानी / रसिद ('+Receivables.payments(inv).length+')', id:'inv-prev-rcpts', onClick:function(){ document.getElementById('view-modal').classList.remove('open'); Receivables.payModal(id); } }
+    ] : []).concat([
       { label:'❌ Cancel Invoice', cls:'btn-danger', id:'inv-prev-cancel', onClick:function(){ document.getElementById('view-modal').classList.remove('open'); Invoices.cancelModal(id); } }
-    ]);
+    ]));
   },
 
   // v7.1.0: a real invoice is never deleted (bill numbers must stay unbroken) — it is cancelled with a reason.
