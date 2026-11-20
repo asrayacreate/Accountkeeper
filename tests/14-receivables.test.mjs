@@ -105,10 +105,10 @@ test('Payment Receipt: installment number, paid before / balance rows, print siz
   assert.equal(r.d1.noPay, false);
   assert.equal(r.d2.kista, 3); assert.equal(r.d2.bal, 0); assert.equal(r.d2.noPay, true);
   for (const h of [r.a4, r.t58]) {
-    assert.ok(h.includes('PAYMENT RECEIPT')); assert.ok(h.includes('Himal Test Traders')); assert.ok(h.includes('प्राप्त रकम')); assert.ok(h.includes('Received from'));
+    assert.ok(h.includes('PAYMENT RECEIPT')); assert.ok(h.includes('Himal Test Traders')); assert.ok(h.includes('प्राप्त रकम'));
     assert.ok(h.includes('Balance / बाँकी')); assert.ok(!h.includes('Subtotal'), 'receipt has no subtotal line');
   }
-  assert.ok(r.a4.includes('दोस्रो किस्ता')); assert.ok(!r.a4.includes('Terms &amp; Conditions'));
+  assert.ok(r.a4.includes('Received from')); assert.ok(r.a4.includes('दोस्रो किस्ता')); assert.ok(!r.a4.includes('Terms &amp; Conditions'));
   assert.ok(r.a4.includes('data-pay-qr'), 'balance left → Scan to Pay shown');
   assert.ok(!r.a4Paid.includes('data-pay-qr'), 'fully paid → no Scan to Pay');
   assert.equal(r.w, 1080); assert.ok(r.h > 600);
