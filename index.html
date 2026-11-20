@@ -25,9 +25,11 @@
 // ── RELEASE VERSION — एकै ठाउँ। `npm run release` ले यो, sw.js, package.json र तलका सबै ?v= सँगै बदल्छ। ──
 var APP_VERSION = '7.1.0';
 </script>
+<script src="js/core/error-log.js?v=7.1.0"></script>
 <script src="js/core/manifest.js?v=7.1.0"></script>
 <link rel="stylesheet" href="css/app.css?v=7.1.0">
 <link rel="stylesheet" href="css/extra.css?v=7.1.0">
+<link rel="stylesheet" href="css/trial-safety.css?v=7.1.0">
 <link rel="stylesheet" href="css/v7.css?v=7.1.0">
 <link rel="stylesheet" href="css/insights.css?v=7.1.0">
 </head>
@@ -180,6 +182,7 @@ var APP_VERSION = '7.1.0';
     <div class="nav-section">Business</div>
     <div class="nav-item" data-page="projects" data-module="projects" data-role="admin" onclick="App.navigate('projects')"><span class="icon">🏗️</span>Projects / Sites</div>
     <div class="nav-item" data-page="payables" data-module="payables" data-role="admin" onclick="App.navigate('payables')"><span class="icon">👷</span>Supplier / मिस्त्री खाता</div>
+    <div class="nav-item" data-page="purchases" data-role="admin" onclick="App.navigate('purchases')"><span class="icon">🛒</span>Purchase / खरिद बिल</div>
     <div class="nav-item" data-page="ratelist" onclick="App.navigate('ratelist')"><span class="icon">💰</span>Rate List</div>
     <div class="nav-item" data-page="vcard" onclick="App.navigate('vcard')"><span class="icon">💼</span>Visiting Card</div>
     <div class="nav-item" data-page="brochures" onclick="App.navigate('brochures')"><span class="icon">📄</span>Brochures</div>
@@ -254,6 +257,7 @@ var APP_VERSION = '7.1.0';
 
   <!-- ========================= DASHBOARD PAGE ========================= -->
   <div class="page active" id="page-dashboard">
+    <div id="backup-alert-dash" style="display:none;"></div>
     <div id="smart-rem-dash"></div>
     <div class="hero-card">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;flex-wrap:wrap;">
@@ -272,6 +276,8 @@ var APP_VERSION = '7.1.0';
       </div>
     </div>
     <div id="dash-greet" style="font-size:1.05rem;font-weight:800;margin-bottom:10px;">👋</div>
+    <!-- v7.2.0 Low Stock warning (Stock.renderDashAlert) -->
+    <div id="dash-lowstock" data-module="stock" style="display:none;"></div>
     <!-- ═══ आजको Snapshot — Daily P&L + due tracking (v5.9) ═══ -->
     <div class="card" style="margin-bottom:14px;background:linear-gradient(135deg,rgba(249,115,22,0.06),rgba(34,197,94,0.04));border:1px solid var(--border);">
       <div style="padding:12px 14px 8px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;">
@@ -653,6 +659,16 @@ var APP_VERSION = '7.1.0';
     <div id="pay-list" class="proj-list"></div>
   </div>
 
+  <div class="page" id="page-purchases">
+    <div class="section-head">
+      <div><div class="section-title">🛒 Purchase / खरिद बिल</div><div class="section-subtitle">Supplier को बिल, Input VAT र TDS कट्टी — Purchase Book CA लाई Reports बाट</div></div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;"><button onclick="App.navigate('dailyreport')" class="btn btn-sm btn-secondary">📒 VAT Books</button><button onclick="Purchases.open()" class="btn btn-sm btn-primary" id="pur-new">➕ नयाँ खरिद बिल</button></div>
+    </div>
+    <div class="proj-summary" id="pur-summary"></div>
+    <input type="search" id="pur-search" placeholder="🔍 Supplier / बिल नं. / PAN" oninput="Purchases._q=this.value;Purchases.render()" style="width:100%;margin-bottom:12px;">
+    <div id="pur-list"></div>
+  </div>
+
   <div class="page" id="page-followups">
     <div class="section-head">
       <div class="btn-group"><button class="btn btn-sm btn-primary" id="fu-f-all" onclick="Followups.filter('all')">सबै</button><button class="btn btn-sm btn-secondary" id="fu-f-today" onclick="Followups.filter('today')">आज 🔴</button><button class="btn btn-sm btn-secondary" id="fu-f-upcoming" onclick="Followups.filter('upcoming')">Upcoming 🔵</button><button class="btn btn-sm btn-secondary" id="fu-f-overdue" onclick="Followups.filter('overdue')">Overdue ⚠️</button><button class="btn btn-sm btn-secondary" id="fu-f-done" onclick="Followups.filter('done')">Done ✅</button></div>
@@ -980,6 +996,7 @@ var APP_VERSION = '7.1.0';
   <!-- ========================= STOCK PAGE ========================= -->
   <div class="page" id="page-stocklist">
     <div class="section-head"><div class="search-wrap"><input type="text" id="stk-search" placeholder="Search stock..." oninput="Stock.render()"></div><div class="btn-group"><button onclick="Stock.scanBarcode()" class="btn btn-sm btn-secondary">📷 Scan</button><button onclick="Stock.addModal()" class="btn btn-sm btn-primary">+ Add</button></div></div>
+    <div style="font-size:0.72rem;color:var(--text-muted);margin-bottom:8px;">ℹ️ Invoice (बिक्री) सेभ गर्दा मिल्ने नामको सामान stock बाट स्वतः घट्छ; Supplier बिलमा "Stock मा थप्ने" सामान राखे स्वतः बढ्छ। रातो = Low Stock (सीमा भन्दा कम)।</div>
     <div id="stk-alert-bar" style="display:none;background:var(--red-soft);border:1px solid rgba(248,113,113,0.3);border-radius:10px;padding:10px 14px;font-size:0.82rem;color:var(--red);margin-bottom:10px;"></div>
     <div class="card"><div class="table-wrap"><table><thead><tr><th>Photo</th><th>Item Name</th><th>Category</th><th style="text-align:right;">Stock</th><th style="text-align:right;">Purchase</th><th style="text-align:right;">Selling</th><th style="text-align:right;">Margin</th><th></th></tr></thead><tbody id="stk-table"></tbody></table></div><div id="no-stk" class="empty-state" style="display:none;"><div class="icon">📦</div><div class="title">Stock छैन</div><button onclick="Stock.addModal()" class="btn btn-primary">+ Add Item</button></div></div>
   </div>
@@ -1222,6 +1239,17 @@ var APP_VERSION = '7.1.0';
           <label class="btn btn-secondary" style="cursor:pointer;">📤 Restore from File <input type="file" accept=".json" style="display:none;" onchange="Backup.importJSON(event)"></label>
         </div>
         <div style="font-size:0.73rem;color:var(--text-muted);margin-top:8px;">Auto-save: हरेक action मा स्वतः save हुन्छ।</div>
+      </div>
+      <div class="card card-body" id="set-errlog-card">
+        <div class="section-title">🐞 Error Log (ट्रायल / समस्या रिपोर्ट)</div>
+        <div style="font-size:0.75rem;color:var(--text-muted);margin:6px 0 4px;line-height:1.6;">एप चलाउँदा कुनै bug वा error आए यहाँ आफैं रेकर्ड हुन्छ। "Copy" थिचेर WhatsApp / Email मा पठाउन सकिन्छ। यो यही device मा मात्र रहन्छ — sync वा backup फाइलमा जाँदैन।</div>
+        <div style="font-size:0.8rem;font-weight:700;margin-bottom:8px;" id="errlog-count">—</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          <button type="button" id="errlog-view-btn" class="btn btn-sm btn-secondary" onclick="ErrorLogView.toggle()">👁 Error Log हेर्नुहोस्</button>
+          <button type="button" id="errlog-copy-btn" class="btn btn-sm btn-primary" onclick="ErrorLogView.copy()">📋 Copy</button>
+          <button type="button" id="errlog-clear-btn" class="btn btn-sm btn-danger" onclick="ErrorLogView.clear()">🗑 खाली गर्नुहोस्</button>
+        </div>
+        <div id="errlog-list" class="errlog-list" style="display:none;"></div>
       </div>
 
       <!-- ========================= TESTING CHECKLIST ========================= -->
@@ -1937,6 +1965,8 @@ var APP_VERSION = '7.1.0';
 <script src="js/modules/bulk-message.js?v=7.1.0"></script>
 <script src="js/modules/account-summary.js?v=7.1.0"></script>
 <script src="js/modules/backup.js?v=7.1.0"></script>
+<script src="js/modules/backup-alert.js?v=7.1.0"></script>
+<script src="js/modules/error-log-view.js?v=7.1.0"></script>
 <script src="js/modules/settings.js?v=7.1.0"></script>
 <script src="js/modules/audit-notif.js?v=7.1.0"></script>
 <script src="js/modules/smart-reminders.js?v=7.1.0"></script>
@@ -1973,6 +2003,8 @@ var APP_VERSION = '7.1.0';
 <script src="js/modules/projects.js?v=7.1.0"></script>
 <script src="js/modules/payables.js?v=7.1.0"></script>
 <script src="js/modules/ca-export.js?v=7.1.0"></script>
+<script src="js/modules/tax-invoice.js?v=7.1.0"></script>
+<script src="js/modules/purchase.js?v=7.1.0"></script>
 <script src="js/core/sw-register.js?v=7.1.0"></script>
 </body>
 </html>

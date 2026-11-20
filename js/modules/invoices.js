@@ -68,6 +68,8 @@ var Invoices = {
     // Amount in words
     var wordsEl=document.getElementById('inv-sum-words');
     if(wordsEl) wordsEl.textContent = (typeof numToWords==='function') ? numToWords(grand) : '';
+    var _t={sub:sub,discAmt:discAmt,taxAmt:taxAmt,grand:grand};
+    try{ TaxInvoice.onCalc(_t); }catch(e){}   // v7.2.0: Taxable amount, Nepali words, bill type hint
 
     // Overpayment warning
     var warnEl=document.getElementById('inv-paid-warn');
@@ -119,6 +121,12 @@ var Invoices = {
         });
       });
     }catch(e){}
+    // v7.2.0: stock items too (label shows मौज्दात)
+    try{
+      if(Stock.autoOn()) Stock.getData().forEach(function(st){
+        if(st&&st.name){ var o=document.createElement('option'); o.value=st.name; o.label='📦 Stock: '+(st.qty||0)+' '+(st.unit||'')+(st.selling?' • Rs.'+st.selling:''); idl.appendChild(o); }
+      });
+    }catch(e){}
     document.body.appendChild(idl);
 
     tb.innerHTML=this._rows.map(function(r,i){
@@ -145,6 +153,7 @@ var Invoices = {
           return false;
         });
       });
+      if(!found){ try{ var st=Stock.autoOn() && Stock.find(r.name); if(st && parseFloat(st.selling)>0) found={rate:st.selling,unit:st.unit}; }catch(e){} }
       if(found){ r.rate=parseFloat(found.rate)||0; if(found.unit) r.unit=found.unit; this.renderRows(); this.calc(); }
     }catch(e){}
   },
@@ -204,7 +213,7 @@ var Invoices = {
 
       // ── meta strip: invoice no / dates / customer (Book Keeper style) ──
       +'<div class="inv-doc-meta">'
-        +'<div class="inv-mcell"><span class="inv-mlbl">Bill To / ग्राहक *</span><select id="inv-cust-sel" class="inv-fld">'+custOpts+'</select></div>'
+        +'<div class="inv-mcell"><span class="inv-mlbl">Bill To / ग्राहक *</span><select id="inv-cust-sel" class="inv-fld" onchange="try{TaxInvoice.onCustomer()}catch(e){}">'+custOpts+'</select></div>'
         +'<div class="inv-mcell"><span class="inv-mlbl">Invoice No / बिल नं</span><input type="text" id="inv-num-inp" class="inv-fld" value="'+esc(invNum)+'"></div>'
         +'<div class="inv-mcell"><span class="inv-mlbl">Date / मिति (AD)</span><input type="date" id="inv-date-inp" class="inv-fld" value="'+(inv&&inv.date?String(inv.date).slice(0,10):new Date().toISOString().slice(0,10))+'"></div>'
         +'<div class="inv-mcell"><span class="inv-mlbl">मिति (BS)</span><input type="text" id="inv-date-bs-inp" class="inv-fld" value="'+esc(invBsStr)+'" placeholder="2083-04-17"></div>'
@@ -223,6 +232,7 @@ var Invoices = {
       // ── two-column footer: narration/terms (left) + totals (right) ──
       +'<div class="inv-doc-foot">'
         +'<div class="inv-foot-left">'
+          +((typeof TaxInvoice!=='undefined')?TaxInvoice.formHtml(inv):'')
           +'<div class="inv-fld-group"><label class="inv-mlbl">Discount <select id="inv-disc-mode" onchange="Invoices.calc()" style="font-size:0.66rem;padding:1px 3px;border-radius:4px;"><option value="percent">%</option><option value="flat">Rs.</option></select></label><input type="number" id="inv-disc" value="'+discV+'" min="0" oninput="Invoices.calc()" class="inv-fld"></div>'
           +'<div class="inv-fld-group"><label class="inv-mlbl">VAT / Tax (%)</label><input type="number" id="inv-tax" value="'+taxV+'" min="0" oninput="Invoices.calc()" class="inv-fld"></div>'
           +'<div class="inv-fld-group"><label class="inv-mlbl">Paid (Rs.)</label><input type="number" id="inv-paid-inp" value="'+paidV+'" min="0" oninput="Invoices.calc()" class="inv-fld"'+(inv&&Array.isArray(inv.payments)&&inv.payments.length?' readonly title="किस्ता भुक्तानी 💵 बटनबाट मात्र"':'')+'><span id="inv-paid-warn" style="display:none;font-size:0.64rem;color:var(--red);margin-top:2px;">⚠️ Grand भन्दा बढी</span></div>'
@@ -234,11 +244,13 @@ var Invoices = {
         +'<div class="inv-foot-right">'
           +'<div class="inv-tot-row"><span>Subtotal</span><b id="inv-sum-sub">Rs. 0</b></div>'
           +'<div class="inv-tot-row muted"><span>Discount</span><span id="inv-sum-disc">- Rs. 0</span></div>'
+          +'<div class="inv-tot-row muted" id="inv-sum-taxable-row" style="display:none;"><span>Taxable / करयोग्य रकम</span><span id="inv-sum-taxable">Rs. 0</span></div>'
           +'<div class="inv-tot-row muted"><span>Tax / VAT</span><span id="inv-sum-tax">+ Rs. 0</span></div>'
           +'<div class="inv-tot-row muted" id="inv-sum-round-row" style="display:none;"><span>Round Off</span><span id="inv-sum-round">+ Rs. 0</span></div>'
           +'<label class="inv-tot-row muted" style="cursor:pointer;align-items:center;gap:6px;"><span><input type="checkbox" id="inv-roundoff" checked onchange="Invoices.calc()" style="vertical-align:middle;"> Round to nearest Rs.</span></label>'
           +'<div class="inv-tot-grand"><span>Grand Total</span><b id="inv-sum-grand">Rs. 0</b></div>'
-          +'<div id="inv-sum-words" style="font-size:0.68rem;font-style:italic;color:var(--text-muted);padding:4px 0;border-bottom:1px dashed var(--border);margin-bottom:4px;"></div>'
+          +'<div id="inv-sum-words" style="font-size:0.68rem;font-style:italic;color:var(--text-muted);padding:4px 0 0;"></div>'
+          +'<div id="inv-sum-words-ne" style="font-size:0.7rem;color:var(--text-muted);padding:2px 0 4px;border-bottom:1px dashed var(--border);margin-bottom:4px;"></div>'
           +'<div class="inv-tot-row" style="margin-top:6px;"><span style="color:var(--text-muted);">Balance Due</span><b id="inv-sum-bal" style="color:var(--red);">Rs. 0</b></div>'
         +'</div>'
       +'</div>'
@@ -291,21 +303,24 @@ var Invoices = {
       desc: items.map(function(r){return r.name;}).filter(Boolean).slice(0,3).join(', '),  // legacy summary
       date: adDate, dateBs: bsDate
     };
+    try{ Object.assign(rec, TaxInvoice.formValues(custId)); }catch(e){}   // v7.2.0: billType + buyer PAN
 
     var list=this.getData();
     if(this._editId){
       var idx=list.findIndex(function(x){return x.id===rec.id;});
-      if(idx>=0){ rec.created=list[idx].created; if(Array.isArray(list[idx].payments)) rec.payments=list[idx].payments; list[idx]=rec; }   // v7.2.0: keep installment history
+      if(idx>=0){ rec.created=list[idx].created; if(list[idx].stockTracked) rec.stockTracked=true; if(Array.isArray(list[idx].payments)) rec.payments=list[idx].payments; list[idx]=rec; }   // v7.2.0: keep stock link + installment history
       else list.unshift(rec);
       Audit.log('INVOICE','Updated: '+rec.invNum);
     } else {
       rec.created=new Date().toISOString();
+      rec.stockTracked=true;   // v7.2.0: new bills move stock (old bills never do)
       list.unshift(rec);
       Audit.log('INVOICE','Created: '+rec.invNum+' '+cust.name);
       try{ Activity.add('🧾 Invoice created: '+rec.invNum+' — '+cust.name); }catch(e){}
     }
     STORE.set('pk3_invoices',list);
     App.toast(this._editId?'✅ Invoice updated!':'✅ Invoice saved!','success');
+    try{ Stock.warnLow(Stock.syncInvoice(rec)); }catch(e){ console.warn('stock sync', e); }
     this._editId=null; this._rows=[];
     document.getElementById('inv-edit-modal').classList.remove('open');
     this.render();
@@ -373,7 +388,7 @@ var Invoices = {
     if(!inv._demo){ App.toast('ℹ️ बिल नम्बर नटुटोस् भनेर Invoice delete हुँदैन — कारणसहित Cancel गर्नुहोस्','warning',3500); return this.cancelModal(id); }
     return this._hardDelete(id);
   },
-  _hardDelete: function(id){ if(!confirm('Invoice delete गर्ने?'))return; STORE.set('pk3_invoices',this.getData().filter(function(x){return x.id!==id;})); try{ QuoteConvert.onInvoiceDeleted(id); }catch(e){} Audit.log('INVOICE','Deleted'); this.render(); App.toast('Invoice deleted','info'); },
+  _hardDelete: function(id){ if(!confirm('Invoice delete गर्ने?'))return; STORE.set('pk3_invoices',this.getData().filter(function(x){return x.id!==id;})); try{ QuoteConvert.onInvoiceDeleted(id); }catch(e){} try{ Stock.reverse('inv:'+id,{note:'🗑 Invoice deleted'}); }catch(e){} Audit.log('INVOICE','Deleted'); this.render(); App.toast('Invoice deleted','info'); },
 
   // ═══ v7.1.0: Invoice Cancel (बिल रद्द) + Credit Note — audit safe ═══
   // • Number stays used (nextNum scans every invoice, cancelled too), record stays in history with a CANCELLED badge.
@@ -422,6 +437,7 @@ var Invoices = {
     }
     if(mine.length || refund) STORE.set('pk3_ledger', led);
     STORE.set('pk3_invoices', list);
+    try{ Stock.syncInvoice(inv); }catch(e){}   // v7.2.0: रद्द बिलको सामान stock मा फिर्ता
     // free the source quotation / estimate so it can be converted again (the cancelled bill stays in history)
     [['pk3_quotations'],['pk3_estimates']].forEach(function(k){
       var l=STORE.get(k[0],[])||[], ch=false;

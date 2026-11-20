@@ -11,7 +11,7 @@ var Modules = {
     { id: 'projects',    icon: '🏗️', label: 'Projects / Sites',              hint: 'Project/Site को progress, खर्च र नाफा' },
     { id: 'measurement', icon: '📏', label: 'Site Measurement (Sq.ft)',      hint: 'Quotation मा नाप (Sq.ft) क्यालकुलेटर' },
     { id: 'payables',    icon: '👷', label: 'Supplier र मिस्त्री खाता',        hint: 'Supplier / ठेकेदारलाई तिर्नुपर्ने हिसाब (Payables)' },
-    { id: 'stock',       icon: '📦', label: 'Stock / Items',                 hint: 'सामानको stock र मौज्दात' },
+    { id: 'stock',       icon: '📦', label: 'Stock / Items',                 hint: 'सामानको मौज्दात, Low Stock चेतावनी, बिक्रीमा घट्ने / खरिदमा बढ्ने' },
     { id: 'quotations',  icon: '📋', label: 'Quotations / Estimates',        hint: 'Quotation, Estimate र Bakauta' },
     { id: 'walkin',      icon: '🚶', label: 'Walk-in Greeting',              hint: 'पसल/showroom मा आउने ग्राहकलाई स्वागत सन्देश' },
     { id: 'ai',          icon: '🤖', label: 'AI Assistant',                  hint: 'AI बाट message / post / analysis' },
