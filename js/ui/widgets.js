@@ -500,8 +500,8 @@ var FabDrag = {
 
     function place(x, y){
       // Keep within viewport (with 6px margin), 54px button
-      var vw = window.innerWidth, vh = window.innerHeight, sz = 54, mg = 6;
-      x = Math.max(mg, Math.min(x, vw - sz - mg));
+      var vw = window.innerWidth, vh = window.innerHeight, sw = fab.offsetWidth || 54, sz = fab.offsetHeight || 54, mg = 6;
+      x = Math.max(mg, Math.min(x, vw - sw - mg));
       y = Math.max(mg, Math.min(y, vh - sz - mg));
       fab.style.left = x + 'px';
       fab.style.top = y + 'px';
@@ -530,9 +530,9 @@ var FabDrag = {
         var r = fab.getBoundingClientRect();
         try { STORE.set('pk3_fab_pos', {x:r.left, y:r.top}); } catch(e){}
       } else {
-        // Treated as a tap → open Quick Actions
-        var m = document.getElementById('fab-modal');
-        if(m) m.classList.add('open');
+        // Treated as a tap → open Quick Add (v7.1.0)
+        if(typeof QuickAdd!=='undefined') QuickAdd.open();
+        else { var m = document.getElementById('fab-modal'); if(m) m.classList.add('open'); }
       }
     }
 
@@ -552,8 +552,8 @@ var FabDrag = {
     var pos = null;
     try { pos = STORE.get('pk3_fab_pos', null); } catch(e){}
     if(pos && typeof pos.x === 'number'){
-      var vw = window.innerWidth, vh = window.innerHeight, sz = 54, mg = 6;
-      var x = Math.max(mg, Math.min(pos.x, vw - sz - mg));
+      var vw = window.innerWidth, vh = window.innerHeight, sw = fab.offsetWidth || 54, sz = fab.offsetHeight || 54, mg = 6;
+      var x = Math.max(mg, Math.min(pos.x, vw - sw - mg));
       var y = Math.max(mg, Math.min(pos.y, vh - sz - mg));
       fab.style.left = x + 'px';
       fab.style.top = y + 'px';
@@ -571,7 +571,7 @@ var FabDrag = {
     }
     var m = document.getElementById('fab-modal');
     if(m) m.classList.remove('open');
-    if(window.App && App.toast) App.toast('📍 ⚡ button मूल ठाउँमा फर्कियो','success',1800);
+    if(window.App && App.toast) App.toast('📍 ＋ Quick Add button मूल ठाउँमा फर्कियो','success',1800);
   }
 };
 

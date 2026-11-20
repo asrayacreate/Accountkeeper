@@ -29,6 +29,7 @@ var APP_VERSION = '7.0.0';
 <link rel="stylesheet" href="css/app.css?v=7.0.0">
 <link rel="stylesheet" href="css/extra.css?v=7.0.0">
 <link rel="stylesheet" href="css/v7.css?v=7.0.0">
+<link rel="stylesheet" href="css/insights.css?v=7.0.0">
 </head>
 <body>
 
@@ -294,6 +295,9 @@ var APP_VERSION = '7.0.0';
       <div class="stat-card c-red" data-module="stock" onclick="App.navigate('stocklist')"><div class="stat-label">⚠️ Low Stock</div><div class="stat-value text-red" id="s-lowstock">0</div><div class="stat-foot">Need restock</div></div>
       <div class="stat-card c-red" onclick="App.navigate('followups')"><div class="stat-label">📅 Overdue FU</div><div class="stat-value text-red" id="s-overdue">0</div><div class="stat-foot">Pending overdue</div></div>
     </div>
+
+    <!-- ═══ v7.1.0 Insight charts (js/ui/dash-charts.js) ═══ -->
+    <div id="dash-insights"></div>
 
     <!-- ═══ Key Summaries (moved up v5.9.6) ═══ -->
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;">
@@ -1788,21 +1792,16 @@ var APP_VERSION = '7.0.0';
     </div>
   </div>
 
-  <!-- FAB Actions Modal -->
+  <!-- FAB → Quick Add sheet (v7.1.0; items rendered by js/ui/quick-add.js) -->
   <div class="modal-overlay" id="fab-modal">
-    <div class="modal modal-sm">
+    <div class="modal modal-sm qadd-modal">
       <div class="modal-head">
-        <div class="modal-title">⚡ Quick Actions</div>
-        <button class="modal-close" onclick="document.getElementById('fab-modal').classList.remove('open')">✕</button>
+        <div class="modal-title">＋ Quick Add</div>
+        <button class="modal-close" onclick="QuickAdd.close()">✕</button>
       </div>
-      <div style="display:grid;gap:8px;">
-        <button onclick="document.getElementById('fab-modal').classList.remove('open');App.navigate('add-customer')" class="btn btn-primary btn-block">➕ Add Customer</button>
-        <button onclick="document.getElementById('fab-modal').classList.remove('open');App.navigate('add-quotation')" class="btn btn-secondary btn-block">📝 New Quotation</button>
-        <button onclick="document.getElementById('fab-modal').classList.remove('open');App.navigate('add-followup')" class="btn btn-secondary btn-block">🔔 Add Follow-up</button>
-        <button onclick="document.getElementById('fab-modal').classList.remove('open');DayBook.addModal()" class="btn btn-secondary btn-block">📒 Day Book Entry</button>
-        <button onclick="document.getElementById('fab-modal').classList.remove('open');App.showCalc()" class="btn btn-secondary btn-block">🧮 Calculator</button>
-        <button onclick="FabDrag.reset()" class="btn btn-secondary btn-block" style="font-size:0.76rem;opacity:0.8;">📍 यो ⚡ button लाई मूल ठाउँमा फर्काउनुस्</button>
-      </div>
+      <div id="qadd-grid" class="qadd-grid"></div>
+      <div id="qadd-voice-lang" class="qadd-voice"></div>
+      <button onclick="FabDrag.reset()" class="btn btn-secondary btn-block" style="font-size:0.76rem;opacity:0.8;margin-top:8px;">📍 यो ＋ button लाई मूल ठाउँमा फर्काउनुस्</button>
     </div>
   </div>
 
@@ -1862,7 +1861,7 @@ var APP_VERSION = '7.0.0';
   <!-- (Removed duplicate BS Date Picker — primary one is at top of modals section) -->
 
   <!-- FAB Button -->
-  <button class="fab no-print" id="fab-btn" title="Quick Actions (drag गरेर सार्न सकिन्छ)">⚡</button>
+  <button class="fab qadd-fab no-print" id="fab-btn" title="Quick Add (drag गरेर सार्न सकिन्छ)" aria-label="Quick Add"><span class="qadd-plus">＋</span><span class="qadd-lbl">Quick Add</span></button>
 
   <!-- Bottom Nav -->
   <nav id="bottom-nav" class="no-print">
@@ -1937,6 +1936,8 @@ var APP_VERSION = '7.0.0';
 <script src="js/modules/reports.js?v=7.0.0"></script>
 <script src="js/ui/dashboard.js?v=7.0.0"></script>
 <script src="js/ui/widgets.js?v=7.0.0"></script>
+<script src="js/ui/dash-charts.js?v=7.0.0"></script>
+<script src="js/ui/quick-add.js?v=7.0.0"></script>
 <script src="js/modules/system-tests.js?v=7.0.0"></script>
 <script src="js/core/init.js?v=7.0.0"></script>
 <script src="js/core/permissions.js?v=7.0.0"></script>

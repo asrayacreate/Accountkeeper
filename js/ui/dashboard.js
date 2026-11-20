@@ -206,6 +206,8 @@ var Dashboard = {
       // ── Charts ──
       this.renderSummaryCharts(db, custs, quots);
       this.renderTotalChart();
+      // ── v7.1.0: 6-month Sales vs Expense, Receivables vs Payables, Top 5 ──
+      try { if(typeof DashCharts!=='undefined') DashCharts.render(); } catch(e){ console.warn('DashCharts', e); }
     } catch(e){ console.error('Dashboard.render error:',e); }
   },
 
