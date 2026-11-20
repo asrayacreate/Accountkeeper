@@ -138,6 +138,7 @@ test('Cancel Invoice: reason required, number kept, CANCELLED in history, Credit
     out.afterDel = Invoices.getData().length;
     out.cxlModalOpen = document.getElementById('inv-cxl-modal').classList.contains('open');
     document.getElementById('inv-cxl-modal').classList.remove('open');
+    out.rcpt = DocPrint.buildReceipt(DocPrint.fromInvoice(Invoices.getData().find((x) => x.id === 'i2')), 80);
     out.ca = CAExport.salesRegister({ from: '2083-01-01', to: '2083-12-30' }).find((row) => row[2] === 'INV-2026-002');
     return out;
   });
@@ -157,6 +158,7 @@ test('Cancel Invoice: reason required, number kept, CANCELLED in history, Credit
   assert.equal(r.count, 3); assert.equal(r.active, 2);
   assert.equal(r.quote.convertedInvId, undefined, 'source quotation freed to convert again');
   assert.equal(r.afterDel, 3); assert.ok(r.cxlModalOpen);
+  assert.match(r.rcpt, /CANCELLED[\s\S]*ग्राहकले/, 'thermal receipt shows CANCELLED too');
   assert.equal(r.ca[11], 0); assert.match(r.ca[14], /^CANCELLED: /);
 
   // UI: list badge, preview stamp, edit blocked

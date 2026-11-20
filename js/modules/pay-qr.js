@@ -25,6 +25,8 @@ var PayQR = {
     if(ph) ph.style.display = src ? 'none' : '';
     if(del) del.style.display = src ? '' : 'none';
     var t = document.getElementById('set-doc-terms'); if(t && document.activeElement !== t) t.value = this.terms();
+
+    try { PrintFmt.render(); } catch(e){}
   },
   // Resize to max 600px (QR stays sharp & scannable) and store as PNG data URL
   upload: function(event){

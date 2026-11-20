@@ -1141,6 +1141,15 @@ var APP_VERSION = '7.0.0';
           <button type="button" onclick="Settings.saveManual('payment')" class="btn btn-primary">💾 Save Payment Details</button>
         </div>
       </div>
+      <div class="card card-body" id="set-print-card">
+        <div class="section-title">🖨️ Print Settings / बिल साइज</div>
+        <div class="form-grid" style="margin-top:14px;">
+          <div class="form-group full"><label>Quotation / Invoice / Estimate को Print साइज</label>
+            <select id="set-print-size" onchange="PrintFmt.set(this.value)"></select>
+            <div style="font-size:0.7rem;color:var(--text-muted);line-height:1.5;margin-top:6px;">A4 = निर्माण/इन्टेरियरका लागि पूरा प्रोफेसनल बिल · A5 = आधा पेज · 58mm / 80mm = हार्डवेयर, किराना, रिटेल पसलको Thermal POS प्रिन्टरमा छोटो बिल। Preview मा पनि एक पटकका लागि साइज बदल्न मिल्छ।</div>
+          </div>
+        </div>
+      </div>
       <div class="card card-body">
         <div class="section-title">⚙️ Themes & Preferences</div>
         <div style="margin-top:14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:8px;" id="theme-picker">
