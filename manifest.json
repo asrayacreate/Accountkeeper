@@ -1,7 +1,7 @@
 {
   "name": "Swagatik — Smart Business CRM",
   "short_name": "Swagatik",
-  "description": "Swagatik — smart offline business CRM for Prerak Multipurpose Pvt Ltd",
+  "description": "Swagatik — smart offline business CRM for quotations, invoices, accounts and customers",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",

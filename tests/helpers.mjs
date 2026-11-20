@@ -13,7 +13,7 @@ try { playwright = require('playwright'); }
 catch (e) { playwright = createRequire(path.join(process.execPath, '..', '..', 'lib', 'node_modules', '/'))('playwright'); }
 
 export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const TYPES = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.json': 'application/json', '.png': 'image/png' };
+const TYPES = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.svg': 'image/svg+xml', '.json': 'application/json', '.png': 'image/png' };
 
 // The real master key / password are never written in this public repo.
 // The test server swaps the stored hashes for hashes of these test-only secrets,
@@ -21,21 +21,31 @@ const TYPES = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '
 export const TEST_MASTER = 'TEST-MASTER-0001';
 export const TEST_PASS = 'test-pass-123';
 const sha = (s) => createHash('sha256').update(s, 'utf8').digest('hex');
-export function testHtml() {
-  let html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
-  html = html.replace(/MASTER_HASH: '[0-9a-f]{64}'/, "MASTER_HASH: '" + sha('PRK-2083-MKWNPR|MASTER|' + TEST_MASTER) + "'");
-  html = html.replace(/\['punya', '[0-9a-f]{64}'/, "['punya', '" + sha('SWG-PW-v1|' + TEST_PASS) + "'");
-  return html;
+// v7: app code lives in index.html + js/**. The secret hashes sit in js/core/*.js.
+function swapSecrets(src) {
+  return src
+    .replace(/MASTER_HASH: '[0-9a-f]{64}'/, "MASTER_HASH: '" + sha('PRK-2083-MKWNPR|MASTER|' + TEST_MASTER) + "'")
+    .replace(/\['punya', '[0-9a-f]{64}'/, "['punya', '" + sha('SWG-PW-v1|' + TEST_PASS) + "'");
 }
+export function appFiles() {
+  const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
+  return [...html.matchAll(/<script src="(js\/[^"?]+)/g)].map((m) => m[1]);
+}
+/** All app source (index.html + every loaded js file), as stored in the repo. */
+export function appSource() {
+  return [fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8'), ...appFiles().map((f) => fs.readFileSync(path.join(ROOT, f), 'utf8'))].join('\n');
+}
+/** The same source as the test server serves it (test-only secret hashes). */
+export function testHtml() { return swapSecrets(appSource()); }
 
 export function startServer() {
   return new Promise((resolve) => {
     const srv = http.createServer((req, res) => {
       let p = decodeURIComponent(new URL(req.url, 'http://x').pathname);
       if (p === '/') p = '/index.html';
-      if (p === '/index.html') { res.writeHead(200, { 'Content-Type': TYPES['.html'] }); return res.end(testHtml()); }
       const f = path.join(ROOT, p);
       if (!f.startsWith(ROOT) || !fs.existsSync(f) || fs.statSync(f).isDirectory()) { res.writeHead(404); return res.end('nf'); }
+      if (/^\/(index\.html|js\/core\/(license|security)\.js)$/.test(p)) { res.writeHead(200, { 'Content-Type': TYPES[path.extname(f)] }); return res.end(swapSecrets(fs.readFileSync(f, 'utf8'))); }
       res.writeHead(200, { 'Content-Type': TYPES[path.extname(f)] || 'application/octet-stream' });
       fs.createReadStream(f).pipe(res);
     });

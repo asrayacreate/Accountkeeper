@@ -1,0 +1,29 @@
+/* ═══════════ v7.0.0 — Modules On/Off, Setup Wizard, Payables, Measurement, Photos ═══════════ */
+/* Modules: anything tagged data-module="x" hides while module x is Off (see js/core/modules.js) */
+html[data-mod-off~="projects"] [data-module~="projects"],
+html[data-mod-off~="measurement"] [data-module~="measurement"],
+html[data-mod-off~="payables"] [data-module~="payables"],
+html[data-mod-off~="stock"] [data-module~="stock"],
+html[data-mod-off~="quotations"] [data-module~="quotations"],
+html[data-mod-off~="walkin"] [data-module~="walkin"],
+html[data-mod-off~="ai"] [data-module~="ai"] { display: none !important; }
+
+/* Photos (compressed media) */
+.media-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.media-thumb { position: relative; width: 64px; height: 64px; border-radius: 8px; overflow: hidden; border: 1px solid var(--border); background: #fff; display: inline-block; }
+.media-thumb img { width: 100%; height: 100%; object-fit: cover; cursor: zoom-in; }
+.media-del { position: absolute; top: 2px; right: 2px; width: 20px; height: 20px; border-radius: 50%; border: 0; background: rgba(0,0,0,0.65); color: #fff; font-size: 11px; line-height: 20px; padding: 0; cursor: pointer; }
+
+/* Simple data table (Payables, Measurement) */
+.data-table { border-collapse: collapse; }
+.data-table th, .data-table td { padding: 7px 8px; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; }
+.data-table th { font-size: 0.72rem; color: var(--text-muted); font-weight: 700; }
+.data-table .r { text-align: right; white-space: nowrap; }
+.data-table input, .data-table select { padding: 6px 7px; font-size: 0.8rem; }
+.pay-card { cursor: pointer; padding: 12px 14px; }
+@media (max-width: 600px) { .media-thumb { width: 56px; height: 56px; } }
+
+/* Setup Wizard + Modules list */
+#wz-types .btn { white-space: normal; width: 100%; min-width: 0; }
+#wz-types .btn > span:last-child { min-width: 0; overflow-wrap: anywhere; }
+.mod-row, .mod-row span { text-transform: none !important; letter-spacing: normal !important; }

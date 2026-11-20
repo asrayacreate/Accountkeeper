@@ -1,0 +1,7 @@
+/* ═══ v4.8 additions: global search + clock ═══ */
+@media(max-width:760px){ .gs-wrap{display:none;} #crm-clock{display:none;} }
+.gsr-item{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 12px;cursor:pointer;font-size:0.8rem;border-bottom:1px solid var(--border);}
+.gsr-item:last-child{border-bottom:none;}
+.gsr-item:hover{background:var(--surface-2);}
+.gsr-item b{font-weight:700;}
+.gsr-item span{color:var(--text-muted);font-size:0.72rem;}

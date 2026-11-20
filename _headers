@@ -1,0 +1,16 @@
+# Cloudflare Pages headers (GitHub Pages ignores this file).
+# App code is versioned with ?v=… and sw.js is network-first, so short caching is safe.
+/sw.js
+  Cache-Control: no-cache
+/index.html
+  Cache-Control: no-cache
+/
+  Cache-Control: no-cache
+/js/*
+  Cache-Control: public, max-age=300
+/css/*
+  Cache-Control: public, max-age=300
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(self), geolocation=(), microphone=()
