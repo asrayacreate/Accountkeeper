@@ -32,7 +32,8 @@ var DocPrint = {
       dueDate: inv.dueDate || '', cust:{ name:inv.custName||'', phone:inv.custPhone||'', address:cust.address||'' },
       items: items, sub: sub, disc: parseFloat(inv.discAmt)||0, discP: parseFloat(inv.discP)||0, taxP: parseFloat(inv.taxP)||0, taxAmt: parseFloat(inv.taxAmt)||0,
       total: total, paidLabel:'Paid / भुक्तानी', paid: paid, balance: bal, terms: inv.terms||'', status: inv.status||'Pending',
-      ref: inv.fromQuote ? (inv.fromQuote.type==='estimate' ? 'Estimate ' : 'Quotation ') + (inv.fromQuote.no||'') : '' };
+      ref: inv.fromQuote ? (inv.fromQuote.type==='estimate' ? 'Estimate ' : 'Quotation ') + (inv.fromQuote.no||'') : '',
+      cancelled: (inv.cancelled || inv.status==='Cancelled') ? { reason: (inv.cancelled&&inv.cancelled.reason)||'', at: (inv.cancelled&&inv.cancelled.at)||'' } : null };
   },
   fromEstimate: function(e){
     var items = (e.items||[]).map(function(r){ return { name:r.name||'', qty:parseFloat(r.qty)||0, unit:r.unit||'', rate:parseFloat(r.rate)||0 }; });
@@ -96,6 +97,7 @@ var DocPrint = {
         + '</div>'
         + '<div class="tt"><div class="k">'+esc(d.kind)+'</div><div class="kn">'+esc(d.kindNe||'')+'</div></div>'
       + '</div>'
+      + (d.cancelled ? '<div class="cxl-stamp" style="border:2px solid #dc2626;color:#dc2626;background:#fef2f2;border-radius:8px;padding:8px 12px;margin-bottom:12px;font-weight:800;letter-spacing:1px;">❌ CANCELLED / रद्द'+(d.cancelled.reason?'<div style="font-weight:600;letter-spacing:0;font-size:12px;margin-top:2px;">कारण: '+esc(d.cancelled.reason)+(d.cancelled.at?' • '+esc(String(d.cancelled.at).slice(0,10)):'')+'</div>':'')+'</div>' : '')
       + '<div class="meta">'
         + '<div class="box"><div class="lbl">'+(d.kind==='QUOTATION'||d.kind==='ESTIMATE' ? 'To / ग्राहक' : 'Bill To / ग्राहक')+'</div>'
           + '<div style="font-weight:800;font-size:14px;">'+esc(d.cust.name)+'</div>'
@@ -180,6 +182,7 @@ var DocPrint = {
       + (co.phone ? '<div class="c s">'+esc(co.phone)+'</div>' : '')
       + (co.pan ? '<div class="c s">PAN/VAT: '+esc(co.pan)+'</div>' : '')
       + '<div class="hr"></div><div class="c k">'+esc(d.kind)+'</div>'
+      + (d.cancelled ? '<div class="c k cxl-stamp" style="border:2px solid #000;margin:4px 0;">*** CANCELLED / रद्द ***'+(d.cancelled.reason?'<div class="s">'+esc(d.cancelled.reason)+'</div>':'')+'</div>' : '')
       + row('No: <b>'+esc(d.no||'—')+'</b>', esc(bs || ad))
       + (bs && ad ? row('', esc(ad)) : '')
       + (d.cust.name ? '<div>ग्राहक: <b>'+esc(d.cust.name)+'</b>'+(d.cust.phone ? ' '+esc(d.cust.phone) : '')+'</div>' : '')
@@ -375,6 +378,7 @@ var DocShare = {
     if(co.pan) y += para('PAN / VAT No: ' + co.pan, lx, y + 4, cw, 22, 700, GREY, 30);
     y = Math.max(y + 8, top + (logo ? 128 : 0), top + 90);
     rect(P, y + 6, W - 2*P, 6, ORANGE); y += 36;
+    if(d.cancelled) y += para('❌ CANCELLED / रद्द' + (d.cancelled.reason ? ' — कारण: ' + d.cancelled.reason : ''), P, y, W - 2*P, 30, 900, '#dc2626', 40) + 12;
 
     // ── Customer box | number & dates box
     var gap = 24, rw = 380, lw = W - 2*P - rw - gap, bt = y, pad = 18;

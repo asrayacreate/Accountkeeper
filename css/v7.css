@@ -7,6 +7,7 @@ html[data-mod-off~="stock"] [data-module~="stock"],
 html[data-mod-off~="quotations"] [data-module~="quotations"],
 html[data-mod-off~="walkin"] [data-module~="walkin"],
 html[data-mod-off~="ai"] [data-module~="ai"] { display: none !important; }
+html[data-mod-off~="staff"] [data-module~="staff"] { display: none !important; } /* v7.1.0 */
 
 /* Photos (compressed media) */
 .media-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }

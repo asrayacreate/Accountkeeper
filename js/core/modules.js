@@ -14,7 +14,8 @@ var Modules = {
     { id: 'stock',       icon: '📦', label: 'Stock / Items',                 hint: 'सामानको stock र मौज्दात' },
     { id: 'quotations',  icon: '📋', label: 'Quotations / Estimates',        hint: 'Quotation, Estimate र Bakauta' },
     { id: 'walkin',      icon: '🚶', label: 'Walk-in Greeting',              hint: 'पसल/showroom मा आउने ग्राहकलाई स्वागत सन्देश' },
-    { id: 'ai',          icon: '🤖', label: 'AI Assistant',                  hint: 'AI बाट message / post / analysis' }
+    { id: 'ai',          icon: '🤖', label: 'AI Assistant',                  hint: 'AI बाट message / post / analysis' },
+    { id: 'staff',       icon: '🧑‍🔧', label: 'Staff हाजिरी र तलब',            hint: 'दैनिक हाजिरी, पेश्की र मासिक खुद तलब (Payroll)' }
   ],
   // Pages that belong to a module (navigation is blocked while the module is Off)
   PAGES: {
@@ -23,7 +24,8 @@ var Modules = {
     stock: ['stocklist'],
     quotations: ['quotations', 'add-quotation', 'bakauta', 'estimate-new', 'estimates-list'],
     walkin: ['walkin'],
-    ai: ['ai-assistant']
+    ai: ['ai-assistant'],
+    staff: ['staff']
   },
 
   /** {id: true|false} — missing ids default to On (so existing users keep every feature). */
