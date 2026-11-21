@@ -28,7 +28,7 @@ var Auth = {
     currentUser=found;
     if(document.getElementById('remember-me').checked) STORE.set('pk3_session',{user:found.user,ph:found.passHash});
     this._showApp();
-    Audit.log('LOGIN','User logged in: '+found.name+' ('+found.role+')');
+    Audit.log('LOGIN','User logged in: '+found.name+' ('+found.role+') — password form'+(document.getElementById('remember-me').checked?', remember me':'')+' @ '+location.host);
   },
   logout: function() {
     if(!confirm('Logout गर्नुहुन्छ?')) return;

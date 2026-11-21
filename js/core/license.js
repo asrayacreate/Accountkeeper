@@ -266,6 +266,7 @@ var License = {
     // Self-disable the founder bootstrap key once a REAL (non-bootstrap) key is stored on this device.
     if (!v.bootstrap) { try { localStorage.setItem('pk3_bootstrap_used', '1'); } catch (e) {} }
 
+    try { if (typeof Audit !== 'undefined') Audit.log('LICENSE', 'License activated (' + v.plan + ') for ' + company.trim() + ' @ ' + location.host); } catch (e) {}
     this._afterActivate(company, v.expiry);
   },
 
