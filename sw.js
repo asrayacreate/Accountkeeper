@@ -73,6 +73,7 @@ var CORE_ASSETS = [
   './js/ui/widgets.js',
   './js/ui/dash-charts.js',
   './js/ui/quick-add.js',
+  './js/ui/help-keys.js',
   './js/modules/system-tests.js',
   './js/core/init.js',
   './js/core/permissions.js',
