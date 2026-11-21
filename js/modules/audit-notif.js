@@ -7,7 +7,23 @@ var Audit = {
     if(q) list=list.filter(function(a){return (a.user+a.action+a.details).toLowerCase().indexOf(q)>=0;});
     var tb=document.getElementById('audit-table'), ne=document.getElementById('no-audit');
     if(!list.length){tb.innerHTML='';ne.style.display='';return;} ne.style.display='none';
-    tb.innerHTML=list.map(function(a){var tm=a.time||a.date||''; var dpart=tm?fmtDisplayDate(String(tm).slice(0,10)):''; var tpart=tm&&String(tm).length>=16?String(tm).slice(11,16):''; return '<tr><td style="font-size:0.72rem;">'+dpart+' '+tpart+'</td><td style="font-size:0.78rem;">'+esc(a.user||'')+'</td><td><span class="tag tag-blue" style="font-size:0.65rem;">'+esc(a.action||'')+'</span></td><td style="font-size:0.78rem;">'+esc(a.details||'')+'</td></tr>';}).join('');
+    tb.innerHTML=list.map(function(a){var tm=a.time||a.date||''; var _np=Audit.npt(tm); var dpart=_np.date; var tpart=_np.time; return '<tr><td style="font-size:0.72rem;">'+dpart+' '+tpart+'</td><td style="font-size:0.78rem;">'+esc(a.user||'')+'</td><td><span class="tag tag-blue" style="font-size:0.65rem;">'+esc(a.action||'')+'</span></td><td style="font-size:0.78rem;">'+esc(a.details||'')+'</td></tr>';}).join('');
+  },
+  // v7.3.2: समय नेपाली समय (NPT, Asia/Kathmandu) मा — stored value UTC ISO नै रहन्छ
+  npt: function(tm){
+    if(!tm) return {date:'',time:''};
+    var d=new Date(tm);
+    if(isNaN(d.getTime()) || String(tm).length<16) return {date:fmtDisplayDate(String(tm).slice(0,10)),time:''};
+    try {
+      var o={timeZone:'Asia/Kathmandu'};
+      return {
+        date:d.toLocaleDateString('en-IN',{timeZone:o.timeZone,day:'2-digit',month:'short',year:'numeric'}),
+        time:d.toLocaleTimeString('en-GB',{timeZone:o.timeZone,hour:'2-digit',minute:'2-digit',hour12:false})+' NPT'
+      };
+    } catch(e){
+      var n=new Date(d.getTime()+345*60000);   // UTC+5:45
+      return {date:fmtDisplayDate(n.toISOString().slice(0,10)),time:n.toISOString().slice(11,16)+' NPT'};
+    }
   },
   clear: function(){ if(!confirm('Audit log clear गर्नुहुन्छ?'))return; STORE.set('pk3_audit',[]); this.render(); App.toast('🗑 Audit cleared','info'); },
   export: function(){ var data=JSON.stringify(this.getData(),null,2); downloadFile('audit-'+todayISO()+'.json',data); App.toast('✅ Audit exported!','success'); }
