@@ -425,10 +425,12 @@ var Dashboard = {
       if(!iso) return false;
       var d = new Date(iso); return !isNaN(d.getTime()) && d >= monthStart;
     };
-    var custs = (STORE.get('pk3_customers',[])||[]).filter(function(c){return inRange(c.created||c.updated);});
-    var fus   = (STORE.get('pk3_followups',[])||[]).filter(function(f){return f.status!=='Done';});
-    var quots = (STORE.get('pk3_quotations',[])||[]).filter(function(q){return inRange(q.date||q.created);});
-    var db    = (STORE.get('pk3_daybook',[])||[]).filter(function(d){return inRange(d.date||d.dateAd);});
+    // v7.3.2: demo (sample) records stat card जस्तै यहाँ पनि गनिँदैनन्
+    var _real = (typeof SampleData!=='undefined'?SampleData.real:function(a){return a;});
+    var custs = _real(STORE.get('pk3_customers',[])||[]).filter(function(c){return inRange(c.created||c.updated);});
+    var fus   = _real(STORE.get('pk3_followups',[])||[]).filter(function(f){return f.status!=='Done';});
+    var quots = _real(STORE.get('pk3_quotations',[])||[]).filter(function(q){return inRange(q.date||q.created);});
+    var db    = _real(STORE.get('pk3_daybook',[])||[]).filter(function(d){return inRange(d.date||d.dateAd);});
     var income  = db.filter(function(d){return d.type==='income';}).reduce(function(s,d){return s+parseFloat(d.amount||0);},0);
     var expense = db.filter(function(d){return d.type==='expense';}).reduce(function(s,d){return s+parseFloat(d.amount||0);},0);
     var advance = custs.reduce(function(s,c){return s+parseFloat(c.advance||0);},0);
@@ -592,9 +594,10 @@ var Dashboard = {
     if(!el) return;
     var period = parseInt(getVal('dash-total-period')||30);
     var metric = this._metric||'income';
-    var db = STORE.get('pk3_daybook',[])||[];
-    var custs = STORE.get('pk3_customers',[])||[];
-    var quots = STORE.get('pk3_quotations',[])||[];
+    var _real = (typeof SampleData!=='undefined'?SampleData.real:function(a){return a;});
+    var db = _real(STORE.get('pk3_daybook',[])||[]);
+    var custs = _real(STORE.get('pk3_customers',[])||[]);
+    var quots = _real(STORE.get('pk3_quotations',[])||[]);
     var days = []; var now = new Date();
     for(var i=period-1;i>=0;i--){var d=new Date(now); d.setDate(d.getDate()-i); days.push(isoLocal(d));}
     var vals = days.map(function(day){
