@@ -90,6 +90,7 @@ var CORE_ASSETS = [
   './js/modules/pay-qr.js',
   './js/modules/doc-print.js',
   './js/modules/receivables.js',
+  './js/modules/party-statement.js',
   './js/modules/quote-convert.js',
   './js/modules/projects.js',
   './js/modules/payables.js',

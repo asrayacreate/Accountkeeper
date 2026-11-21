@@ -504,7 +504,7 @@ var APP_VERSION = '7.2.0';
 
   <!-- ========================= CUSTOMER LEDGER ========================= -->
   <div class="page" id="page-ledger">
-    <div class="section-head"><div class="search-wrap"><select id="ledger-cust-select" onchange="Ledger.select(this.value)" style="padding-left:40px;"><option value="">-- Customer छान्नुस् --</option></select></div><div class="btn-group"><button onclick="Ledger.addTransaction()" class="btn btn-sm btn-primary">+ Transaction</button><button onclick="Ledger.print()" class="btn btn-sm btn-secondary">🖨️ Print</button></div></div>
+    <div class="section-head"><div class="search-wrap"><select id="ledger-cust-select" onchange="Ledger.select(this.value)" style="padding-left:40px;"><option value="">-- Customer छान्नुस् --</option></select></div><div class="btn-group"><button onclick="Ledger.addTransaction()" class="btn btn-sm btn-primary">+ Transaction</button><button onclick="Ledger.print()" class="btn btn-sm btn-secondary">🖨️ Print</button><button onclick="PartyStatement.open('customer', getVal('ledger-cust-select'))" class="btn btn-sm btn-primary" id="ledger-statement-btn">📄 खाता विवरण</button></div></div>
     <div id="ledger-content"></div>
   </div>
 
@@ -2001,6 +2001,7 @@ var APP_VERSION = '7.2.0';
 <script src="js/modules/pay-qr.js?v=7.2.0"></script>
 <script src="js/modules/doc-print.js?v=7.2.0"></script>
 <script src="js/modules/receivables.js?v=7.2.0"></script>
+<script src="js/modules/party-statement.js?v=7.2.0"></script>
 <script src="js/modules/quote-convert.js?v=7.2.0"></script>
 <script src="js/modules/projects.js?v=7.2.0"></script>
 <script src="js/modules/payables.js?v=7.2.0"></script>

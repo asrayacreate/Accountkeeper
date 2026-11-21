@@ -178,6 +178,7 @@ var Payables = {
       + this._stockBox()
       + '<div class="form-group full"><button type="button" class="btn btn-sm btn-secondary" onclick="Payables.addPhoto()">📸 बिल रसिदको फोटो</button><div class="media-row" id="pay-t-photos"></div></div>'
       + '</div><div style="display:flex;justify-content:flex-end;gap:8px;margin-top:10px;"><button class="btn btn-sm btn-secondary" onclick="Payables.openParty(\'' + esc(id) + '\')">✏️ Edit</button>'
+      + '<button class="btn btn-sm btn-secondary" id="pay-v-statement" onclick="PartyStatement.open(\'supplier\', \'' + esc(id) + '\')">📄 खाता विवरण</button>'
       + '<button class="btn btn-sm btn-primary" id="pay-t-save" onclick="Payables.saveTxn(\'' + esc(id) + '\')">➕ थप्नुहोस्</button></div></div>'
       + '<div style="overflow-x:auto;"><table class="data-table" style="width:100%;font-size:0.8rem;"><thead><tr><th>मिति</th><th>विवरण</th><th class="r">बिल</th><th class="r">तिरेको</th><th class="r">बाँकी</th><th></th></tr></thead><tbody>'
       + (rows || '<tr><td colspan="6" style="text-align:center;color:var(--text-muted);">कुनै entry छैन</td></tr>') + '</tbody></table></div>');
