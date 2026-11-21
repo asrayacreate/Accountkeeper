@@ -12,7 +12,7 @@ import { pageFiles } from '../scripts/build-pages.mjs';
 
 let oldS, newS, evilS, plainS, browser;
 const deployFor = (primary, legacy) => (p, text) => (p === '/js/core/deploy.js'
-  ? text.replace("primaryOrigin: ''", `primaryOrigin: '${primary()}'`).replace(/legacyOrigins: \[[^\]]*\]/, `legacyOrigins: ['${legacy()}']`)
+  ? text.replace(/primaryOrigin: '[^']*'/, `primaryOrigin: '${primary()}'`).replace(/legacyOrigins: \[[^\]]*\]/, `legacyOrigins: ['${legacy()}']`)
   : undefined);
 before(async () => {
   const P = () => newS.base, L = () => oldS.base;
@@ -69,7 +69,7 @@ test('new address ignores data from any other site', async () => {
   await ctx.close();
 });
 
-test('no banner when no new address is set, or on the new address itself', async () => {
+test('no banner on an address that is not listed as old, or on the new address itself', async () => {
   const a = await loggedIn({ base: plainS.base, browser });
   await a.page.evaluate(() => App.navigate('dashboard'));
   assert.equal(await a.page.isVisible('#move-alert-dash'), false);

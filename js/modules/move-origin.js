@@ -13,7 +13,8 @@ var MoveOrigin = {
   _origin: function (u) { try { return new URL(u).origin; } catch (e) { return ''; } },
   primary: function () { return this._origin(this._cfg().primaryOrigin || ''); },
   legacy: function () { var self = this; return (this._cfg().legacyOrigins || []).map(function (u) { return self._origin(u); }).filter(Boolean); },
-  isOld: function () { var p = this.primary(); return !!p && location.origin !== p && /^https?:$/.test(location.protocol); },
+  // पुरानो ठेगाना = legacyOrigins मा लेखिएको ठेगाना मात्र (localhost / अरू copy मा ब्यानर देखिँदैन)
+  isOld: function () { var p = this.primary(); return !!p && location.origin !== p && this.legacy().indexOf(location.origin) !== -1; },
   movedAt: function () { try { return localStorage.getItem(this.MOVED_KEY) || ''; } catch (e) { return ''; } },
   newUrl: function () { return this.primary() + '/'; },
 

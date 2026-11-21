@@ -11,7 +11,7 @@ Custom Domain + Supabase License** मा सार्ने चरणहरू 
 
 ### Data सार्ने (पुरानो ठेगाना → नयाँ ठेगाना)
 
-1. Cloudflare को ठेगाना `js/core/deploy.js` को `primaryOrigin` मा राखेर `npm run release` → merge।
+1. Cloudflare को ठेगाना `js/core/deploy.js` को `primaryOrigin` मा राखेर (अहिले `https://accountkeeper.pages.dev`) `npm run release` → merge।
 2. हरेक device मा पुरानो (github.io) app खोल्नुहोस् → Dashboard मा **📦 डाटा नयाँ ठेगानामा सार्नुहोस्** →
    नयाँ tab मा Restore को OK → नयाँ ठेगानामा License Key + login। पुरानो ठेगानाको data मेटिँदैन।
 3. License, login session, Dropbox / Google Drive token र AI key सर्दैनन् — नयाँ ठेगानामा फेरि जोड्नुहोस्
