@@ -43,7 +43,7 @@ var DayBook = {
     var desc=getVal('db-desc'); if(!desc){App.toast('Description लेख्नुस्!','error');return;}
     var editId=getVal('db-edit-id'); var isEdit=!!editId; var id=editId||uid();
     var dateInp=getVal('db-date-inp')||todayBs(); var dateAd=todayISO();
-    if(dateInp){try{var p=dateInp.split('-');var ad=bsToAd(parseInt(p[0]),parseInt(p[1]),parseInt(p[2]));dateAd=ad.toISOString().slice(0,10);}catch(e){}}
+    if(dateInp){try{var p=dateInp.split('-');var ad=bsToAd(parseInt(p[0]),parseInt(p[1]),parseInt(p[2]));dateAd=isoLocal(ad);}catch(e){}}
     var rec={id:id,type:getVal('db-type'),amount:amount,desc:desc,cat:getVal('db-cat'),vendor:getVal('db-vendor'),bill:getVal('db-bill'),pay:getVal('db-pay'),notes:getVal('db-notes'),date:dateAd,dateBs:dateInp||todayBs(),user:currentUser?currentUser.name:''};
     var _pj=getVal('db-project'); if(_pj) rec.projectId=_pj;
     if(this._photos && this._photos.length) rec.photoIds=this._photos.slice();   // v7.0.0 bill receipt photos
@@ -66,7 +66,7 @@ var DayBook = {
   render: function(){
     var list=this.getData(); var today=todayISO(); var week=new Date(); week.setDate(week.getDate()-7);
     if(this._filter==='today') list=list.filter(function(e){return e.date===today;});
-    else if(this._filter==='week') list=list.filter(function(e){return e.date>=week.toISOString().slice(0,10);});
+    else if(this._filter==='week') list=list.filter(function(e){return e.date>=isoLocal(week);});
     else if(this._filter==='month') list=list.filter(function(e){return e.date&&e.date.slice(0,7)===today.slice(0,7);});
     var cf=getVal('db-cat-filter')||'';
     if(cf) list=list.filter(function(e){return e.cat===cf;});
@@ -190,7 +190,7 @@ var DayBook = {
     var today = todayISO();
     var week = new Date(); week.setDate(week.getDate()-7);
     if(this._filter==='today') list=list.filter(function(e){return e.date===today;});
-    else if(this._filter==='week') list=list.filter(function(e){return e.date>=week.toISOString().slice(0,10);});
+    else if(this._filter==='week') list=list.filter(function(e){return e.date>=isoLocal(week);});
     else if(this._filter==='month') list=list.filter(function(e){return e.date&&e.date.slice(0,7)===today.slice(0,7);});
     var inc = list.filter(function(e){return e.type==='income';}).reduce(function(s,e){return s+parseFloat(e.amount||0);},0);
     var exp = list.filter(function(e){return e.type==='expense';}).reduce(function(s,e){return s+parseFloat(e.amount||0);},0);

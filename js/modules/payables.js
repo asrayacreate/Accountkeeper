@@ -158,7 +158,10 @@ var Payables = {
       var proj = ''; try { var pj = t.projectId && Projects.get(t.projectId); if (pj) proj = ' · 🏗️ ' + esc(pj.name); } catch (e) {}
       return '<tr><td>' + esc(t.dateBs || t.date) + '</td><td>' + (t.type === 'bill' ? '🧾 बिल' : '💸 भुक्तानी') + (t.billNo ? ' #' + esc(t.billNo) : '') + '<div style="font-size:0.68rem;color:var(--text-muted);">' + esc(t.note || '') + proj + '</div>' + (t.stockItems && t.stockItems.length ? '<div style="font-size:0.66rem;color:var(--green);">📦 ' + t.stockItems.map(function (l) { return '+' + l.qty + ' ' + esc(l.name); }).join(', ') + '</div>' : '') + (t.photoIds && t.photoIds.length ? '<div class="media-row">' + Media.thumbs(t.photoIds) + '</div>' : '') + '</td>'
         + '<td class="r">' + (t.type === 'bill' ? fmtRs(t.amount) : '') + '</td><td class="r" style="color:var(--green);">' + (t.type === 'payment' ? fmtRs(t.amount) : '') + '</td><td class="r"><b>' + fmtRs(run) + '</b></td>'
-        + '<td><button class="btn btn-xs btn-danger" onclick="if(confirm(\'यो entry हटाउने?\')){Payables.delTxn(\'' + esc(t.id) + '\');Payables.view(\'' + esc(id) + '\');Payables.render();}">🗑</button></td></tr>';
+        // v7.3.0 audit: an entry made by a Purchase Bill is changed/removed from that bill only — deleting it here
+        // left the Purchase Book, Input VAT and stock out of step with the Supplier balance.
+        + '<td>' + (t.purchaseId ? '<button class="btn btn-xs btn-secondary" data-pur-link="' + esc(t.purchaseId) + '" title="खरिद बिलबाट मात्र बदल्न/हटाउन मिल्छ" onclick="Payables.close();Purchases.open(\'' + esc(t.purchaseId) + '\')">🛒</button>'
+          : '<button class="btn btn-xs btn-danger" onclick="if(confirm(\'यो entry हटाउने?\')){Payables.delTxn(\'' + esc(t.id) + '\');Payables.view(\'' + esc(id) + '\');Payables.render();}">🗑</button>') + '</td></tr>';
     }).join('');
     var projOpts = '<option value="">— कुनै Project होइन —</option>';
     try { projOpts += Projects.getData().map(function (pj) { return '<option value="' + esc(pj.id) + '">' + esc(pj.name) + '</option>'; }).join(''); } catch (e) {}

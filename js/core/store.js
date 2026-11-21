@@ -66,10 +66,15 @@ function showToast(msg,type,dur){ if(window.Notif && Notif.toast) return Notif.t
 function addActivity(text){ var act=STORE.get('pk3_activity',[])||[]; act.push({text:text,time:new Date().toLocaleString('en-IN')}); if(act.length>200) act=act.slice(-200); STORE.set('pk3_activity',act); }
 
 function downloadCSV(name,data) {
+  if(String(data).charAt(0)!=='\uFEFF') data='\uFEFF'+data;   // v7.3.0: BOM → Excel shows नेपाली अक्षर correctly
   var a=document.createElement('a'); a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(data);
   a.download=name; document.body.appendChild(a); a.click(); document.body.removeChild(a);
 }
-function todayISO() { return new Date().toISOString().slice(0,10); }
+// v7.3.0 audit: local calendar date (not UTC). toISOString() is UTC, so in Nepal (UTC+5:45) between
+// 00:00 and 05:45 it returned *yesterday*, and a BS date converted with bsToAd() (local midnight) always
+// came out one day early. isoLocal(d) keeps the date the user actually sees.
+function isoLocal(d) { d = d || new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function todayISO() { return isoLocal(new Date()); }
 function todayBs() {
   var d=new Date();
   var b=adToBs(d.getFullYear(),d.getMonth()+1,d.getDate());

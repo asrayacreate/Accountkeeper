@@ -30,9 +30,12 @@ var Backup = {
   },
   exportCSV: function(){
     var custs=Customers.getData();
-    var header='Name,Phone,Address,Service,Sub-Service,Advance,Salesperson,Issue Date,FU Date,Created\n';
-    var rows=custs.map(function(c){return [c.name,c.phone,(c.address||'').replace(/,/g,';'),'"'+Customers.getServices(c).map(function(x){return x.work;}).filter(Boolean).join('; ')+'"','"'+Customers.getServices(c).map(function(x){return x.subwork;}).filter(Boolean).join('; ')+'"',c.advance||0,c.sales||'',c.issueDateBs||'',c.fuDateBs||'',c.created||''].join(',');}).join('\n');
-    downloadCSV('customers-'+todayISO()+'.csv',header+rows);
+    // v7.3.0 audit: UTF-8 BOM (नेपाली नाम Excel मा नबिग्रने) + proper quoting (comma / quote in a name no longer shifts columns)
+    var rows=[['Name','Phone','Address','Service','Sub-Service','Advance','Salesperson','Issue Date','FU Date','Created']].concat(custs.map(function(c){
+      var sv=Customers.getServices(c);
+      return [c.name||'',c.phone||'',c.address||'',sv.map(function(x){return x.work;}).filter(Boolean).join('; '),sv.map(function(x){return x.subwork;}).filter(Boolean).join('; '),parseFloat(c.advance)||0,c.sales||'',c.issueDateBs||'',c.fuDateBs||'',c.created||''];
+    }));
+    CAExport.download('customers-'+todayISO()+'.csv',rows);
     App.toast('✅ CSV downloaded!','success');
   },
   importJSON: function(e){

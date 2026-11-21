@@ -162,7 +162,13 @@ var CAExport = {
   },
 
   // ── file builders ──
-  _cell: function (v) { var s = v == null ? '' : String(v); return /[",\n\r]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; },
+  _cell: function (v) {
+    var s = v == null ? '' : String(v);
+    // v7.3.0 audit: text that Excel would run as a formula (=, @, or +/− not followed by a plain number/phone)
+    // gets a leading apostrophe. Real numbers (−500, +977 98…) are left as they are.
+    if (typeof v !== 'number' && (/^[=@\t\r]/.test(s) || (/^[+-]/.test(s) && !/^[+-][\d\s().,-]*$/.test(s)))) s = "'" + s;
+    return /[",\n\r]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+  },
   toCSV: function (rows, title) {
     var self = this, co = Company.get(), head = [];
     if (title) head = [[title], [co.name + (co.pan ? ' — PAN/VAT: ' + co.pan : '')], []];

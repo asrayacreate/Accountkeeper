@@ -50,8 +50,11 @@ var Receivables = {
   },
   _status: function(inv){
     var bal = this._r2((parseFloat(inv.amount) || 0) - (parseFloat(inv.paid) || 0));
-    inv.balance = Math.max(0, bal);
-    inv.status = (parseFloat(inv.paid) || 0) <= 0 ? 'Pending' : (bal > 0.5 ? 'Partial' : 'Paid');
+    inv.balance = Math.max(0, bal);   // gross — the sales return is subtracted by balanceOf / SmartRem.dueFor
+    // v7.3.0 audit: a bill with a Sales Return is fully paid once (total − return) is received,
+    // and a Rs 0 bill is never "Pending".
+    var net = this._r2(bal - (inv._returned ? parseFloat(inv._returnedAmt) || 0 : 0));
+    inv.status = net <= 0.5 ? 'Paid' : ((parseFloat(inv.paid) || 0) <= 0 ? 'Pending' : 'Partial');
   },
 
   /** Record an installment / partial payment. o = {amount, date(AD), mode, ref, note}. Returns {inv, pay}. */

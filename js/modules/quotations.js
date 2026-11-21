@@ -158,7 +158,7 @@ var Quotations = {
   render: function() {
     var list=this.getData(); var today=todayISO(); var week=new Date(); week.setDate(week.getDate()-7);
     if(this._filter==='today') list=list.filter(function(q){return q.date===today;});
-    else if(this._filter==='week') list=list.filter(function(q){return q.date>=week.toISOString().slice(0,10);});
+    else if(this._filter==='week') list=list.filter(function(q){return q.date>=isoLocal(week);});
     else if(this._filter==='month') list=list.filter(function(q){return q.date&&q.date.slice(0,7)===today.slice(0,7);});
     var tb=document.getElementById('quot-table'), ne=document.getElementById('no-quot');
     setText('q-filter-label',list.length+' quotations');
