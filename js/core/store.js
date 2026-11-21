@@ -4,7 +4,15 @@ var STORE = {
     try { var v=localStorage.getItem(k); return v!==null?JSON.parse(v):def; } catch(e){ return def||null; }
   },
   set: function(k, v) {
-    try { localStorage.setItem(k,JSON.stringify(v)); return true; } catch(e){ return false; }
+    try { localStorage.setItem(k,JSON.stringify(v)); return true; }
+    catch(e){
+      // v7.3.0: storage भरियो → auto-save कपी हटाएर एक पटक फेरि; नभए प्रयोगकर्तालाई तुरुन्तै भन्ने
+      if (k !== 'pk3_autosave_snapshot') {
+        try { if (localStorage.getItem('pk3_autosave_snapshot') !== null) { localStorage.removeItem('pk3_autosave_snapshot'); localStorage.setItem(k,JSON.stringify(v)); return true; } } catch(e2){}
+        try { if (window.StorageGuard) StorageGuard.onWriteFail(k, e); } catch(e3){}
+      }
+      return false;
+    }
   },
   del: function(k) { try { localStorage.removeItem(k); } catch(e){} }
 };

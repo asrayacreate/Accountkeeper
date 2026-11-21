@@ -57,6 +57,7 @@ var CORE_ASSETS = [
   './js/modules/backup.js',
   './js/modules/backup-alert.js',
   './js/modules/error-log-view.js',
+  './js/modules/data-safety.js',
   './js/modules/settings.js',
   './js/modules/audit-notif.js',
   './js/modules/smart-reminders.js',
@@ -112,7 +113,16 @@ self.addEventListener('install', function (event) {
       }));
     })
   );
-  self.skipWaiting();
+  // v7.3.0: पहिलो install मा तुरुन्तै सक्रिय। अपडेट (पुरानो version पहिल्यै चलिरहेको) भने पर्खिन्छ —
+  // एपले "नयाँ अपडेट उपलब्ध छ — रिफ्रेश गर्नुहोस्" ब्यानर देखाउँछ र प्रयोगकर्ताले थिचेपछि मात्र
+  // SKIP_WAITING सन्देश पठाउँछ (js/core/sw-register.js)। यसले भरिँदै गरेको फारम बीचमै reload हुँदैन।
+  if (!self.registration.active) self.skipWaiting();
+});
+
+self.addEventListener('message', function (event) {
+  var d = event.data;
+  if (d === 'SKIP_WAITING' || (d && d.type === 'SKIP_WAITING')) self.skipWaiting();
+  if (d && d.type === 'GET_VERSION' && event.ports && event.ports[0]) event.ports[0].postMessage({ version: APP_VERSION, cache: CACHE_VERSION });
 });
 
 // Activate: delete old caches

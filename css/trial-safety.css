@@ -12,3 +12,19 @@
 .errlog-msg{font-size:0.78rem;font-family:ui-monospace,Menlo,Consolas,monospace;word-break:break-word;margin-top:2px;}
 .errlog-src{font-size:0.68rem;color:var(--text-muted,#666);font-family:ui-monospace,Menlo,Consolas,monospace;word-break:break-all;}
 .errlog-empty{font-size:0.8rem;color:var(--text-muted,#666);padding:6px 0;}
+/* v7.3.0 — Storage alert + meter, PWA update banner */
+.storage-alert.storage-crit{border-color:#dc2626;background:rgba(220,38,38,0.10);}
+.storage-alert.storage-crit .backup-alert-text b{color:#dc2626;}
+.storage-bar{height:10px;border-radius:6px;background:var(--surface-3,rgba(0,0,0,0.08));overflow:hidden;}
+.storage-bar>div{height:100%;border-radius:6px;transition:width .3s;}
+.storage-sum{font-size:0.8rem;margin:6px 0;font-weight:600;}
+.storage-top{display:grid;gap:3px;}
+.storage-row{display:flex;justify-content:space-between;gap:10px;font-size:0.74rem;color:var(--text-muted,#666);}
+.sw-update-banner{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:99999;
+  display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px 12px;
+  width:max-content;max-width:calc(100% - 24px);box-sizing:border-box;padding:10px 14px;border-radius:12px;
+  background:var(--surface,#fff);color:var(--text,#111);border:1px solid var(--accent,#2563eb);
+  box-shadow:0 8px 28px rgba(0,0,0,0.25);font-size:0.84rem;line-height:1.45;}
+.sw-update-text small{color:var(--text-muted,#666);}
+.sw-update-btns{display:flex;gap:6px;}
+@media (max-width:768px){.sw-update-banner{bottom:78px;}}
