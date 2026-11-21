@@ -258,6 +258,7 @@ var APP_VERSION = '7.2.0';
   <!-- ========================= DASHBOARD PAGE ========================= -->
   <div class="page active" id="page-dashboard">
     <div id="backup-alert-dash" style="display:none;"></div>
+    <div id="storage-alert-dash" style="display:none;"></div>
     <div id="smart-rem-dash"></div>
     <div class="hero-card">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;flex-wrap:wrap;">
@@ -1042,7 +1043,9 @@ var APP_VERSION = '7.2.0';
         <div class="section-subtitle" style="margin-bottom:18px;">तपाईंको सबै data सुरक्षित राख्नुस्</div>
         <div style="display:grid;gap:12px;">
           <div style="background:var(--green-soft);border:1px solid rgba(34,197,94,0.3);border-radius:12px;padding:14px;"><div style="font-weight:700;margin-bottom:8px;">💾 Create Backup</div><div style="font-size:0.8rem;color:var(--text-muted);margin-bottom:10px;">सबै data JSON file मा download गर्नुस् (filename मा date र version include हुन्छ)</div><div class="btn-group"><button onclick="Backup.exportJSON()" class="btn btn-success">⬇️ Download Backup (.json)</button><button onclick="Backup.exportCSV()" class="btn btn-secondary">📊 Customers CSV</button></div></div>
-          <div style="background:var(--blue-soft);border:1px solid rgba(96,165,250,0.3);border-radius:12px;padding:14px;"><div style="font-weight:700;margin-bottom:8px;">📂 Restore from Backup</div><div style="font-size:0.8rem;color:var(--text-muted);margin-bottom:10px;">⚠️ यो action ले current data replace गर्छ। Restore गर्नु अघि validation हुन्छ।</div><input type="file" id="backup-restore-file" accept=".json" style="display:none;" onchange="Backup.importJSON(event)"><button onclick="document.getElementById('backup-restore-file').click()" class="btn btn-blue">📤 Upload Backup File</button></div>
+          <div style="background:var(--blue-soft);border:1px solid rgba(96,165,250,0.3);border-radius:12px;padding:14px;"><div style="font-weight:700;margin-bottom:8px;">📂 Restore from Backup</div><div style="font-size:0.8rem;color:var(--text-muted);margin-bottom:10px;">⚠️ यो action ले current data replace गर्छ। Restore गर्नु अघि validation हुन्छ।</div><input type="file" id="backup-restore-file" accept=".json" style="display:none;" onchange="Backup.importJSON(event)"><button onclick="document.getElementById('backup-restore-file').click()" class="btn btn-blue">📤 Upload Backup File</button><div style="font-size:0.72rem;color:var(--text-muted);margin-top:8px;">🛟 Restore गर्नुअघि अहिलेको डाटाको सुरक्षा कपी आफैं सेभ हुन्छ।</div></div>
+          <div id="restore-undo-box" style="display:none;background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:14px;"></div>
+          <div id="storage-card" style="background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:14px;"><div style="font-weight:700;margin-bottom:8px;">📦 Storage (यो ब्राउजरको डाटा भण्डार)</div><div id="storage-meter"></div><div style="font-size:0.72rem;color:var(--text-muted);margin-top:8px;">७५% भन्दा बढी भरिएमा Dashboard मा चेतावनी आउँछ। फोटो छुट्टै (IndexedDB) मा बस्छन्, यहाँ गनिँदैनन्।</div></div>
           <div style="background:var(--red-soft);border:1px solid rgba(248,113,113,0.3);border-radius:12px;padding:14px;"><div style="font-weight:700;margin-bottom:8px;color:var(--red);">⚠️ Danger Zone</div><div style="font-size:0.8rem;color:var(--text-muted);margin-bottom:10px;">सबै data permanently delete गर्छ</div><button onclick="Backup.clearAll()" class="btn btn-danger">🗑️ Clear All Data</button></div>
         </div>
       </div>
@@ -1967,6 +1970,7 @@ var APP_VERSION = '7.2.0';
 <script src="js/modules/backup.js?v=7.2.0"></script>
 <script src="js/modules/backup-alert.js?v=7.2.0"></script>
 <script src="js/modules/error-log-view.js?v=7.2.0"></script>
+<script src="js/modules/data-safety.js?v=7.2.0"></script>
 <script src="js/modules/settings.js?v=7.2.0"></script>
 <script src="js/modules/audit-notif.js?v=7.2.0"></script>
 <script src="js/modules/smart-reminders.js?v=7.2.0"></script>

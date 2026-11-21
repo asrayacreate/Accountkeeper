@@ -9,6 +9,7 @@ var Backup = {
     setText('settings-last-backup',disp);
     try { BackupAlert.render(); } catch(e){}
     try { ErrorLogView.render(); } catch(e){}
+    try { RestoreGuard.render(); } catch(e){}
   },
   exportJSON: function(){
     var data={};
@@ -39,29 +40,48 @@ var Backup = {
     var file=e.target.files[0]; if(!file)return;
     var reader=new FileReader();
     reader.onload=function(ev){
-      try{
-        var data=JSON.parse(ev.target.result);
-        // Validate
-        if(!data||typeof data!=='object'){App.toast('❌ Invalid backup file','error');return;}
-        var requiredKeys=['pk3_customers','pk3_quotations'];
-        var missing=requiredKeys.filter(function(k){return !(k in data);});
-        if(missing.length){App.toast('❌ Invalid backup: missing '+missing.join(', '),'error');return;}
-        if(!confirm('Restore backup? Current data will be replaced.\nExported: '+(data._meta?data._meta.date:'unknown')))return;
-        var _licSafe = License._load();
-        Object.keys(data).forEach(function(k){if(k!=='_meta' && k!=='_media' && License._STORES.indexOf(k)===-1)STORE.set(k,data[k]);});
-        if(data._media){ try { Media.importAll(data._media); } catch(e){} }
-        // v7.0.0: a v6 backup (no pk3_business) is migrated again on reload, like an old device
-        if(!('pk3_business' in data)){ localStorage.removeItem('pk3_business'); localStorage.removeItem('pk3_v7_migrated'); }
-        if(_licSafe) License._save(_licSafe);   // restore पछि पनि license बाँच्छ
-        STORE.set('lastBackup',new Date().toISOString());
-        Audit.log('RESTORE','Backup restored from '+file.name);
-        App.toast('✅ Data restored!','success');
-        setTimeout(function(){window.location.reload();},1000);
-      }catch(err){App.toast('❌ File parse error: '+err.message,'error');}
+      var data;
+      try{ data=JSON.parse(ev.target.result); }catch(err){ App.toast('❌ File parse error: '+err.message,'error'); return; }
+      Backup.restoreData(data, file.name);
     };
     reader.readAsText(file);
     e.target.value='';
   },
+  /**
+   * v7.3.0 safe restore: validate → summary confirmation → safety copy of current data
+   * (IndexedDB, or a downloaded .json when that fails) → write with automatic rollback on failure.
+   * Resolves true when data was restored.
+   */
+  restoreData: function(data, name){
+    // Validate
+    if(!data||typeof data!=='object'||Array.isArray(data)){App.toast('❌ Invalid backup file','error');return Promise.resolve(false);}
+    var requiredKeys=['pk3_customers','pk3_quotations'];
+    var missing=requiredKeys.filter(function(k){return !(k in data);});
+    if(missing.length){App.toast('❌ Invalid backup: missing '+missing.join(', '),'error');return Promise.resolve(false);}
+    if(!confirm('📂 Backup Restore गर्ने?\n\n'+RestoreGuard.summary(data)+'\n\nअहिलेको डाटा यो Backup ले बदलिन्छ।\n(अहिलेको डाटाको सुरक्षा कपी पहिले आफैं सेभ हुन्छ — पछि "↩️ Restore अघिको डाटा फर्काउनुहोस्" बाट फर्काउन मिल्छ।)'))return Promise.resolve(false);
+    return RestoreGuard.snapshot('Backup Restore ('+(name||'file')+')').then(function(snap){
+      if(!snap.ok && !confirm('⚠️ अहिलेको डाटाको सुरक्षा कपी बनाउन सकिएन।\nफेरि पनि Restore गर्ने? (सिफारिस: Cancel थिचेर पहिले "Download Backup" गर्नुहोस्)')) return false;
+      var _licSafe = License._load();
+      var writes={};
+      Object.keys(data).forEach(function(k){ if(k!=='_meta' && k!=='_media' && License._STORES.indexOf(k)===-1 && !RestoreGuard.SKIP.test(k)) writes[k]=JSON.stringify(data[k]); });
+      // v7.0.0: a v6 backup (no pk3_business) is migrated again on reload, like an old device
+      if(!('pk3_business' in data)){ writes.pk3_business=null; writes.pk3_v7_migrated=null; }
+      writes.lastBackup=JSON.stringify(new Date().toISOString());
+      var r=RestoreGuard.applyRaw(writes);
+      if(_licSafe) License._save(_licSafe);   // restore पछि पनि license बाँच्छ
+      if(!r.ok){
+        App.toast('❌ Restore पूरा हुन सकेन (डाटा भण्डार भरियो) — अहिलेको डाटा जस्ताको तस्तै फर्काइयो।','error',8000);
+        try { StorageGuard.render(); } catch(e){}
+        return false;
+      }
+      if(data._media){ try { Media.importAll(data._media); } catch(e){} }
+      Audit.log('RESTORE','Backup restored from '+(name||'file'));
+      App.toast('✅ Data restored!','success');
+      setTimeout(function(){ Backup._reload(); },1000);
+      return true;
+    });
+  },
+  _reload: function(){ window.location.reload(); },
   clearAll: function(){
     if(!confirm('⚠️ ALL data permanently delete गर्नुहुन्छ? यो action undo हुँदैन!'))return;
     if(!confirm('CONFIRM: सबै data delete गर्नुहुन्छ?'))return;
@@ -87,6 +107,8 @@ var Backup = {
 
   autoSave: function(){
     // Save a recovery snapshot inside localStorage (separate key)
+    // v7.3.0: यो पूरा डाटाकै दोहोरो प्रति हो — storage भरिन लागेमा राख्दैन (असली डाटाका लागि ठाउँ बचाउने)
+    try { if(window.StorageGuard && !StorageGuard.roomForAutosave()){ localStorage.removeItem('pk3_autosave_snapshot'); return; } } catch(e){}
     try {
       var snap=Backup._snapshot();
       localStorage.setItem('pk3_autosave_snapshot', JSON.stringify(snap));
@@ -104,6 +126,8 @@ var Backup = {
     window.addEventListener('beforeunload', function(){ Backup.autoSave(); });
     // 4. Daily backup reminder — if no download backup in 24h+, gently nudge
     Backup._checkDailyBackup();
+    // 5. v7.3.0: storage भरिन लागेको चेतावनी (साँचो सीमा background मा नापिन्छ)
+    try { if(window.StorageGuard) StorageGuard.init(); } catch(e){}
   },
 
   _checkDailyBackup: function(){

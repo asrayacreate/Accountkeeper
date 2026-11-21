@@ -38,13 +38,18 @@ export function appSource() {
 /** The same source as the test server serves it (test-only secret hashes). */
 export function testHtml() { return swapSecrets(appSource()); }
 
-export function startServer() {
+/** @param {object} [o] { transform: (urlPath, text) => string|undefined } — lets a test serve a changed file (e.g. a new sw.js). */
+export function startServer(o = {}) {
   return new Promise((resolve) => {
     const srv = http.createServer((req, res) => {
       let p = decodeURIComponent(new URL(req.url, 'http://x').pathname);
       if (p === '/') p = '/index.html';
       const f = path.join(ROOT, p);
       if (!f.startsWith(ROOT) || !fs.existsSync(f) || fs.statSync(f).isDirectory()) { res.writeHead(404); return res.end('nf'); }
+      if (o.transform && /\.(js|html|json)$/.test(p)) {
+        const out = o.transform(p, fs.readFileSync(f, 'utf8'));
+        if (typeof out === 'string') { res.writeHead(200, { 'Content-Type': TYPES[path.extname(f)], 'Cache-Control': 'no-store' }); return res.end(/^\/(index\.html|js\/core\/(license|security)\.js)$/.test(p) ? swapSecrets(out) : out); }
+      }
       if (/^\/(index\.html|js\/core\/(license|security)\.js)$/.test(p)) { res.writeHead(200, { 'Content-Type': TYPES[path.extname(f)] }); return res.end(swapSecrets(fs.readFileSync(f, 'utf8'))); }
       res.writeHead(200, { 'Content-Type': TYPES[path.extname(f)] || 'application/octet-stream' });
       fs.createReadStream(f).pipe(res);

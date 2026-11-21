@@ -199,7 +199,8 @@ var DBX = {
   },
   restoreNow: async function(){
     if (!this.connected()) return this.toast('पहिले Dropbox जोड्नुहोस्', 'error');
-    if (!confirm('Dropbox को backup बाट Restore गर्ने?\nयहाँको अहिलेको data बदलिन्छ।')) return;
+    if (!confirm('Dropbox को backup बाट Restore गर्ने?\nयहाँको अहिलेको data बदलिन्छ।\n(अहिलेको data को सुरक्षा कपी पहिले सेभ हुन्छ)')) return;
+    try { if (window.RestoreGuard) await RestoreGuard.snapshot('Dropbox Restore'); } catch(e){}
     await this.pull();
   },
   disconnect: function(silent){

@@ -118,7 +118,8 @@ CloudSync.prototype = {
   },
   restoreNow: async function () {
     if (!this.p.isConnected()) return this.toast('पहिले ' + this.p.label + ' जोड्नुहोस्', 'error');
-    if (!confirm(this.p.label + ' को backup बाट Restore गर्ने?\nयहाँको अहिलेको data बदलिन्छ।')) return;
+    if (!confirm(this.p.label + ' को backup बाट Restore गर्ने?\nयहाँको अहिलेको data बदलिन्छ।\n(अहिलेको data को सुरक्षा कपी पहिले सेभ हुन्छ)')) return;
+    try { if (window.RestoreGuard) await RestoreGuard.snapshot(this.p.label + ' Restore'); } catch (e) {}
     await this.pull();
   },
   disconnect: function (silent) {
