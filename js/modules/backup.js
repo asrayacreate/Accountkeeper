@@ -11,18 +11,26 @@ var Backup = {
     try { ErrorLogView.render(); } catch(e){}
     try { RestoreGuard.render(); } catch(e){}
   },
-  exportJSON: function(){
+  /**
+   * v7.3.1: everything a backup holds (data keys + _meta + _media photos), as one object.
+   * Used by the .json download and by MoveOrigin (data transfer to a new web address).
+   */
+  collect: function(){
     var data={};
     // v7.0.0: one list (ALL_KEYS) + every other pk3_ data key, so new modules are never left out
     var keys = Backup.ALL_KEYS.slice();
     try { for (var _i=0; _i<localStorage.length; _i++){ var _k=localStorage.key(_i); if(_k && _k.indexOf('pk3_')===0 && keys.indexOf(_k)===-1 && !/^(pk3_session|pk3_dbx_|pk3_gdrive_|pk3_autosave_|pk3_ai_key|pk3_oai_key|pk3_gem_key|pk3_license|pk3_lic_backup)/.test(_k)) keys.push(_k); } } catch(e){}
     keys.forEach(function(k){ var v=STORE.get(k,null); if(v!==null) data[k]=v; });
     data._meta={version:APP_VERSION,date:todayISO(),exportedBy:currentUser?currentUser.name:'unknown',company:Company.name('')};
+    // v7.0.0: site / bill photos (IndexedDB) travel inside the same backup
+    return new Promise(function(resolve){
+      try { Media.exportAll().then(function(m){ if(m && Object.keys(m).length) data._media=m; resolve(data); }).catch(function(){ resolve(data); }); } catch(e){ resolve(data); }
+    });
+  },
+  exportJSON: function(){
     var dateStr=new Date().toISOString().slice(0,10);
     var filename='swagatik-backup-'+dateStr+'.json';
-    // v7.0.0: site / bill photos (IndexedDB) travel inside the same backup file
-    var done=function(){ downloadFile(filename,JSON.stringify(data,null,2)); };
-    try { Media.exportAll().then(function(m){ if(m && Object.keys(m).length) data._media=m; done(); }).catch(done); } catch(e){ done(); }
+    Backup.collect().then(function(data){ downloadFile(filename,JSON.stringify(data,null,2)); });
     var now=new Date().toISOString();
     STORE.set('lastBackup',now);
     this.render();

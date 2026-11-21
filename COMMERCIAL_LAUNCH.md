@@ -4,8 +4,21 @@
 Custom Domain + Supabase License** मा सार्ने चरणहरू बताउँछ। App मा अझै कुनै build step छैन —
 फाइलहरू जस्ताको तस्तै host हुन्छन्।
 
-> ⚠️ **क्रम महत्त्वपूर्ण छ:** पहिले repo Private, त्यसपछि मात्र नयाँ Master Key / Super Admin
-> password। पुराना secret हरू public git history मा छन्, त्यसैले private भएपछि बदल्नैपर्छ।
+> ⚠️ **क्रम महत्त्वपूर्ण छ (v7.3.1 देखि):** app एक मिनेट पनि बन्द नहोस् र कुनै device को data नहराओस् भनेर:
+> **(A)** Cloudflare Pages मा चलाउने (GitHub Pages चलिरहन्छ) → **(B)** हरेक device को data नयाँ ठेगानामा
+> सार्ने → **(C)** repo Private (free plan मा यसले GitHub Pages बन्द गर्छ) → **(D)** नयाँ Master Key + Super Admin password।
+> पुराना secret हरू public git history मा छन्, त्यसैले private भएपछि बदल्नैपर्छ।
+
+### Data सार्ने (पुरानो ठेगाना → नयाँ ठेगाना)
+
+1. Cloudflare को ठेगाना `js/core/deploy.js` को `primaryOrigin` मा राखेर (अहिले `https://accountkeeper.pages.dev`) `npm run release` → merge।
+2. हरेक device मा पुरानो (github.io) app खोल्नुहोस् → Dashboard मा **📦 डाटा नयाँ ठेगानामा सार्नुहोस्** →
+   नयाँ tab मा Restore को OK → नयाँ ठेगानामा License Key + login। पुरानो ठेगानाको data मेटिँदैन।
+3. License, login session, Dropbox / Google Drive token र AI key सर्दैनन् — नयाँ ठेगानामा फेरि जोड्नुहोस्
+   (Google Drive को OAuth मा नयाँ ठेगाना पनि थप्नुहोस्)।
+4. नयाँ ठेगानाले `legacyOrigins` मा लेखिएका ठेगानाबाट मात्र data लिन्छ।
+5. सुरक्षा जाल: पुरानो hosting बन्द भएपछि पनि (404) पहिल्यै खोलिएको app service worker cache बाट खुल्छ,
+   त्यसैले छुटेको device बाट पछि पनि सार्न सकिन्छ (internet चाहिन्छ)।
 
 ---
 
@@ -48,14 +61,14 @@ npm run hash-secret -- password "NewStrongPassword!"
 1. <https://dash.cloudflare.com> → **Workers & Pages → Create → Pages → Connect to Git** → GitHub account जोडेर `Accountkeeper` repo छान्नुहोस्।
 2. Build settings:
    - Framework preset: **None**
-   - Build command: *(खाली छोड्नुहोस्)*
-   - Build output directory: **`/`**
+   - Build command: **`node scripts/build-pages.mjs`** (app का फाइल मात्र `dist/` मा — docs, tests, SQL website मा जाँदैनन्)
+   - Build output directory: **`dist`**
    - Production branch: `main`
 3. **Save and Deploy**। `https://<project>.pages.dev` मा app खुल्छ।
 4. Custom domain: Pages project → **Custom domains → Set up a domain** → जस्तै `app.swagatik.com.np`।
    Domain Cloudflare मै भए DNS आफैं बन्छ; बाहिर भए दिइएको `CNAME` record domain provider मा राख्नुहोस्।
 5. `_headers` (cache नियम) र `_redirects` फाइल Cloudflare ले आफैं पढ्छ।
-6. पुरानो GitHub Pages बन्द गर्नुहोस्: Repo Settings → Pages → Source: *None*। (`CNAME` फाइल GitHub Pages को लागि मात्र हो — Cloudflare मा चाहिँदैन।)
+6. सबै device सरेपछि मात्र पुरानो GitHub Pages बन्द गर्नुहोस् (repo Private गर्दा आफैं बन्द हुन्छ)। (`CNAME` फाइल GitHub Pages को लागि मात्र हो — Cloudflare मा चाहिँदैन।)
 7. पुराना प्रयोगकर्ताको data browser मा **domain अनुसार** बस्छ। नयाँ domain मा सार्दा: पुरानो URL मा
    Settings → Backup → **Download Backup (.json)** → नयाँ URL मा **Restore from File** (वा Dropbox / Google Drive बाट Restore)।
 

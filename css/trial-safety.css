@@ -28,3 +28,10 @@
 .sw-update-text small{color:var(--text-muted,#666);}
 .sw-update-btns{display:flex;gap:6px;}
 @media (max-width:768px){.sw-update-banner{bottom:78px;}}
+/* v7.3.1 — move to a new web address */
+.move-alert{border-color:#2563eb;background:rgba(37,99,235,0.10);}
+.move-alert .backup-alert-text b{color:#1d4ed8;}
+.move-alert.move-done{border-color:#16a34a;background:rgba(22,163,74,0.10);}
+.move-alert.move-done .backup-alert-text b{color:#15803d;}
+.move-alert a{word-break:break-all;}
+.move-status{font-weight:600;}

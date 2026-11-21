@@ -93,6 +93,7 @@ var BackupAlert = {
 
   render: function () {
     try { if (window.StorageGuard) StorageGuard.render(); } catch (e) {}
+    try { if (window.MoveOrigin) MoveOrigin.render(); } catch (e) {}
     var box = document.getElementById('backup-alert-dash');
     if (!box) return;
     if (!this.shouldShow()) { box.innerHTML = ''; box.style.display = 'none'; return; }
