@@ -35,3 +35,9 @@
 .move-alert.move-done .backup-alert-text b{color:#15803d;}
 .move-alert a{word-break:break-all;}
 .move-status{font-weight:600;}
+/* v7.3.4 — new secret → hash (Super Admin) */
+.sh-input{width:100%;box-sizing:border-box;padding:10px 12px;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:0.85rem;}
+.sh-err{color:#dc2626;font-size:0.8rem;font-weight:700;}
+.sh-ok{color:#15803d;font-size:0.8rem;font-weight:700;margin-bottom:6px;}
+.sh-hashes,textarea.sh-hashes{width:100%;box-sizing:border-box;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:0.68rem;word-break:break-all;padding:8px;border-radius:8px;border:1px solid var(--border);background:var(--surface-2,rgba(0,0,0,0.03));color:var(--text);margin-bottom:6px;}
+.sh-note{font-size:0.7rem;color:var(--text-muted);margin-top:6px;}
