@@ -44,7 +44,8 @@ var Purchases = {
   /** Pure maths — {subtotal, discAmt, nonTaxable, taxable, vatAmt, total, tdsAmt, netPayable} */
   compute: function (b) {
     var r2 = this.r2;
-    var items = (b.items || []).map(function (r) { return { name: String(r.name || '').trim(), qty: parseFloat(r.qty) || 0, unit: r.unit || '', rate: parseFloat(r.rate) || 0, stockId: r.stockId || '' }; });
+    // v7.3.0 audit: negative qty / rate would silently lower the bill (and its VAT) — never below 0
+    var items = (b.items || []).map(function (r) { return { name: String(r.name || '').trim(), qty: Math.max(parseFloat(r.qty) || 0, 0), unit: r.unit || '', rate: Math.max(parseFloat(r.rate) || 0, 0), stockId: r.stockId || '' }; });
     items.forEach(function (r) { r.amount = r2(r.qty * r.rate); });
     var subtotal = r2(items.reduce(function (s, r) { return s + r.amount; }, 0));
     var discAmt = Math.min(Math.max(r2(b.discAmt), 0), subtotal);
@@ -54,7 +55,7 @@ var Purchases = {
     if (vatP === 0) nonTaxable = r2(subtotal - discAmt);
     var vatAmt = r2(taxable * vatP / 100);
     var total = r2(subtotal - discAmt + vatAmt);
-    var tdsP = Math.max(parseFloat(b.tdsP) || 0, 0);
+    var tdsP = Math.min(Math.max(parseFloat(b.tdsP) || 0, 0), 100);   // v7.3.0: TDS % is 0–100
     var tdsAmt = r2((taxable + nonTaxable) * tdsP / 100);
     return { items: items, subtotal: subtotal, discAmt: discAmt, nonTaxable: nonTaxable, taxable: taxable, vatP: vatP, vatAmt: vatAmt, total: total, tdsP: tdsP, tdsAmt: tdsAmt, netPayable: r2(total - tdsAmt) };
   },
@@ -81,12 +82,20 @@ var Purchases = {
     var self = this, c = this.compute(b);
     c.items = c.items.filter(function (r) { return r.name || r.amount; });
     if (!c.items.length || c.total <= 0) throw new Error('कम्तिमा १ सामानको रकम (qty × rate) चाहिन्छ');
+    // v7.3.0 audit: check before anything is unposted — a failure after _unpost(prev) used to delete the
+    // bill's Supplier entries while the purchase record stayed (Supplier balance ≠ Purchase Book).
+    if (c.netPayable <= 0) throw new Error('TDS कट्टीपछि Supplier लाई तिर्नुपर्ने रकम ० भन्दा बढी हुनुपर्छ');
     var party = this._party(b);
     var list = this.getData(), prev = b.id ? list.find(function (x) { return x.id === b.id; }) : null;
     if (b.id && !prev) throw new Error('Purchase bill भेटिएन');
     var date = b.date || todayISO(), dateBs = b.dateBs || '';
     if (!dateBs) try { dateBs = _bsFromAd(date); } catch (e) {}
-    c.items.forEach(function (r) { if (!r.stockId) r.stockId = self._stockIdFor(r.name); });
+    c.items.forEach(function (r) {
+      // v7.3.0 audit: a row renamed while editing kept the old stockId, so stock went to the wrong item
+      var byName = self._stockIdFor(r.name);
+      if (r.stockId && byName && byName !== r.stockId) r.stockId = byName;
+      if (!r.stockId) r.stockId = byName;
+    });
     var paid = Math.min(Math.max(this.r2(b.paid), 0), c.netPayable);
     var tdsType = this.TDS[b.tdsType] ? b.tdsType : (c.tdsP > 0 ? 'custom' : 'none');
     var rec = Object.assign({}, prev || {}, {
@@ -238,7 +247,7 @@ var Purchases = {
     if (!dl) { dl = document.createElement('datalist'); dl.id = 'pur-items-dl'; document.body.appendChild(dl); }
     try { dl.innerHTML = (STORE.get('pk3_stock', []) || []).map(function (s) { return '<option value="' + esc(s.name) + '">'; }).join(''); } catch (e) {}
     tb.innerHTML = this._rows.map(function (r, i) {
-      return '<tr><td><input type="text" list="pur-items-dl" data-pr="name-' + i + '" value="' + esc(r.name || '') + '" oninput="Purchases._rows[' + i + '].name=this.value" style="width:100%;min-width:120px;"></td>'
+      return '<tr><td><input type="text" list="pur-items-dl" data-pr="name-' + i + '" value="' + esc(r.name || '') + '" oninput="Purchases._rows[' + i + '].name=this.value;Purchases._rows[' + i + '].stockId=\'\'" style="width:100%;min-width:120px;"></td>'
         + '<td><input type="number" data-pr="qty-' + i + '" value="' + (r.qty || 0) + '" min="0" oninput="Purchases._rows[' + i + '].qty=this.value;Purchases.calc()" style="width:60px;"></td>'
         + '<td><input type="text" value="' + esc(r.unit || '') + '" oninput="Purchases._rows[' + i + '].unit=this.value" style="width:56px;"></td>'
         + '<td><input type="number" data-pr="rate-' + i + '" value="' + (r.rate || 0) + '" min="0" oninput="Purchases._rows[' + i + '].rate=this.value;Purchases.calc()" style="width:84px;"></td>'

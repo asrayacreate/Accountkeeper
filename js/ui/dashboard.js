@@ -502,7 +502,7 @@ var Dashboard = {
     // Income vs Expense 7 days
     var cashEl = document.getElementById('dash-summary-cash');
     if(cashEl){
-      var days7 = []; for(var i=6;i>=0;i--){var d=new Date();d.setDate(d.getDate()-i);days7.push(d.toISOString().slice(0,10));}
+      var days7 = []; for(var i=6;i>=0;i--){var d=new Date();d.setDate(d.getDate()-i);days7.push(isoLocal(d));}
       var rows = days7.map(function(d){
         var inc = db.filter(function(x){return x.date===d&&(x.type==='income'||x.type==='receipt');}).reduce(function(s,x){return s+parseFloat(x.amount||0);},0);
         var exp = db.filter(function(x){return x.date===d&&(x.type==='expense'||x.type==='payment');}).reduce(function(s,x){return s+parseFloat(x.amount||0);},0);
@@ -596,7 +596,7 @@ var Dashboard = {
     var custs = STORE.get('pk3_customers',[])||[];
     var quots = STORE.get('pk3_quotations',[])||[];
     var days = []; var now = new Date();
-    for(var i=period-1;i>=0;i--){var d=new Date(now); d.setDate(d.getDate()-i); days.push(d.toISOString().slice(0,10));}
+    for(var i=period-1;i>=0;i--){var d=new Date(now); d.setDate(d.getDate()-i); days.push(isoLocal(d));}
     var vals = days.map(function(day){
       if(metric==='income') return db.filter(function(d){return d.date===day&&(d.type==='income'||d.type==='receipt');}).reduce(function(s,d){return s+parseFloat(d.amount||0);},0);
       if(metric==='expense') return db.filter(function(d){return d.date===day&&(d.type==='expense'||d.type==='payment');}).reduce(function(s,d){return s+parseFloat(d.amount||0);},0);

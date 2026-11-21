@@ -107,7 +107,7 @@ var Ledger = {
     setVal('ltx-amount','');
     setVal('ltx-desc','');
     var d = document.getElementById('ltx-date');
-    if(d) d.value = new Date().toISOString().slice(0,10);
+    if(d) d.value = todayISO();
     document.getElementById('ledger-tx-modal').classList.add('open');
   },
 
@@ -184,8 +184,7 @@ var Ledger = {
   exportCSV: function(){
     var rows = [['Date','Customer','Narration','Debit','Credit']];
     this.getData().forEach(function(r){ rows.push([r.date,r.custName,(r.narration||r.desc||''),r.debit||0,r.credit||0]); });
-    var csv = rows.map(function(r){ return r.map(function(c){ return '"'+String(c).replace(/"/g,'""')+'"'; }).join(','); }).join('\n');
-    if(typeof downloadText==='function') downloadText(csv,'ledger-export.csv','text/csv');
+    CAExport.download('ledger-export.csv', rows);   // v7.3.0: UTF-8 BOM + safe quoting (नेपाली narration Excel मा नबिग्रने)
   }
 };
 

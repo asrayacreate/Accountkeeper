@@ -69,7 +69,7 @@ export const SESSION_OLD = { pk3_session: JSON.stringify({ user: 'punya', pass: 
  * @param {object} o  { base, browser, storage: {key: rawString}, viewport, mock: (page)=>Promise }
  */
 export async function openApp(o) {
-  const ctx = await o.browser.newContext({ serviceWorkers: 'block', viewport: o.viewport || { width: 1280, height: 900 } });
+  const ctx = await o.browser.newContext({ serviceWorkers: 'block', viewport: o.viewport || { width: 1280, height: 900 }, ...(o.contextOptions || {}) });
   const page = await ctx.newPage();
   const errors = [];
   page.on('pageerror', (e) => errors.push(String(e && e.message || e)));

@@ -3,7 +3,7 @@ var AccountSummary = {
   _filter: 'month',
   setFilter: function(f){ this._filter=f; ['month','year','all'].forEach(function(x){var b=document.getElementById('acf-'+x);if(b)b.className='btn btn-sm btn-'+(x===f?'primary':'secondary');}); this.render(); },
   render: function(){
-    var db=STORE.get('pk3_daybook',[]), today=new Date().toISOString().slice(0,10);
+    var db=STORE.get('pk3_daybook',[]), today=todayISO();
     var entries=db;
     if(this._filter==='month') entries=db.filter(function(e){return e.date&&e.date.slice(0,7)===today.slice(0,7);});
     else if(this._filter==='year') entries=db.filter(function(e){return e.date&&e.date.slice(0,4)===today.slice(0,4);});

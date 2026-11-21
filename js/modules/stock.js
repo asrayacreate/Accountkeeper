@@ -61,12 +61,21 @@ var Stock = {
     document.getElementById('stk-history-modal').classList.add('open');
   },
   adjustStock: function(){
-    var qty=parseFloat(getVal('stk-adj-qty'))||0; if(!qty){App.toast('Qty enter गर्नुस्!','error');return;}
     var type=getVal('stk-adj-type')||'in'; var note=getVal('stk-adj-note')||''; var id=this._curId; if(!id)return;
+    var qty=parseFloat(getVal('stk-adj-qty'));
+    // v7.3.0 audit: a negative qty turned "in" into a silent decrease; "= set" to 0 must still be allowed
+    if(isNaN(qty) || qty<0 || (!qty && type!=='adj')){App.toast('Qty enter गर्नुस् (० भन्दा बढी)!','error');return;}
     var list=this.getData(); var idx=list.findIndex(function(x){return x.id===id;}); if(idx<0)return;
     var s=list[idx]; if(!s.history)s.history=[];
-    if(type==='in')s.qty=(s.qty||0)+qty;
-    else if(type==='out')s.qty=Math.max(0,(s.qty||0)-qty);
+    var cur=parseFloat(s.qty)||0, r3=function(n){ return Math.round(n*1000)/1000; };
+    if(type==='in')s.qty=r3(cur+qty);
+    else if(type==='out'){
+      // "out" never goes below 0; history records what was actually taken out, so it adds up to the qty
+      var take=Math.min(qty, Math.max(cur,0));
+      if(take<qty) App.toast('⚠️ मौज्दात '+cur+' मात्र छ — '+take+' मात्र घटाइयो','warning',3500);
+      if(!take) return;
+      s.qty=r3(cur-take); qty=take;
+    }
     else s.qty=qty;
     s.history.unshift({date:todayISO(),type:type,qty:qty,note:note});
     STORE.set('pk3_stock',list);

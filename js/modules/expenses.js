@@ -31,7 +31,7 @@ var Expenses = {
     var catF=getVal('ex-cat-filter');
     var list = catF ? all.filter(function(e){return (e.cat||'')===catF;}) : all.slice();
     var today=todayISO();
-    var week=new Date(); week.setDate(week.getDate()-7); var weekStr=week.toISOString().slice(0,10);
+    var week=new Date(); week.setDate(week.getDate()-7); var weekStr=isoLocal(week);
     function inRange(e){
       if(Expenses._filter==='today') return e.date===today;
       if(Expenses._filter==='week') return e.date>=weekStr;

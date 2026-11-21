@@ -276,7 +276,7 @@ var Staff = {
     var name=getVal('stf-name'); if(!name){App.toast('नाम चाहिन्छ!','error');return;}
     var id=getVal('stf-edit-id')||uid(); var isEdit=!!getVal('stf-edit-id');
     var rec={id:id,name:name,phone:getVal('stf-phone'),role:getVal('stf-role'),payType:getVal('stf-paytype')==='monthly'?'monthly':'daily',
-      wage:parseFloat(getVal('stf-wage'))||0,salary:parseFloat(getVal('stf-salary'))||0,joinDate:getVal('stf-join'),address:getVal('stf-address'),notes:getVal('stf-snotes'),peshki:[],payments:[]};
+      wage:Math.max(0,parseFloat(getVal('stf-wage'))||0),salary:Math.max(0,parseFloat(getVal('stf-salary'))||0),joinDate:getVal('stf-join'),address:getVal('stf-address'),notes:getVal('stf-snotes'),peshki:[],payments:[]};
     var list=this.getData();
     if(isEdit){var idx=list.findIndex(function(x){return x.id===id;});if(idx>=0){rec=Object.assign({},list[idx],rec,{peshki:list[idx].peshki||[],payments:list[idx].payments||[]});list[idx]=rec;}else list.push(rec);}
     else list.push(rec);
@@ -288,17 +288,31 @@ var Staff = {
   },
   addPeshki: function(){
     var staffId=getVal('peshki-staff'); if(!staffId)return;
-    var amt=parseFloat(getVal('peshki-amt'))||0; if(!amt){App.toast('Amount छान्नुस्!','error');return;}
+    var amt=parseFloat(getVal('peshki-amt'))||0; if(!(amt>0)){App.toast('Amount छान्नुस् (० भन्दा बढी)!','error');return;}   // v7.3.0: no negative पेश्की
     var note=getVal('peshki-note');
     var list=this.getData(); var idx=list.findIndex(function(x){return x.id===staffId;});
     if(idx<0)return;
     if(!list[idx].peshki)list[idx].peshki=[];
-    list[idx].peshki.unshift({id:uid(),amount:amt,note:note,date:this._today()});
+    var pid=uid(), dbId=uid();
+    list[idx].peshki.unshift({id:pid,amount:amt,note:note,date:this._today(),dbId:dbId});
     this.setData(list);
-    // Add to daybook
-    var db=STORE.get('pk3_daybook',[]); db.unshift({id:uid(),type:'expense',amount:amt,desc:'पेश्की - '+list[idx].name+(note?' ('+note+')':''),cat:'पेश्की',date:todayISO(),dateBs:todayBs(),user:(window.currentUser&&currentUser.name)||'system'}); STORE.set('pk3_daybook',db);
+    // Add to daybook (dbId links them, so deleting the पेश्की removes this expense too)
+    var db=STORE.get('pk3_daybook',[])||[]; db.unshift({id:dbId,type:'expense',amount:amt,desc:'पेश्की - '+list[idx].name+(note?' ('+note+')':''),cat:'पेश्की',date:todayISO(),dateBs:todayBs(),user:(window.currentUser&&currentUser.name)||'system',_peshki:pid}); STORE.set('pk3_daybook',db);
     App.toast('✅ पेश्की added!','success'); setVal('peshki-amt',''); setVal('peshki-note',''); this.render();
   },
-  delPeshki: function(staffId,pId){ var list=this.getData(); var idx=list.findIndex(function(x){return x.id===staffId;}); if(idx<0)return; list[idx].peshki=(list[idx].peshki||[]).filter(function(p){return p.id!==pId;}); this.setData(list); this.render(); },
+  // v7.3.0 audit: deleting a पेश्की used to leave its Day Book expense behind (expense counted with no पेश्की).
+  // New entries carry dbId; for older ones the matching Day Book line (same staff, amount, date, cat 'पेश्की') is removed once.
+  delPeshki: function(staffId,pId){
+    var list=this.getData(); var idx=list.findIndex(function(x){return x.id===staffId;}); if(idx<0)return;
+    var s=list[idx], p=(s.peshki||[]).find(function(x){return x.id===pId;}); if(!p) return;
+    s.peshki=(s.peshki||[]).filter(function(x){return x.id!==pId;}); this.setData(list);
+    var db=STORE.get('pk3_daybook',[])||[], ix=-1;
+    if(p.dbId) ix=db.findIndex(function(e){ return e && e.id===p.dbId; });
+    if(ix<0) ix=db.findIndex(function(e){ return e && !e._staffPay && e.cat==='पेश्की' && e.type==='expense' && Math.abs((parseFloat(e.amount)||0)-(parseFloat(p.amount)||0))<0.005
+      && String(e.date||'').slice(0,10)===String(p.date||'').slice(0,10) && String(e.desc||'').indexOf('पेश्की - '+s.name)===0 && (!e._peshki || e._peshki===pId); });
+    if(ix>=0){ db.splice(ix,1); STORE.set('pk3_daybook',db); }
+    try { Audit.log('STAFF','पेश्की removed: '+s.name+' '+fmtRs(p.amount)); } catch(e){}
+    this.render();
+  },
   delStaff: function(id){ if(!confirm('Delete staff?'))return; this.setData(this.getData().filter(function(x){return x.id!==id;})); this.render(); App.toast('🗑 Deleted','info'); }
 };

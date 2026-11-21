@@ -25,8 +25,11 @@ var DocPrint = {
     var items = Array.isArray(inv.items) && inv.items.length ? inv.items : [{ name:inv.desc||'Amount', qty:1, unit:'', rate:parseFloat(inv.amount)||0 }];
     items = items.map(function(r){ return { name:r.name||'', qty:parseFloat(r.qty)||0, unit:r.unit||'', rate:parseFloat(r.rate)||0 }; });
     var sub = inv.subtotal!=null ? parseFloat(inv.subtotal)||0 : items.reduce(function(s,r){ return s + r.qty*r.rate; }, 0);
-    var total = parseFloat(inv.amount)||sub, paid = parseFloat(inv.paid)||0;
+    // v7.3.0 audit: a Rs 0 bill (100% discount) used to print the subtotal as its total ("||sub")
+    var total = (inv.amount!=null && inv.amount!=='' && !isNaN(parseFloat(inv.amount))) ? parseFloat(inv.amount) : sub, paid = parseFloat(inv.paid)||0;
     var bal = inv.balance!=null ? parseFloat(inv.balance)||0 : total-paid;
+    if(inv._returned) bal = Math.max(0, bal - (parseFloat(inv._returnedAmt)||0));   // after a Sales Return
+    var _cxl = !!(inv.cancelled || inv.status==='Cancelled');
     var cust = Customers.getData().find(function(c){ return c.id===inv.custId; }) || {};
     var _k = (typeof TaxInvoice!=='undefined') ? TaxInvoice.kindOf(inv) : { en: (parseFloat(inv.taxP)||0) > 0 ? 'TAX INVOICE' : 'INVOICE', ne:'बिल' };   // v7.2.0
     return { kind: _k.en, kindNe: _k.ne, billType: inv.billType||'', taxable: (parseFloat(inv.taxAmt)||0) > 0 ? sub-(parseFloat(inv.discAmt)||0) : 0, no: inv.invNum||'', dateAd: inv.date || todayISO(), dateBs: inv.dateBs || _bsFromAd(inv.date),
@@ -34,7 +37,8 @@ var DocPrint = {
       items: items, sub: sub, disc: parseFloat(inv.discAmt)||0, discP: parseFloat(inv.discP)||0, taxP: parseFloat(inv.taxP)||0, taxAmt: parseFloat(inv.taxAmt)||0,
       total: total, paidLabel:'Paid / भुक्तानी', paid: paid, balance: bal, terms: inv.terms||'', status: inv.status||'Pending',
       ref: inv.fromQuote ? (inv.fromQuote.type==='estimate' ? 'Estimate ' : 'Quotation ') + (inv.fromQuote.no||'') : '',
-      cancelled: (inv.cancelled || inv.status==='Cancelled') ? { reason: (inv.cancelled&&inv.cancelled.reason)||'', at: (inv.cancelled&&inv.cancelled.at)||'' } : null };
+      noPay: _cxl || bal <= 0.5,   // v7.3.0: no "Scan to Pay" QR on a paid / cancelled bill
+      cancelled: _cxl ? { reason: (inv.cancelled&&inv.cancelled.reason)||'', at: (inv.cancelled&&inv.cancelled.at)||'' } : null };
   },
   fromEstimate: function(e){
     var items = (e.items||[]).map(function(r){ return { name:r.name||'', qty:parseFloat(r.qty)||0, unit:r.unit||'', rate:parseFloat(r.rate)||0 }; });

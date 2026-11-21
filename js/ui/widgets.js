@@ -346,7 +346,7 @@ var BSPicker = {
         var parts = bsDate.split('-');
         var adDate = bsToAd(parseInt(parts[0]), parseInt(parts[1]), parseInt(parts[2]));
         if (adDate) {
-          var adStr = adDate.toISOString().slice(0, 10);
+          var adStr = isoLocal(adDate);
           var adEl = document.getElementById(this._target + '-ad');
           if (adEl) adEl.value = adStr;
           // If the target itself is an AD-format date field, set it too

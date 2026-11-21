@@ -4,16 +4,17 @@ var QR = {
     // Pre-fill with company contact URL if empty so the page isn't blank
     var inp = document.getElementById('qr-url');
     if(inp && !inp.value){
-      var co = STORE.get('pk3_settings',{})||{};
-      var phone = (co.phone1||'').replace(/[^0-9]/g,'');
-      // Default to a WhatsApp link for the business
-      inp.value = 'https://wa.me/977'+phone;
+      // Default to a WhatsApp link for the business — from Company Settings only.
+      // v7.3.0 audit: with no phone saved this used to prefill a dead "https://wa.me/977" link.
+      var phone = String((typeof Company!=='undefined' ? Company.get().phone1 : (STORE.get('pk3_settings',{})||{}).phone1) || '').replace(/[^0-9]/g,'');
+      if(phone.length===10) phone='977'+phone;
+      if(phone) inp.value = 'https://wa.me/'+phone;
     }
   },
   generate: function(){
     var url=getVal('qr-url'); if(!url){ App.toast('URL वा text राख्नुस्','error'); return; }
     var wrap=document.getElementById('qr-canvas-wrap'); if(!wrap) return; wrap.innerHTML='';
-    if(window.QRCode){ try{new QRCode(wrap,{text:url,width:180,height:180});}catch(e){wrap.innerHTML='<div>QR generated for: '+url+'</div>';} }
+    if(window.QRCode){ try{new QRCode(wrap,{text:url,width:180,height:180});}catch(e){wrap.innerHTML='<div>QR generated for: '+esc(url)+'</div>';} }
     else {
       // Fallback: use a public QR image API
       var img=document.createElement('img');

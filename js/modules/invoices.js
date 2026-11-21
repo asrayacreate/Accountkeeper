@@ -78,13 +78,13 @@ var Invoices = {
     // Auto-status: set the dropdown (not just a hint) based on paid vs grand
     var st=document.getElementById('inv-status-inp');
     if(st && !st.dataset.userset){
-      var auto = paid<=0 ? 'Pending' : (paid<grand-0.5 ? 'Partial' : 'Paid');
+      var auto = grand<=0.5 ? 'Paid' : paid<=0 ? 'Pending' : (paid<grand-0.5 ? 'Partial' : 'Paid');   // v7.3.0: Rs 0 bill (100% discount) is not "Pending" forever
       // only auto-change among the money-driven statuses; leave Overdue/Cancelled if user picked them
       if(['Pending','Partial','Paid'].indexOf(st.value)>=0) st.value=auto;
     }
     var hint=document.getElementById('inv-status-hint');
     if(hint){
-      var autoH = paid<=0 ? 'Pending' : (paid<grand-0.5 ? 'Partial' : 'Paid');
+      var autoH = grand<=0.5 ? 'Paid' : paid<=0 ? 'Pending' : (paid<grand-0.5 ? 'Partial' : 'Paid');
       hint.textContent='(भुक्तानी अनुसार: '+autoH+')';
     }
 
@@ -215,7 +215,7 @@ var Invoices = {
       +'<div class="inv-doc-meta">'
         +'<div class="inv-mcell"><span class="inv-mlbl">Bill To / ग्राहक *</span><select id="inv-cust-sel" class="inv-fld" onchange="try{TaxInvoice.onCustomer()}catch(e){}">'+custOpts+'</select></div>'
         +'<div class="inv-mcell"><span class="inv-mlbl">Invoice No / बिल नं</span><input type="text" id="inv-num-inp" class="inv-fld" value="'+esc(invNum)+'"></div>'
-        +'<div class="inv-mcell"><span class="inv-mlbl">Date / मिति (AD)</span><input type="date" id="inv-date-inp" class="inv-fld" value="'+(inv&&inv.date?String(inv.date).slice(0,10):new Date().toISOString().slice(0,10))+'"></div>'
+        +'<div class="inv-mcell"><span class="inv-mlbl">Date / मिति (AD)</span><input type="date" id="inv-date-inp" class="inv-fld" value="'+(inv&&inv.date?String(inv.date).slice(0,10):todayISO())+'"></div>'
         +'<div class="inv-mcell"><span class="inv-mlbl">मिति (BS)</span><input type="text" id="inv-date-bs-inp" class="inv-fld" value="'+esc(invBsStr)+'" placeholder="2083-04-17"></div>'
         +'<div class="inv-mcell"><span class="inv-mlbl">Due Date / भुक्तानी मिति</span><input type="date" id="inv-due-inp" class="inv-fld" value="'+esc(dueVal)+'"></div>'
       +'</div>'
@@ -308,7 +308,11 @@ var Invoices = {
     var list=this.getData();
     if(this._editId){
       var idx=list.findIndex(function(x){return x.id===rec.id;});
-      if(idx>=0){ rec.created=list[idx].created; if(list[idx].stockTracked) rec.stockTracked=true; if(Array.isArray(list[idx].payments)) rec.payments=list[idx].payments; list[idx]=rec; }   // v7.2.0: keep stock link + installment history
+      if(idx>=0){
+        rec.created=list[idx].created; if(list[idx].stockTracked) rec.stockTracked=true; if(Array.isArray(list[idx].payments)) rec.payments=list[idx].payments;   // v7.2.0: keep stock link + installment history
+        ['fromQuote','_returned','_returnedAmt','_demo'].forEach(function(k){ if(list[idx][k]!==undefined) rec[k]=list[idx][k]; });   // v7.3.0: edit must not drop the quote link / return flag
+        list[idx]=rec;
+      }
       else list.unshift(rec);
       Audit.log('INVOICE','Updated: '+rec.invNum);
     } else {
@@ -319,6 +323,7 @@ var Invoices = {
       try{ Activity.add('🧾 Invoice created: '+rec.invNum+' — '+cust.name); }catch(e){}
     }
     STORE.set('pk3_invoices',list);
+    if(this._editId) this._syncLedger(rec);
     App.toast(this._editId?'✅ Invoice updated!':'✅ Invoice saved!','success');
     try{ Stock.warnLow(Stock.syncInvoice(rec)); }catch(e){ console.warn('stock sync', e); }
     this._editId=null; this._rows=[];
@@ -326,10 +331,29 @@ var Invoices = {
     this.render();
   },
 
+  // v7.3.0 audit: a quote-converted bill posts Customer Ledger lines (_inv). Editing the bill used to leave
+  // the old Sale / advance amounts there, so the ledger balance no longer matched the bill. Keep them in step.
+  // Payment (_pay) and Credit Note (_cn) lines are separate records and are never touched here.
+  _syncLedger: function(inv){
+    var led=STORE.get('pk3_ledger',[])||[], mine=led.filter(function(t){ return t && t._inv===inv.id && !t._cn && !t._pay; });
+    if(!mine.length) return false;
+    var sale=mine.find(function(t){ return (parseFloat(t.debit)||0)>0; });
+    var adv=mine.find(function(t){ return t!==sale && (parseFloat(t.credit)||0)>0; });
+    var paidByRcpt=(Array.isArray(inv.payments)?inv.payments:[]).reduce(function(t,p){ return t+(parseFloat(p.amount)||0); },0);
+    var opening=Math.round(Math.max(0,(parseFloat(inv.paid)||0)-paidByRcpt)*100)/100;
+    var base={ customerId: inv.custId, custName: inv.custName, date: inv.dateBs, dateAd: inv.date };
+    if(sale) Object.assign(sale, base, { debit: parseFloat(inv.amount)||0 });
+    if(adv && opening>0) Object.assign(adv, base, { credit: opening });
+    else if(adv) led=led.filter(function(t){ return t!==adv; });
+    else if(opening>0){ var e2=Object.assign({ id:'lx_'+uid(), narration:'💰 अग्रिम प्राप्त — '+inv.invNum, debit:0, credit:opening, _inv:inv.id, created:new Date().toISOString() }, base); e2.desc=e2.narration; led.push(e2); }
+    STORE.set('pk3_ledger', led);
+    return true;
+  },
+
   render: function(){
     var list=this.getData(), q=getVal('inv-search').toLowerCase();
     // auto-flag overdue (unpaid + past due date)
-    var today=new Date().toISOString().slice(0,10);
+    var today=todayISO();
     list.forEach(function(i){
       if(i.dueDate && (parseFloat(i.balance)||0)>0.5 && i.status!=='Paid' && i.status!=='Cancelled' && i.dueDate<today){
         i._overdue=true;
@@ -343,6 +367,7 @@ var Invoices = {
     tb.innerHTML=list.map(function(i){
       if(Invoices.isCancelled(i)) return Invoices._cancelledRow(i);
       var bal = i.balance!=null ? i.balance : ((parseFloat(i.amount)||0)-(parseFloat(i.paid)||0));
+      if(i._returned) bal = (parseFloat(bal)||0) - (parseFloat(i._returnedAmt)||0);   // v7.3.0: same as Receivables.balanceOf
       var stt = i._overdue ? 'Overdue' : (i.status||'Pending');
       var due = i.dueDate ? '<div style="font-size:0.66rem;color:'+(i._overdue?'var(--red)':'var(--text-muted)')+';">Due: '+fmtDisplayDate(i.dueDate)+'</div>' : '';
       return '<tr style="cursor:pointer;"'
